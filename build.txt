@@ -1,0 +1,3 @@
+displayName = UI Customizer
+author = Erky
+version = 0.1
