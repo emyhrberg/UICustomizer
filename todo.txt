@@ -25,3 +25,5 @@ Maybe thats enough, i dont really see the use for moving much else.
 Just focus on fixing it for other mods like calamity.
 
 Not compatible with betterchatbox :)
+
+- Maybe make a copy of the UIScale slider when in edit mode?

@@ -29,6 +29,8 @@ namespace UICustomizer.UI
         {
             base.LeftClick(evt);
 
+            if (!Active) return;
+
             // Reset all hooks.
             ChatHook.OffsetX = 0;
             ChatHook.OffsetY = 0;

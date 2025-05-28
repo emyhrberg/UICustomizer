@@ -32,21 +32,21 @@ namespace UICustomizer.Common.Systems.Hooks
                 int positionIndex = -1;
 
                 c.GotoNext(MoveType.After,
-                  i => i.MatchLdloca(out positionIndex), // we match our positionIndex with the IL I guess?
-                  i => i.MatchLdcR4(236f)); // yes this matches with the IL?
+                  i => i.MatchLdloca(out positionIndex), // we match our positionIndex with the IL I guess
+                  i => i.MatchLdcR4(236f)); // yes this matches with the IL
 
                 // Match to after `((Vector2)(ref val))..ctor(236f - (FontAssets.MouseText.Value.MeasureString(text) / 2f).X, 0f);` or whatever slop the decompiler spat out.
                 c.GotoNext(MoveType.After,
-                  i => i.MatchLdcR4(0f), // why 0f here? 
-                  i => i.MatchCall<Vector2>(".ctor")); // Vector2 constructor here, why?
+                  i => i.MatchLdcR4(0f), // why 0f here
+                  i => i.MatchCall<Vector2>(".ctor")); // Vector2 constructor here, why
 
                 // Use ldloca to load a ref of the local, making it easier to modify with our delegate.
                 c.EmitLdloca(positionIndex); // Here we load local variable with position.
 
-                // this part I kind of understand, delegate is a reference to the function and we modify it I guess?
+                // delegate is a reference to the function and we modify it
                 c.EmitDelegate((ref Vector2 position) =>
                 {
-                    position += new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY);
+                    position += new Vector2(OffsetX, OffsetY);
                 });
             }
             catch (Exception innerException)

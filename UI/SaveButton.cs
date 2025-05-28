@@ -30,6 +30,8 @@ namespace UICustomizer.UI
         {
             base.LeftClick(evt);
 
+            if (!Active) return;
+
             // Save.
             Conf.C.ChatOffsetX = ChatHook.OffsetX;
             Conf.C.ChatOffsetY = ChatHook.OffsetY;

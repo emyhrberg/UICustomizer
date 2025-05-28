@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.GameContent.UI.Chat;
@@ -12,40 +14,36 @@ namespace UICustomizer.Common.Systems.Hooks
 
         public override void Load()
         {
-            IL_Main.DrawPlayerChat += InjectOffset;
-            IL_RemadeChatMonitor.DrawChat += InjectOffset;
+            IL_Main.DrawPlayerChat += InjectChatOffset;
+            IL_RemadeChatMonitor.DrawChat += InjectChatOffset;
         }
 
         public override void Unload()
         {
-            IL_Main.DrawPlayerChat -= InjectOffset;
-            IL_RemadeChatMonitor.DrawChat -= InjectOffset;
+            IL_Main.DrawPlayerChat -= InjectChatOffset;
+            IL_RemadeChatMonitor.DrawChat -= InjectChatOffset;
         }
 
-        /// <summary>Adds new Vector2(OffsetX, OffsetY) to every Vector2 literal.</summary>
-        private static void InjectOffset(ILContext il)
+        private void InjectChatOffset(ILContext il)
         {
-            var vec2Ctor = typeof(Vector2).GetConstructor([typeof(float), typeof(float)]);
-            var vec2Add = typeof(Vector2).GetMethod("op_Addition",
-                             BindingFlags.Public | BindingFlags.Static,
-                             null, [typeof(Vector2), typeof(Vector2)], null);
-
-            var fldX = typeof(ChatHook).GetField(nameof(OffsetX));
-            var fldY = typeof(ChatHook).GetField(nameof(OffsetY));
-
-            ILCursor c = new(il);
-
-            while (c.TryGotoNext(i => i.MatchNewobj(vec2Ctor)))
+            try
             {
-                c.Index++;                              // insert right after newobj
+                ILCursor c = new(il);
 
-                // push new Vector2(OffsetX, OffsetY)
-                c.Emit(OpCodes.Ldsfld, fldX);           // float OffsetX
-                c.Emit(OpCodes.Ldsfld, fldY);           // float OffsetY
-                c.Emit(OpCodes.Newobj, vec2Ctor);       // Vector2(offsetX, offsetY)
-
-                // add the two vectors
-                c.Emit(OpCodes.Call, vec2Add);          // original + offset
+                // Find 3 calls to SpriteBatch.Draw, which is where the chat text is drawn.
+                while (c.TryGotoNext(MoveType.After,
+                    i => i.MatchConvR4(),
+                    i => i.MatchNewobj<Vector2>()))
+                {
+                    c.EmitDelegate((Vector2 pos) =>
+                    {
+                        return pos + new Vector2(OffsetX, OffsetY);
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ILPatchFailureException(Mod, il, e);
             }
         }
     }

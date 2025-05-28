@@ -52,38 +52,7 @@ namespace UICustomizer.Common.Systems
                     () => { userInterface?.Draw(Main.spriteBatch, new GameTime()); return true; },
                     InterfaceScaleType.UI)
                 );
-
-                layers.Insert(index + 1, new LegacyGameInterfaceLayer(
-            "UICustomizer: Drag Debug",
-            DrawDebugRects,
-            InterfaceScaleType.UI));
             }
-        }
-
-        private bool DrawDebugRects()
-        {
-            if (!UICustomizerSystem.EditModeActive) return true;
-
-            SpriteBatch sb = Main.spriteBatch;
-            Texture2D px = TextureAssets.MagicPixel.Value;
-
-            void Box(Rectangle r, Color c, string label)
-            {
-                // thin outline
-                sb.Draw(px, new Rectangle(r.Left, r.Top, r.Width, 1), c); // top
-                sb.Draw(px, new Rectangle(r.Left, r.Bottom - 1, r.Width, 1), c); // bottom
-                sb.Draw(px, new Rectangle(r.Left, r.Top, 1, r.Height), c); // left
-                sb.Draw(px, new Rectangle(r.Right - 1, r.Top, 1, r.Height), c); // right
-
-                // draw label
-                Vector2 labelPosition = new Vector2(r.Center.X, r.Top - 20); // position above the box
-                Utils.DrawBorderString(sb, label, labelPosition, c, 0.8f, 0.5f, 0.5f);
-            }
-
-            Box(DragSystem.HotbarBounds(), Color.Cyan * 0.8f, "Hotbar");
-            Box(DragSystem.ChatBounds(), Color.Lime * 0.8f, "Chat");
-
-            return true;
         }
     }
 }

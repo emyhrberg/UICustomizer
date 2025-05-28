@@ -36,8 +36,9 @@ namespace UICustomizer.UI
             if (!Active) return;
 
             string text = "";
-            text += $"Chat Hover: {DragSystem.MouseInBounds(DragSystem.ChatBounds())}\n";
-            text += $"Hotbar Hover: {DragSystem.MouseInBounds(DragSystem.HotbarBounds())}\n";
+            text += "--- DEBUG ---\n";
+            text += $"Chat Hover: {DragHelper.MouseInBounds(DragHelper.ChatBounds())}\n";
+            text += $"Hotbar Hover: {DragHelper.MouseInBounds(DragHelper.HotbarBounds())}\n";
             text += $"ChatX: {(int)ChatHook.OffsetX}\n";
             text += $"ChatY: {(int)ChatHook.OffsetY}\n";
             text += $"HotbarX: {(int)HotbarHook.OffsetX}\n";

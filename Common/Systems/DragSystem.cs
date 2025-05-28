@@ -19,8 +19,11 @@ namespace UICustomizer.Common.Systems
 
             OpenChatIfEditModeActive();
 
-            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
-            HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
+            // Hot reload testing
+            //ChatHook.OffsetX = 200;
+
+            HandleDrag(DragHelper.ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
+            HandleDrag(DragHelper.HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
         }
 
         private void OpenChatIfEditModeActive()
@@ -34,25 +37,22 @@ namespace UICustomizer.Common.Systems
                 Main.ClosePlayerChat();
         }
 
-        private void HandleDrag(Func<Rectangle> getBoundsUI,
-                        ref float offsetX, ref float offsetY)
+        private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)
         {
-            float uiScale = Main.UIScale;                   
-            Vector2 mouseUI = Main.MouseScreen / uiScale;   // convert once
+            float uiScale = Main.UIScale;
+            Vector2 mouseUI = Main.MouseScreen / 1;   // convert once
 
             /* start drag */
-            if (_dragSource is null &&
-                Main.mouseLeft &&
-                getBoundsUI().Contains(mouseUI.ToPoint()))
+            if (_dragSource is null && Main.mouseLeft && DragHelper.MouseInBounds(bounds()))
             {
-                _dragSource = getBoundsUI;
+                _dragSource = bounds;
                 _mouseStart = mouseUI;                      // store in UI units
                 _offsetStart = new Vector2(offsetX, offsetY);
                 Main.LocalPlayer.mouseInterface = true;
             }
 
             /* update drag */
-            if (_dragSource == getBoundsUI)
+            if (_dragSource == bounds)
             {
                 Vector2 deltaUI = mouseUI - _mouseStart;     // already de-scaled
                 offsetX = _offsetStart.X + deltaUI.X;
@@ -61,34 +61,6 @@ namespace UICustomizer.Common.Systems
                 if (!Main.mouseLeft)
                     _dragSource = null;
             }
-        }
-
-        public static bool MouseInBounds(Rectangle bounds)
-        {
-            float uiScale = Main.UIScale;
-            Vector2 mouseUI = Main.MouseScreen / uiScale;   // convert once
-
-            return bounds.Contains(mouseUI.ToPoint());
-        }
-
-        public static Rectangle ChatBounds()
-        {
-            // vanilla: centre horizontally, a bit above the bottom toolbar
-            int w = TextureAssets.TextBack.Width();
-            int h = TextureAssets.TextBack.Height();
-            int x = (int)(30 + ChatHook.OffsetX);
-            int y = (int)(700 + ChatHook.OffsetY);
-            return new Rectangle(x, y, w, h);
-        }
-
-        public static Rectangle HotbarBounds()
-        {
-            int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
-            int w = slot * 20-180;
-            int h = slot*2+10;
-            int x = (int)(20 + HotbarHook.OffsetX);
-            int y = (int) (HotbarHook.OffsetY);
-            return new Rectangle(x, y, w, h);
         }
     }
 }
