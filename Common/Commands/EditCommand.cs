@@ -15,7 +15,11 @@ namespace UICustomizer.Common.Commands
             // Enter "edit mode"
             if (UICustomizerSystem.EditModeActive)
             {
-
+                UICustomizerSystem.ExitEditMode();
+            }
+            else
+            {
+                UICustomizerSystem.EnterEditMode();
             }
         }
     }

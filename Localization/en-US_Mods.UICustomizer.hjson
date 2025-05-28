@@ -1,1 +1,26 @@
-Configs.Config.DisplayName: Config
+Configs: {
+	Config: {
+		DisplayName: Config
+		Headers.UIPositions: U I Positions Header
+
+		ChatOffsetX: {
+			Label: Chat Offset X
+			Tooltip: ""
+		}
+
+		ChatOffsetY: {
+			Label: Chat Offset Y
+			Tooltip: ""
+		}
+
+		HotbarOffsetX: {
+			Label: Hotbar Offset X
+			Tooltip: ""
+		}
+
+		HotbarOffsetY: {
+			Label: Hotbar Offset Y
+			Tooltip: ""
+		}
+	}
+}

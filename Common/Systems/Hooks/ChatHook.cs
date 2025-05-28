@@ -5,7 +5,7 @@ using Terraria.GameContent.UI.Chat;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
-    public class ChatPosHook : ModSystem
+    public class ChatHook : ModSystem
     {
         public static float OffsetX = 0;
         public static float OffsetY = 0;
@@ -22,14 +22,6 @@ namespace UICustomizer.Common.Systems.Hooks
             IL_RemadeChatMonitor.DrawChat -= InjectOffset;
         }
 
-        public override void PostUpdateEverything()
-        {
-            // Test hot reload changes here (to chat position)
-            OffsetX = 50;
-            OffsetY = 0;
-            base.PostUpdateEverything();
-        }
-
         /// <summary>Adds new Vector2(OffsetX, OffsetY) to every Vector2 literal.</summary>
         private static void InjectOffset(ILContext il)
         {
@@ -38,8 +30,8 @@ namespace UICustomizer.Common.Systems.Hooks
                              BindingFlags.Public | BindingFlags.Static,
                              null, [typeof(Vector2), typeof(Vector2)], null);
 
-            var fldX = typeof(ChatPosHook).GetField(nameof(OffsetX));
-            var fldY = typeof(ChatPosHook).GetField(nameof(OffsetY));
+            var fldX = typeof(ChatHook).GetField(nameof(OffsetX));
+            var fldY = typeof(ChatHook).GetField(nameof(OffsetY));
 
             ILCursor c = new(il);
 

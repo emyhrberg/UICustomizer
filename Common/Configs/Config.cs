@@ -7,6 +7,20 @@ namespace UICustomizer.Common.Configs
     public class Config : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [Header("UIPositions")]
+
+        [DefaultValue(0)]
+        public float ChatOffsetX;
+
+        [DefaultValue(0)]
+        public float ChatOffsetY;
+
+        [DefaultValue(0)]
+        public float HotbarOffsetX;
+
+        [DefaultValue(0)]
+        public float HotbarOffsetY;
     }
 
     public static class Conf

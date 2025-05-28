@@ -1,72 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Terraria.GameContent;
 using UICustomizer.Common.Systems.Hooks;
 
 namespace UICustomizer.Common.Systems
 {
     public class DragSystem : ModSystem
     {
-        private bool _dragging;
         private Vector2 _mouseStart;
         private Vector2 _offsetStart;
+        private Func<Rectangle>? _dragSource;   // null = no drag in progress
 
         //  Update logic. Runs every frame before drawing happens
         public override void PostUpdateInput()
         {
             // If edit mode is not active, do nothing
-            //if (!UICustomizerSystem.EditModeActive)
-                //return;
+            if (!UICustomizerSystem.EditModeActive)
+                return;
 
-            ChatDrag();
+            OpenChatIfEditModeActive();
+
+            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
+            HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
         }
 
-        private void ChatDrag()
+        private void OpenChatIfEditModeActive()
         {
-            Vector2 mouse = Main.MouseScreen;
-
-            // Log status of mouseleft, release, and dragging and chatbounds.contains
-            Log.SlowInfo($"Dragging: {_dragging}, ChatBounds.Contains: {ChatBounds().Contains(mouse.ToPoint())}");
-
-            // 1) Start dragging when the player presses LMB inside the chat box
-            if (!_dragging && Main.mouseLeft && ChatBounds().Contains(mouse.ToPoint()))
+            if (UICustomizerSystem.EditModeActive)
             {
-                _dragging = true;
-                _mouseStart = mouse;
-                _offsetStart = new Vector2(ChatPosHook.OffsetX, ChatPosHook.OffsetY);
+                if (!Main.drawingPlayerChat)               // chat is closed → open it
+                    Main.OpenPlayerChat();                 // vanilla helper
+            }
+            else if (Main.drawingPlayerChat)               // left edit-mode → tidy up
+                Main.ClosePlayerChat();
+        }
 
-                // Stop items from being used while we are holding the chat
+        private void HandleDrag(Func<Rectangle> getBoundsUI,
+                        ref float offsetX, ref float offsetY)
+        {
+            float uiScale = Main.UIScale;                   
+            Vector2 mouseUI = Main.MouseScreen / uiScale;   // convert once
+
+            /* start drag */
+            if (_dragSource is null &&
+                Main.mouseLeft &&
+                getBoundsUI().Contains(mouseUI.ToPoint()))
+            {
+                _dragSource = getBoundsUI;
+                _mouseStart = mouseUI;                      // store in UI units
+                _offsetStart = new Vector2(offsetX, offsetY);
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            // 2) While dragging, update the offsets every frame
-            if (_dragging)
+            /* update drag */
+            if (_dragSource == getBoundsUI)
             {
-                Vector2 delta = mouse - _mouseStart;
-                ChatPosHook.OffsetX = _offsetStart.X + delta.X;
-                ChatPosHook.OffsetY = _offsetStart.Y + delta.Y;
+                Vector2 deltaUI = mouseUI - _mouseStart;     // already de-scaled
+                offsetX = _offsetStart.X + deltaUI.X;
+                offsetY = _offsetStart.Y + deltaUI.Y;
 
-                // Release as soon as the button comes up
                 if (!Main.mouseLeft)
-                    _dragging = false;
+                    _dragSource = null;
             }
-
-            // 3) Clamp so the whole box stays on‑screen
-            int pad = 20;                              // keep 20‑px margin
-            ChatPosHook.OffsetX = MathHelper.Clamp(ChatPosHook.OffsetX,
-                                                   -Main.screenWidth + pad,
-                                                    Main.screenWidth - pad);
-            ChatPosHook.OffsetY = MathHelper.Clamp(ChatPosHook.OffsetY,
-                                                   -Main.screenHeight + pad,
-                                                    0);               // never go below bottom
         }
 
-        private static Rectangle ChatBounds()
+        public static bool MouseInBounds(Rectangle bounds)
         {
-            int width = (int)(Main.screenWidth * 0.60f);   // vanilla chat ≈ 60 % width
-            int height = 38;                                // input line height
-            int x = 20 + (int)ChatPosHook.OffsetX;          // left padding + offset
-            int y = Main.screenHeight - height - 28         // 28 px vanilla margin
-                    + (int)ChatPosHook.OffsetY;
-            return new Rectangle(x, y, width, height);
+            float uiScale = Main.UIScale;
+            Vector2 mouseUI = Main.MouseScreen / uiScale;   // convert once
+
+            return bounds.Contains(mouseUI.ToPoint());
+        }
+
+        public static Rectangle ChatBounds()
+        {
+            // vanilla: centre horizontally, a bit above the bottom toolbar
+            int w = TextureAssets.TextBack.Width();
+            int h = TextureAssets.TextBack.Height();
+            int x = (int)(30 + ChatHook.OffsetX);
+            int y = (int)(700 + ChatHook.OffsetY);
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle HotbarBounds()
+        {
+            int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
+            int w = slot * 20-180;
+            int h = slot*2+10;
+            int x = (int)(20 + HotbarHook.OffsetX);
+            int y = (int) (HotbarHook.OffsetY);
+            return new Rectangle(x, y, w, h);
         }
     }
 }

@@ -1,0 +1,27 @@
+Todo:
+1. Save button (save all new x and y positions)
+2. Cancel/exit button (dont save the latest changes)
+3. Reset button (reset all defaults)
+- Maybe put "Editing UI" text in top left with options to save/edit there?
+
+- Fix drag to coincide with mouse actual drag, its dragging elements more than the mouse rn
+- Fix hitboxes for chat and hotbar and everything else
+- Add a little box with info showing all values of x and y and currently dragging element.
+- Add clamp to avoid moving UI out of screen (like DL).
+- Add stick to make it stick to the walls of the screen (like DL).
+
+Obviously:
+- Add hooks for everything else UI like resource bars, inventory, OTHER MODS, etc.
+
+Also:
+- Make checkboxes for moving only X or only Y direction or both
+
+All other UI:
+Inventory not open:
+- Life bars
+- Map 
+- Mana bars
+Maybe thats enough, i dont really see the use for moving much else.
+Just focus on fixing it for other mods like calamity.
+
+Not compatible with betterchatbox :)
