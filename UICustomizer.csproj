@@ -11,6 +11,15 @@
 	<!-- References -->
 
 	<ItemGroup>
+
+		<Reference Include="DragonLens">
+			<HintPath>lib\DragonLens.dll</HintPath>
+		</Reference>
+
+		<Reference Include="CheatSheet">
+			<HintPath>lib\CheatSheet.dll</HintPath>
+		</Reference>
+
 		<PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
 		<Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
 	</ItemGroup>

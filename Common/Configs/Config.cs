@@ -11,16 +11,52 @@ namespace UICustomizer.Common.Configs
         [Header("UIPositions")]
 
         [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
         public float ChatOffsetX;
 
         [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
         public float ChatOffsetY;
 
         [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
         public float HotbarOffsetX;
 
         [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
         public float HotbarOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float MapOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float MapOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float InfoAccsOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float InfoAccsOffsetY;
     }
 
     public static class Conf

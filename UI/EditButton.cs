@@ -1,59 +1,53 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader.UI;
+using Terraria.ID;
 using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
-    public class EditButton : UIPanel
+    // Credits to ScalarVector1:
+    // https://github.com/ScalarVector1/DragonLens/blob/master/Content/GUI/EmergencyCustomizeMenu.cs
+    public class EditButton : UIText   // UIText already IS a UIElement
     {
-        public bool Active = false;
-        public UIText saveText;
+        private float scale = 0.6f;
 
-        internal EditButton()
+        public EditButton() : base("Edit UI", 0.6f, false)
         {
-            // Panel size and position
-            Width.Set(100, 0);
-            Height.Set(35, 0);
-            VAlign = 0.4f;
-            HAlign = 0.95f;
+            Top.Set(-98, 1);   
+            Left.Set(-210, 1);
 
-            // Add UIText in the middle
-            saveText = new("Edit UI", 0.45f, true);
-            saveText.HAlign = 0.5f;
-            Append(saveText);
-        }
+            Width.Set(200, 0);
+            Height.Set(40, 0);
 
-        public override void LeftClick(UIMouseEvent evt)
-        {
-            base.LeftClick(evt);
+            TextOriginX = 0.5f;
+            TextOriginY = 0.5f;
 
-            if (!Active) return;
-
-            UICustomizerSystem.EnterEditMode();
+            OnLeftClick += (_, _) => UICustomizerSystem.EnterEditMode();
+            OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (!Active) return;
+            if (UICustomizerSystem.EditModeActive) return;
 
-            //VAlign = 0.4f;
+            //Height.Set(40, 0);
+            //TextOriginX = 0.5f;
+            //TextOriginY = 0.5f;
+            //Top.Set(-98, 1);
 
             base.Update(gameTime);
+
+            if (IsMouseHovering && scale < 0.75f) scale += 0.02f;
+            if (!IsMouseHovering && scale > 0.6f) scale -= 0.02f;
+
+            SetText("[Edit UI!]", scale, true);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Active) return;
-
-            //if (UICustomizerSystem.EditModeActive) return;
-
-            base.Draw(spriteBatch);
-
-            if (IsMouseHovering)
-            {
-                UICommon.TooltipMouseText("Click to edit some UI");
-            }
+            if (UICustomizerSystem.EditModeActive || !Main.playerInventory) return;
+            base.Draw(spriteBatch);   // UIText already draws itself
         }
     }
 }

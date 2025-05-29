@@ -1,40 +1,42 @@
-﻿using System;
+using System;
 using MonoMod.Cil;
-using Terraria.GameContent.UI.Chat;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
-    public class ChatHook : ModSystem
+    public class InfoAccsHook : ModSystem
     {
         public static float OffsetX = 0;
         public static float OffsetY = 0;
 
         public override void Load()
         {
-            IL_Main.DrawPlayerChat += InjectChatOffset;
-            IL_RemadeChatMonitor.DrawChat += InjectChatOffset;
+            Main.QueueMainThreadAction(() => IL_Main.DrawInfoAccs += InjectInfoAccsOffset);
         }
 
         public override void Unload()
         {
-            IL_Main.DrawPlayerChat -= InjectChatOffset;
-            IL_RemadeChatMonitor.DrawChat -= InjectChatOffset;
+            Main.QueueMainThreadAction(() => IL_Main.DrawInfoAccs -= InjectInfoAccsOffset);
         }
 
-        private void InjectChatOffset(ILContext il)
+        private void InjectInfoAccsOffset(ILContext il)
         {
+            Log.Info("IL info accs patching...");
+
             try
             {
                 ILCursor c = new(il);
-
-                // Find 3 calls to SpriteBatch.Draw, which is where the chat text is drawn.
+                int count = 0;
                 while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchConvR4(),
                     i => i.MatchNewobj<Vector2>()))
                 {
+                    Log.Info("ILcount: " + count);
+                    count++;
                     c.EmitDelegate((Vector2 pos) =>
                     {
-                        return pos + new Vector2(OffsetX, OffsetY);
+                        return new Vector2(
+                            pos.X + OffsetX,
+                            pos.Y + OffsetY
+                        );
                     });
                 }
             }

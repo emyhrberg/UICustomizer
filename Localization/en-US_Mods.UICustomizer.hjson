@@ -1,7 +1,11 @@
 Configs: {
 	Config: {
 		DisplayName: Config
-		Headers.UIPositions: U I Positions Header
+
+		Headers: {
+			UIPositions: U I Positions Header
+			Main: Main Header
+		}
 
 		ChatOffsetX: {
 			Label: Chat Offset X
@@ -20,6 +24,31 @@ Configs: {
 
 		HotbarOffsetY: {
 			Label: Hotbar Offset Y
+			Tooltip: ""
+		}
+
+		ShowEditUIButton: {
+			Label: Show Edit U I Button
+			Tooltip: ""
+		}
+
+		MapOffsetX: {
+			Label: Map Offset X
+			Tooltip: ""
+		}
+
+		MapOffsetY: {
+			Label: Map Offset Y
+			Tooltip: ""
+		}
+
+		InfoAccsOffsetX: {
+			Label: Info Accs Offset X
+			Tooltip: ""
+		}
+
+		InfoAccsOffsetY: {
+			Label: Info Accs Offset Y
 			Tooltip: ""
 		}
 	}

@@ -2,3 +2,4 @@ displayName = UI Customizer
 author = Erky
 version = 0.1
 side = client
+weakReferences = DragonLens, CheatSheet

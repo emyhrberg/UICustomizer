@@ -1,1 +1,27 @@
-This description will show up on the steam page, check out https://steamcommunity.com/comment/Guide/formattinghelp.
+[h1] UI Customizer [/h1] 
+
+Ever wanted to move the hotbar, chat, map position or anything else? This mod allows you to move all UI to your liking.
+
+[h1] Features [/h1] 
+
+[h2] Editor [/h2]
+
+Use the editor to move all elements in the game! Simply open the editor and drag and drop the UI elements to your desired position.
+
+[h2] Toggle [/h2]
+
+Use the toggle to enable or disable all UI elements from vanilla and other mods! This is useful if you want to focus on 
+
+[h2] Layouts [/h2]
+
+Save and load your custom layouts with your new positions and toggles! You can also share them with your friends!
+
+[h1] Support [/h1]
+[list]
+[*] [url=https://github.com/emyhrberg/UICustomizer] GitHub source code [/url]
+[*] [url=https://discord.com/invite/JNFYABQM] Join us on Discord! [/url]
+[/list]
+
+[quote]
+Developed By Erky
+[/quote]

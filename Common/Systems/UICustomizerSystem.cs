@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
-using Terraria.UI;
+using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
 {
@@ -9,20 +7,18 @@ namespace UICustomizer.Common.Systems
     internal class UICustomizerSystem : ModSystem
     {
         // Handle edit mode state.
-        public static bool EditModeActive { get; private set; } = false;
+        public static bool EditModeActive { get; private set; } = true;
         public static void EnterEditMode()
         {
-            ModContent.GetInstance<UICustomizerSystem>().uiCustomizerState.saveButton.Active = true;
-            ModContent.GetInstance<UICustomizerSystem>().uiCustomizerState.cancelButton.Active = true;
             EditModeActive = true;
-            Main.NewText("UI: Editing...", Color.OrangeRed);
+
+            CombatText.NewText(Main.LocalPlayer.getRect(), Color.OrangeRed, "UI: Editing...");
         }
         public static void ExitEditMode()
         {
-            ModContent.GetInstance<UICustomizerSystem>().uiCustomizerState.saveButton.Active = false;
-            ModContent.GetInstance<UICustomizerSystem>().uiCustomizerState.cancelButton.Active = false;
             EditModeActive = false;
-            Main.NewText("UI: Saved!", Color.LightGreen);
+
+            CombatText.NewText(Main.LocalPlayer.getRect(), Color.Green, "UI: Saved!");
         }
 
         // UI.

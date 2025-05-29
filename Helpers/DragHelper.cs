@@ -18,7 +18,7 @@ namespace UICustomizer.Helpers
             int w = TextureAssets.TextBack.Width() + 120; // not accurate, its much wider in fullscreen
             int h = TextureAssets.TextBack.Height();
             int x = (int)(78 + ChatHook.OffsetX);
-            int y = (int)(Main.screenHeight-86 + ChatHook.OffsetY);
+            int y = (int)(Main.screenHeight - 86 + ChatHook.OffsetY);
             return new Rectangle(x, y, w, h);
         }
 
@@ -29,6 +29,24 @@ namespace UICustomizer.Helpers
             int h = slot * 2 + 10;
             int x = (int)(20 + HotbarHook.OffsetX);
             int y = (int)(HotbarHook.OffsetY);
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle MapBounds()
+        {
+            int w = 250;
+            int h = 250;
+            int x = (int)(Main.screenWidth - 50 - w + MapHook.OffsetX);
+            int y = 90 + (int)(MapHook.OffsetY);
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle InfoAccsBounds()
+        {
+            int w = 250;
+            int h = 250;
+            int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
+            int y = 150 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
     }

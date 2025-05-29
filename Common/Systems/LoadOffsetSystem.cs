@@ -17,6 +17,8 @@ namespace UICustomizer.Common.Systems
             ChatHook.OffsetY = Conf.C.ChatOffsetY;
             HotbarHook.OffsetX = Conf.C.HotbarOffsetX;
             HotbarHook.OffsetY = Conf.C.HotbarOffsetY;
+            MapHook.OffsetX = Conf.C.MapOffsetX;
+            MapHook.OffsetY = Conf.C.MapOffsetY;
         }
 
         public override void OnModLoad()
@@ -24,10 +26,12 @@ namespace UICustomizer.Common.Systems
             if (Conf.C == null) return;
 
             // Load offsets (again?!) from config
-            ChatHook.OffsetX = 0f;
-            ChatHook.OffsetY = 0f;
-            HotbarHook.OffsetX = 0f;
-            HotbarHook.OffsetY = 0f;
+            ChatHook.OffsetX = Conf.C.ChatOffsetX;
+            ChatHook.OffsetY = Conf.C.ChatOffsetY;
+            HotbarHook.OffsetX = Conf.C.HotbarOffsetX;
+            HotbarHook.OffsetY = Conf.C.HotbarOffsetY;
+            MapHook.OffsetX = Conf.C.MapOffsetX;
+            MapHook.OffsetY = Conf.C.MapOffsetY;
         }
     }
 
@@ -37,11 +41,13 @@ namespace UICustomizer.Common.Systems
         {
             if (Conf.C == null) return;
 
-            // Load offsets from config
+            // Load offsets (again?!) from config
             ChatHook.OffsetX = Conf.C.ChatOffsetX;
             ChatHook.OffsetY = Conf.C.ChatOffsetY;
             HotbarHook.OffsetX = Conf.C.HotbarOffsetX;
             HotbarHook.OffsetY = Conf.C.HotbarOffsetY;
+            MapHook.OffsetX = Conf.C.MapOffsetX;
+            MapHook.OffsetY = Conf.C.MapOffsetY;
         }
     }
 

@@ -1,51 +1,32 @@
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.UI.Elements;
+using UICustomizer.Common.Configs;
+using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
 {
     public class UICustomizerState : UIState
     {
-        public SaveButton saveButton;
-        public ResetButton cancelButton;
-        public EditButton editButton;
-        public DisplayPanel displayPanel;
-        public SliderPanel sliderPanel;
-
+        public UIEditorPanel editorPanel;
         public UICustomizerState()
         {
-            // Initialize UI components here
-            saveButton = new();
-            Append(saveButton);
+            // The entire panel that contains all the UI elements for editing.
+            editorPanel = new();
+            editorPanel.Width.Set(200,0);
+            editorPanel.Left.Set(200, 0);
+            editorPanel.Top.Set(200, 0);
+            editorPanel.Height.Set(200, 0);
 
-            cancelButton = new();
-            Append(cancelButton);
+            Append(editorPanel);
 
-            editButton = new();
-            editButton.Active = true;
+            // The text next to settings open when inventory is open
+            EditButton editButton = new();
             Append(editButton);
-
-            displayPanel = new();
-            displayPanel.Active = true;
-            Append(displayPanel);
-
-            sliderPanel = new(
-                title: "UI Scale",
-                min: 0.5f,
-                max: 2f,
-                defaultValue: Main.UIScale,
-                onValueChanged: value => Main.UIScale = value,
-                increment: 0.01f,
-                textSize: 0.8f,
-                hover: "Adjust the UI scale",
-                valueFormatter: value => $"{value * 100f:0}%"
-            );
-            Append(sliderPanel);
         }
 
         // Draw black background with lower opacity to show we're in edit mode.
-        // TODO: Exclude all UI that can be moved from this black drawing.
-        // Reference:
-        // https://github.com/ScalarVector1/DragonLens/blob/master/Content/GUI/ToolbarState.cs#L132
+        // TODO: Exclude all UI that can be moved from this black drawing. Maybe with draw interface layers?
         public override void Draw(SpriteBatch sb)
         {
             if (UICustomizerSystem.EditModeActive)
@@ -54,19 +35,14 @@ namespace UICustomizer.Common.Systems
                 Texture2D tex = Terraria.GameContent.TextureAssets.MagicPixel.Value;
                 sb.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), null, Color.Black * 0.65f);
 
-                // Draw chat
-                DrawHelper.DrawDebugHitboxOutline(sb, DragHelper.ChatBounds(), Color.Red);
-                DrawHelper.DrawDebugText(sb, DragHelper.ChatBounds().Location.ToVector2(), "Chat");
-
-                // Draw hotbar
-                DrawHelper.DrawDebugHitboxOutline(sb, DragHelper.HotbarBounds(), Color.Red);
-                DrawHelper.DrawDebugText(sb, DragHelper.HotbarBounds().Location.ToVector2(), "Hotbar");
+                // Draw hover around every element
+                DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.ChatBounds(), "Chat");
+                DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.HotbarBounds(), "Hotbar");
+                DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.MapBounds(), "Map");
+                DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.InfoAccsBounds(), "InfoAccs");
             }
 
-
             base.Draw(sb);
-
-
         }
     }
 }
