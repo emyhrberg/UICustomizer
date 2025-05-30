@@ -44,6 +44,9 @@ namespace UICustomizer.Common.Systems
 
             // If dragging the UIEditorPanel, return
             UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
+            if (sys == null || sys.uiCustomizerState == null) 
+                return;
+
             if (sys.uiCustomizerState.editorPanel.dragging || sys.uiCustomizerState.editorPanel.resize.draggingResize)
                 return;
 
@@ -52,6 +55,7 @@ namespace UICustomizer.Common.Systems
             HandleDrag(DragHelper.HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
             HandleDrag(DragHelper.MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
             HandleDrag(DragHelper.InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
+            //HandleDrag(DragHelper.ResourceBarBounds, ref ResourceBarHook.OffsetX, ref ResourceBarHook.OffsetY);
         }
 
         private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)

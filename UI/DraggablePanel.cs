@@ -4,7 +4,7 @@ namespace UICustomizer.UI
 {
     public class DraggablePanel : UIPanel
     {
-        private Vector2 offset;
+        public Vector2 offset;
         public bool dragging { get; private set; }
 
         // Called by children to stop a drag

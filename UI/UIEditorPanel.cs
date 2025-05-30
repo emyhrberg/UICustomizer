@@ -12,6 +12,8 @@ namespace UICustomizer.UI
         private UIText title;
         private ButtonPanel saveBtn;
         private ButtonPanel resetBtn;
+        private ButtonPanel layersBtn;
+        private ButtonPanel layoutsBtn;
         private UIText positionsText;
         public Checkbox checkboxX;
         public Checkbox checkboxY;
@@ -28,7 +30,16 @@ namespace UICustomizer.UI
             Left.Set(Main.screenWidth - 215, 0);
             Top.Set(Main.screenHeight - 415, 0);
 
-            // ----- scrollable list -----
+            Populate();
+        }
+
+        private void SafeAdd(UIElement ele)
+        {
+            list.Append(ele);
+        }
+
+        private void Populate()
+        {
             list = new UIList
             {
                 Width = { Percent = 1f, Pixels = 0 },
@@ -37,19 +48,17 @@ namespace UICustomizer.UI
                 Left = { Pixels = 0 },
                 ListPadding = 4f
             };
-            Append(list);                                   // sibling #1
+            Append(list);                              
 
-            // ----- scrollbar (sibling of list) -----
             scrollbar = new UIScrollbar
             {
-                Height = { Percent = 1f, Pixels = -24-24-5 },
+                Height = { Percent = 1f, Pixels = -24 - 24 - 5 },
                 Top = { Pixels = 24 },
                 Left = { Percent = 1f, Pixels = -15 }
             };
-            Append(scrollbar);                              // sibling #2
-            list.SetScrollbar(scrollbar);                   // wire them together
+            Append(scrollbar);                         
+            list.SetScrollbar(scrollbar);                  
 
-            // ----- resize handle -----
             resize = new Resize(Ass.Resize)
             {
                 HAlign = 1f,
@@ -57,7 +66,7 @@ namespace UICustomizer.UI
             };
             resize.OnDragY += dy =>
             {
-                CancelDrag();                               // stop panel drag
+                CancelDrag();                              
                 float min = 80f;
                 float newH = Math.Clamp(Height.Pixels + dy, min: min, max: 1000f);
                 Height.Set(newH, 0);
@@ -66,36 +75,49 @@ namespace UICustomizer.UI
                 list.Recalculate();
                 scrollbar.Recalculate();
             };
-            //resize.OnDragX += dx =>
-            //{
-            //    CancelDrag();                               // stop panel drag
-            //    float newW = Math.Clamp(Height.Pixels + dx, 180f, 1000f);
-            //    Width.Set(newW, 0);
-            //    list.Height.Set(newW, 0);
-            //    Recalculate();
-            //    list.Recalculate();
-            //    scrollbar.Recalculate();
-            //};
-            Append(resize);                                 // sibling #3
+            Append(resize);                               
 
-            // ----- controls inside the list -----
             int off = 30;
-            UIElement spacer = new UIElement();
-            spacer.Height.Set(3, 0f);   // 5-pixel gap
-            list.Add(spacer);           // first item in the list
             title = new UIText("UI Editor", 0.55f, true) { HAlign = 0.5f, Top = { Pixels = 0 } };
             saveBtn = new ButtonPanel("Save", "Save and exit edit mode", off, SaveAndExitEditMode);
-            resetBtn = new ButtonPanel("Reset", "Reset all offsets", off * 2, ResetOffsets);
-            checkboxX = new Checkbox("Edit X", "Move only in X") { Top = { Pixels = off * 3 } };
-            checkboxY = new Checkbox("Edit Y", "Move only in Y") { Top = { Pixels = off * 4 } };
-            positionsText = new UIText("", 0.4f, true) { Top = { Pixels = off * 5 } };
+            resetBtn = new ButtonPanel("Reset", "Reset all offsets to default", off * 2, ResetOffsets);
+            layersBtn = new ButtonPanel("Layers", "Toggle layers panel", off * 3, ToggleLayersPanel);
+            layoutsBtn = new ButtonPanel("Layouts", "Toggle layouts panel", off * 4, ToggleLayoutsPanel);
+            checkboxX = new Checkbox("X", "Move only in X") { Top = { Pixels = off * 5 } };
+            checkboxY = new Checkbox("Y", "Move only in Y") { Top = { Pixels = off * 6 } };
+            positionsText = new UIText("", 0.4f, true) { Top = { Pixels = off * 7 } };
 
-            list.Add(title);
-            list.Add(saveBtn);
-            list.Add(resetBtn);
-            list.Add(checkboxX);
-            list.Add(checkboxY);
-            list.Add(positionsText);
+            Padding(3);
+            SafeAdd(title);
+            Padding(3);
+            SafeAdd(saveBtn);
+            SafeAdd(resetBtn);
+            SafeAdd(layersBtn);
+            SafeAdd(layoutsBtn);
+            Padding(3);
+            SafeAdd(checkboxX);
+            SafeAdd(checkboxY);
+            Padding(3);
+            SafeAdd(positionsText);
+        }
+
+        private void ToggleLayoutsPanel()
+        {
+            var sys = ModContent.GetInstance<UICustomizerSystem>();
+            sys.uiCustomizerState.layoutsPanel.Active = !sys.uiCustomizerState.layoutsPanel.Active;
+        }
+
+        private void ToggleLayersPanel()
+        {
+            var sys = ModContent.GetInstance<UICustomizerSystem>();
+            sys.uiCustomizerState.layerPanel.Active = !sys.uiCustomizerState.layerPanel.Active;
+        }
+
+        private void Padding(float num)
+        {
+            UIElement spacing = new UIElement();
+            spacing.Height.Set(num, 0f);   // create gap
+            list.Add(spacing);           // add to list
         }
 
         private void ResetOffsets()
@@ -133,6 +155,9 @@ namespace UICustomizer.UI
         {
             if (!UICustomizerSystem.EditModeActive) return;
 
+            //list.Clear();
+            //Populate();
+
             // --- HOT RELOAD TESTING ---
             //Height.Set(400, 0);
 
@@ -151,9 +176,17 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // list all interface layers:
+            //foreach(var l in Interfacela
+
             if (!UICustomizerSystem.EditModeActive) return;
 
             base.Draw(spriteBatch);
+        }
+
+        public static explicit operator UIEditorPanel(LayerTogglePanel v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

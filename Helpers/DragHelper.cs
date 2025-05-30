@@ -49,5 +49,13 @@ namespace UICustomizer.Helpers
             int y = 150 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
+        public static Rectangle ResourceBarBounds()
+        {
+            int w = 250;
+            int h = 40;
+            int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
+            int y = 30 + (int)InfoAccsHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
     }
 }

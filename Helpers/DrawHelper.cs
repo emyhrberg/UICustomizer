@@ -26,7 +26,7 @@ namespace UICustomizer.Helpers
 
         /// <summary>
         /// Draws a texture at the proper scale to fit within the given UI element.
-        /// /// </summary>
+        /// </summary>
         public static void DrawProperScale(SpriteBatch spriteBatch, UIElement element, Texture2D tex, float scale = 1.0f, float opacity = 1.0f, bool active = false)
         {
             if (tex == null || element == null)

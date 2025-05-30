@@ -24,3 +24,14 @@
 - Feature: Add toggle on/off to vanilla elements and other mods elements
 - Feature: Add layouts like hotbar bottom center, move everything else, etc.
 - 3 tabs: Editor, Layouts, Toggle
+
+--------------------------------------------------------------
+
+2025-05-30:
+- Make tabs for: Editor, Layouts, Layers.
+- Add drag for calamity bars
+- Add some custom layouts
+- Clean up offsets in config and prevent dragging outside map and make dragging stick to screen (see DL)
+- Fix info accessories
+- Figure out resource bars 
+- Draw the dragged element with full opacity using interface layers!

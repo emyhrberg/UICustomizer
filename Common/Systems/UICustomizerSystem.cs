@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
@@ -40,6 +41,9 @@ namespace UICustomizer.Common.Systems
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
+            // list them all
+            //Log.SlowInfo("layers:\n" + string.Join("\n", layers.Select(l => l.Name)));
+
             int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
             if (index != -1)
             {

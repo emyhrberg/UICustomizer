@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -15,12 +16,15 @@ namespace UICustomizer.UI
         public CheckboxBox box;
         private UIText label;
         private string hoverText;
+        private Action onClick;
 
-        public Checkbox(string text, string hover)
+        public Checkbox(string text, string hover, Action onClick=null)
         {
             hoverText = hover;
-            Height.Set(22, 0);
-            Width.Set(80, 0);
+            this.onClick = onClick;
+
+            Height.Set(16, 0);
+            Width.Set(400, 0);
             //MaxWidth.Set(20, 1);
             Left.Set(0, 0);
 
@@ -31,7 +35,7 @@ namespace UICustomizer.UI
             Append(box);
 
             // Label
-            label = new UIText(text, 0.4f, true);
+            label = new UIText(text, 0.34f, true);
             label.Left.Set(30, 0);
             label.Top.Set(5, 0);
             Append(label);
@@ -42,11 +46,11 @@ namespace UICustomizer.UI
             base.LeftClick(evt);
 
             Toggle();
+            onClick?.Invoke();
         }
 
         private void Toggle()
         {
-            if (!UICustomizerSystem.EditModeActive) return;
             if (state == CheckboxState.Checked)
             {
                 state = CheckboxState.Unchecked;
@@ -65,11 +69,19 @@ namespace UICustomizer.UI
             //Width.Set(20, 1);
             //MaxWidth.Set(20, 1);
             //label.Top.Set(5, 0);
+            
 
             base.Draw(spriteBatch);
+
             if (IsMouseHovering)
             {
-                Log.SlowInfo("hover");
+                //Log.SlowInfo("hover");
+                //UICommon.TooltipMouseText("");
+            }
+
+            if (IsMouseHovering && hoverText != "")
+            {
+                //Log.SlowInfo("hover");
                 UICommon.TooltipMouseText(hoverText);
             }
         }
@@ -85,12 +97,16 @@ namespace UICustomizer.UI
             MaxHeight.Set(22, 0);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch sb)
         {
-            base.Draw(spriteBatch);
-            if (IsMouseHovering)
+            //base.Draw(spriteBatch);
+
+            if (Parent is Checkbox checkbox)
             {
-                //Log.Info("22");
+                //DrawHelper.DrawProperScale(spriteBatch, checkbox, _texture.Value);
+                float opacity = checkbox.IsMouseHovering ? 1f : 0.4f;
+                Vector2 pos = checkbox.GetDimensions().Position();
+                sb.Draw(_texture.Value, pos, Color.White * opacity);
             }
         }
     }
