@@ -15,13 +15,13 @@ namespace UICustomizer.UI
         private string hoverText;
         private Action onClick;
 
-        public Checkbox(string text, string hover, Action onClick = null)
+        public Checkbox(string text, string hover, int width = 50, Action onClick = null)
         {
             hoverText = hover;
             this.onClick = onClick;
 
             Height.Set(16, 0);
-            Width.Set(400, 0);
+            Width.Set(width, 0);
             //MaxWidth.Set(20, 1);
             Left.Set(0, 0);
 

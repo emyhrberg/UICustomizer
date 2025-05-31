@@ -14,6 +14,16 @@ namespace UICustomizer.UI
         public override void LeftMouseDown(UIMouseEvent evt)
         {
             base.LeftMouseDown(evt);
+
+            // If the mouse‐target (or any of its parents) is a UIScrollbar, do NOT start a panel‐drag.
+            UIElement target = evt.Target;
+            while (target != null)
+            {
+                if (target is UIScrollbar || target is CloseButton)
+                    return;
+                target = target.Parent;
+            }
+
             if (ContainsPoint(evt.MousePosition))
             {
                 DragStart(evt);

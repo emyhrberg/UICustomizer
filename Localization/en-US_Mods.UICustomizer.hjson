@@ -51,5 +51,55 @@ Configs: {
 			Label: Info Accs Offset Y
 			Tooltip: ""
 		}
+
+		FancyLifeOffsetX: {
+			Label: Fancy Life Offset X
+			Tooltip: ""
+		}
+
+		FancyLifeOffsetY: {
+			Label: Fancy Life Offset Y
+			Tooltip: ""
+		}
+
+		ClassicLifeOffsetX: {
+			Label: Classic Life Offset X
+			Tooltip: ""
+		}
+
+		ClassicLifeOffsetY: {
+			Label: Classic Life Offset Y
+			Tooltip: ""
+		}
+
+		ClassicManaOffsetX: {
+			Label: Classic Mana Offset X
+			Tooltip: ""
+		}
+
+		ClassicManaOffsetY: {
+			Label: Classic Mana Offset Y
+			Tooltip: ""
+		}
+
+		FancyManaOffsetX: {
+			Label: Fancy Mana Offset X
+			Tooltip: ""
+		}
+
+		FancyManaOffsetY: {
+			Label: Fancy Mana Offset Y
+			Tooltip: ""
+		}
+
+		HorizontalLifeBarOffsetX: {
+			Label: Horizontal Life Bar Offset X
+			Tooltip: ""
+		}
+
+		HorizontalLifeBarOffsetY: {
+			Label: Horizontal Life Bar Offset Y
+			Tooltip: ""
+		}
 	}
 }

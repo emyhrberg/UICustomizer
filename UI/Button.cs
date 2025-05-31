@@ -11,14 +11,17 @@ namespace UICustomizer.UI
         public Action click;
         private readonly string hoverText;
 
-        public Button(string text, string hoverText, int topOffset, Action click)
+        public Button(string text, string hoverText, int topOffset, Action click, bool maxWidth = false)
         {
             // Variables
             this.click = click;
             this.hoverText = hoverText;
 
             // Panel size and position
-            Width.Set(70, 0);
+            if (maxWidth)
+                Width.Set(-16, 1f); // Full width
+            else
+                Width.Set(80, 0); // Fixed width
             Height.Set(30, 0);
             VAlign = 0.0f;
             HAlign = 0.0f;

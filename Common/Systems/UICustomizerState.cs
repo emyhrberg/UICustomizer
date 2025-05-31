@@ -25,21 +25,6 @@ namespace UICustomizer.Common.Systems
 
             if (!UICustomizerSystem.EditModeActive) return;
 
-            // Draw black hover effect IF wanted
-            var sys = ModContent.GetInstance<UICustomizerSystem>();
-            if (sys == null || sys.state == null || sys.state.panel == null)
-            {
-                Log.SlowInfo("UICustomizerSystem or editorPanel is not initialized. Skipping draw.", seconds: 5);
-                return;
-            }
-            //if (sys.state.panel.checkboxBlack.state == CheckboxState.Checked)
-            {
-                // sb.End();
-                // sb.Begin(default, default, default, default, default, null, Main.UIScaleMatrix);
-                Texture2D tex = Terraria.GameContent.TextureAssets.MagicPixel.Value;
-                sb.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), null, Color.Black * 0.65f);
-            }
-
             // Draw hover around every element
             DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.ChatBounds(), "Chat");
             DrawHelper.DrawHitboxOutlineAndText(sb, DragHelper.HotbarBounds(), "Hotbar");

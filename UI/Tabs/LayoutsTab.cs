@@ -1,10 +1,13 @@
+using System;
+using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Systems.Hooks;
 
 namespace UICustomizer.UI.Tabs
 {
     public sealed class LayoutsTab : Tab
     {
-        public LayoutsTab() : base("Layouts")
+        public LayoutsTab(Action<Tab> select, UIScrollbar bar = null)
+        : base("Layouts", select, bar)
         {
 
         }
@@ -12,8 +15,8 @@ namespace UICustomizer.UI.Tabs
         protected override void Populate()
         {
             Gap(2);
-            list.Add(new Button("Default", "No offsets applied", 0, () => ApplyLayout("Default")));
-            list.Add(new Button("HBCenter", "Hotbar centered", 0, () => ApplyLayout("HBCenter")));
+            list.Add(new Button("Default", "No offsets applied", 0, () => ApplyLayout("Default"), maxWidth: true));
+            list.Add(new Button("HBCenter", "Hotbar centered", 0, () => ApplyLayout("HBCenter"), maxWidth: true));
         }
 
         private static void ApplyLayout(string layoutName)

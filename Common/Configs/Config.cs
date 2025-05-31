@@ -57,6 +57,66 @@ namespace UICustomizer.Common.Configs
         [Increment(10)]
         [DrawTicks]
         public float InfoAccsOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float FancyLifeOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float FancyLifeOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float ClassicLifeOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float ClassicLifeOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float ClassicManaOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float ClassicManaOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float FancyManaOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float FancyManaOffsetY;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float HorizontalLifeBarOffsetX;
+
+        [DefaultValue(0)]
+        [Range(-500f, 500f)]
+        [Increment(10)]
+        [DrawTicks]
+        public float HorizontalLifeBarOffsetY;
     }
 
     public static class Conf

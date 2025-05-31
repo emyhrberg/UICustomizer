@@ -35,3 +35,10 @@
 - Fix info accessories
 - Figure out resource bars 
 - Draw the dragged element with full opacity using interface layers!
+
+--------------------------------------------------------------
+
+2025-05-31: 
+- Fix all resource bars: classic, fancy, bars and HOVER text from some Common... method in vanilla
+- Fix map NPC not moving
+- Move buff icons
