@@ -12,7 +12,7 @@ namespace UICustomizer.UI
     {
         private float scale = 0.6f;
 
-        public EditButton() : base("Edit UI", 0.6f, false)
+        public EditButton() : base("Edit UI", 0.6f, true)
         {
             Top.Set(-98, 1);   
             Left.Set(-210, 1);
@@ -23,7 +23,11 @@ namespace UICustomizer.UI
             TextOriginX = 0.5f;
             TextOriginY = 0.5f;
 
-            OnLeftClick += (_, _) => UICustomizerSystem.EnterEditMode();
+            OnLeftClick += (_, _) =>
+            {
+                if (!UICustomizerSystem.EditModeActive)
+                    UICustomizerSystem.EnterEditMode();
+            };
             OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
         }
 

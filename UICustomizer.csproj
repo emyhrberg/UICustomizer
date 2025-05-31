@@ -7,6 +7,12 @@
 	<PropertyGroup>
 		
 	</PropertyGroup>
+	<ItemGroup>
+	  <AdditionalFiles Remove="Common\NewFolder\**" />
+	  <Compile Remove="Common\NewFolder\**" />
+	  <EmbeddedResource Remove="Common\NewFolder\**" />
+	  <None Remove="Common\NewFolder\**" />
+	</ItemGroup>
 
 	<!-- References -->
 
@@ -22,10 +28,6 @@
 
 		<PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
 		<Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Common\NewFolder\" />
 	</ItemGroup>
 
 </Project>

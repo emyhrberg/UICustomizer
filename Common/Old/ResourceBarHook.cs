@@ -1,9 +1,9 @@
-﻿//using System;
-//using MonoMod.Cil;
-//using Terraria.GameContent.UI.ResourceSets;
+﻿// using System;
+// using MonoMod.Cil;
+// using Terraria.GameContent.UI.ResourceSets;
 
-//namespace UICustomizer.Common.Systems.Hooks
-//{
+// namespace UICustomizer.Common.Systems.Hooks
+// {
 //    public class ResourceBarHook : ModSystem
 //    {
 //        public static float OffsetX = 0;
@@ -11,10 +11,10 @@
 
 //        public override void Load()
 //        {
-//            IL_Main.DrawHealthBar += InjectOffset;
-//            IL_Main.DrawBuffIcon += InjectOffset;
+//         //    IL_Main.DrawHealthBar += InjectOffset;
+//         //    IL_Main.DrawBuffIcon += InjectOffset;
 //            //IL_Main.GUIBarsDrawInner += SkipCallTest;
-//            IL_PlayerResourceSetsManager.Draw += SkipCallTest;
+//         //    IL_PlayerResourceSetsManager.Draw += SkipCallTest;
 //        }
 
 //        public override void Unload()
@@ -84,4 +84,4 @@
 //            }
 //        }
 //    }
-//}
+// }

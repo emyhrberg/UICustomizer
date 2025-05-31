@@ -3,6 +3,9 @@ using MonoMod.Cil;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
+    /// <summary>
+    /// Finds all calls to Vector2 constructor in the map drawing code and injects an offset to the position.
+    /// </summary>
     public class MapHook : ModSystem
     {
         public static float OffsetX = 0;

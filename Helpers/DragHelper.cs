@@ -28,7 +28,7 @@ namespace UICustomizer.Helpers
             int w = slot * 20 - 180;
             int h = slot * 2 + 10;
             int x = (int)(20 + HotbarHook.OffsetX);
-            int y = (int)(HotbarHook.OffsetY);
+            int y = (int)HotbarHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
@@ -37,24 +37,61 @@ namespace UICustomizer.Helpers
             int w = 250;
             int h = 250;
             int x = (int)(Main.screenWidth - 50 - w + MapHook.OffsetX);
-            int y = 90 + (int)(MapHook.OffsetY);
+            int y = 90 + (int)MapHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
         public static Rectangle InfoAccsBounds()
         {
             int w = 250;
-            int h = 250;
+            int h = 100;
             int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
-            int y = 150 + (int)InfoAccsHook.OffsetY;
+            int y = 340 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
-        public static Rectangle ResourceBarBounds()
+
+        public static Rectangle ClassicLifeBounds()
         {
             int w = 250;
             int h = 40;
-            int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
-            int y = 30 + (int)InfoAccsHook.OffsetY;
+            int x = (int)(Main.screenWidth - 50 - w + ClassicLifeHook.OffsetX);
+            int y = 35 + (int)ClassicLifeHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle FancyLifeBounds()
+        {
+            int w = 250;
+            int h = 60;
+            int x = (int)(Main.screenWidth - 50 - w + FancyLifeHook.OffsetX);
+            int y = 12 + (int)FancyLifeHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle ClassicManaBounds()
+        {
+            int w = 40;
+            int h = 300;
+            int x = (int)(Main.screenWidth - 6 - w + ClassicManaHook.OffsetX);
+            int y = 6 + (int)ClassicManaHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle FancyManaBounds()
+        {
+            int w = 40;
+            int h = 300;
+            int x = (int)(Main.screenWidth - 6 - w + FancyManaHook.OffsetX);
+            int y = 6 + (int)FancyManaHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle BarsBounds()
+        {
+            int w = 250;
+            int h = 80;
+            int x = (int)(Main.screenWidth - 50 - w + FancyLifeHook.OffsetX);
+            int y = 12 + (int)FancyLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
     }

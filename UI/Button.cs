@@ -5,14 +5,13 @@ using Terraria.ModLoader.UI;
 
 namespace UICustomizer.UI
 {
-    public class ButtonPanel : UIPanel
+    public class Button : UIPanel
     {
-        public bool Active = true;
         public UIText buttonText;
         public Action click;
-        private string hoverText;
+        private readonly string hoverText;
 
-        public ButtonPanel(string text, string hoverText, int topOffset, Action click)
+        public Button(string text, string hoverText, int topOffset, Action click)
         {
             // Variables
             this.click = click;
@@ -23,7 +22,7 @@ namespace UICustomizer.UI
             Height.Set(30, 0);
             VAlign = 0.0f;
             HAlign = 0.0f;
-            Top.Set(topOffset,0);
+            Top.Set(topOffset, 0);
 
             // Add UIText in the middle
             buttonText = new(text, 0.4f, true);
@@ -50,22 +49,16 @@ namespace UICustomizer.UI
         {
             base.LeftClick(evt);
 
-            if (!Active) return;
-
             click?.Invoke();
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (!Active) return;
-
             base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Active) return;
-
             base.Draw(spriteBatch);
 
             if (IsMouseHovering)

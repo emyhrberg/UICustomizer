@@ -1,11 +1,8 @@
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
-using Terraria.UI;
-using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
@@ -18,7 +15,7 @@ namespace UICustomizer.UI
         private string hoverText;
         private Action onClick;
 
-        public Checkbox(string text, string hover, Action onClick=null)
+        public Checkbox(string text, string hover, Action onClick = null)
         {
             hoverText = hover;
             this.onClick = onClick;
@@ -65,23 +62,10 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Left.Set(-10, 0);
-            //Width.Set(20, 1);
-            //MaxWidth.Set(20, 1);
-            //label.Top.Set(5, 0);
-            
-
             base.Draw(spriteBatch);
-
-            if (IsMouseHovering)
-            {
-                //Log.SlowInfo("hover");
-                //UICommon.TooltipMouseText("");
-            }
 
             if (IsMouseHovering && hoverText != "")
             {
-                //Log.SlowInfo("hover");
                 UICommon.TooltipMouseText(hoverText);
             }
         }
@@ -99,6 +83,7 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch sb)
         {
+            // Skip base draw and draw custom position and opacity
             //base.Draw(spriteBatch);
 
             if (Parent is Checkbox checkbox)

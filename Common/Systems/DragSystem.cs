@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Input;
 using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.UI;
 
@@ -21,6 +22,7 @@ namespace UICustomizer.Common.Systems
             // --- HOT RELOAD TESTING ---
             //ChatHook.OffsetY = -200;
             //MapHook.OffsetX = -100;
+            //LifeAndManaHook.OffsetY = 100;
 
             // If edit mode is not active, do nothing
             if (!UICustomizerSystem.EditModeActive)
@@ -37,17 +39,23 @@ namespace UICustomizer.Common.Systems
             // Force close inventory
             if (UICustomizerSystem.EditModeActive && Main.playerInventory)
             {
-                CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Inventory is not available in UI edit mode.");
+                //CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Inventory is not available in UI edit mode.");
                 Main.playerInventory = false;              // close inventory
                 Main.mouseItem = new Item();               // clear mouse item
             }
 
+            // Force exit edit mode on escape
+            if (UICustomizerSystem.EditModeActive && Main.keyState.IsKeyDown(Keys.Escape))
+            {
+                UICustomizerSystem.ExitEditMode();
+            }
+
             // If dragging the UIEditorPanel, return
             UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
-            if (sys == null || sys.uiCustomizerState == null) 
+            if (sys == null || sys.state == null)
                 return;
 
-            if (sys.uiCustomizerState.editorPanel.dragging || sys.uiCustomizerState.editorPanel.resize.draggingResize)
+            if (sys.state.panel.dragging || sys.state.panel.resize.draggingResize)
                 return;
 
             // Handle dragging of UI elements
@@ -55,14 +63,20 @@ namespace UICustomizer.Common.Systems
             HandleDrag(DragHelper.HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
             HandleDrag(DragHelper.MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
             HandleDrag(DragHelper.InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
-            //HandleDrag(DragHelper.ResourceBarBounds, ref ResourceBarHook.OffsetX, ref ResourceBarHook.OffsetY);
+
+            // Resource bars
+            HandleDrag(DragHelper.ClassicLifeBounds, ref ClassicLifeHook.OffsetX, ref ClassicLifeHook.OffsetY);
+            HandleDrag(DragHelper.FancyLifeBounds, ref FancyLifeHook.OffsetX, ref FancyLifeHook.OffsetY);
+            HandleDrag(DragHelper.ClassicManaBounds, ref ClassicManaHook.OffsetX, ref ClassicManaHook.OffsetY);
+            HandleDrag(DragHelper.FancyManaBounds, ref FancyManaHook.OffsetX, ref FancyManaHook.OffsetY);
+            HandleDrag(DragHelper.BarsBounds, ref HorizontalLifeBarHook.OffsetX, ref HorizontalLifeBarHook.OffsetY);
         }
 
         private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)
         {
             UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
-            Checkbox checkboxX = sys.uiCustomizerState.editorPanel.checkboxX;
-            Checkbox checkboxY = sys.uiCustomizerState.editorPanel.checkboxY;
+            Checkbox checkboxX = sys.state.panel.editorTab.CheckboxX;
+            Checkbox checkboxY = sys.state.panel.editorTab.CheckboxY;
 
             Vector2 mouseUI = Main.MouseScreen;
 

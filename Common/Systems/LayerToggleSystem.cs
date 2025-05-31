@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems
 {
     public class LayerToggleSystem : ModSystem
     {
-        internal static readonly Dictionary<string, bool> LayerStates = new(); // true = visible
+        internal static readonly Dictionary<string, bool> LayerStates = [];
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {

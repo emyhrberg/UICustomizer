@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
+using UICustomizer.Common.Systems;
+using UICustomizer.UI;
 
 namespace UICustomizer.Helpers
 {
@@ -13,15 +15,29 @@ namespace UICustomizer.Helpers
 
             Texture2D t = TextureAssets.MagicPixel.Value;
             int thickness = 2;
+            var sys = ModContent.GetInstance<UICustomizerSystem>();
+            if (sys == null || sys.state == null || sys.state.panel == null)
+            {
+                Log.SlowInfo("UICustomizerSystem or editorPanel is not initialized. Skipping draw.", seconds: 5);
+                return;
+            }
 
-            sb.Draw(t, new Rectangle(rect.X, rect.Y, rect.Width, thickness), color);
-            sb.Draw(t, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
-            sb.Draw(t, new Rectangle(rect.X + rect.Width - thickness, rect.Y, thickness, rect.Height), color);
-            sb.Draw(t, new Rectangle(rect.X, rect.Y + rect.Height - thickness, rect.Width, thickness), color);
+            // Draw hitbox (outline around the rectangle)
+            if (sys.state.panel.editorTab.CheckboxHitbox.state == CheckboxState.Checked)
+            {
+                sb.Draw(t, new Rectangle(rect.X, rect.Y, rect.Width, thickness), color);
+                sb.Draw(t, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
+                sb.Draw(t, new Rectangle(rect.X + rect.Width - thickness, rect.Y, thickness, rect.Height), color);
+                sb.Draw(t, new Rectangle(rect.X, rect.Y + rect.Height - thickness, rect.Width, thickness), color);
+            }
 
-            Vector2 pos = rect.Location.ToVector2();
-            pos += new Vector2(0, -20); // place 20 pixels above the pos
-            Utils.DrawBorderString(sb, text, pos, Color.White);
+            // Draw names (of the UI elements)
+            if (sys.state.panel.editorTab.CheckboxNames.state == CheckboxState.Checked)
+            {
+                Vector2 pos = rect.Location.ToVector2();
+                pos += new Vector2(0, -20); // place 20 pixels above the pos
+                Utils.DrawBorderString(sb, text, pos, Color.White);
+            }
         }
 
         /// <summary>

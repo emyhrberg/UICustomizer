@@ -14,6 +14,8 @@ namespace UICustomizer.UI
         public event Action<float> OnDragX;
         public event Action<float> OnDragY;
 
+        private Color color;
+
         public Resize(Asset<Texture2D> texture) : base(texture)
         {
             // Position the button inside the bottom-right corner
@@ -28,19 +30,15 @@ namespace UICustomizer.UI
             Texture = texture;
         }
 
-        // Called when the user presses the left mouse button on this element
         public override void LeftMouseDown(UIMouseEvent evt)
         {
             base.LeftMouseDown(evt);  // needed for correct event handling
 
-            // We only start dragging if the user explicitly clicked this button
             draggingResize = true;
             clickOffsetY = evt.MousePosition.Y - GetDimensions().Y;
-            clickOffsetX = evt.MousePosition.X - GetDimensions().X;   // <─ new
-            // Main.LocalPlayer.mouseInterface = true;
+            clickOffsetX = evt.MousePosition.X - GetDimensions().X;
         }
 
-        // Called when the user releases the left mouse button
         public override void LeftMouseUp(UIMouseEvent evt)
         {
             base.LeftMouseUp(evt);
@@ -51,10 +49,8 @@ namespace UICustomizer.UI
         {
             base.Update(gameTime);
 
-            // If we are dragging, keep sending offset events
             if (draggingResize)
             {
-                // If the mouse was released outside this UI, stop
                 if (!Main.mouseLeft)
                 {
                     draggingResize = false;
@@ -67,9 +63,9 @@ namespace UICustomizer.UI
                     OnDragY?.Invoke(offsetY);
 
                     // X-offset
-                    float newLeft = Main.MouseScreen.X - clickOffsetX; 
-                    float offsetX = newLeft - GetDimensions().X;       
-                    OnDragX?.Invoke(offsetX);                          
+                    float newLeft = Main.MouseScreen.X - clickOffsetX;
+                    float offsetX = newLeft - GetDimensions().X;
+                    OnDragX?.Invoke(offsetX);
                 }
             }
         }

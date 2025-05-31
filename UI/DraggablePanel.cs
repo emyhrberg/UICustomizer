@@ -1,9 +1,10 @@
-﻿using Terraria.GameContent.UI.Elements;
+using Terraria.GameContent.UI.Elements;
 
 namespace UICustomizer.UI
 {
     public class DraggablePanel : UIPanel
     {
+        // Dragging
         public Vector2 offset;
         public bool dragging { get; private set; }
 
@@ -52,8 +53,7 @@ namespace UICustomizer.UI
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            // Add extra guard to avoid dragging if resize is already dragging
-            if (dragging && !(this as UIEditorPanel)?.resize.draggingResize == true)
+            if (dragging)
             {
                 Left.Set(Main.mouseX - offset.X, 0f);
                 Top.Set(Main.mouseY - offset.Y, 0f);
