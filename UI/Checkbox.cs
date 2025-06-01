@@ -15,8 +15,10 @@ namespace UICustomizer.UI
         private string hoverText;
         private Action onClick;
 
-        public Checkbox(string text, string hover, int width = 50, Action onClick = null)
+        public Checkbox(string text, string hover, int width = 50, Action onClick = null, CheckboxState initialState = CheckboxState.Checked)
+            : base()
         {
+            state = initialState;
             hoverText = hover;
             this.onClick = onClick;
 
@@ -27,6 +29,7 @@ namespace UICustomizer.UI
 
             // Box
             box = new CheckboxBox(Ass.Check);
+            box.SetImage(initialState == CheckboxState.Checked ? Ass.Check : Ass.Uncheck);
             box.Left.Set(0, 0);
             box.Top.Set(0, 0);
             Append(box);
@@ -46,17 +49,21 @@ namespace UICustomizer.UI
             onClick?.Invoke();
         }
 
+        public void SetState(CheckboxState newState)
+        {
+            state = newState;
+            box.SetImage(newState == CheckboxState.Checked ? Ass.Check : Ass.Uncheck);
+        }
+
         private void Toggle()
         {
             if (state == CheckboxState.Checked)
             {
-                state = CheckboxState.Unchecked;
-                box.SetImage(Ass.Uncheck);
+                SetState(CheckboxState.Unchecked);
             }
             else
             {
-                state = CheckboxState.Checked;
-                box.SetImage(Ass.Check);
+                SetState(CheckboxState.Checked);
             }
         }
 

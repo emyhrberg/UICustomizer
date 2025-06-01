@@ -21,6 +21,8 @@ namespace UICustomizer.Helpers
         // Add assets here
         public static Asset<Texture2D> Check;
         public static Asset<Texture2D> Uncheck;
+        public static Asset<Texture2D> Pluss;
+        public static Asset<Texture2D> Minuss;
         public static Asset<Texture2D> Resize;
 
         // This will automatically initialize the assets

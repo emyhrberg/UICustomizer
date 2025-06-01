@@ -12,10 +12,32 @@ namespace UICustomizer.UI
             HAlign = 1f;
             VAlign = 0f;
             SetPadding(0);
-            Append(new UIText(text, 0.45f, true) { HAlign = .5f, VAlign = .5f });
-            OnMouseOver += (_, _) => BorderColor = Color.Yellow;
+
+            UIText x = new(text, 0.45f, true)
+            {
+                HAlign = 0.5f,
+                VAlign = 0.5f
+            };
+            Append(x);
+            OnMouseOver += (_, _) =>
+            {
+                BorderColor = Color.Yellow;
+                if (Main.mouseLeft)
+                {
+                    // x._color = Color.Yellow;
+                    if (Main.mouseLeftRelease)
+                    {
+                        x._color = Color.White;
+                        // UICustomizerSystem.ExitEditMode();
+                    }
+                }
+            };
             OnMouseOut += (_, _) => BorderColor = Color.Black;
-            OnLeftClick += (_, _) => UICustomizerSystem.ExitEditMode();
+            OnLeftClick += (_, _) =>
+            {
+
+                UICustomizerSystem.ExitEditMode();
+            };
         }
     }
 }

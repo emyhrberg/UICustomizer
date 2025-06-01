@@ -32,10 +32,7 @@ namespace UICustomizer.Common.Systems.Hooks
                     i => i.MatchConvR4(),
                     i => i.MatchNewobj<Vector2>()))
                 {
-                    c.EmitDelegate((Vector2 pos) =>
-                    {
-                        return pos + new Vector2(OffsetX, OffsetY);
-                    });
+                    c.EmitDelegate((Vector2 pos) => pos + new Vector2(OffsetX, OffsetY));
                 }
             }
             catch (Exception e)

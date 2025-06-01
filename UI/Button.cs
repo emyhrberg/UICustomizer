@@ -8,20 +8,22 @@ namespace UICustomizer.UI
     public class Button : UIPanel
     {
         public UIText buttonText;
-        public Action click;
-        private readonly string hoverText;
+        private readonly Func<string> tooltip;
 
-        public Button(string text, string hoverText, int topOffset, Action click, bool maxWidth = false)
+        public Button(string text, Func<string> tooltip, Action onClick, int topOffset = 0, bool maxWidth = false, Action onRightClick = null, int width = 100)
         {
             // Variables
-            this.click = click;
-            this.hoverText = hoverText;
+            this.tooltip = tooltip;
+            OnMouseOver += (_, _) => BorderColor = Color.Yellow;
+            OnMouseOut += (_, _) => BorderColor = Color.Black;
+            OnRightClick += (_, _) => onRightClick?.Invoke();
+            OnLeftClick += (_, _) => onClick?.Invoke();
 
             // Panel size and position
             if (maxWidth)
                 Width.Set(-16, 1f); // Full width
             else
-                Width.Set(80, 0); // Fixed width
+                Width.Set(width, 0); // Fixed width
             Height.Set(30, 0);
             VAlign = 0.0f;
             HAlign = 0.0f;
@@ -32,27 +34,6 @@ namespace UICustomizer.UI
             buttonText.HAlign = 0.5f;
             buttonText.VAlign = 0.5f;
             Append(buttonText);
-        }
-
-        public override void MouseOver(UIMouseEvent evt)
-        {
-            base.MouseOver(evt);
-
-            BorderColor = Color.Yellow;
-        }
-
-        public override void MouseOut(UIMouseEvent evt)
-        {
-            base.MouseOut(evt);
-
-            BorderColor = Color.Black;
-        }
-
-        public override void LeftClick(UIMouseEvent evt)
-        {
-            base.LeftClick(evt);
-
-            click?.Invoke();
         }
 
         public override void Update(GameTime gameTime)
@@ -66,7 +47,7 @@ namespace UICustomizer.UI
 
             if (IsMouseHovering)
             {
-                UICommon.TooltipMouseText(hoverText);
+                UICommon.TooltipMouseText(tooltip());
             }
         }
     }

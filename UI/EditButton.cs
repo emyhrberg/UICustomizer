@@ -12,9 +12,9 @@ namespace UICustomizer.UI
     {
         private float scale = 0.6f;
 
-        public EditButton() : base("Edit UI", 0.6f, true)
+        public EditButton() : base("UI Editor", 0.6f, true)
         {
-            Top.Set(-98, 1);   
+            Top.Set(-98, 1);
             Left.Set(-210, 1);
 
             Width.Set(200, 0);
@@ -25,10 +25,15 @@ namespace UICustomizer.UI
 
             OnLeftClick += (_, _) =>
             {
+                Main.LocalPlayer.mouseInterface = true; // prevents item use
                 if (!UICustomizerSystem.EditModeActive)
                     UICustomizerSystem.EnterEditMode();
             };
-            OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+            OnMouseOver += (_, _) =>
+            {
+                Main.LocalPlayer.mouseInterface = true; // prevents item use
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
         }
 
         public override void Update(GameTime gameTime)
@@ -45,7 +50,7 @@ namespace UICustomizer.UI
             if (IsMouseHovering && scale < 0.75f) scale += 0.02f;
             if (!IsMouseHovering && scale > 0.6f) scale -= 0.02f;
 
-            SetText("[Edit UI!]", scale, true);
+            SetText("UI Editor", scale, true);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

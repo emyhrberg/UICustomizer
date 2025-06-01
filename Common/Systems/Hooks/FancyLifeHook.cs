@@ -1,6 +1,9 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using MonoMod.Cil;
+using Terraria;
 using Terraria.GameContent.UI.ResourceSets;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
@@ -11,47 +14,74 @@ namespace UICustomizer.Common.Systems.Hooks
 
         public override void Load()
         {
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectOffset;
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar += InjectOffset;
+            // Hook the Vector2 constructor in DrawLifeBar method
+            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar += InjectLifeBarOffset;
+            // Hook the static DrawLifeBarText method
+            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectLifeBarTextOffset;
         }
 
         public override void Unload()
         {
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectOffset;
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar -= InjectOffset;
+            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar -= InjectLifeBarOffset;
+            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectLifeBarTextOffset;
         }
 
-        private void InjectOffset(ILContext il)
+        private void InjectLifeBarOffset(ILContext il)
         {
             try
             {
                 ILCursor c = new(il);
 
-                // Find FIRST 4, with instruction ldc.i4
+                // Hook only the main Vector2 position: new Vector2(Main.screenWidth - 300 + 4, 15f)
                 if (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcI4(4)))
+                    i => i.MatchLdsfld("Terraria.Main", "screenWidth"),
+                    i => i.MatchLdcI4(300),
+                    i => i.MatchSub(),
+                    i => i.MatchLdcI4(4),
+                    i => i.MatchAdd(),
+                    i => i.MatchConvR4(),
+                    i => i.MatchLdcR4(15f),
+                    i => i.MatchNewobj<Vector2>()))
                 {
-                    c.EmitDelegate((int value) => (int)(value + OffsetX));
+                    c.EmitDelegate<Func<Vector2, Vector2>>(pos => new Vector2(pos.X + OffsetX, pos.Y + OffsetY));
+                    // Log.Info("Hooked fancy life bar main position");
                 }
 
-                // Find FIRST 15f, with ldc.r4
-                if (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcR4(15f)))
+                // Hook TopLeftAnchor field assignments - this is the key part!
+                c.Index = 0;
+                int anchorCount = 0;
+                while (c.TryGotoNext(MoveType.After,
+                    i => i.MatchStfld<ResourceDrawSettings>("TopLeftAnchor")))
                 {
-                    c.EmitDelegate((float value) => value + OffsetY);
+                    anchorCount++;
+                    // Go back to hook the Vector2 being assigned to TopLeftAnchor
+                    c.Index -= 1;
+                    c.EmitDelegate<Func<Vector2, Vector2>>(anchor => new Vector2(anchor.X + OffsetX, anchor.Y + OffsetY));
+                    c.Index += 1; // Move forward again
+                    // Log.Info($"Hooked TopLeftAnchor assignment #{anchorCount}");
                 }
+            }
+            catch (Exception e)
+            {
+                throw new ILPatchFailureException(Mod, il, e);
+            }
+        }
 
-                // while (c.TryGotoNext(MoveType.After,
-                //     i => i.MatchNewobj<Vector2>()))
-                // {
-                //     c.EmitDelegate((Vector2 pos) =>
-                //     {
-                //         return new Vector2(
-                //             pos.X + OffsetX,
-                //             pos.Y + OffsetY
-                //         );
-                //     });
-                // }
+        private void InjectLifeBarTextOffset(ILContext il)
+        {
+            try
+            {
+                ILCursor c = new(il);
+
+                // Hook the Vector2 constructor in DrawLifeBarText: topLeftAnchor + new Vector2(130f, -24f)
+                if (c.TryGotoNext(MoveType.After,
+                    i => i.MatchLdcR4(130f),
+                    i => i.MatchLdcR4(-24f),
+                    i => i.MatchNewobj<Vector2>()))
+                {
+                    c.EmitDelegate<Func<Vector2, Vector2>>(offset => new Vector2(offset.X + OffsetX, offset.Y + OffsetY));
+                    // Log.Info("Hooked fancy life bar text offset");
+                }
             }
             catch (Exception e)
             {

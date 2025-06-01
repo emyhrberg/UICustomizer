@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Systems;
 using UICustomizer.UI.Tabs;
@@ -10,8 +11,8 @@ namespace UICustomizer.UI
         // Tabs
         public Tab current;
         public EditorTab editorTab;
-        public LayoutsTab layoutsTab;
-        public InterfaceLayersTab layersTab;
+        public ThemeTab themesTab;
+        public LayersTab layersTab;
 
         // Content
         public int W = 300;
@@ -19,17 +20,11 @@ namespace UICustomizer.UI
         public UIPanel headerElement;
         public Resize resize;
         public UIElement body = new();   // the content region
-        private readonly UIScrollbar scrollbar;
+        private readonly Scrollbar scrollbar;
 
         public Panel()
         {
-            // Size and position
-            Width.Set(W, 0);
-            Height.Set(H, 0);
-            HAlign = 1.0f;
-            VAlign = 1.0f;
-            Left.Set(-20, 0);
-            Top.Set(-20, 0);
+            SetDefaultSizeAndPosition();
 
             // Header element
             headerElement = new UIPanel
@@ -44,23 +39,19 @@ namespace UICustomizer.UI
             Append(headerElement);
 
             // Scrollbar
-            scrollbar = new UIScrollbar();
-            scrollbar.Width.Set(20, 0);
-            scrollbar.Height.Set(-30 - 12, 1);
-            scrollbar.Left.Set(-12, 1);
-            scrollbar.Top.Set(6, 0);
+            scrollbar = new();
             body.Append(scrollbar);
 
             // Tabs
             float tabW = (W - 30f) / W / 3f;          // W is the panel pixel width
 
             editorTab = new EditorTab(Select, scrollbar) { Width = { Percent = tabW } };
-            layersTab = new InterfaceLayersTab(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW } };
-            layoutsTab = new LayoutsTab(Select) { Width = { Percent = tabW }, Left = { Percent = tabW * 2 } };
+            layersTab = new LayersTab(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW } };
+            themesTab = new ThemeTab(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW * 2 } };
 
             headerElement.Append(editorTab);
             headerElement.Append(layersTab);
-            headerElement.Append(layoutsTab);
+            headerElement.Append(themesTab);
 
             // X
             headerElement.Append(new CloseButton("X"));
@@ -107,6 +98,18 @@ namespace UICustomizer.UI
             Select(editorTab); // default tab
         }
 
+        public void SetDefaultSizeAndPosition()
+        {
+            // Set default size and position
+            Left.Set(-40, 0f);
+            Top.Set(-40, 0f);
+            Width.Set(W, 0f);
+            Height.Set(H, 0f);
+            VAlign = 1.0f;
+            HAlign = 1.0f;
+            Recalculate();
+        }
+
         private void Select(Tab t)
         {
             if (!UICustomizerSystem.EditModeActive) return;
@@ -115,7 +118,7 @@ namespace UICustomizer.UI
             current = t;
 
             // Highlight color
-            Tab[] tabs = [editorTab, layoutsTab, layersTab];
+            Tab[] tabs = [editorTab, themesTab, layersTab];
             foreach (var tab in tabs)
                 tab.header.TextColor = tab == t ? Color.Yellow : Color.White;
 
@@ -124,9 +127,20 @@ namespace UICustomizer.UI
             // Append everything
             body.Append(t.list);
             body.Append(scrollbar);
-            if (scrollbar != null)
-                t.list.SetScrollbar(scrollbar);
+            t.list.SetScrollbar(scrollbar);
             t.list.Recalculate();
+
+            // Show scrollbar only if content is taller than view
+            float contentHeight = 0f;
+            foreach (UIElement child in t.list.Children)
+            {
+                float childTop = child.Top.Pixels;
+                float childHeight = child.GetDimensions().Height;
+                contentHeight = Math.Max(contentHeight, childTop + childHeight);
+            }
+            float viewHeight = t.list.GetInnerDimensions().Height;
+            scrollbar.Visible = contentHeight > viewHeight;
+
         }
 
         public override void Update(GameTime gameTime)

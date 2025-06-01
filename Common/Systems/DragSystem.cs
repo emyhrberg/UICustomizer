@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
+using Terraria.GameContent;
 using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.UI;
 
@@ -59,17 +60,45 @@ namespace UICustomizer.Common.Systems
                 return;
 
             // Handle dragging of UI elements
-            HandleDrag(DragHelper.ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
-            HandleDrag(DragHelper.HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
-            HandleDrag(DragHelper.MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
-            HandleDrag(DragHelper.InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
+            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
+            HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
+            HandleDrag(BuffBounds, ref BuffHook.OffsetX, ref BuffHook.OffsetY);
+            HandleDrag(MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
+            HandleDrag(InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
 
             // Resource bars
-            HandleDrag(DragHelper.ClassicLifeBounds, ref ClassicLifeHook.OffsetX, ref ClassicLifeHook.OffsetY);
-            HandleDrag(DragHelper.FancyLifeBounds, ref FancyLifeHook.OffsetX, ref FancyLifeHook.OffsetY);
-            HandleDrag(DragHelper.ClassicManaBounds, ref ClassicManaHook.OffsetX, ref ClassicManaHook.OffsetY);
-            HandleDrag(DragHelper.FancyManaBounds, ref FancyManaHook.OffsetX, ref FancyManaHook.OffsetY);
-            HandleDrag(DragHelper.BarsBounds, ref HorizontalLifeBarHook.OffsetX, ref HorizontalLifeBarHook.OffsetY);
+            // Check which resource set is active and handle dragging accordingly
+            string activeSetName = Main.ResourceSetsManager.ActiveSet.DisplayedName;
+            if (activeSetName.StartsWith("Classic"))
+            {
+                HandleDrag(ClassicLifeBounds, ref ClassicLifeHook.OffsetX, ref ClassicLifeHook.OffsetY);
+                HandleDrag(ClassicManaBounds, ref ClassicManaHook.OffsetX, ref ClassicManaHook.OffsetY);
+            }
+            else if (activeSetName == "Fancy")
+            {
+                HandleDrag(FancyLifeBounds, ref FancyLifeHook.OffsetX, ref FancyLifeHook.OffsetY);
+                HandleDrag(FancyManaBounds, ref FancyManaHook.OffsetX, ref FancyManaHook.OffsetY);
+            }
+            else if (activeSetName == "Fancy 2")
+            {
+                HandleDrag(FancyLifeBounds, ref FancyLifeHook.OffsetX, ref FancyLifeHook.OffsetY);
+                HandleDrag(FancyManaBounds, ref FancyManaHook.OffsetX, ref FancyManaHook.OffsetY);
+            }
+            else if (activeSetName == "Bars")
+            {
+                HandleDrag(BarsBounds, ref HorizontalBarsHook.OffsetX, ref HorizontalBarsHook.OffsetY);
+            }
+            else if (activeSetName == "Bars 2")
+            {
+                HandleDrag(BarsBounds, ref HorizontalBarsHook.OffsetX, ref HorizontalBarsHook.OffsetY);
+                HandleDrag(BarLifeTextBounds, ref BarLifeTextHook.OffsetX, ref BarLifeTextHook.OffsetY);
+            }
+            else if (activeSetName == "Bars 3")
+            {
+                HandleDrag(BarsBounds, ref HorizontalBarsHook.OffsetX, ref HorizontalBarsHook.OffsetY);
+                HandleDrag(BarLifeTextBounds, ref BarLifeTextHook.OffsetX, ref BarLifeTextHook.OffsetY);
+                HandleDrag(BarManaTextBounds, ref BarManaTextHook.OffsetX, ref BarManaTextHook.OffsetY);
+            }
         }
 
         private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)
@@ -81,7 +110,7 @@ namespace UICustomizer.Common.Systems
             Vector2 mouseUI = Main.MouseScreen;
 
             /* start drag */
-            if (_dragSource is null && Main.mouseLeft && DragHelper.MouseInBounds(bounds()))
+            if (_dragSource is null && Main.mouseLeft && bounds().Contains(Main.MouseScreen.ToPoint()))
             {
                 // If neither x nor y is checked, print a warning and return
                 bool someTimeElapsed = DateTime.UtcNow - lastWarningSent >= TimeSpan.FromMilliseconds(50);
@@ -97,6 +126,10 @@ namespace UICustomizer.Common.Systems
                     lastWarningSent = DateTime.UtcNow;
                     return;
                 }
+
+                // Force switch to active layout
+                LayoutJsonHelper.CurrentLayoutName = "Active";
+                sys?.state?.panel?.editorTab?.PopulatePublic();
 
                 _dragSource = bounds;
                 _mouseStart = mouseUI;                      // store in UI units
@@ -121,8 +154,135 @@ namespace UICustomizer.Common.Systems
                 }
 
                 if (!Main.mouseLeft)
+                {
+                    // End drag
                     _dragSource = null;
+                    LayoutJsonHelper.SaveActiveLayout("Active");
+                }
             }
         }
+
+        #region Bounds
+
+        public static Rectangle ChatBounds()
+        {
+            // vanilla: centre horizontally, a bit above the bottom toolbar
+            int w = TextureAssets.TextBack.Width() + 120; // not accurate, its much wider in fullscreen
+            //Log.SlowInfo(Main.screenWidth.ToString());
+            if (Main.screenWidth > 1000)
+            {
+                w += 200;
+            }
+            if (Main.screenWidth > 1800)
+            {
+                w += 727;
+            }
+            int h = TextureAssets.TextBack.Height();
+            int x = (int)(78 + ChatHook.OffsetX);
+            int y = (int)(Main.screenHeight - 86 + ChatHook.OffsetY);
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle HotbarBounds()
+        {
+            //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
+            int w = 52 * 10 - 85;
+            int h = 52 + 12;
+            int x = (int)(20 + HotbarHook.OffsetX);
+            int y = 1 + (int)HotbarHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle BuffBounds()
+        {
+            int w = 52 * 10 - 85;
+            int h = 52 + 12;
+            int x = (int)(20 + BuffHook.OffsetX);
+            int y = (int)(52 + 21 + BuffHook.OffsetY);
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle MapBounds()
+        {
+            int w = (int)(250 * Main.MapScale);
+            int h = (int)(250 * Main.MapScale);
+            int x = (int)(Main.screenWidth - 50 - w + MapHook.OffsetX);
+            int y = 90 + (int)MapHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle InfoAccsBounds()
+        {
+            int w = 250;
+            int h = 100;
+            int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
+            int y = 340 + (int)InfoAccsHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle ClassicLifeBounds()
+        {
+            int w = 245;
+            int h = 65;
+            int x = (int)(Main.screenWidth - 57 - w + ClassicLifeHook.OffsetX);
+            int y = 6 + (int)ClassicLifeHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle FancyLifeBounds()
+        {
+            int w = 250;
+            int h = 60;
+            int x = (int)(Main.screenWidth - 50 - w + FancyLifeHook.OffsetX);
+            int y = 12 + (int)FancyLifeHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle ClassicManaBounds()
+        {
+            int w = 44;
+            int h = 300;
+            int x = (int)(Main.screenWidth - 6 - w + ClassicManaHook.OffsetX);
+            int y = 6 + (int)ClassicManaHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle FancyManaBounds()
+        {
+            int w = 40;
+            int h = 300;
+            int x = (int)(Main.screenWidth - 6 - w + FancyManaHook.OffsetX);
+            int y = 6 + (int)FancyManaHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle BarsBounds()
+        {
+            int w = 250;
+            int h = 80;
+            int x = (int)(Main.screenWidth - 50 - w + HorizontalBarsHook.OffsetX);
+            int y = 12 + (int)HorizontalBarsHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle BarLifeTextBounds()
+        {
+            int w = 110;
+            int h = 30;
+            int x = (int)(Main.screenWidth - 118 - w + BarLifeTextHook.OffsetX);
+            int y = 1 + (int)BarLifeTextHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle BarManaTextBounds()
+        {
+            int w = 110;
+            int h = 30;
+            int x = (int)(Main.screenWidth - 123 - w + BarManaTextHook.OffsetX);
+            int y = 60 + (int)BarManaTextHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        #endregion
     }
 }

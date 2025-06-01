@@ -15,11 +15,11 @@ namespace UICustomizer.UI
         {
             base.LeftMouseDown(evt);
 
-            // If the mouse‐target (or any of its parents) is a UIScrollbar, do NOT start a panel‐drag.
+            // If the mouse‐target (or any of its parents) is a Scrollbar, do NOT start a panel‐drag.
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is UIScrollbar || target is CloseButton)
+                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is CollapseIcon)
                     return;
                 target = target.Parent;
             }
