@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Systems;
 using UICustomizer.UI.Tabs;
@@ -16,7 +18,7 @@ namespace UICustomizer.UI
 
         // Content
         public int W = 300;
-        public int H = 400;
+        public int H = 420;
         public UIPanel headerElement;
         public Resize resize;
         public UIElement body = new();   // the content region
@@ -25,6 +27,7 @@ namespace UICustomizer.UI
         public Panel()
         {
             SetDefaultSizeAndPosition();
+            UICustomizerSystem.EnterEditMode();
 
             // Header element
             headerElement = new UIPanel
@@ -43,11 +46,11 @@ namespace UICustomizer.UI
             body.Append(scrollbar);
 
             // Tabs
-            float tabW = (W - 30f) / W / 3f;          // W is the panel pixel width
+            float tabW = (W - 30f) / W / 3f; // -30 for close button, 3f for three tabs
 
-            editorTab = new EditorTab(Select, scrollbar) { Width = { Percent = tabW } };
-            layersTab = new LayersTab(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW } };
-            themesTab = new ThemeTab(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW * 2 } };
+            editorTab = new(Select, scrollbar) { Width = { Percent = tabW } };
+            layersTab = new(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW } };
+            themesTab = new(Select, scrollbar) { Width = { Percent = tabW }, Left = { Percent = tabW * 2 } };
 
             headerElement.Append(editorTab);
             headerElement.Append(layersTab);
@@ -102,7 +105,7 @@ namespace UICustomizer.UI
         {
             // Set default size and position
             Left.Set(-40, 0f);
-            Top.Set(-40, 0f);
+            Top.Set(-60, 0f);
             Width.Set(W, 0f);
             Height.Set(H, 0f);
             VAlign = 1.0f;
@@ -113,34 +116,17 @@ namespace UICustomizer.UI
         private void Select(Tab t)
         {
             if (!UICustomizerSystem.EditModeActive) return;
-
             if (current == t) return;
+
+            // Select new tab
             current = t;
 
-            // Highlight color
-            Tab[] tabs = [editorTab, themesTab, layersTab];
-            foreach (var tab in tabs)
-                tab.header.TextColor = tab == t ? Color.Yellow : Color.White;
-
+            // Update body content
             body.RemoveAllChildren();
-
-            // Append everything
             body.Append(t.list);
             body.Append(scrollbar);
             t.list.SetScrollbar(scrollbar);
             t.list.Recalculate();
-
-            // Show scrollbar only if content is taller than view
-            float contentHeight = 0f;
-            foreach (UIElement child in t.list.Children)
-            {
-                float childTop = child.Top.Pixels;
-                float childHeight = child.GetDimensions().Height;
-                contentHeight = Math.Max(contentHeight, childTop + childHeight);
-            }
-            float viewHeight = t.list.GetInnerDimensions().Height;
-            scrollbar.Visible = contentHeight > viewHeight;
-
         }
 
         public override void Update(GameTime gameTime)
@@ -148,12 +134,74 @@ namespace UICustomizer.UI
             if (!UICustomizerSystem.EditModeActive) return;
 
             base.Update(gameTime);
+
+            UpdateScrollbarVisbility();
+        }
+
+        private void UpdateScrollbarVisbility()
+        {
+            // Set scrollbar visibility
+            if (current?.list != null)
+            {
+                // Default to false
+                scrollbar.Visible = false;
+
+                // Count the number of expanded sections
+                int expandedCount = 0;
+
+                if (current is ThemeTab)
+                {
+                    // Theme tab has no sections to count
+                    scrollbar.Visible = true;
+                    expandedCount = 0;
+                }
+                else if (current is EditorTab editor)
+                {
+                    if (editor._uiEditorExpanded) expandedCount++;
+                    if (editor._layoutsExpanded) expandedCount++;
+                    if (editor._optionsExpanded) expandedCount++;
+                    expandedCount++;
+                }
+                else if (current is LayersTab layers)
+                {
+                    if (layers.vanillaExpanded) expandedCount++;
+                    if (expandedCount == 1 && layers.modsExpandedMap.Values.All(v => !v))
+                    {
+                        scrollbar.Visible = true;
+                        return;
+                    }
+                    expandedCount += layers.modsExpandedMap.Values.Count(v => v);
+                }
+
+                // Show scrollbar only if more than one section is expanded
+                if (expandedCount > 1)
+                {
+                    scrollbar.Visible = true;
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (!UICustomizerSystem.EditModeActive) return;
 
+            // Don't draw the panel at all when hiding everything
+            if (current is EditorTab editorTab && editorTab.hideAllMode)
+            {
+                // If press escape, exit hide mode
+                // NOTE: This causes collection enumeration issues
+                // if (Main.keyState.IsKeyDown(Keys.Escape))
+                // {
+                //     UICustomizerSystem.ExitEditMode();
+                //     editorTab.hideAllMode = false;
+                //     editorTab.ResetHideAllState();
+                //     editorTab.PopulatePublic();
+                // }
+
+                return; // Panel is completely invisible, floating button handled by UIState
+            }
+
+            // Normal drawing when not hiding
             base.Draw(spriteBatch);
         }
     }

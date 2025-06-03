@@ -36,7 +36,7 @@ namespace UICustomizer.Helpers
             if (instance == null || instance.Logger == null)
                 return; // Skip logging if the mod is unloading or null
 
-            // Use TimeSpanFactory to create a 3-second interval.
+            // Use TimeSpanFactory to create a x-second interval.
             TimeSpan interval = TimeSpan.FromSeconds(seconds);
             bool timeElapsed = DateTime.UtcNow - lastLogTime >= interval;
             if (timeElapsed)

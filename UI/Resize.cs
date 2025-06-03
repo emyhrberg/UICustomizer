@@ -7,14 +7,11 @@ namespace UICustomizer.UI
 {
     public class Resize : UIImageButton
     {
-        private Asset<Texture2D> Texture;
         public bool draggingResize;
         private float clickOffsetX, clickOffsetY;
 
         public event Action<float> OnDragX;
         public event Action<float> OnDragY;
-
-        private Color color;
 
         public Resize(Asset<Texture2D> texture) : base(texture)
         {
@@ -27,22 +24,17 @@ namespace UICustomizer.UI
             Width.Set(35, 0f);
             Height.Set(35, 0f);
 
-            Texture = texture;
-        }
+            OnLeftMouseDown += (evt, _) =>
+            {
+                draggingResize = true;
+                clickOffsetY = evt.MousePosition.Y - GetDimensions().Y;
+                clickOffsetX = evt.MousePosition.X - GetDimensions().X;
+            };
 
-        public override void LeftMouseDown(UIMouseEvent evt)
-        {
-            base.LeftMouseDown(evt);  // needed for correct event handling
-
-            draggingResize = true;
-            clickOffsetY = evt.MousePosition.Y - GetDimensions().Y;
-            clickOffsetX = evt.MousePosition.X - GetDimensions().X;
-        }
-
-        public override void LeftMouseUp(UIMouseEvent evt)
-        {
-            base.LeftMouseUp(evt);
-            draggingResize = false;
+            OnLeftMouseUp += (evt, listeningElement) =>
+            {
+                draggingResize = false;
+            };
         }
 
         public override void Update(GameTime gameTime)
@@ -70,9 +62,9 @@ namespace UICustomizer.UI
             }
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch sb)
         {
-            DrawHelper.DrawProperScale(spriteBatch, element: this, tex: Texture.Value, scale: 0.7f);
+            base.Draw(sb);
         }
     }
 }

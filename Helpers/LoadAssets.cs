@@ -5,17 +5,8 @@ using ReLogic.Content;
 namespace UICustomizer.Helpers
 {
     /// <summary>
-    /// To add a new asset, simply add a new field like:
-    /// public static Asset<Texture2D> MyAsset;
+    /// Static class to hold all assets used in the mod.
     /// </summary>
-    public class LoadAssets : ModSystem
-    {
-        public override void Load()
-        {
-            _ = Ass.Initialized;
-        }
-    }
-
     public static class Ass
     {
         // Add assets here
@@ -25,7 +16,7 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> Minuss;
         public static Asset<Texture2D> Resize;
 
-        // This will automatically initialize the assets
+        // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }
 
         static Ass()
@@ -34,15 +25,23 @@ namespace UICustomizer.Helpers
             {
                 if (field.FieldType == typeof(Asset<Texture2D>))
                 {
-                    field.SetValue(null, RequestAsset(field.Name));
+                    string modName = "UICustomizer";
+                    string path = field.Name;
+                    var asset = ModContent.Request<Texture2D>($"{modName}/Assets/{path}", AssetRequestMode.AsyncLoad);
+                    field.SetValue(null, asset);
                 }
             }
         }
+    }
 
-        private static Asset<Texture2D> RequestAsset(string path)
+    /// <summary>
+    /// System that automatically initializes assets
+    /// </summary>
+    public class LoadAssets : ModSystem
+    {
+        public override void Load()
         {
-            string modName = "UICustomizer"; // Replace this with your mod's folder name
-            return ModContent.Request<Texture2D>($"{modName}/Assets/" + path, AssetRequestMode.AsyncLoad);
+            _ = Ass.Initialized;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent;
 using UICustomizer.Common.Systems.Hooks;
+using UICustomizer.Helpers.Layouts;
 using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
@@ -128,7 +129,7 @@ namespace UICustomizer.Common.Systems
                 }
 
                 // Force switch to active layout
-                LayoutJsonHelper.CurrentLayoutName = "Active";
+                LayoutHelper.CurrentLayoutName = "Active";
                 sys?.state?.panel?.editorTab?.PopulatePublic();
 
                 _dragSource = bounds;
@@ -157,7 +158,7 @@ namespace UICustomizer.Common.Systems
                 {
                     // End drag
                     _dragSource = null;
-                    LayoutJsonHelper.SaveActiveLayout("Active");
+                    LayoutHelper.SaveActiveLayout();
                 }
             }
         }

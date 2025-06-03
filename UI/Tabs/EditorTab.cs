@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Systems;
 using UICustomizer.Common.Systems.Hooks;
-using static UICustomizer.UI.CollapsibleHeader;
+using UICustomizer.Helpers.Layouts;
 
 namespace UICustomizer.UI.Tabs
 {
@@ -29,20 +29,65 @@ namespace UICustomizer.UI.Tabs
         private CheckboxState _checkboxTextPosState = CheckboxState.Checked;
 
         // Layouts
-        public string CurrentLayoutName => LayoutJsonHelper.CurrentLayoutName;
+        public string CurrentLayoutName => LayoutHelper.CurrentLayoutName;
         public List<Button> LayoutButtons = [];
         private int _lastLayoutCount = -1;
 
         // Collapsible headers
-        private bool _uiEditorExpanded = true;
-        private bool _layoutsExpanded = true;
-        private bool _positionsExpanded = true;
-        private bool _optionsExpanded = true;
+        public bool _uiEditorExpanded = true;
+        public bool _layoutsExpanded = true;
+        public bool _positionsExpanded = true;
+        public bool _optionsExpanded = true;
 
-        private bool _hideAll = false;
+        public bool hideAllMode = false;
+        private Vector2 _hideAllBtnPosition;
 
         public EditorTab(Action<Tab> select, Scrollbar bar = null) : base("Editor", select, bar)
         {
+        }
+
+        public void ResetHideAllState()
+        {
+            hideAllMode = false;
+
+            // Clean up any floating buttons
+            UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
+            if (sys?.state != null)
+            {
+                var floatingButtons = sys.state.Children.OfType<Button>()
+                    .Where(b => b.buttonText.Text == "Save").ToList();
+                foreach (var btn in floatingButtons)
+                {
+                    sys.state.RemoveChild(btn);
+                }
+            }
+        }
+
+        public void SetInitialCheckboxStates()
+        {
+            // Set initial checkbox states
+            CheckboxX.state = _checkboxXState;
+            CheckboxY.state = _checkboxYState;
+            CheckboxFill.state = _checkboxFillState;
+            CheckboxOutline.state = _checkboxOutlineState;
+            CheckboxNames.state = _checkboxNamesState;
+            CheckboxTextPos.state = _checkboxTextPosState;
+
+            // Set fill, outline, names and text position checkboxes to unchecked by default
+            CheckboxFill.state = CheckboxState.Unchecked;
+            CheckboxOutline.state = CheckboxState.Unchecked;
+            CheckboxNames.state = CheckboxState.Unchecked;
+            CheckboxTextPos.state = CheckboxState.Unchecked;
+            Log.Info("Initial checkbox states set.");
+
+            // Update _state variables
+            _checkboxXState = CheckboxX.state;
+            _checkboxYState = CheckboxY.state;
+            _checkboxFillState = CheckboxFill.state;
+            _checkboxOutlineState = CheckboxOutline.state;
+            _checkboxNamesState = CheckboxNames.state;
+            _checkboxTextPosState = CheckboxTextPos.state;
+            Log.Info("Checkbox states updated.");
         }
 
         public void PopulatePublic() => Populate();
@@ -50,6 +95,35 @@ namespace UICustomizer.UI.Tabs
         {
             list.Clear();
             list.ListPadding = 0;
+            Log.Info("hideAllMode: " + hideAllMode);
+
+            if (hideAllMode)
+            {
+                var saveBtn = new Button(
+                    text: "Save",
+                    tooltip: () => "Save and exit edit mode",
+                    onClick: () =>
+                    {
+                        // Reset hide all state before exiting
+                        ResetHideAllState();
+
+                        // Exit edit mode
+                        UICustomizerSystem.ExitEditMode();
+                    }
+                );
+
+                // Use stored position
+                saveBtn.Left.Set(_hideAllBtnPosition.X, 0);
+                saveBtn.Top.Set(_hideAllBtnPosition.Y, 0);
+                saveBtn.Width.Set(100, 0);
+                saveBtn.Height.Set(30, 0);
+
+                UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
+                sys?.state?.Append(saveBtn);
+                return;
+            }
+
+            Log.Info("Populating EditorTab");
 
             AddCollapsibleHeader("UI Editor", () => _uiEditorExpanded, state => _uiEditorExpanded = state);
             PopulateUIEditor();
@@ -60,7 +134,7 @@ namespace UICustomizer.UI.Tabs
             AddCollapsibleHeader("Positions", () => _positionsExpanded, state => _positionsExpanded = state);
             PopulatePositions();
 
-            AddCollapsibleHeader("Options", () => _optionsExpanded, state => _optionsExpanded = state);
+            AddCollapsibleHeader("Layout Options", () => _optionsExpanded, state => _optionsExpanded = state);
             PopulateOptions();
 
             list.Recalculate();
@@ -115,11 +189,19 @@ namespace UICustomizer.UI.Tabs
                 return row;
             }
 
+            Button hideAllBtn = null;
+            hideAllBtn = new Button(
+                text: "Hide All",
+                tooltip: () => "Hide everything except a save button",
+                onClick: () =>
+                {
+                    hideAllMode = true;
+                    var dimensions = hideAllBtn.GetDimensions();
+                    _hideAllBtnPosition = new Vector2(dimensions.X, dimensions.Y);
+                    Populate(); // Rebuild by removing everything except the new button
+                }
+            );
             var saveBtn = new Button("Save", () => "Save and exit edit mode", UICustomizerSystem.ExitEditMode);
-            var hideAllBtn = new Button("Hide All", () => "Hide everything except save button", () =>
-            {
-                _hideAll = !_hideAll;
-            });
             var resetBtn = new Button("Reset", () => "Reset all offsets", ResetAllOffsets);
             var lifeBtn = new Button("Life",
                 () => Main.ResourceSetsManager.ActiveSet.DisplayedName,
@@ -209,9 +291,9 @@ namespace UICustomizer.UI.Tabs
         {
             if (!_layoutsExpanded) return;
 
-            foreach (var layoutName in LayoutJsonHelper.GetLayouts())
+            foreach (var layoutName in FileHelper.GetLayouts())
             {
-                string tooltip = layoutName == LayoutJsonHelper.CurrentLayoutName
+                string tooltip = layoutName == LayoutHelper.CurrentLayoutName
                     ? "This is the currently applied layout."
                     : $"Apply the '{layoutName}' layout";
 
@@ -227,15 +309,23 @@ namespace UICustomizer.UI.Tabs
                     {
                         var sys = ModContent.GetInstance<UICustomizerSystem>();
                         sys.state.panel.CancelDrag();
-                        LayoutJsonHelper.ApplyLayout(layoutName);
-                        LayoutJsonHelper.CurrentLayoutName = layoutName;
-                        LayoutJsonHelper.SaveLastLayout(); // Save the selected layout
+                        LayoutHelper.ApplyLayout(layoutName);
+                        LayoutHelper.CurrentLayoutName = layoutName;
+                        LayoutHelper.SaveLastLayout(); // Save the selected layout
                         Populate(); // Refresh to update colors
                     },
-                    maxWidth: true
+                    maxWidth: true,
+                    onRightClick: () =>
+                    {
+                        // Open the layout file in the editor
+                        if (UICustomizerSystem.EditModeActive)
+                        {
+                            FileHelper.OpenLayoutFile(layoutName);
+                        }
+                    }
                 );
 
-                if (layoutName == LayoutJsonHelper.CurrentLayoutName)
+                if (layoutName == LayoutHelper.CurrentLayoutName)
                     btn.buttonText.TextColor = Color.Yellow;
                 else
                     btn.buttonText.TextColor = Color.White;
@@ -266,21 +356,21 @@ namespace UICustomizer.UI.Tabs
 
             var openFolderBtn = new Button(
                 text: "Open layouts folder",
-                tooltip: () => "Open the layouts folder and edit or add new layouts",
+                tooltip: () => "Open the layouts folder to edit, share or add new layouts",
                 onClick: () =>
                 {
                     if (!UICustomizerSystem.EditModeActive) return;
-                    LayoutJsonHelper.OpenLayoutFolder();
+                    FileHelper.OpenLayoutFolder();
                 },
                 maxWidth: true
             );
             var createNewBtn = new Button(
-                text: "Create new layout",
-                tooltip: () => "Create a new layout file to edit",
+                text: "Save current layout",
+                tooltip: () => "Creates and opens a new layout file with the current layout",
                 onClick: () =>
                 {
                     if (!UICustomizerSystem.EditModeActive) return;
-                    LayoutJsonHelper.OpenNewLayoutFile("MyNewLayout");
+                    FileHelper.CreateAndOpenNewLayoutFile("MyNewLayout");
                     Populate();
                 },
                 maxWidth: true
@@ -292,7 +382,7 @@ namespace UICustomizer.UI.Tabs
                 onClick: () =>
                 {
                     if (!UICustomizerSystem.EditModeActive) return;
-                    LayoutJsonHelper.DeleteAllLayouts();
+                    FileHelper.DeleteAllLayouts();
                     Populate();
                 },
                 maxWidth: true
@@ -306,38 +396,11 @@ namespace UICustomizer.UI.Tabs
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_hideAll)
-            {
-                // Only draw the save button
-                foreach (var child in list.Children)
-                {
-                    if (child is Button btn && btn.buttonText.Text == "Hide all")
-                    {
-                        btn.Draw(spriteBatch);
-                    }
-                }
-                return;
-            }
-
             base.Draw(spriteBatch);
         }
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            if (_hideAll)
-            {
-                // Only allow clicking the save button
-                foreach (var child in list.Children)
-                {
-                    if (child is Button btn && btn.buttonText.Text == "Save")
-                    {
-                        btn.LeftClick(evt);
-                        return;
-                    }
-                }
-                return; // Ignore other clicks
-            }
-
             base.LeftClick(evt);
         }
 
@@ -349,7 +412,7 @@ namespace UICustomizer.UI.Tabs
             positions.Height.Set(300, 0); // TODO update to real value
 
             // Check if layouts folder changed
-            int currentCount = LayoutJsonHelper.GetLayouts().Count();
+            int currentCount = FileHelper.GetLayouts().Count();
             if (currentCount != _lastLayoutCount)
             {
                 _lastLayoutCount = currentCount;
@@ -392,6 +455,11 @@ namespace UICustomizer.UI.Tabs
             HorizontalBarsHook.OffsetX = HorizontalBarsHook.OffsetY = 0f;
             InfoAccsHook.OffsetX = InfoAccsHook.OffsetY = 0f;
             BuffHook.OffsetX = BuffHook.OffsetY = 0f;
+            BarLifeTextHook.OffsetX = BarLifeTextHook.OffsetY = 0f;
+            BarManaTextHook.OffsetX = BarManaTextHook.OffsetY = 0f;
+
+            // Write to active layout
+            LayoutHelper.SaveActiveLayout();
         }
     }
 }

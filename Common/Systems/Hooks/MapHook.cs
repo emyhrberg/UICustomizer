@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using MonoMod.Cil;
-using Terraria;
-using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {

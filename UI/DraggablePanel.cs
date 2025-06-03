@@ -19,7 +19,7 @@ namespace UICustomizer.UI
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is CollapseIcon)
+                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is CollapseIcon || target is Button)
                     return;
                 target = target.Parent;
             }

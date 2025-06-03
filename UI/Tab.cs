@@ -8,7 +8,7 @@ namespace UICustomizer.UI
     public abstract class Tab : UIPanel
     {
         public readonly UIList list = [];
-        public Action OnSelect { get; set; }
+        private readonly Action<Tab> selectCallback;
         public UIText header;
         public Scrollbar scrollbar;
 
@@ -19,6 +19,7 @@ namespace UICustomizer.UI
             SetPadding(0);
 
             this.scrollbar = scrollbar;
+            this.selectCallback = select;
 
             // Hover
             OnMouseOver += (_, _) => BorderColor = Color.Yellow;
@@ -42,8 +43,10 @@ namespace UICustomizer.UI
             }
 
             // Wire click
-            OnLeftClick += (_, _) => select(this);
-
+            OnLeftClick += (_, _) =>
+            {
+                selectCallback?.Invoke(this);
+            };
             Populate();
         }
 
@@ -75,12 +78,6 @@ namespace UICustomizer.UI
             {
                 list.Add(element);
             }
-        }
-        public override void LeftClick(UIMouseEvent evt)
-        {
-            base.LeftClick(evt);
-
-            OnSelect?.Invoke();
         }
 
         protected void Gap(float px)

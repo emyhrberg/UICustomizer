@@ -6,9 +6,7 @@ using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
-    // Credits to ScalarVector1:
-    // https://github.com/ScalarVector1/DragonLens/blob/master/Content/GUI/EmergencyCustomizeMenu.cs
-    public class EditButton : UIText   // UIText already IS a UIElement
+    public class EditButton : UIText  
     {
         private float scale = 0.6f;
 
@@ -55,8 +53,18 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Top.Set(-98, 1);
+            Width.Set(200, 0);
+
+            //if (Player.SupportedSlotsAccs > 6)
+            if (Main.LocalPlayer.extraAccessorySlots >= 1)
+            {
+                Top.Set(-80, 1);
+                Height.Set(30, 0);
+            }
+
             if (UICustomizerSystem.EditModeActive || !Main.playerInventory) return;
-            base.Draw(spriteBatch);   // UIText already draws itself
+            base.Draw(spriteBatch);  
         }
     }
 }

@@ -1,38 +1,24 @@
 [h1] UI Customizer [/h1] 
+Move the hotbar, chat, map, health, mana, and buff positions with ease! This mod allows you to move a significant amount of UI to your liking.
 
-Ever wanted to move the hotbar, chat, map, life, mana, buff positions or anything else? This mod allows you to move a significant amount of UI to your liking.
+[h2] How to use [/h2] 
 
-[h1] How to use [/h1] 
+Open up your inventory and press "UI Editor" in the bottom right corner.
 
-Open up your inventory and look, there's a new option above "Settings"!
-
-[img]https://i.imgur.com/jI6hZZl.png[/img]
-
-[h1] Features [/h1] 
-
-[h2] UI Editor [/h2]
-
-Use the UI editor to move all elements in the game. Simply open the editor and drag and drop the UI elements wherever you want. 
-
-[h2] Interface Layer Toggle [/h2]
-
-Use the toggle to enable or disable all UI elements from vanilla and other mods. Useful for debugging modders and for players avoiding distractions from other mods.
-
-[h2] Layouts [/h2]
-
-Save and load your custom layouts! You can also share them with your friends!
-
-[h2] Credits [/h2]
+[h2] Features [/h2] 
 [list]
-[*] thraaks for icon and sprite help
+[*] [b]Editor:[/b] Allows you to move and customize all UI. Save and share layouts with your friends!
+[*] [b]Layers:[/b] Toggle interface layers for each mod.
 [/list]
 
 [h2] Links [/h2]
 [list]
-[*] Source code hosted at: [url=https://github.com/emyhrberg/ModReloader] GitHub [/url]
+[*] Source code hosted at: [url=https://github.com/emyhrberg/UICustomizer] GitHub [/url]
 [*] Got questions or suggestions? Join us at: [url=https://discord.gg/6ykWs5uS] Discord [/url]
 [*] Wish to support my mod development? You can do so at  [url=https://ko-fi.com/erkyy] Ko-Fi [/url]
+[*] Thanks to thraaks for icon and sprite help
 [/list]
+
 [quote]
 Developed By Erky
 [/quote]

@@ -1,14 +1,10 @@
-﻿using System.ComponentModel;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
+﻿using Terraria.ModLoader.Config;
 
 namespace UICustomizer.Common.Configs
 {
     public class Config : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
-
-
     }
 
     public static class Conf

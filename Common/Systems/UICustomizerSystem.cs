@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
+using UICustomizer.Helpers.Layouts;
 using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
@@ -9,32 +8,35 @@ namespace UICustomizer.Common.Systems
     internal class UICustomizerSystem : ModSystem
     {
         // Handle edit mode state.
-        public static bool EditModeActive { get; private set; } = true;
+        public static bool EditModeActive { get; private set; } = false;
         public static void EnterEditMode()
         {
             EditModeActive = true;
 
-            // Reset position
+            // Get panel
             var sys = ModContent.GetInstance<UICustomizerSystem>();
             if (sys == null || sys.state == null)
                 return;
+            Panel panel = sys.state.panel;
 
-            sys.state.panel.SetDefaultSizeAndPosition();
-
-            // Force outline and names to be unchecked
-            // sys.state.panel.editorTab.CheckboxOutline.SetState(CheckboxState.Unchecked);
-            // sys.state.panel.editorTab.CheckboxNames.SetState(CheckboxState.Unchecked);
+            // Reset and re-populate
+            panel.SetDefaultSizeAndPosition();
+            panel.editorTab.ResetHideAllState();
+            panel.editorTab.PopulatePublic();
+            panel.editorTab.SetInitialCheckboxStates();
         }
         public static void ExitEditMode()
         {
             EditModeActive = false;
 
-            // Force stop dragging
+            // Get panel
             var sys = ModContent.GetInstance<UICustomizerSystem>();
             if (sys == null || sys.state == null)
                 return;
+            Panel panel = sys.state.panel;
 
-            sys.state.panel.CancelDrag();
+            // Force stop dragging
+            panel.CancelDrag();
         }
 
         // UI components
@@ -45,7 +47,7 @@ namespace UICustomizer.Common.Systems
         {
             base.OnModLoad();
 
-            LayoutJsonHelper.EnsureDefaultLayoutsExist();
+            DefaultLayouts.CreateAllDefaultLayouts();
         }
 
         public override void OnWorldLoad()
@@ -56,17 +58,8 @@ namespace UICustomizer.Common.Systems
             userInterface.SetState(state);
 
             // Apply last selected layout
-            string lastLayout = LayoutJsonHelper.LoadLastLayoutName();
-            if (LayoutJsonHelper.GetLayouts().Contains(lastLayout))
-            {
-                LayoutJsonHelper.ApplyLayout(lastLayout);
-                LayoutJsonHelper.CurrentLayoutName = lastLayout;
-            }
-            else
-            {
-                LayoutJsonHelper.ApplyLayout("Default");
-                LayoutJsonHelper.CurrentLayoutName = "Default";
-            }
+            string lastLayoutName = FileHelper.LoadLastLayoutName();
+            LayoutHelper.ApplyLayout(lastLayoutName);
         }
 
         public override void UpdateUI(GameTime gameTime)

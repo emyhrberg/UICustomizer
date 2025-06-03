@@ -1,1 +1,9 @@
-Modify this file with a description of your mod.
+UI Customizer!
+Move the hotbar, chat, map, health, mana, and buff positions with ease! This mod allows you to move a significant amount of UI to your liking.
+
+How to use:
+Open up your inventory and press "UI Editor" in the bottom right corner.
+
+Features:
+- Editor: Allows you to move and customize all UI. Save and share layouts with your friends!
+- Layers: Toggle interface layers for each mod.

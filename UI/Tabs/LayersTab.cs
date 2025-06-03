@@ -9,8 +9,8 @@ namespace UICustomizer.UI.Tabs
     public sealed class LayersTab : Tab
     {
         private int _knownCount = -1; // forces an initial build
-        private bool vanillaExpanded = true; // whether the Vanilla section is expanded
-        private readonly Dictionary<string, bool> modsExpandedMap = new();
+        public bool vanillaExpanded = true; // whether the Vanilla section is expanded
+        public readonly Dictionary<string, bool> modsExpandedMap = new();
 
         public LayersTab(Action<Tab> select, Scrollbar bar)
             : base("Layers", select, bar)
@@ -110,7 +110,7 @@ namespace UICustomizer.UI.Tabs
             };
 
             headerRow.Append(toggleAll);
-            list.Add(headerRow);
+            TryAdd(headerRow);
 
             if (isExpanded)
             {
@@ -129,7 +129,7 @@ namespace UICustomizer.UI.Tabs
                     })
                     { state = visible ? CheckboxState.Checked : CheckboxState.Unchecked };
                     check.box.SetImage(check.state == CheckboxState.Checked ? Ass.Check : Ass.Uncheck);
-                    list.Add(check);
+                    TryAdd(check);
                 }
             }
         }
