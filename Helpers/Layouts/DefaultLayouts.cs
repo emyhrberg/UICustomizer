@@ -18,6 +18,7 @@ namespace UICustomizer.Helpers.Layouts
             CreateDefaultLayout();
             CreateHotbarCenteredLayout();
             CreateMapLeftLayout();
+            CreateMinecraftLayout();
             CreateLastLayoutFile();
         }
 
@@ -102,6 +103,34 @@ namespace UICustomizer.Helpers.Layouts
                     }
                 };
                 LayoutHelper.WriteLayoutFile("MapLeft", layoutData);
+            }
+        }
+
+        private static void CreateMinecraftLayout()
+        {
+            string minecraftPath = FileHelper.GetLayoutFilePath("Minecraft");
+            if (!File.Exists(minecraftPath))
+            {
+                var layoutData = new LayoutData
+                {
+                    Theme = ResourceTheme.Fancy2,
+                    Positions = new Dictionary<string, Vector2>
+                    {
+                        ["ChatOffset"] = new Vector2(1111, 41),
+                        ["HotbarOffset"] = new Vector2(788, 936),
+                        ["MapOffset"] = new Vector2(5, -77),
+                        ["InfoAccsOffset"] = new Vector2(9, -85),
+                        ["ClassicLifeOffset"] = Vector2.Zero,
+                        ["ClassicManaOffset"] = Vector2.Zero,
+                        ["FancyLifeOffset"] = new Vector2(-736, 853),
+                        ["FancyManaOffset"] = new Vector2(3, -9),
+                        ["HorizontalBarsOffset"] = new Vector2(-772, -12),
+                        ["BarLifeTextOffset"] = Vector2.Zero,
+                        ["BarManaTextOffset"] = Vector2.Zero,
+                        ["BuffOffset"] = Vector2.Zero
+                    }
+                };
+                LayoutHelper.WriteLayoutFile("Minecraft", layoutData);
             }
         }
 

@@ -21,6 +21,7 @@ namespace UICustomizer.Common.Systems
 
             // Reset and re-populate
             panel.SetDefaultSizeAndPosition();
+            panel.SelectPublic(panel.editorTab);
             panel.editorTab.ResetHideAllState();
             panel.editorTab.PopulatePublic();
             panel.editorTab.SetInitialCheckboxStates();
@@ -60,6 +61,10 @@ namespace UICustomizer.Common.Systems
             // Apply last selected layout
             string lastLayoutName = FileHelper.LoadLastLayoutName();
             LayoutHelper.ApplyLayout(lastLayoutName);
+
+            // Exit edit mode if it was active
+            if (EditModeActive)
+                ExitEditMode();
         }
 
         public override void UpdateUI(GameTime gameTime)

@@ -23,10 +23,10 @@ namespace UICustomizer.UI.Tabs
         // Store checkbox states
         private CheckboxState _checkboxXState = CheckboxState.Checked;
         private CheckboxState _checkboxYState = CheckboxState.Checked;
-        private CheckboxState _checkboxFillState = CheckboxState.Checked;
-        private CheckboxState _checkboxOutlineState = CheckboxState.Checked;
-        private CheckboxState _checkboxNamesState = CheckboxState.Checked;
-        private CheckboxState _checkboxTextPosState = CheckboxState.Checked;
+        private CheckboxState _checkboxFillState = CheckboxState.Unchecked;
+        private CheckboxState _checkboxOutlineState = CheckboxState.Unchecked;
+        private CheckboxState _checkboxNamesState = CheckboxState.Unchecked;
+        private CheckboxState _checkboxTextPosState = CheckboxState.Unchecked;
 
         // Layouts
         public string CurrentLayoutName => LayoutHelper.CurrentLayoutName;
@@ -78,7 +78,6 @@ namespace UICustomizer.UI.Tabs
             CheckboxOutline.state = CheckboxState.Unchecked;
             CheckboxNames.state = CheckboxState.Unchecked;
             CheckboxTextPos.state = CheckboxState.Unchecked;
-            Log.Info("Initial checkbox states set.");
 
             // Update _state variables
             _checkboxXState = CheckboxX.state;
@@ -87,7 +86,6 @@ namespace UICustomizer.UI.Tabs
             _checkboxOutlineState = CheckboxOutline.state;
             _checkboxNamesState = CheckboxNames.state;
             _checkboxTextPosState = CheckboxTextPos.state;
-            Log.Info("Checkbox states updated.");
         }
 
         public void PopulatePublic() => Populate();

@@ -1,11 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Terraria.GameContent.UI.States;
 using Terraria.Initializers;
 using Terraria.IO;
-using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI.Tabs
 {
@@ -14,63 +11,92 @@ namespace UICustomizer.UI.Tabs
         private bool _enabledPacksExpanded = true;
         private bool _disabledPacksExpanded = true;
 
-        private ResourcePackList _allPacks;
+        private List<ResourcePack> allPacks;
+        private List<ResourcePack> enabledPacks;
+        private List<ResourcePack> disabledPacks;
 
         public ThemeTab(Action<Tab> select, Scrollbar bar) : base("Packs", select, bar)
         {
+            ResourcePackList _allPacksList = AssetInitializer.CreateResourcePackList(Main.instance.Services);
+            allPacks = _allPacksList.AllPacks.ToList();
         }
+
         protected override void Populate()
         {
             list.Clear();
 
-            // Initialize the resource pack list
-            _allPacks = AssetInitializer.CreateResourcePackList(Main.instance.Services);
+            if (allPacks == null)
+            {
+                ResourcePackList packList = AssetInitializer.CreateResourcePackList(Main.instance.Services);
+                if (packList.AllPacks != null)
+                {
+                    allPacks = packList.AllPacks.ToList();
+                }
+                else
+                {
+                    allPacks = [];
+                }
+                allPacks = packList.AllPacks?.ToList() ?? [];
+            }
 
-            // Log them
-            Log.Info($"Enabled/Disabled Packs: {_allPacks.EnabledPacks.Count()} / {_allPacks.DisabledPacks.Count()}");
+            list.Clear();
+
+            enabledPacks = allPacks
+                .Where(pack => pack.IsEnabled)
+                .OrderBy(pack => pack.SortingOrder)
+                .ThenBy(pack => pack.Name)
+                .ThenBy(pack => pack.Version)
+                .ThenBy(pack => pack.FileName)
+                .ToList();
+
+            disabledPacks = allPacks
+                .Where(pack => !pack.IsEnabled)
+                .OrderBy(pack => pack.Name)
+                .ThenBy(pack => pack.Version)
+                .ThenBy(pack => pack.FileName)
+                .ToList();
+
+            Log.Info($"Enabled Packs: {enabledPacks.Count} / {allPacks.Count}");
+            // Main.NewText($"Enabled Packs: {enabledPacks.Count} / {allPacks.Count}", Color.LightGreen);
 
             AddCollapsibleHeader(
                 text: "Enabled Packs",
                 getState: () => _enabledPacksExpanded,
-                setState: (state) => _enabledPacksExpanded = state,
-                onToggle: () => { } // Remove the callback to avoid double population
+                setState: (v) => _enabledPacksExpanded = v,
+                onToggle: () => { /* no extra action needed—Populate() always rebuilds */ }
             );
-
             PopulateEnabledPacks();
 
             AddCollapsibleHeader(
                 text: "Disabled Packs",
                 getState: () => _disabledPacksExpanded,
-                setState: (state) => _disabledPacksExpanded = state,
-                onToggle: () => { } // Remove the callback to avoid double population
+                setState: (v) => _disabledPacksExpanded = v,
+                onToggle: () => { /* no extra action needed—Populate() always rebuilds */ }
             );
-
-            PopulateDisabledPacks(); // Fix: was "popu"
+            PopulateDisabledPacks();
         }
 
         private void PopulateEnabledPacks()
         {
             if (!_enabledPacksExpanded) return;
 
-            var enabledPacks = _allPacks.EnabledPacks.ToList();
+            // Snapshot so we can mutate enabledPacks inside the click handler:
+            var snapshot = enabledPacks.ToList();
 
-            foreach (var pack in enabledPacks)
+            foreach (var pack in snapshot)
             {
-                // If it's currently enabled, the user wants to disable it:
-                string status = pack.IsEnabled ? "disable" : "enable";
-
                 var btn = new Button(
                     text: pack.Name,
-                    tooltip: () => $"Click to {status} {pack.Name} resource pack",
+                    tooltip: () => $"Click to disable {pack.Name} resource pack",
                     onClick: () =>
                     {
-                        pack.IsEnabled = !pack.IsEnabled;
+                        pack.IsEnabled = false;
 
-                        // Recreate the resource pack list
-                        // _allPacks = AssetInitializer.CreateResourcePackList(Main.instance.Services);
+                        enabledPacks.Remove(pack);
+                        disabledPacks.Add(pack);
+                        Main.AssetSourceController.UseResourcePacks(new ResourcePackList(enabledPacks));
 
-                        Main.AssetSourceController.UseResourcePacks(_allPacks);
-                        Main.NewText($"{pack.Name} {status}d.", pack.IsEnabled ? Color.Green : Color.Red);
+                        Main.NewText($"{pack.Name} disabled.", Color.Red);
                         Populate();
                     },
                     maxWidth: true
@@ -82,25 +108,24 @@ namespace UICustomizer.UI.Tabs
 
         private void PopulateDisabledPacks()
         {
-            if (!_disabledPacksExpanded) return;
+            if (!_disabledPacksExpanded)
+                return;
 
-            var disabledPacks = _allPacks.DisabledPacks.ToList();
+            var snapshot = disabledPacks.ToList();
 
-            foreach (var pack in disabledPacks)
+            foreach (var pack in snapshot)
             {
-                // If it's disabled, user wants to enable it:
-                string status = pack.IsEnabled ? "disable" : "enable";
-
                 var btn = new Button(
                     text: pack.Name,
-                    tooltip: () => $"Click to {status} {pack.Name} resource pack",
+                    tooltip: () => $"Click to enable {pack.Name} resource pack",
                     onClick: () =>
                     {
-                        pack.IsEnabled = !pack.IsEnabled;
-                        // _allPacks = AssetInitializer.CreateResourcePackList(Main.instance.Services);
+                        pack.IsEnabled = true;
+                        disabledPacks.Remove(pack);
+                        enabledPacks.Add(pack);
+                        Main.AssetSourceController.UseResourcePacks(new ResourcePackList(enabledPacks));
 
-                        Main.AssetSourceController.UseResourcePacks(_allPacks);
-                        Main.NewText($"{pack.Name} resource pack {status}d.", pack.IsEnabled ? Color.Green : Color.Red);
+                        Main.NewText($"{pack.Name} enabled.", Color.Green);
                         Populate();
                     },
                     maxWidth: true

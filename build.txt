@@ -1,4 +1,4 @@
-displayName = UI Customizer
+displayName = UI Editor
 author = Erky
-version = 0.1
+version = 0.2
 side = client

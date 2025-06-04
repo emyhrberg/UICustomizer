@@ -1,24 +1,22 @@
-[h1] UI Customizer [/h1] 
-Move the hotbar, chat, map, health, mana, and buff positions with ease! This mod allows you to move a significant amount of UI to your liking.
+[h1] UI Editor [/h1] 
+This mod allows you to move all UI: the hotbar, chat, map, health, mana, and buff positions can now be set to a new position of your choosing. The mod is client-sided.
 
-[h2] How to use [/h2] 
+To use, open inventory and click on "UI Editor" in the bottom right corner.
 
-Open up your inventory and press "UI Editor" in the bottom right corner.
+[img]https://i.imgur.com/dF6cGZA.png[/img]
 
 [h2] Features [/h2] 
 [list]
-[*] [b]Editor:[/b] Allows you to move and customize all UI. Save and share layouts with your friends!
-[*] [b]Layers:[/b] Toggle interface layers for each mod.
+[*] [b]UI Editor:[/b] Use dragging to move all vanilla UI to your desired position and save.
+[*] [b]Layouts:[/b] After finding a layout you like, you can save it for later use and even share it with your friends!
+[*] [b]Toggle Interface Layers:[/b] Allows you to toggle individual or all interface layers for all mods.
+[*] [b]Toggle Resource Packs:[/b] Easily enable and disable resource packs while in a world without exiting!
 [/list]
 
-[h2] Links [/h2]
+[h2] Support [/h2]
 [list]
-[*] Source code hosted at: [url=https://github.com/emyhrberg/UICustomizer] GitHub [/url]
-[*] Got questions or suggestions? Join us at: [url=https://discord.gg/6ykWs5uS] Discord [/url]
-[*] Wish to support my mod development? You can do so at  [url=https://ko-fi.com/erkyy] Ko-Fi [/url]
-[*] Thanks to thraaks for icon and sprite help
+[*] Source code hosted at [url=https://github.com/emyhrberg/UICustomizer] GitHub [/url] (currently private)
+[*] Got questions or suggestions? Join our [url=https://discord.gg/6ykWs5uS] Discord Server [/url]
+[*] Wish to support me and my mods? You can do so at my [url=https://ko-fi.com/erkyy] Ko-Fi page [/url]
+[*] Thanks to [url=https://steamcommunity.com/id/thraaks/]thraaks[/url] for making the icon!
 [/list]
-
-[quote]
-Developed By Erky
-[/quote]

@@ -6,4 +6,5 @@ Open up your inventory and press "UI Editor" in the bottom right corner.
 
 Features:
 - Editor: Allows you to move and customize all UI. Save and share layouts with your friends!
-- Layers: Toggle interface layers for each mod.
+- Toggle Interface Layers: Toggle interface layers for each mod.
+- Toggle Resource Packs: Easily enable and disable resource packs while in a world without exiting!

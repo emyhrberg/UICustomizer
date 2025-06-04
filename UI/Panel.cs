@@ -98,7 +98,12 @@ namespace UICustomizer.UI
             };
             Append(resize);
 
-            Select(editorTab); // default tab
+            // THIS WILL OPEN PANEL ON LAUNCH!
+            // Select(editorTab); // default tab
+            if (current != null)
+            {
+                Select(current);
+            }
         }
 
         public void SetDefaultSizeAndPosition()
@@ -113,6 +118,7 @@ namespace UICustomizer.UI
             Recalculate();
         }
 
+        public void SelectPublic(Tab t) => Select(t);
         private void Select(Tab t)
         {
             if (!UICustomizerSystem.EditModeActive) return;
@@ -120,6 +126,11 @@ namespace UICustomizer.UI
 
             // Select new tab
             current = t;
+
+            // Highlight color
+            Tab[] tabs = [editorTab, themesTab, layersTab];
+            foreach (var tab in tabs)
+                tab.header.TextColor = tab == t ? Color.Yellow : Color.White;
 
             // Update body content
             body.RemoveAllChildren();
@@ -135,7 +146,7 @@ namespace UICustomizer.UI
 
             base.Update(gameTime);
 
-            UpdateScrollbarVisbility();
+            // UpdateScrollbarVisbility();
         }
 
         private void UpdateScrollbarVisbility()

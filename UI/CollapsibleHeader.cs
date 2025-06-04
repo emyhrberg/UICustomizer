@@ -68,7 +68,7 @@ namespace UICustomizer.UI
     {
         private CollapseState currentState = CollapseState.Expanded;
 
-        public CollapseIcon(Action onClick) : base(Ass.Minuss.Value)
+        public CollapseIcon(Action onClick) : base(Ass.Minus.Value)
         {
             AllowResizingDimensions = false;
             ScaleToFit = true;
@@ -89,7 +89,7 @@ namespace UICustomizer.UI
         public void UpdateState(CollapseState state)
         {
             currentState = state;
-            SetImage(state == CollapseState.Collapsed ? Ass.Pluss.Value : Ass.Minuss.Value);
+            SetImage(state == CollapseState.Collapsed ? Ass.Plus.Value : Ass.Minus.Value);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
