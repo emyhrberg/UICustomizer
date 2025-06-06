@@ -88,12 +88,11 @@ namespace UICustomizer.UI.Tabs
             _checkboxTextPosState = CheckboxTextPos.state;
         }
 
-        public void PopulatePublic() => Populate();
-        protected override void Populate()
+        public override void Populate()
         {
             list.Clear();
             list.ListPadding = 0;
-            Log.Info("hideAllMode: " + hideAllMode);
+            // Log.Info("hideAllMode: " + hideAllMode);
 
             if (hideAllMode)
             {
@@ -121,7 +120,7 @@ namespace UICustomizer.UI.Tabs
                 return;
             }
 
-            Log.Info("Populating EditorTab");
+            // Log.Info("Populating EditorTab");
 
             AddCollapsibleHeader("UI Editor", () => _uiEditorExpanded, state => _uiEditorExpanded = state);
             PopulateUIEditor();
@@ -201,8 +200,14 @@ namespace UICustomizer.UI.Tabs
             );
             var saveBtn = new Button("Save", () => "Save and exit edit mode", UICustomizerSystem.ExitEditMode);
             var resetBtn = new Button("Reset", () => "Reset all offsets", ResetAllOffsets);
+
+            // Life button to cycle through resource sets
             var lifeBtn = new Button("Life",
-                () => Main.ResourceSetsManager.ActiveSet.DisplayedName,
+                tooltip: () =>
+                {
+                    int currentIndex = Main.ResourceSetsManager.selectedSet;
+                    return $"{currentIndex}: {Main.ResourceSetsManager.ActiveSet.DisplayedName}";
+                },
                 onClick: () => Main.ResourceSetsManager.CycleResourceSet(),
                 onRightClick: () =>
                 {
@@ -211,20 +216,28 @@ namespace UICustomizer.UI.Tabs
                     Main.ResourceSetsManager.SetActiveFrameFromIndex(newIndex);
                 },
                 width: 70);
+
+            // Map button to cycle through map styles
             var mapBtn = new Button("Map",
             tooltip: () =>
             {
-                return Main.mapStyle switch
-                {
-                    0 => "Map: Hidden",
-                    1 => "Map: Minimap",
-                    2 => "Map: Overlay",
-                    _ => throw new NotImplementedException(),
-                };
+                string currentKey = Main.MinimapFrameManagerInstance.ActiveSelectionKeyName;
+                List<string> options = Main.MinimapFrameManagerInstance.Options.Keys.ToList();
+                int currentIndex = options.IndexOf(currentKey);
+                return $"{currentIndex}: {Main.MinimapFrameManagerInstance.ActiveSelectionKeyName}";
             }, width: 70,
-            onClick: () => { Main.mapStyle = (Main.mapStyle + 1) % 3; },
-            onRightClick: () => { Main.mapStyle = (Main.mapStyle - 1 + 3) % 3; }
+            onRightClick: Main.MinimapFrameManagerInstance.CycleSelection,
+            onClick: () =>
+            {
+                string currentKey = Main.MinimapFrameManagerInstance.ActiveSelectionKeyName;
+                List<string> options = Main.MinimapFrameManagerInstance.Options.Keys.ToList();
+                int currentIndex = options.IndexOf(currentKey);
+                int newIndex = (currentIndex + 1 + options.Count) % options.Count;
+                Main.MinimapFrameManagerInstance.SetActiveFrame(options[newIndex]);
+            }
             );
+
+            // UIScale button to adjust UI scale
             var scaleBtn = new Button("UIScale",
                 tooltip: () => $"UIScale: {Main.UIScale * 100:F1}%",
                 onClick: () =>
@@ -245,8 +258,7 @@ namespace UICustomizer.UI.Tabs
                         Main.UIScale = 0.5f;
                     }
 
-                    // Decrease by 0.01 on right click
-                    Main.UIScale -= 0.01f;
+                    Main.UIScale -= 0.05f;
                 }, width: 100
             );
 
@@ -256,7 +268,7 @@ namespace UICustomizer.UI.Tabs
             CheckboxFill = new Checkbox("Fill", "Show fill", 80, initialState: _checkboxFillState);
             CheckboxOutline = new Checkbox("Outline", "Show outlines", 80, initialState: _checkboxOutlineState);
             CheckboxNames = new Checkbox("Text", "Show names", 80, initialState: _checkboxNamesState);
-            CheckboxTextPos = new Checkbox("TextPos", "Offset text position", 80, initialState: _checkboxTextPosState);
+            CheckboxTextPos = new Checkbox("Offset", "Offset text position", 80, initialState: _checkboxTextPosState);
 
             Gap(4);
             TryAdd(Row(saveBtn, CheckboxX, CheckboxY, 0));

@@ -30,7 +30,6 @@ namespace UICustomizer.Common.Systems
             if (!UICustomizerSystem.EditModeActive)
                 return;
 
-
             // Force open chat
             //    if (!Main.drawingPlayerChat)               
             //        Main.OpenPlayerChat();             
@@ -39,12 +38,12 @@ namespace UICustomizer.Common.Systems
             //    Main.ClosePlayerChat();
 
             // Force close inventory
-            if (UICustomizerSystem.EditModeActive && Main.playerInventory)
-            {
-                //CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Inventory is not available in UI edit mode.");
-                Main.playerInventory = false;              // close inventory
-                Main.mouseItem = new Item();               // clear mouse item
-            }
+            // if (UICustomizerSystem.EditModeActive && Main.playerInventory)
+            // {
+            //     //CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Inventory is not available in UI edit mode.");
+            //     Main.playerInventory = false;              // close inventory
+            //     Main.mouseItem = new Item();               // clear mouse item
+            // }
 
             // Force exit edit mode on escape
             if (UICustomizerSystem.EditModeActive && Main.keyState.IsKeyDown(Keys.Escape))
@@ -61,11 +60,20 @@ namespace UICustomizer.Common.Systems
                 return;
 
             // Handle dragging of UI elements
-            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
             HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
             HandleDrag(BuffBounds, ref BuffHook.OffsetX, ref BuffHook.OffsetY);
             HandleDrag(MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
             HandleDrag(InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
+
+            // Handle inventory or hotbar dragging
+            if (Main.playerInventory)
+            {
+                HandleDrag(InventoryBounds, ref InventoryHook.OffsetX, ref InventoryHook.OffsetY);
+            }
+            else
+            {
+                HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
+            }
 
             // Resource bars
             // Check which resource set is active and handle dragging accordingly
@@ -130,7 +138,7 @@ namespace UICustomizer.Common.Systems
 
                 // Force switch to active layout
                 LayoutHelper.CurrentLayoutName = "Active";
-                sys?.state?.panel?.editorTab?.PopulatePublic();
+                sys?.state?.panel?.editorTab?.Populate();
 
                 _dragSource = bounds;
                 _mouseStart = mouseUI;                      // store in UI units
@@ -189,6 +197,16 @@ namespace UICustomizer.Common.Systems
             //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
             int w = 52 * 10 - 85;
             int h = 52 + 12;
+            int x = (int)(20 + HotbarHook.OffsetX);
+            int y = 1 + (int)HotbarHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle InventoryBounds()
+        {
+            //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
+            int w = 52 * 10 - 85;
+            int h = 252 + 12;
             int x = (int)(20 + HotbarHook.OffsetX);
             int y = 1 + (int)HotbarHook.OffsetY;
             return new Rectangle(x, y, w, h);

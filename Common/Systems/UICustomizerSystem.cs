@@ -4,27 +4,25 @@ using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
 {
-    [Autoload(Side = ModSide.Client)]
-    internal class UICustomizerSystem : ModSystem
+    public enum TabType
     {
+        Editor,
+        Themes,
+        Layers
+    }
+
+    [Autoload(Side = ModSide.Client)]
+    public class UICustomizerSystem : ModSystem
+    {
+        // public static Tab LastSelectedTab { get; set; }
+        public static TabType? LastSelectedTabType { get; private set; } = null;
+        public static void SetLastSelectedTab(TabType t) => LastSelectedTabType = t;
+
         // Handle edit mode state.
         public static bool EditModeActive { get; private set; } = false;
         public static void EnterEditMode()
         {
             EditModeActive = true;
-
-            // Get panel
-            var sys = ModContent.GetInstance<UICustomizerSystem>();
-            if (sys == null || sys.state == null)
-                return;
-            Panel panel = sys.state.panel;
-
-            // Reset and re-populate
-            panel.SetDefaultSizeAndPosition();
-            panel.SelectPublic(panel.editorTab);
-            panel.editorTab.ResetHideAllState();
-            panel.editorTab.PopulatePublic();
-            panel.editorTab.SetInitialCheckboxStates();
         }
         public static void ExitEditMode()
         {

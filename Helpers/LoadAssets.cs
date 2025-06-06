@@ -15,6 +15,7 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> Plus;
         public static Asset<Texture2D> Minus;
         public static Asset<Texture2D> Resize;
+        public static Asset<Texture2D> DragonLensToolIcon;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

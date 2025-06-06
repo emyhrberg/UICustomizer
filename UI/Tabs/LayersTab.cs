@@ -37,7 +37,7 @@ namespace UICustomizer.UI.Tabs
 
             if (layersWithoutColons.Any())
             {
-                AddSection("Mods", name => !name.StartsWith("Vanilla", StringComparison.OrdinalIgnoreCase) && !name.Contains(':'));
+                AddSection("Other Mods", name => !name.StartsWith("Vanilla", StringComparison.OrdinalIgnoreCase) && !name.Contains(':'));
                 Gap(8);
             }
 
@@ -72,7 +72,7 @@ namespace UICustomizer.UI.Tabs
                     else modsExpandedMap[headerText] = !modsExpandedMap[headerText];
                     Build();
                 },
-                hoverText: () => $"Click to {(isExpanded ? "collapse" : "expand")} the {headerText} section",
+                // hoverText: () => $"Click to {(isExpanded ? "collapse" : "expand")} the {headerText} section",
                 large: true
             )
             { HAlign = 0.2f, VAlign = 0.5f };
@@ -134,7 +134,7 @@ namespace UICustomizer.UI.Tabs
             }
         }
 
-        protected override void Populate() => Build();
+        public override void Populate() => Build();
 
         public override void Update(GameTime gameTime)
         {

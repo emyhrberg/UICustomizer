@@ -1,1 +1,18 @@
 Configs.Config.DisplayName: Config
+
+Keybinds: {
+	DragonLensEditTool.DisplayName: Dragon Lens Edit Tool
+	"UI Editor.DisplayName": U I  Editor
+}
+
+Tools: {
+	DragonLensEditTool: {
+		DisplayName: DragonLensEditTool
+		Description: The tool has no description! Add one in .hjson files!
+	}
+
+	"UI Editor": {
+		DisplayName: UI Editor
+		Description: The tool has no description! Add one in .hjson files!
+	}
+}

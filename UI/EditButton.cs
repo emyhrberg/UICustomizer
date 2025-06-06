@@ -36,6 +36,8 @@ namespace UICustomizer.UI
 
         public override void Update(GameTime gameTime)
         {
+            //if (ModLoader.TryGetMod("DragonLens", out _)) return;
+
             if (UICustomizerSystem.EditModeActive) return;
 
             //Height.Set(40, 0);
@@ -53,6 +55,8 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //if (ModLoader.TryGetMod("DragonLens", out _)) return;
+
             Top.Set(-98, 1);
             Width.Set(200, 0);
 

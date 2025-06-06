@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Terraria.Initializers;
 using Terraria.IO;
@@ -21,7 +22,7 @@ namespace UICustomizer.UI.Tabs
             allPacks = _allPacksList.AllPacks.ToList();
         }
 
-        protected override void Populate()
+        public override void Populate()
         {
             list.Clear();
 
@@ -99,11 +100,24 @@ namespace UICustomizer.UI.Tabs
                         Main.NewText($"{pack.Name} disabled.", Color.Red);
                         Populate();
                     },
+                    onRightClick: () =>
+                    {
+                        // Open the pack folder in the file explorer
+                        OpenPackFolderInExplorer(pack);
+                    },
                     maxWidth: true
                 );
 
                 TryAdd(btn);
             }
+        }
+
+        private void OpenPackFolderInExplorer(ResourcePack pack)
+        {
+            Main.NewText("Opening: " + pack.FullPath, Color.LightGray);
+
+            // Open it with System.Diagnostics.Process
+            Process.Start("explorer.exe", pack.FullPath);
         }
 
         private void PopulateDisabledPacks()
@@ -127,6 +141,11 @@ namespace UICustomizer.UI.Tabs
 
                         Main.NewText($"{pack.Name} enabled.", Color.Green);
                         Populate();
+                    },
+                    onRightClick: () =>
+                    {
+                        // Open the pack folder in the file explorer
+                        OpenPackFolderInExplorer(pack);
                     },
                     maxWidth: true
                 );

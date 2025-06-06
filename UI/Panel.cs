@@ -100,10 +100,15 @@ namespace UICustomizer.UI
 
             // THIS WILL OPEN PANEL ON LAUNCH!
             // Select(editorTab); // default tab
-            if (current != null)
+            // If we already remembered a tab from last time, select it; otherwise default to editorTab
+            Select(UICustomizerSystem.LastSelectedTabType switch
             {
-                Select(current);
-            }
+                TabType.Editor => editorTab,
+                TabType.Themes => themesTab,
+                TabType.Layers => layersTab,
+                _ => editorTab
+            });
+            Select(editorTab); // default tab
         }
 
         public void SetDefaultSizeAndPosition()
@@ -127,10 +132,21 @@ namespace UICustomizer.UI
             // Select new tab
             current = t;
 
+            // Figure out which TabType this instance is:
+            if (t == editorTab)
+                UICustomizerSystem.SetLastSelectedTab(TabType.Editor);
+            else if (t == themesTab)
+                UICustomizerSystem.SetLastSelectedTab(TabType.Themes);
+            else if (t == layersTab)
+                UICustomizerSystem.SetLastSelectedTab(TabType.Layers);
+
             // Highlight color
             Tab[] tabs = [editorTab, themesTab, layersTab];
             foreach (var tab in tabs)
                 tab.header.TextColor = tab == t ? Color.Yellow : Color.White;
+
+            // Re‐populate in case something changed
+            t.Populate();
 
             // Update body content
             body.RemoveAllChildren();
@@ -142,53 +158,18 @@ namespace UICustomizer.UI
 
         public override void Update(GameTime gameTime)
         {
-            if (!UICustomizerSystem.EditModeActive) return;
+            if (!UICustomizerSystem.EditModeActive)
+                return;
 
             base.Update(gameTime);
 
-            // UpdateScrollbarVisbility();
-        }
-
-        private void UpdateScrollbarVisbility()
-        {
-            // Set scrollbar visibility
-            if (current?.list != null)
+            if (current is EditorTab editorTab)
             {
-                // Default to false
-                scrollbar.Visible = false;
+                bool namesChecked = editorTab.CheckboxNames.state == CheckboxState.Checked;
 
-                // Count the number of expanded sections
-                int expandedCount = 0;
-
-                if (current is ThemeTab)
-                {
-                    // Theme tab has no sections to count
-                    scrollbar.Visible = true;
-                    expandedCount = 0;
-                }
-                else if (current is EditorTab editor)
-                {
-                    if (editor._uiEditorExpanded) expandedCount++;
-                    if (editor._layoutsExpanded) expandedCount++;
-                    if (editor._optionsExpanded) expandedCount++;
-                    expandedCount++;
-                }
-                else if (current is LayersTab layers)
-                {
-                    if (layers.vanillaExpanded) expandedCount++;
-                    if (expandedCount == 1 && layers.modsExpandedMap.Values.All(v => !v))
-                    {
-                        scrollbar.Visible = true;
-                        return;
-                    }
-                    expandedCount += layers.modsExpandedMap.Values.Count(v => v);
-                }
-
-                // Show scrollbar only if more than one section is expanded
-                if (expandedCount > 1)
-                {
-                    scrollbar.Visible = true;
-                }
+                // Only show (and allow clicks on) the “TextPos” checkbox if “Names” is checked
+                //editorTab.CheckboxTextPos.Visible = namesChecked;
+                editorTab.CheckboxTextPos.Active = namesChecked;
             }
         }
 

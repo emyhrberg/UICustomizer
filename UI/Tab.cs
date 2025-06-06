@@ -50,7 +50,7 @@ namespace UICustomizer.UI
             Populate();
         }
 
-        protected abstract void Populate();
+        public abstract void Populate();
 
         protected CollapsibleHeader AddCollapsibleHeader(string text, Func<bool> getState, Action<bool> setState, Action onToggle = null)
         {

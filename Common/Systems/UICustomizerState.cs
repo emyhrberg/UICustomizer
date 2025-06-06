@@ -13,9 +13,12 @@ namespace UICustomizer.Common.Systems
             panel = new();
             Append(panel);
 
-            // The text next to settings open when inventory is open
-            EditButton editButton = new();
-            Append(editButton);
+            if (!ModLoader.TryGetMod("DragonLens", out _))
+            {
+                // The text next to settings open when inventory is open
+                EditButton editButton = new();
+                Append(editButton);
+            }
         }
 
         // Draw black background with lower opacity to show we're in edit mode.
@@ -27,11 +30,20 @@ namespace UICustomizer.Common.Systems
             if (!UICustomizerSystem.EditModeActive) return;
 
             // Draw hover around every element
-            DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), "Hotbar", textPos: TextPosition.Right);
             DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), "Buffs", textPos: TextPosition.Right);
             DrawHitboxOutlineAndText(sb, DragSystem.MapBounds(), "Map", textPos: TextPosition.Left, x: 20);
             DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), "Info\nAccessories", textPos: TextPosition.Left, x: 20);
             DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), "Chat", textPos: TextPosition.Top);
+
+            // Draw hotbar or inventory
+            if (Main.playerInventory)
+            {
+                DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), "Inventory", textPos: TextPosition.Left, x: 20);
+            }
+            else
+            {
+                DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), "Hotbar", textPos: TextPosition.Left, x: 20);
+            }
 
             // Draw resource bars. Check which health and mana style is active:
             string activeSetName = Main.ResourceSetsManager.ActiveSet.DisplayedName;

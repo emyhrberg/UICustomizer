@@ -44,3 +44,6 @@
 [x] Use layouts instead of 
 [x] Add toggle all to layers
 [x] Move buff icons
+
+--------------------------------------------------------------
+I stopped updating here and went to Trello instead.

@@ -14,6 +14,7 @@ namespace UICustomizer.UI
         private UIText label;
         private string hoverText;
         private Action onClick;
+        public bool Active = true;
 
         public Checkbox(string text, string hover, int width = 50, Action onClick = null, CheckboxState initialState = CheckboxState.Checked)
             : base()
@@ -43,6 +44,8 @@ namespace UICustomizer.UI
 
         public override void LeftClick(UIMouseEvent evt)
         {
+            if (!Active) return;
+
             base.LeftClick(evt);
 
             Toggle();
@@ -69,6 +72,8 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (!Active) return;
+
             base.Draw(spriteBatch);
 
             if (IsMouseHovering && hoverText != "")

@@ -3,31 +3,20 @@
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
 
-	<!-- General -->
-	<PropertyGroup>
-		
-	</PropertyGroup>
-	<ItemGroup>
-	  <AdditionalFiles Remove="Common\NewFolder\**" />
-	  <Compile Remove="Common\NewFolder\**" />
-	  <EmbeddedResource Remove="Common\NewFolder\**" />
-	  <None Remove="Common\NewFolder\**" />
-	</ItemGroup>
-
 	<!-- References -->
 
+	<!-- DragonLens reference -->
 	<ItemGroup>
-
 		<Reference Include="DragonLens">
 			<HintPath>lib\DragonLens.dll</HintPath>
 		</Reference>
+    </ItemGroup>
 
-		<Reference Include="CheatSheet">
-			<HintPath>lib\CheatSheet.dll</HintPath>
-		</Reference>
-
+	<!-- Makes use of Krafs Publicizer when compiling tModLoader.dll, making all access modifiers public -->
+    <ItemGroup>
 		<PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
 		<Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
-	</ItemGroup>
+        <Publicize Include="DragonLens" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
+    </ItemGroup>
 
 </Project>

@@ -100,8 +100,8 @@ namespace UICustomizer.UI
 
             if (IsMouseHovering)
             {
-                string tooltip = currentState == CollapseState.Expanded ? "Collapse" : "Expand";
-                Main.hoverItemName = tooltip;
+                // string tooltip = currentState == CollapseState.Expanded ? "Collapse" : "Expand";
+                // Main.hoverItemName = tooltip;
                 //UICommon.TooltipMouseText(tooltip);
             }
         }

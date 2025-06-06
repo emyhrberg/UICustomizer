@@ -2,3 +2,4 @@ displayName = UI Editor
 author = Erky
 version = 0.2
 side = client
+weakReferences = DragonLens

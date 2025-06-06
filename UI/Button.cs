@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
+using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
@@ -17,7 +18,12 @@ namespace UICustomizer.UI
             OnMouseOver += (_, _) => BorderColor = Color.Yellow;
             OnMouseOut += (_, _) => BorderColor = Color.Black;
             OnRightClick += (_, _) => onRightClick?.Invoke();
-            OnLeftClick += (_, _) => onClick?.Invoke();
+            OnLeftClick += (_, _) =>
+            {
+                if (!UICustomizerSystem.EditModeActive)
+                    return; // Ignore clicks if not in edit mode
+                onClick?.Invoke();
+            };
 
             // Panel size and position
             if (maxWidth)
