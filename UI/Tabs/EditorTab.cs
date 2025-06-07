@@ -23,10 +23,10 @@ namespace UICustomizer.UI.Tabs
         // Store checkbox states
         private CheckboxState _checkboxXState = CheckboxState.Checked;
         private CheckboxState _checkboxYState = CheckboxState.Checked;
-        private CheckboxState _checkboxFillState = CheckboxState.Unchecked;
-        private CheckboxState _checkboxOutlineState = CheckboxState.Unchecked;
-        private CheckboxState _checkboxNamesState = CheckboxState.Unchecked;
-        private CheckboxState _checkboxTextPosState = CheckboxState.Unchecked;
+        private CheckboxState _checkboxFillState = CheckboxState.Checked;
+        private CheckboxState _checkboxOutlineState = CheckboxState.Checked;
+        private CheckboxState _checkboxNamesState = CheckboxState.Checked;
+        private CheckboxState _checkboxTextPosState = CheckboxState.Checked;
 
         // Layouts
         public string CurrentLayoutName => LayoutHelper.CurrentLayoutName;
@@ -486,6 +486,7 @@ namespace UICustomizer.UI.Tabs
             InventoryHook.OffsetX = InventoryHook.OffsetY = 0f;
             CraftingHook.OffsetX = CraftingHook.OffsetY = 0f;
             AccessoriesHook.OffsetX = AccessoriesHook.OffsetY = 0f;
+            CraftWindowHook.OffsetX = CraftWindowHook.OffsetY = 0f;
 
             // Write to active layout
             LayoutHelper.SaveActiveLayout();

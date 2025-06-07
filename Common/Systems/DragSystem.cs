@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent;
 using UICustomizer.Common.Systems.Hooks;
@@ -42,7 +43,9 @@ namespace UICustomizer.Common.Systems
             // Handle dragging of UI elements
             HandleDrag(MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
             HandleDrag(InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
-            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
+
+            if (Main.drawingPlayerChat)
+                HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
 
             // Handle inventory or hotbar dragging
             if (Main.playerInventory)
@@ -51,11 +54,18 @@ namespace UICustomizer.Common.Systems
                 HandleDrag(InventoryBounds, ref InventoryHook.OffsetX, ref InventoryHook.OffsetY);
                 HandleDrag(CraftingBounds, ref CraftingHook.OffsetX, ref CraftingHook.OffsetY);
                 HandleDrag(AccessoriesBounds, ref AccessoriesHook.OffsetX, ref AccessoriesHook.OffsetY);
+
+
             }
             else
             {
                 HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
                 HandleDrag(BuffBounds, ref BuffHook.OffsetX, ref BuffHook.OffsetY);
+            }
+
+            if (Main.recBigList)
+            {
+                HandleDrag(CraftWindowBounds, ref CraftWindowHook.OffsetX, ref CraftWindowHook.OffsetY);
             }
 
             // Resource bars
@@ -154,7 +164,7 @@ namespace UICustomizer.Common.Systems
             }
         }
 
-        #region Bounds
+        #region Bounds (hardcoded...)
 
         public static Rectangle ChatBounds()
         {
@@ -178,8 +188,8 @@ namespace UICustomizer.Common.Systems
         public static Rectangle HotbarBounds()
         {
             //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
-            int w = 52 * 10 - 85;
-            int h = 52 + 12;
+            int w = 440;
+            int h = 74;
             int x = (int)(20 + HotbarHook.OffsetX);
             int y = 1 + (int)HotbarHook.OffsetY;
             return new Rectangle(x, y, w, h);
@@ -187,8 +197,13 @@ namespace UICustomizer.Common.Systems
 
         public static Rectangle BuffBounds()
         {
-            int w = 52 * 10 - 85;
-            int h = 52 + 12;
+            int w = 440;
+            int h = 36;
+            if (BuffLoader.BuffCount > 11)
+                h = 36 * 3;
+
+            //Log.ChatSlow(BuffLoader.BuffCount.ToString());
+
             int x = (int)(20 + BuffHook.OffsetX);
             int y = (int)(52 + 21 + BuffHook.OffsetY);
             return new Rectangle(x, y, w, h);
@@ -196,36 +211,73 @@ namespace UICustomizer.Common.Systems
 
         public static Rectangle MapBounds()
         {
-            int w = (int)(250 * Main.MapScale);
-            int h = (int)(250 * Main.MapScale);
-            int x = (int)(Main.screenWidth - 50 - w + MapHook.OffsetX);
-            int y = 90 + (int)MapHook.OffsetY;
+            int w = (int)(255 * Main.MapScale);
+            int h = (int)(255 * Main.MapScale);
+            int x = (int)(Main.screenWidth - 300 + MapHook.OffsetX);
+            int y = 85 + (int)MapHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
         public static Rectangle InfoAccsBounds()
         {
-            int w = 250;
-            int h = 100;
-            int x = (int)(Main.screenWidth - 50 - w + InfoAccsHook.OffsetX);
-            int y = 340 + (int)InfoAccsHook.OffsetY;
+            int shown = 0;
+
+            try
+            {
+                // Safe bounds checking before accessing the array
+                if (InfoDisplayLoader.InfoDisplays != null &&
+                    InfoDisplayLoader.InfoDisplayCount > 0 &&
+                    Main.LocalPlayer?.hideInfo != null)
+                {
+                    for (int i = 0; i < InfoDisplayLoader.InfoDisplayCount && i < InfoDisplayLoader.InfoDisplays.Count && i < Main.LocalPlayer.hideInfo.Length; i++)
+                    {
+                        if (InfoDisplayLoader.InfoDisplays[i] != null &&
+                            InfoDisplayLoader.InfoDisplays[i].Active() &&
+                            !Main.LocalPlayer.hideInfo[i])
+                        {
+                            shown++;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error counting info displays: {ex.Message}");
+                shown = 1; // Fallback value
+            }
+
+            // Remove the debug line that's spamming chat
+            // Main.NewText(shown);
+
+            int h = 30;
+
+            if (Main.playerInventory)
+                h = 30;
+            else if (shown > 0)
+            {
+                h = shown * 23;
+            }
+
+            int w = 255;
+            int x = (int)(Main.screenWidth - 300 + InfoAccsHook.OffsetX);
+            int y = 350 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
         public static Rectangle ClassicLifeBounds()
         {
-            int w = 245;
-            int h = 65;
-            int x = (int)(Main.screenWidth - 57 - w + ClassicLifeHook.OffsetX);
+            int w = 255;
+            int h = 75;
+            int x = (int)(Main.screenWidth - 300 + ClassicLifeHook.OffsetX);
             int y = 6 + (int)ClassicLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
         public static Rectangle FancyLifeBounds()
         {
-            int w = 250;
+            int w = 255;
             int h = 60;
-            int x = (int)(Main.screenWidth - 50 - w + FancyLifeHook.OffsetX);
+            int x = (int)(Main.screenWidth - 300 + FancyLifeHook.OffsetX);
             int y = 12 + (int)FancyLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
@@ -234,7 +286,7 @@ namespace UICustomizer.Common.Systems
         {
             int w = 44;
             int h = 300;
-            int x = (int)(Main.screenWidth - 6 - w + ClassicManaHook.OffsetX);
+            int x = (int)(Main.screenWidth - 0 - w + ClassicManaHook.OffsetX);
             int y = 6 + (int)ClassicManaHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
@@ -242,9 +294,9 @@ namespace UICustomizer.Common.Systems
         public static Rectangle FancyManaBounds()
         {
             int w = 40;
-            int h = 300;
+            int h = 250;
             int x = (int)(Main.screenWidth - 6 - w + FancyManaHook.OffsetX);
-            int y = 6 + (int)FancyManaHook.OffsetY;
+            int y = 12 + (int)FancyManaHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
@@ -278,8 +330,8 @@ namespace UICustomizer.Common.Systems
         public static Rectangle InventoryBounds()
         {
             //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
-            int w = 52 * 10 - 85;
-            int h = 252 + 12;
+            int w = 548;
+            int h = 315;
             int x = (int)(20 + InventoryHook.OffsetX);
             int y = 1 + (int)InventoryHook.OffsetY;
             return new Rectangle(x, y, w, h);
@@ -297,10 +349,21 @@ namespace UICustomizer.Common.Systems
 
         public static Rectangle AccessoriesBounds()
         {
-            int w = (int)(180);
             int h = (int)(430);
-            int x = (int)(Main.screenWidth - 30 - w + AccessoriesHook.OffsetX);
-            int y = 430 + (int)AccessoriesHook.OffsetY;
+
+
+            int w = (int)(225);
+            int x = (int)(Main.screenWidth - 230 + AccessoriesHook.OffsetX);
+            int y = 390 + (int)AccessoriesHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle CraftWindowBounds()
+        {
+            int w = (int)(180);
+            int h = (int)(200);
+            int x = (int)(485 - w + CraftWindowHook.OffsetX);
+            int y = 330 + (int)CraftWindowHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 

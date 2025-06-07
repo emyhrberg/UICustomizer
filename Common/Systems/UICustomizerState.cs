@@ -1,4 +1,6 @@
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
+using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.UI;
 using static UICustomizer.Helpers.DrawHelper;
 
@@ -34,24 +36,38 @@ namespace UICustomizer.Common.Systems
         {
             base.Draw(sb);
 
+            // --- HOT RELOAD TESTING ---
+            int hidden = Main.LocalPlayer.hideInfo.Cast<bool>().Count(b => !b);
+            int active = InfoDisplayLoader.ActiveDisplays();
+            //Log.Info("test");
+            //Log.ChatSlow("test", 3000);
+
+
             if (!UICustomizerSystem.EditModeActive) return;
 
             // Draw hover around every element
             DrawHitboxOutlineAndText(sb, DragSystem.MapBounds(), "Map", textPos: TextPosition.Left, x: 20);
-            DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), "Info\nAccessories", textPos: TextPosition.Left, x: 20);
-            DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), "Chat", textPos: TextPosition.Top);
+            DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), "Info\nAccs", textPos: TextPosition.Left, x: 20);
+
+            if (Main.drawingPlayerChat)
+                DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), "Chat", textPos: TextPosition.Top);
 
             // Draw hotbar or inventory
             if (Main.playerInventory)
             {
                 DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), "Inventory", textPos: TextPosition.Left, x: 20);
                 DrawHitboxOutlineAndText(sb, DragSystem.CraftingBounds(), "Crafting", textPos: TextPosition.Right, x: 20);
-                DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), "Accessories", textPos: TextPosition.Bottom, x: 20);
+                DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), "Accessories", textPos: TextPosition.Top, x: 20);
             }
             else
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), "Hotbar", textPos: TextPosition.Left, x: 20);
+                DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), "Hotbar", textPos: TextPosition.Right, x: 20);
                 DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), "Buffs", textPos: TextPosition.Right);
+            }
+
+            if (Main.recBigList)
+            {
+                DrawHitboxOutlineAndText(sb, DragSystem.CraftWindowBounds(), "BigRecList", textPos: TextPosition.Top);
             }
 
             // Draw resource bars. Check which health and mana style is active:

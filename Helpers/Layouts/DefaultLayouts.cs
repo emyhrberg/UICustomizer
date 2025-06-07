@@ -60,7 +60,7 @@ namespace UICustomizer.Helpers.Layouts
 
         private static void CreateHotbarCenteredLayout()
         {
-            const string layoutName = "Default Hotbar Center";
+            const string layoutName = "Hotbar Center";
             string hbPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(hbPath))
             {
@@ -93,7 +93,7 @@ namespace UICustomizer.Helpers.Layouts
 
         private static void CreateMapLeftLayout()
         {
-            const string layoutName = "Default Map Left";
+            const string layoutName = "Map Left";
             string mapLeftPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(mapLeftPath))
             {
@@ -126,7 +126,7 @@ namespace UICustomizer.Helpers.Layouts
 
         private static void CreateMinecraftLayout()
         {
-            const string layoutName = "Default Minecraft";
+            const string layoutName = "Minecraft";
             string minecraftPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(minecraftPath))
             {

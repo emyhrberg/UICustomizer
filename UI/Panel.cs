@@ -163,6 +163,16 @@ namespace UICustomizer.UI
 
             base.Update(gameTime);
 
+            //Main.NewText(InfoDisplayLoader.ActiveDisplays());
+            //Main.NewText("new");
+
+            // TODO Force panel to not overlap accessories and map UI
+            // if (Main.playerInventory && Left.Pixels < Main.screenWidth - 70)
+            // {
+            // Left.Set(Main.screenWidth - 70, 0f);
+            // Recalculate();
+            // }
+
             if (current is EditorTab editorTab)
             {
                 bool namesChecked = editorTab.CheckboxNames.state == CheckboxState.Checked;
