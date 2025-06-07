@@ -13,11 +13,18 @@ namespace UICustomizer.Common.Systems
             panel = new();
             Append(panel);
 
-            if (!ModLoader.TryGetMod("DragonLens", out _))
+            bool AnyModWithUIToolAdded = ModLoader.TryGetMod("DragonLens", out _) || ModLoader.TryGetMod("ModReloader", out _);
+
+            if (!AnyModWithUIToolAdded)
             {
-                // The text next to settings open when inventory is open
-                EditButton editButton = new();
-                Append(editButton);
+                // If we have mods that add their own edit button, we don't need to add our own.
+                // This is because they will handle the edit mode toggle.
+                if (!ModLoader.TryGetMod("DragonLens", out _) && !ModLoader.TryGetMod("ModReloader", out _))
+                {
+                    // The text next to settings open when inventory is closed
+                    EditButton editButton = new();
+                    Append(editButton);
+                }
             }
         }
 
@@ -30,7 +37,6 @@ namespace UICustomizer.Common.Systems
             if (!UICustomizerSystem.EditModeActive) return;
 
             // Draw hover around every element
-            DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), "Buffs", textPos: TextPosition.Right);
             DrawHitboxOutlineAndText(sb, DragSystem.MapBounds(), "Map", textPos: TextPosition.Left, x: 20);
             DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), "Info\nAccessories", textPos: TextPosition.Left, x: 20);
             DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), "Chat", textPos: TextPosition.Top);
@@ -39,10 +45,13 @@ namespace UICustomizer.Common.Systems
             if (Main.playerInventory)
             {
                 DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), "Inventory", textPos: TextPosition.Left, x: 20);
+                DrawHitboxOutlineAndText(sb, DragSystem.CraftingBounds(), "Crafting", textPos: TextPosition.Right, x: 20);
+                DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), "Accessories", textPos: TextPosition.Bottom, x: 20);
             }
             else
             {
                 DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), "Hotbar", textPos: TextPosition.Left, x: 20);
+                DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), "Buffs", textPos: TextPosition.Right);
             }
 
             // Draw resource bars. Check which health and mana style is active:

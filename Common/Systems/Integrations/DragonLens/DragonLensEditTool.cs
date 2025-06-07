@@ -20,15 +20,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
         public override void OnActivate()
         {
-            // Toggle edit mode
-            if (UICustomizerSystem.EditModeActive)
-            {
-                UICustomizerSystem.ExitEditMode();
-            }
-            else
-            {
-                UICustomizerSystem.EnterEditMode();
-            }
+            UICustomizerSystem.ToggleEditMode();
         }
 
         public override void DrawIcon(SpriteBatch spriteBatch, Rectangle position)
@@ -50,7 +42,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
             //scale = tex.Width > tex.Height ? position.Width / tex.Width : position.Height / tex.Height;
 
             scale = 0.35f;
-            Vector2 pos = new(position.Center.X+2, position.Center.Y);
+            Vector2 pos = new(position.Center.X + 2, position.Center.Y);
 
             spriteBatch.Draw(tex, pos, null, Color.White, 0, tex.Size() / 2f, scale, 0, 0);
 

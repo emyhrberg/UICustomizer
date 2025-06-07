@@ -15,9 +15,12 @@ namespace UICustomizer.Helpers
             Bottom
         }
 
-        public static void DrawHitboxOutlineAndText(SpriteBatch sb, Rectangle rect, string text, TextPosition textPos = TextPosition.Top, int x =0)
+        public static void DrawHitboxOutlineAndText(SpriteBatch sb, Rectangle rect, string text, TextPosition textPos = TextPosition.Top, int x = 0, Color color = default)
         {
-            Color color = Color.Red * 0.5f;
+            if (color == default)
+                color = Color.Red * 0.5f;
+            else
+                color *= 0.5f; // Reduce opacity
 
             Texture2D t = TextureAssets.MagicPixel.Value;
             int thickness = 2;
@@ -69,7 +72,7 @@ namespace UICustomizer.Helpers
                         pos += new Vector2(-8, rect.Height); // place 20 pixels below the pos
                     }
                 }
-                    
+
                 Utils.DrawBorderString(sb, text, pos, Color.White);
             }
         }

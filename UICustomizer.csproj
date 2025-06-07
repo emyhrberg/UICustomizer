@@ -12,6 +12,13 @@
 		</Reference>
     </ItemGroup>
 
+    <!-- Mod Reloader reference -->
+	<ItemGroup>
+		<Reference Include="ModReloader">
+			<HintPath>lib\ModReloader.dll</HintPath>
+		</Reference>
+    </ItemGroup>
+
 	<!-- Makes use of Krafs Publicizer when compiling tModLoader.dll, making all access modifiers public -->
     <ItemGroup>
 		<PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />

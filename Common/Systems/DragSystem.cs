@@ -21,35 +21,15 @@ namespace UICustomizer.Common.Systems
         {
             base.PostUpdateInput();
 
-            // --- HOT RELOAD TESTING ---
-            //ChatHook.OffsetY = -200;
-            //MapHook.OffsetX = -100;
-            //LifeAndManaHook.OffsetY = 100;
-
             // If edit mode is not active, do nothing
             if (!UICustomizerSystem.EditModeActive)
                 return;
 
-            // Force open chat
-            //    if (!Main.drawingPlayerChat)               
-            //        Main.OpenPlayerChat();             
-            //}
-            //else if (Main.drawingPlayerChat)               
-            //    Main.ClosePlayerChat();
-
-            // Force close inventory
-            // if (UICustomizerSystem.EditModeActive && Main.playerInventory)
-            // {
-            //     //CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Inventory is not available in UI edit mode.");
-            //     Main.playerInventory = false;              // close inventory
-            //     Main.mouseItem = new Item();               // clear mouse item
-            // }
-
             // Force exit edit mode on escape
-            if (UICustomizerSystem.EditModeActive && Main.keyState.IsKeyDown(Keys.Escape))
-            {
-                UICustomizerSystem.ExitEditMode();
-            }
+            // if (UICustomizerSystem.EditModeActive && Main.keyState.IsKeyDown(Keys.Escape))
+            // {
+            // UICustomizerSystem.ExitEditMode();
+            // }
 
             // If dragging the UIEditorPanel, return
             UICustomizerSystem sys = ModContent.GetInstance<UICustomizerSystem>();
@@ -60,19 +40,22 @@ namespace UICustomizer.Common.Systems
                 return;
 
             // Handle dragging of UI elements
-            HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
-            HandleDrag(BuffBounds, ref BuffHook.OffsetX, ref BuffHook.OffsetY);
             HandleDrag(MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
             HandleDrag(InfoAccsBounds, ref InfoAccsHook.OffsetX, ref InfoAccsHook.OffsetY);
+            HandleDrag(ChatBounds, ref ChatHook.OffsetX, ref ChatHook.OffsetY);
 
             // Handle inventory or hotbar dragging
             if (Main.playerInventory)
             {
+                // convert to float
                 HandleDrag(InventoryBounds, ref InventoryHook.OffsetX, ref InventoryHook.OffsetY);
+                HandleDrag(CraftingBounds, ref CraftingHook.OffsetX, ref CraftingHook.OffsetY);
+                HandleDrag(AccessoriesBounds, ref AccessoriesHook.OffsetX, ref AccessoriesHook.OffsetY);
             }
             else
             {
                 HandleDrag(HotbarBounds, ref HotbarHook.OffsetX, ref HotbarHook.OffsetY);
+                HandleDrag(BuffBounds, ref BuffHook.OffsetX, ref BuffHook.OffsetY);
             }
 
             // Resource bars
@@ -202,16 +185,6 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle InventoryBounds()
-        {
-            //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
-            int w = 52 * 10 - 85;
-            int h = 252 + 12;
-            int x = (int)(20 + HotbarHook.OffsetX);
-            int y = 1 + (int)HotbarHook.OffsetY;
-            return new Rectangle(x, y, w, h);
-        }
-
         public static Rectangle BuffBounds()
         {
             int w = 52 * 10 - 85;
@@ -299,6 +272,35 @@ namespace UICustomizer.Common.Systems
             int h = 30;
             int x = (int)(Main.screenWidth - 123 - w + BarManaTextHook.OffsetX);
             int y = 60 + (int)BarManaTextHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle InventoryBounds()
+        {
+            //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
+            int w = 52 * 10 - 85;
+            int h = 252 + 12;
+            int x = (int)(20 + InventoryHook.OffsetX);
+            int y = 1 + (int)InventoryHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle CraftingBounds()
+        {
+            //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
+            int w = 52;
+            int h = 252 + 12;
+            int x = (int)(20 + CraftingHook.OffsetX);
+            int y = 500 + (int)CraftingHook.OffsetY;
+            return new Rectangle(x, y, w, h);
+        }
+
+        public static Rectangle AccessoriesBounds()
+        {
+            int w = (int)(180);
+            int h = (int)(430);
+            int x = (int)(Main.screenWidth - 30 - w + AccessoriesHook.OffsetX);
+            int y = 430 + (int)AccessoriesHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 

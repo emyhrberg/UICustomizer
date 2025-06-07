@@ -12,15 +12,7 @@ namespace UICustomizer.Common.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            // Enter "edit mode"
-            if (UICustomizerSystem.EditModeActive)
-            {
-                UICustomizerSystem.ExitEditMode();
-            }
-            else
-            {
-                UICustomizerSystem.EnterEditMode();
-            }
+            UICustomizerSystem.ToggleEditMode();
         }
     }
 }

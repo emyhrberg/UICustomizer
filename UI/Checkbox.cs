@@ -95,16 +95,16 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch sb)
         {
-            // Skip base draw and draw custom position and opacity
-            //base.Draw(spriteBatch);
-
-            if (Parent is Checkbox checkbox)
+            // Check if parent checkbox is active before drawing
+            if (Parent is Checkbox checkbox && !checkbox.Active)
             {
-                //DrawHelper.DrawProperScale(spriteBatch, checkbox, _texture.Value);
-                float opacity = checkbox.IsMouseHovering ? 1f : 0.4f;
-                Vector2 pos = checkbox.GetDimensions().Position();
-                sb.Draw(_texture.Value, pos, Color.White * opacity);
+                return; // Don't draw if checkbox is not active
             }
+
+            // Skip base draw and draw custom position and opacity
+            float opacity = Parent is Checkbox cb && cb.IsMouseHovering ? 1f : 0.4f;
+            Vector2 pos = Parent.GetDimensions().Position();
+            sb.Draw(_texture.Value, pos, Color.White * opacity);
         }
     }
 }

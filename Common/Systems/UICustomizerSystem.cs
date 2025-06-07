@@ -20,22 +20,23 @@ namespace UICustomizer.Common.Systems
 
         // Handle edit mode state.
         public static bool EditModeActive { get; private set; } = false;
-        public static void EnterEditMode()
-        {
-            EditModeActive = true;
-        }
+        public static void EnterEditMode() => EditModeActive = true;
         public static void ExitEditMode()
         {
             EditModeActive = false;
 
-            // Get panel
-            var sys = ModContent.GetInstance<UICustomizerSystem>();
-            if (sys == null || sys.state == null)
-                return;
-            Panel panel = sys.state.panel;
-
             // Force stop dragging
-            panel.CancelDrag();
+            var sys = ModContent.GetInstance<UICustomizerSystem>();
+            Panel panel = sys?.state?.panel;
+            panel?.CancelDrag();
+        }
+
+        public static void ToggleEditMode()
+        {
+            if (EditModeActive)
+                ExitEditMode();
+            else
+                EnterEditMode();
         }
 
         // UI components
@@ -47,6 +48,10 @@ namespace UICustomizer.Common.Systems
             base.OnModLoad();
 
             DefaultLayouts.CreateAllDefaultLayouts();
+
+            // #if DEBUG
+            EnterEditMode();
+            // #endif
         }
 
         public override void OnWorldLoad()

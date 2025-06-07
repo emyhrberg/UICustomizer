@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UICustomizer.Common.Systems.Hooks;
-using static UICustomizer.Helpers.ResourceThemeHelper;
+using static UICustomizer.Helpers.Layouts.MapThemeHelper;
+using static UICustomizer.Helpers.Layouts.OffsetHelper;
+using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
 {
@@ -17,45 +20,72 @@ namespace UICustomizer.Helpers.Layouts
         {
             string layoutName = "Active";
 
-            ResourceThemeHelper.GetActiveTheme(out ResourceTheme currentTheme);
+            GetActiveResourceTheme(out ResourceTheme currentTheme);
+            GetActiveMapTheme(out MapTheme mapTheme);
 
             var layoutData = new LayoutData
             {
-                Theme = currentTheme,
-                Positions = new Dictionary<string, Vector2>
+                ResourceTheme = currentTheme,
+                MapTheme = mapTheme,
+                Offsets = new Dictionary<Offset, Vector2>
                 {
-                    ["ChatOffset"] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
-                    ["HotbarOffset"] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
-                    ["MapOffset"] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
-                    ["InfoAccsOffset"] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
-                    ["ClassicLifeOffset"] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
-                    ["ClassicManaOffset"] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
-                    ["FancyLifeOffset"] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
-                    ["FancyManaOffset"] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
-                    ["HorizontalBarsOffset"] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
-                    ["BarLifeTextOffset"] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
-                    ["BarManaTextOffset"] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
-                    ["BuffOffset"] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY)
+                    [Offset.Chat] = new(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Offset.Hotbar] = new(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Offset.Map] = new(MapHook.OffsetX, MapHook.OffsetY),
+                    [Offset.InfoAccs] = new(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Offset.ClassicLife] = new(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Offset.ClassicMana] = new(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Offset.FancyLife] = new(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Offset.FancyMana] = new(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Offset.HorizontalBars] = new(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Offset.BarLifeText] = new(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Offset.BarManaText] = new(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Offset.Buffs] = new(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Offset.Inventory] = new(InventoryHook.OffsetX, InventoryHook.OffsetY),
                 }
             };
 
             WriteLayoutFile(layoutName, layoutData);
             CurrentLayoutName = layoutName;
             SaveLastLayout();
-            Log.Info($"Saved layout '{layoutName}' with theme '{currentTheme}'.");
+            Log.Info($"Saved layout '{layoutName}' with life theme '{currentTheme}'.");
         }
 
+        // Emojis.
         public static void WriteLayoutFile(string layoutName, LayoutData data)
         {
             try
             {
                 string path = FileHelper.GetLayoutFilePath(layoutName);
+                Log.Info($"Attempting to write layout '{layoutName}' to: {path}");
+
+                // Check if directory exists
+                string directory = Path.GetDirectoryName(path);
+                if (!Directory.Exists(directory))
+                {
+                    Log.Info($"Creating directory: {directory}");
+                    Directory.CreateDirectory(directory);
+                }
+
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 File.WriteAllText(path, json);
+
+                Log.Info($"✅ Successfully wrote layout '{layoutName}' ({json.Length} characters)");
+
+                // Verify file was created
+                if (File.Exists(path))
+                {
+                    Log.Info($"✅ Verified file exists: {path}");
+                }
+                else
+                {
+                    Log.Error($"❌ File was not created: {path}");
+                }
             }
             catch (Exception ex)
             {
-                Log.Error($"Failed to write layout '{layoutName}': {ex.Message}");
+                Log.Error($"❌ Failed to write layout '{layoutName}': {ex.Message}");
+                Log.Error($"Stack trace: {ex.StackTrace}");
             }
         }
 
@@ -83,34 +113,41 @@ namespace UICustomizer.Helpers.Layouts
 
                 // Try to deserialize as new format first
                 var layoutData = JsonConvert.DeserializeObject<LayoutData>(json);
-                Dictionary<string, Vector2> positions;
-                ResourceTheme theme = ResourceTheme.Classic;
+                Dictionary<Offset, Vector2> positions;
+                ResourceTheme resourceTheme = ResourceTheme.Classic; // Default fallback
+                MapTheme mapTheme = MapTheme.Default; // Default fallback
 
-                if (layoutData?.Positions != null)
+                if (layoutData?.Offsets != null)
                 {
-                    // New format with theme
-                    positions = layoutData.Positions;
-                    theme = layoutData.Theme;
+                    // New format - extract positions and themes from layout data
+                    positions = layoutData.Offsets.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                    // Use the SAVED themes from the layout, not current themes
+                    resourceTheme = layoutData.ResourceTheme;
+                    mapTheme = layoutData.MapTheme;
                 }
                 else
                 {
-                    // Legacy format - just positions
-                    positions = JsonConvert.DeserializeObject<Dictionary<string, Vector2>>(json);
+                    // Legacy format - just positions, use defaults for themes
+                    positions = JsonConvert.DeserializeObject<Dictionary<Offset, Vector2>>(json);
                     if (positions == null)
                     {
                         Log.Error($"Failed to parse '{layoutName}.json'.");
                         return;
                     }
+                    // Keep default themes for legacy layouts
                 }
 
-                // Apply the resource theme first
-                ResourceThemeHelper.SetResourceTheme(theme);
+                // Apply the SAVED themes from the layout
+                SetResourceTheme(resourceTheme);
+                SetMapTheme(mapTheme);
 
                 // Apply positions
                 ApplyPositions(positions);
 
                 CurrentLayoutName = layoutName;
-                Log.Info($"Applied layout '{layoutName}' with theme '{theme}'.");
+                Log.Info($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.");
+                Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", Color.LightGreen);
             }
             catch (Exception ex)
             {
@@ -118,32 +155,34 @@ namespace UICustomizer.Helpers.Layouts
             }
         }
 
-        private static void ApplyPositions(Dictionary<string, Vector2> positions)
+        private static void ApplyPositions(Dictionary<Offset, Vector2> positions)
         {
-            if (positions.TryGetValue("ChatOffset", out Vector2 chat))
+            if (positions.TryGetValue(Offset.Chat, out Vector2 chat))
             { ChatHook.OffsetX = chat.X; ChatHook.OffsetY = chat.Y; }
-            if (positions.TryGetValue("HotbarOffset", out Vector2 hb))
+            if (positions.TryGetValue(Offset.Hotbar, out Vector2 hb))
             { HotbarHook.OffsetX = hb.X; HotbarHook.OffsetY = hb.Y; }
-            if (positions.TryGetValue("MapOffset", out Vector2 map))
+            if (positions.TryGetValue(Offset.Map, out Vector2 map))
             { MapHook.OffsetX = map.X; MapHook.OffsetY = map.Y; }
-            if (positions.TryGetValue("InfoAccsOffset", out Vector2 ia))
+            if (positions.TryGetValue(Offset.InfoAccs, out Vector2 ia))
             { InfoAccsHook.OffsetX = ia.X; InfoAccsHook.OffsetY = ia.Y; }
-            if (positions.TryGetValue("ClassicLifeOffset", out Vector2 cl))
+            if (positions.TryGetValue(Offset.ClassicLife, out Vector2 cl))
             { ClassicLifeHook.OffsetX = cl.X; ClassicLifeHook.OffsetY = cl.Y; }
-            if (positions.TryGetValue("ClassicManaOffset", out Vector2 cm))
+            if (positions.TryGetValue(Offset.ClassicMana, out Vector2 cm))
             { ClassicManaHook.OffsetX = cm.X; ClassicManaHook.OffsetY = cm.Y; }
-            if (positions.TryGetValue("FancyLifeOffset", out Vector2 fl))
+            if (positions.TryGetValue(Offset.FancyLife, out Vector2 fl))
             { FancyLifeHook.OffsetX = fl.X; FancyLifeHook.OffsetY = fl.Y; }
-            if (positions.TryGetValue("FancyManaOffset", out Vector2 fm))
+            if (positions.TryGetValue(Offset.FancyMana, out Vector2 fm))
             { FancyManaHook.OffsetX = fm.X; FancyManaHook.OffsetY = fm.Y; }
-            if (positions.TryGetValue("HorizontalBarsOffset", out Vector2 hl))
+            if (positions.TryGetValue(Offset.HorizontalBars, out Vector2 hl))
             { HorizontalBarsHook.OffsetX = hl.X; HorizontalBarsHook.OffsetY = hl.Y; }
-            if (positions.TryGetValue("BarLifeTextOffset", out Vector2 blt))
+            if (positions.TryGetValue(Offset.BarLifeText, out Vector2 blt))
             { BarLifeTextHook.OffsetX = blt.X; BarLifeTextHook.OffsetY = blt.Y; }
-            if (positions.TryGetValue("BarManaTextOffset", out Vector2 bmt))
+            if (positions.TryGetValue(Offset.BarManaText, out Vector2 bmt))
             { BarManaTextHook.OffsetX = bmt.X; BarManaTextHook.OffsetY = bmt.Y; }
-            if (positions.TryGetValue("BuffOffset", out Vector2 buff))
+            if (positions.TryGetValue(Offset.Buffs, out Vector2 buff))
             { BuffHook.OffsetX = buff.X; BuffHook.OffsetY = buff.Y; }
+            if (positions.TryGetValue(Offset.Inventory, out Vector2 inv))
+            { InventoryHook.OffsetX = (int)inv.X; InventoryHook.OffsetY = (int)inv.Y; }
         }
 
         public static void LoadLastLayout()

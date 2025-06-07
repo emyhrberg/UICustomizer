@@ -4,7 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UICustomizer.Common.Systems.Hooks;
-using static UICustomizer.Helpers.ResourceThemeHelper;
+using static UICustomizer.Helpers.Layouts.OffsetHelper;
+using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
 {
@@ -59,25 +60,26 @@ namespace UICustomizer.Helpers.Layouts
             }
 
             // Get current theme and positions
-            ResourceThemeHelper.GetActiveTheme(out ResourceTheme currentTheme);
+            ResourceThemeHelper.GetActiveResourceTheme(out ResourceTheme currentTheme);
 
             var layoutData = new LayoutData
             {
-                Theme = currentTheme,
-                Positions = new Dictionary<string, Vector2>
+                ResourceTheme = currentTheme,
+                Offsets = new Dictionary<Offset, Vector2>
                 {
-                    ["ChatOffset"] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
-                    ["HotbarOffset"] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
-                    ["MapOffset"] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
-                    ["InfoAccsOffset"] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
-                    ["ClassicLifeOffset"] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
-                    ["ClassicManaOffset"] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
-                    ["FancyLifeOffset"] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
-                    ["FancyManaOffset"] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
-                    ["HorizontalBarsOffset"] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
-                    ["BarLifeTextOffset"] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
-                    ["BarManaTextOffset"] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
-                    ["BuffOffset"] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY)
+                    [Offset.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Offset.Hotbar] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Offset.Map] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
+                    [Offset.InfoAccs] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Offset.ClassicLife] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Offset.ClassicMana] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Offset.FancyLife] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Offset.FancyMana] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Offset.HorizontalBars] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Offset.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Offset.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Offset.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Offset.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY),
                 }
             };
 
@@ -102,7 +104,10 @@ namespace UICustomizer.Helpers.Layouts
         {
             string folder = FileHelper.GetLayoutsFolderPath();
             if (!Directory.Exists(folder))
-                return new List<string>();
+            {
+                Log.Warn($"Layouts folder does not exist: {folder}");
+                return [];
+            }
 
             return Directory
                 .GetFiles(folder, "*.json")
@@ -112,7 +117,7 @@ namespace UICustomizer.Helpers.Layouts
 
         public static void OpenLayoutFolder()
         {
-            string folder = FileHelper.GetLayoutsFolderPath();
+            string folder = GetLayoutsFolderPath();
             if (Directory.Exists(folder))
             {
                 try
@@ -136,7 +141,7 @@ namespace UICustomizer.Helpers.Layouts
 
         public static void OpenLayoutFile(string layoutName)
         {
-            string path = FileHelper.GetLayoutFilePath(layoutName);
+            string path = GetLayoutFilePath(layoutName);
             if (!File.Exists(path))
             {
                 Log.Warn($"Layout file '{layoutName}.json' not found.");
@@ -159,7 +164,7 @@ namespace UICustomizer.Helpers.Layouts
 
         public static void DeleteAllLayouts()
         {
-            string folder = FileHelper.GetLayoutsFolderPath();
+            string folder = GetLayoutsFolderPath();
             if (!Directory.Exists(folder))
                 return;
 

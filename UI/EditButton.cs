@@ -6,7 +6,7 @@ using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
-    public class EditButton : UIText  
+    public class EditButton : UIText
     {
         private float scale = 0.6f;
 
@@ -68,7 +68,7 @@ namespace UICustomizer.UI
             }
 
             if (UICustomizerSystem.EditModeActive || !Main.playerInventory) return;
-            base.Draw(spriteBatch);  
+            base.Draw(spriteBatch);
         }
     }
 }

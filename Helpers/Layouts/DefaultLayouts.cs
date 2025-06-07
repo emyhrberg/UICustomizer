@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using static UICustomizer.Helpers.ResourceThemeHelper;
+using static UICustomizer.Helpers.Layouts.MapThemeHelper;
+using static UICustomizer.Helpers.Layouts.OffsetHelper;
+using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
 {
@@ -24,113 +26,136 @@ namespace UICustomizer.Helpers.Layouts
 
         private static void CreateDefaultLayout()
         {
-            string defaultPath = FileHelper.GetLayoutFilePath("Default");
+            const string layoutName = "Default";
+
+            string defaultPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(defaultPath))
             {
                 var layoutData = new LayoutData
                 {
-                    Theme = ResourceTheme.Classic,
-                    Positions = new Dictionary<string, Vector2>
+                    ResourceTheme = ResourceTheme.Classic,
+                    MapTheme = MapTheme.Default,
+                    Offsets = new Dictionary<Offset, Vector2>
                     {
-                        ["ChatOffset"] = Vector2.Zero,
-                        ["HotbarOffset"] = Vector2.Zero,
-                        ["MapOffset"] = Vector2.Zero,
-                        ["InfoAccsOffset"] = Vector2.Zero,
-                        ["ClassicLifeOffset"] = Vector2.Zero,
-                        ["ClassicManaOffset"] = Vector2.Zero,
-                        ["FancyLifeOffset"] = Vector2.Zero,
-                        ["FancyManaOffset"] = Vector2.Zero,
-                        ["HorizontalBarsOffset"] = Vector2.Zero,
-                        ["BarLifeTextOffset"] = Vector2.Zero,
-                        ["BarManaTextOffset"] = Vector2.Zero,
-                        ["BuffOffset"] = Vector2.Zero
+                        [Offset.Chat] = Vector2.Zero,
+                        [Offset.Hotbar] = Vector2.Zero,
+                        [Offset.Map] = Vector2.Zero,
+                        [Offset.InfoAccs] = Vector2.Zero,
+                        [Offset.ClassicLife] = Vector2.Zero,
+                        [Offset.ClassicMana] = Vector2.Zero,
+                        [Offset.FancyLife] = Vector2.Zero,
+                        [Offset.FancyMana] = Vector2.Zero,
+                        [Offset.HorizontalBars] = Vector2.Zero,
+                        [Offset.BarLifeText] = Vector2.Zero,
+                        [Offset.BarManaText] = Vector2.Zero,
+                        [Offset.Buffs] = Vector2.Zero,
+                        [Offset.Inventory] = Vector2.Zero,
+                        [Offset.Crafting] = Vector2.Zero,
+                        [Offset.Accessories] = Vector2.Zero
                     }
                 };
-                LayoutHelper.WriteLayoutFile("Default", layoutData);
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
             }
         }
 
         private static void CreateHotbarCenteredLayout()
         {
-            string hbPath = FileHelper.GetLayoutFilePath("HotbarCentered");
+            const string layoutName = "Default Hotbar Center";
+            string hbPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(hbPath))
             {
                 var layoutData = new LayoutData
                 {
-                    Theme = ResourceTheme.Classic,
-                    Positions = new Dictionary<string, Vector2>
+                    ResourceTheme = ResourceTheme.Bars,
+                    MapTheme = MapTheme.Valkyrie,
+                    Offsets = new Dictionary<Offset, Vector2>
                     {
-                        ["ChatOffset"] = Vector2.Zero,
-                        ["HotbarOffset"] = new Vector2(120, 0),
-                        ["MapOffset"] = Vector2.Zero,
-                        ["InfoAccsOffset"] = Vector2.Zero,
-                        ["ClassicLifeOffset"] = Vector2.Zero,
-                        ["ClassicManaOffset"] = Vector2.Zero,
-                        ["FancyLifeOffset"] = Vector2.Zero,
-                        ["FancyManaOffset"] = Vector2.Zero,
-                        ["HorizontalBarsOffset"] = Vector2.Zero,
-                        ["BarLifeTextOffset"] = Vector2.Zero,
-                        ["BarManaTextOffset"] = Vector2.Zero,
-                        ["BuffOffset"] = Vector2.Zero
+                        [Offset.Chat] = Vector2.Zero,
+                        [Offset.Hotbar] = new Vector2(160, 0),
+                        [Offset.Map] = Vector2.Zero,
+                        [Offset.InfoAccs] = Vector2.Zero,
+                        [Offset.ClassicLife] = Vector2.Zero,
+                        [Offset.ClassicMana] = Vector2.Zero,
+                        [Offset.FancyLife] = Vector2.Zero,
+                        [Offset.FancyMana] = Vector2.Zero,
+                        [Offset.HorizontalBars] = Vector2.Zero,
+                        [Offset.BarLifeText] = Vector2.Zero,
+                        [Offset.BarManaText] = Vector2.Zero,
+                        [Offset.Buffs] = Vector2.Zero,
+                        [Offset.Inventory] = Vector2.Zero,
+                        [Offset.Crafting] = Vector2.Zero,
+                        [Offset.Accessories] = Vector2.Zero
                     }
                 };
-                LayoutHelper.WriteLayoutFile("HotbarCentered", layoutData);
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
             }
         }
 
         private static void CreateMapLeftLayout()
         {
-            string mapLeftPath = FileHelper.GetLayoutFilePath("MapLeft");
+            const string layoutName = "Default Map Left";
+            string mapLeftPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(mapLeftPath))
             {
                 var layoutData = new LayoutData
                 {
-                    Theme = ResourceTheme.Fancy2,
-                    Positions = new Dictionary<string, Vector2>
+                    ResourceTheme = ResourceTheme.Fancy2,
+                    MapTheme = MapTheme.Golden,
+                    Offsets = new Dictionary<Offset, Vector2>
                     {
-                        ["ChatOffset"] = Vector2.Zero,
-                        ["HotbarOffset"] = new Vector2(230, -4),
-                        ["MapOffset"] = new Vector2(-658, -71),
-                        ["InfoAccsOffset"] = new Vector2(475, 286),
-                        ["ClassicLifeOffset"] = Vector2.Zero,
-                        ["ClassicManaOffset"] = Vector2.Zero,
-                        ["FancyLifeOffset"] = new Vector2(34, 273),
-                        ["FancyManaOffset"] = new Vector2(-258, 7),
-                        ["HorizontalBarsOffset"] = new Vector2(38, -3),
-                        ["BarLifeTextOffset"] = Vector2.Zero,
-                        ["BarManaTextOffset"] = Vector2.Zero,
-                        ["BuffOffset"] = new Vector2(0, 0)
+                        [Offset.Hotbar] = new Vector2(230, -4),
+                        [Offset.Map] = new Vector2(-658, -71),
+                        [Offset.InfoAccs] = new Vector2(475, 286),
+                        [Offset.FancyLife] = new Vector2(34, 273),
+                        [Offset.FancyMana] = new Vector2(-258, 7),
+                        [Offset.HorizontalBars] = new Vector2(38, -3),
+                        [Offset.BarLifeText] = new Vector2(0, 0),
+                        [Offset.BarManaText] = new Vector2(0, 0),
+                        [Offset.Buffs] = new Vector2(0, 0),
+                        [Offset.Inventory] = new Vector2(0, 0),
+                        [Offset.Chat] = new Vector2(0, 0),
+                        [Offset.ClassicLife] = new Vector2(0, 0),
+                        [Offset.ClassicMana] = new Vector2(0, 0),
+                        [Offset.Crafting] = new Vector2(0, 0),
+                        [Offset.Accessories] = new Vector2(0, 0)
                     }
                 };
-                LayoutHelper.WriteLayoutFile("MapLeft", layoutData);
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
             }
         }
 
         private static void CreateMinecraftLayout()
         {
-            string minecraftPath = FileHelper.GetLayoutFilePath("Minecraft");
+            const string layoutName = "Default Minecraft";
+            string minecraftPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(minecraftPath))
             {
                 var layoutData = new LayoutData
                 {
-                    Theme = ResourceTheme.Fancy2,
-                    Positions = new Dictionary<string, Vector2>
+                    ResourceTheme = ResourceTheme.Fancy2,
+                    MapTheme = MapTheme.TwigLeaf,
+                    Offsets = new Dictionary<Offset, Vector2>
                     {
-                        ["ChatOffset"] = new Vector2(1111, 41),
-                        ["HotbarOffset"] = new Vector2(788, 936),
-                        ["MapOffset"] = new Vector2(5, -77),
-                        ["InfoAccsOffset"] = new Vector2(9, -85),
-                        ["ClassicLifeOffset"] = Vector2.Zero,
-                        ["ClassicManaOffset"] = Vector2.Zero,
-                        ["FancyLifeOffset"] = new Vector2(-736, 853),
-                        ["FancyManaOffset"] = new Vector2(3, -9),
-                        ["HorizontalBarsOffset"] = new Vector2(-772, -12),
-                        ["BarLifeTextOffset"] = Vector2.Zero,
-                        ["BarManaTextOffset"] = Vector2.Zero,
-                        ["BuffOffset"] = Vector2.Zero
+                        [Offset.Chat] = new Vector2(1111, 21),
+                        [Offset.Hotbar] = new Vector2(788, 936),
+                        [Offset.Map] = new Vector2(5, -77),
+                        [Offset.InfoAccs] = new Vector2(9, -85),
+                        [Offset.FancyLife] = new Vector2(-736, 853),
+                        [Offset.FancyMana] = new Vector2(3, -9),
+                        [Offset.HorizontalBars] = new Vector2(0, 0),
+                        [Offset.BarLifeText] = new Vector2(0, 0),
+                        [Offset.BarManaText] = new Vector2(0, 0),
+                        [Offset.Buffs] = new Vector2(0, 0),
+                        [Offset.Inventory] = new Vector2(0, 0),
+                        [Offset.ClassicLife] = new Vector2(0, 0),
+                        [Offset.ClassicMana] = new Vector2(0, 0),
+                        [Offset.Crafting] = new Vector2(0, 0),
+                        [Offset.Accessories] = new Vector2(0, 0)
                     }
                 };
-                LayoutHelper.WriteLayoutFile("Minecraft", layoutData);
+                Log.Info($"Creating layout: {layoutName}");
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
+                Log.Info($"Created layout: {layoutName}");
             }
         }
 

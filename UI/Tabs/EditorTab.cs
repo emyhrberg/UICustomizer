@@ -86,6 +86,9 @@ namespace UICustomizer.UI.Tabs
             _checkboxOutlineState = CheckboxOutline.state;
             _checkboxNamesState = CheckboxNames.state;
             _checkboxTextPosState = CheckboxTextPos.state;
+
+            // Set textpos to be active false
+            CheckboxTextPos.Active = false; // Disable text position checkbox by default
         }
 
         public override void Populate()
@@ -128,7 +131,7 @@ namespace UICustomizer.UI.Tabs
             AddCollapsibleHeader("Layouts", () => _layoutsExpanded, state => _layoutsExpanded = state);
             PopulateLayouts();
 
-            AddCollapsibleHeader("Positions", () => _positionsExpanded, state => _positionsExpanded = state);
+            AddCollapsibleHeader("Offsets", () => _positionsExpanded, state => _positionsExpanded = state);
             PopulatePositions();
 
             AddCollapsibleHeader("Layout Options", () => _optionsExpanded, state => _optionsExpanded = state);
@@ -270,6 +273,9 @@ namespace UICustomizer.UI.Tabs
             CheckboxNames = new Checkbox("Text", "Show names", 80, initialState: _checkboxNamesState);
             CheckboxTextPos = new Checkbox("Offset", "Offset text position", 80, initialState: _checkboxTextPosState);
 
+            CheckboxTextPos.Active = (CheckboxNames.state == CheckboxState.Checked);
+            // Log.Info($"CheckboxTextPos.Active: {CheckboxTextPos.Active}");
+
             Gap(4);
             TryAdd(Row(saveBtn, CheckboxX, CheckboxY, 0));
             TryAdd(Row(hideAllBtn, CheckboxFill, CheckboxOutline, 1));
@@ -365,7 +371,7 @@ namespace UICustomizer.UI.Tabs
             if (!_optionsExpanded) return;
 
             var openFolderBtn = new Button(
-                text: "Open layouts folder",
+                text: "Open layout folder",
                 tooltip: () => "Open the layouts folder to edit, share or add new layouts",
                 onClick: () =>
                 {
@@ -375,7 +381,7 @@ namespace UICustomizer.UI.Tabs
                 maxWidth: true
             );
             var createNewBtn = new Button(
-                text: "Save current layout",
+                text: "Save this layout",
                 tooltip: () => "Creates and opens a new layout file with the current layout",
                 onClick: () =>
                 {
@@ -387,7 +393,7 @@ namespace UICustomizer.UI.Tabs
             );
             var deleteAllBtn = new Button(
                 text: "Remove all layouts",
-                tooltip: () => "Remove all layouts from the folder",
+                tooltip: () => "Remove all layouts from the folder. \nThis means user-created layouts will be gone forever and only some default layouts will be available after you reload.",
                 topOffset: 0,
                 onClick: () =>
                 {
@@ -419,10 +425,17 @@ namespace UICustomizer.UI.Tabs
             base.Update(gameTime);
 
             UpdatePositions();
-            positions.Height.Set(300, 0); // TODO update to real value
+
+            // TODO update to real value
+            // Maybe multiply by Offset.Position
+            int count = Enum.GetValues<OffsetHelper.Offset>().Length;
+            int h = count * 26;
+            //Main.NewText(h);
+            positions.Height.Set(h + 30, 0);
+            //positions.Height.Set(340, 0); 
 
             // Check if layouts folder changed
-            int currentCount = FileHelper.GetLayouts().Count();
+            int currentCount = FileHelper.GetLayouts().Count;
             if (currentCount != _lastLayoutCount)
             {
                 _lastLayoutCount = currentCount;
@@ -446,6 +459,9 @@ namespace UICustomizer.UI.Tabs
             sb.AppendLine($"BarsLifeText: ({(int)BarLifeTextHook.OffsetX}, {(int)BarLifeTextHook.OffsetY})");
             sb.AppendLine($"BarsManaText: ({(int)BarManaTextHook.OffsetX}, {(int)BarManaTextHook.OffsetY})");
             sb.AppendLine($"Chat: ({(int)ChatHook.OffsetX}, {(int)ChatHook.OffsetY})");
+            sb.AppendLine($"Inventory: ({(int)InventoryHook.OffsetX}, {(int)InventoryHook.OffsetY})");
+            sb.AppendLine($"Crafting: ({(int)CraftingHook.OffsetX}, {(int)CraftingHook.OffsetY})");
+            sb.AppendLine($"Accessories: ({(int)AccessoriesHook.OffsetX}, {(int)AccessoriesHook.OffsetY})");
             positions.TextOriginX = 0;
             //positions.VAlign = 0f;
             //positions.HAlign = 0f;
@@ -467,6 +483,9 @@ namespace UICustomizer.UI.Tabs
             BuffHook.OffsetX = BuffHook.OffsetY = 0f;
             BarLifeTextHook.OffsetX = BarLifeTextHook.OffsetY = 0f;
             BarManaTextHook.OffsetX = BarManaTextHook.OffsetY = 0f;
+            InventoryHook.OffsetX = InventoryHook.OffsetY = 0f;
+            CraftingHook.OffsetX = CraftingHook.OffsetY = 0f;
+            AccessoriesHook.OffsetX = AccessoriesHook.OffsetY = 0f;
 
             // Write to active layout
             LayoutHelper.SaveActiveLayout();
