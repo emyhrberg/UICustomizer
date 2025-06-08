@@ -1,6 +1,6 @@
-displayName = UI Editor: Edit and debug UI
+displayName = UI Editor
 author = Erky
-version = 0.3
+version = 0.5
 side = client
 weakReferences = DragonLens
 after = ModReloader

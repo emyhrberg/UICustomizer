@@ -1,4 +1,5 @@
-﻿using UICustomizer.Common.Systems;
+﻿using Terraria.ModLoader;
+using UICustomizer.Common.Systems;
 
 namespace UICustomizer.Common.Commands
 {
@@ -12,7 +13,7 @@ namespace UICustomizer.Common.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            UICustomizerSystem.ToggleEditMode();
+            EditorSystem.ToggleActive();
         }
     }
 }

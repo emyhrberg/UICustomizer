@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.MapThemeHelper;
-using static UICustomizer.Helpers.Layouts.OffsetHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
@@ -21,6 +21,7 @@ namespace UICustomizer.Helpers.Layouts
             CreateHotbarCenteredLayout();
             CreateMapLeftLayout();
             CreateMinecraftLayout();
+            CreateMirrorLayout();
             CreateLastLayoutFile();
         }
 
@@ -35,23 +36,23 @@ namespace UICustomizer.Helpers.Layouts
                 {
                     ResourceTheme = ResourceTheme.Classic,
                     MapTheme = MapTheme.Default,
-                    Offsets = new Dictionary<Offset, Vector2>
+                    Offsets = new Dictionary<Element, Vector2>
                     {
-                        [Offset.Chat] = Vector2.Zero,
-                        [Offset.Hotbar] = Vector2.Zero,
-                        [Offset.Map] = Vector2.Zero,
-                        [Offset.InfoAccs] = Vector2.Zero,
-                        [Offset.ClassicLife] = Vector2.Zero,
-                        [Offset.ClassicMana] = Vector2.Zero,
-                        [Offset.FancyLife] = Vector2.Zero,
-                        [Offset.FancyMana] = Vector2.Zero,
-                        [Offset.HorizontalBars] = Vector2.Zero,
-                        [Offset.BarLifeText] = Vector2.Zero,
-                        [Offset.BarManaText] = Vector2.Zero,
-                        [Offset.Buffs] = Vector2.Zero,
-                        [Offset.Inventory] = Vector2.Zero,
-                        [Offset.Crafting] = Vector2.Zero,
-                        [Offset.Accessories] = Vector2.Zero
+                        [Element.Chat] = Vector2.Zero,
+                        [Element.Hotbar] = Vector2.Zero,
+                        [Element.Map] = Vector2.Zero,
+                        [Element.InfoAccs] = Vector2.Zero,
+                        [Element.ClassicLife] = Vector2.Zero,
+                        [Element.ClassicMana] = Vector2.Zero,
+                        [Element.FancyLife] = Vector2.Zero,
+                        [Element.FancyMana] = Vector2.Zero,
+                        [Element.HorizontalBars] = Vector2.Zero,
+                        [Element.BarLifeText] = Vector2.Zero,
+                        [Element.BarManaText] = Vector2.Zero,
+                        [Element.Buffs] = Vector2.Zero,
+                        [Element.Inventory] = Vector2.Zero,
+                        [Element.Crafting] = Vector2.Zero,
+                        [Element.Accessories] = Vector2.Zero
                     }
                 };
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
@@ -68,23 +69,23 @@ namespace UICustomizer.Helpers.Layouts
                 {
                     ResourceTheme = ResourceTheme.Bars,
                     MapTheme = MapTheme.Valkyrie,
-                    Offsets = new Dictionary<Offset, Vector2>
+                    Offsets = new Dictionary<Element, Vector2>
                     {
-                        [Offset.Chat] = Vector2.Zero,
-                        [Offset.Hotbar] = new Vector2(160, 0),
-                        [Offset.Map] = Vector2.Zero,
-                        [Offset.InfoAccs] = Vector2.Zero,
-                        [Offset.ClassicLife] = Vector2.Zero,
-                        [Offset.ClassicMana] = Vector2.Zero,
-                        [Offset.FancyLife] = Vector2.Zero,
-                        [Offset.FancyMana] = Vector2.Zero,
-                        [Offset.HorizontalBars] = Vector2.Zero,
-                        [Offset.BarLifeText] = Vector2.Zero,
-                        [Offset.BarManaText] = Vector2.Zero,
-                        [Offset.Buffs] = Vector2.Zero,
-                        [Offset.Inventory] = Vector2.Zero,
-                        [Offset.Crafting] = Vector2.Zero,
-                        [Offset.Accessories] = Vector2.Zero
+                        [Element.Chat] = Vector2.Zero,
+                        [Element.Hotbar] = new Vector2(650, 0),
+                        [Element.Map] = Vector2.Zero,
+                        [Element.InfoAccs] = Vector2.Zero,
+                        [Element.ClassicLife] = Vector2.Zero,
+                        [Element.ClassicMana] = Vector2.Zero,
+                        [Element.FancyLife] = Vector2.Zero,
+                        [Element.FancyMana] = Vector2.Zero,
+                        [Element.HorizontalBars] = Vector2.Zero,
+                        [Element.BarLifeText] = Vector2.Zero,
+                        [Element.BarManaText] = Vector2.Zero,
+                        [Element.Buffs] = Vector2.Zero,
+                        [Element.Inventory] = Vector2.Zero,
+                        [Element.Crafting] = Vector2.Zero,
+                        [Element.Accessories] = Vector2.Zero
                     }
                 };
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
@@ -101,23 +102,23 @@ namespace UICustomizer.Helpers.Layouts
                 {
                     ResourceTheme = ResourceTheme.Fancy2,
                     MapTheme = MapTheme.Golden,
-                    Offsets = new Dictionary<Offset, Vector2>
+                    Offsets = new Dictionary<Element, Vector2>
                     {
-                        [Offset.Hotbar] = new Vector2(230, -4),
-                        [Offset.Map] = new Vector2(-658, -71),
-                        [Offset.InfoAccs] = new Vector2(475, 286),
-                        [Offset.FancyLife] = new Vector2(34, 273),
-                        [Offset.FancyMana] = new Vector2(-258, 7),
-                        [Offset.HorizontalBars] = new Vector2(38, -3),
-                        [Offset.BarLifeText] = new Vector2(0, 0),
-                        [Offset.BarManaText] = new Vector2(0, 0),
-                        [Offset.Buffs] = new Vector2(0, 0),
-                        [Offset.Inventory] = new Vector2(0, 0),
-                        [Offset.Chat] = new Vector2(0, 0),
-                        [Offset.ClassicLife] = new Vector2(0, 0),
-                        [Offset.ClassicMana] = new Vector2(0, 0),
-                        [Offset.Crafting] = new Vector2(0, 0),
-                        [Offset.Accessories] = new Vector2(0, 0)
+                        [Element.Hotbar] = new Vector2(230, -4),
+                        [Element.Map] = new Vector2(-658, -71),
+                        [Element.InfoAccs] = new Vector2(475, 286),
+                        [Element.FancyLife] = new Vector2(34, 273),
+                        [Element.FancyMana] = new Vector2(-258, 7),
+                        [Element.HorizontalBars] = new Vector2(38, -3),
+                        [Element.BarLifeText] = new Vector2(0, 0),
+                        [Element.BarManaText] = new Vector2(0, 0),
+                        [Element.Buffs] = new Vector2(0, 0),
+                        [Element.Inventory] = new Vector2(0, 0),
+                        [Element.Chat] = new Vector2(0, 0),
+                        [Element.ClassicLife] = new Vector2(0, 0),
+                        [Element.ClassicMana] = new Vector2(0, 0),
+                        [Element.Crafting] = new Vector2(0, 0),
+                        [Element.Accessories] = new Vector2(0, 0)
                     }
                 };
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
@@ -134,23 +135,93 @@ namespace UICustomizer.Helpers.Layouts
                 {
                     ResourceTheme = ResourceTheme.Fancy2,
                     MapTheme = MapTheme.TwigLeaf,
-                    Offsets = new Dictionary<Offset, Vector2>
+                    Offsets = new Dictionary<Element, Vector2>
                     {
-                        [Offset.Chat] = new Vector2(1111, 21),
-                        [Offset.Hotbar] = new Vector2(788, 936),
-                        [Offset.Map] = new Vector2(5, -77),
-                        [Offset.InfoAccs] = new Vector2(9, -85),
-                        [Offset.FancyLife] = new Vector2(-736, 853),
-                        [Offset.FancyMana] = new Vector2(3, -9),
-                        [Offset.HorizontalBars] = new Vector2(0, 0),
-                        [Offset.BarLifeText] = new Vector2(0, 0),
-                        [Offset.BarManaText] = new Vector2(0, 0),
-                        [Offset.Buffs] = new Vector2(0, 0),
-                        [Offset.Inventory] = new Vector2(0, 0),
-                        [Offset.ClassicLife] = new Vector2(0, 0),
-                        [Offset.ClassicMana] = new Vector2(0, 0),
-                        [Offset.Crafting] = new Vector2(0, 0),
-                        [Offset.Accessories] = new Vector2(0, 0)
+                        [Element.Chat] = new Vector2(1111, 21),
+                        [Element.Hotbar] = new Vector2(788, 936),
+                        [Element.Map] = new Vector2(5, -77),
+                        [Element.InfoAccs] = new Vector2(9, -85),
+                        [Element.FancyLife] = new Vector2(-736, 853),
+                        [Element.FancyMana] = new Vector2(3, -9),
+                        [Element.HorizontalBars] = new Vector2(0, 0),
+                        [Element.BarLifeText] = new Vector2(0, 0),
+                        [Element.BarManaText] = new Vector2(0, 0),
+                        [Element.Buffs] = new Vector2(0, 0),
+                        [Element.Inventory] = new Vector2(0, 0),
+                        [Element.ClassicLife] = new Vector2(0, 0),
+                        [Element.ClassicMana] = new Vector2(0, 0),
+                        [Element.Crafting] = new Vector2(0, 0),
+                        [Element.Accessories] = new Vector2(0, 0)
+                    }
+                };
+                Log.Info($"Creating layout: {layoutName}");
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
+                Log.Info($"Created layout: {layoutName}");
+            }
+        }
+
+        private static void CreateMirrorLayout()
+        {
+            const string layoutName = "Mirror";
+            string minecraftPath = FileHelper.GetLayoutFilePath(layoutName);
+            if (!File.Exists(minecraftPath))
+            {
+                var layoutData = new LayoutData
+                {
+                    ResourceTheme = ResourceTheme.Fancy2,
+                    MapTheme = MapTheme.TwigLeaf,
+                    Offsets = new Dictionary<Element, Vector2>
+                    {
+                        [Element.Chat] = new Vector2(196, -29),
+                        [Element.Hotbar] = new Vector2(1457, 6),
+                        [Element.Map] = new Vector2(-1578, 0),
+                        [Element.InfoAccs] = new Vector2(-1578, -85),
+                        [Element.FancyLife] = new Vector2(-1573, -1),
+                        [Element.FancyMana] = new Vector2(-1872, -6),
+                        [Element.HorizontalBars] = new Vector2(0, 0),
+                        [Element.BarLifeText] = new Vector2(0, 0),
+                        [Element.BarManaText] = new Vector2(0, 0),
+                        [Element.Buffs] = new Vector2(1450, 9),
+                        [Element.Inventory] = new Vector2(1348, 54),
+                        [Element.ClassicLife] = new Vector2(0, 0),
+                        [Element.ClassicMana] = new Vector2(0, 0),
+                        [Element.Crafting] = new Vector2(0, 0),
+                        [Element.Accessories] = new Vector2(0, 0)
+                    }
+                };
+                Log.Info($"Creating layout: {layoutName}");
+                LayoutHelper.WriteLayoutFile(layoutName, layoutData);
+                Log.Info($"Created layout: {layoutName}");
+            }
+        }
+
+        private static void CreateBottomLayout()
+        {
+            const string layoutName = "Bottom";
+            string bottomPath = FileHelper.GetLayoutFilePath(layoutName);
+            if (!File.Exists(bottomPath))
+            {
+                var layoutData = new LayoutData
+                {
+                    ResourceTheme = ResourceTheme.Fancy,
+                    MapTheme = MapTheme.Default,
+                    Offsets = new Dictionary<Element, Vector2>
+                    {
+                        [Element.Chat] = new Vector2(-10, 20),
+                        [Element.Hotbar] = new Vector2(736, 993),
+                        [Element.Map] = new Vector2(-25, 664),
+                        [Element.InfoAccs] = new Vector2(96, 221),
+                        [Element.ClassicLife] = new Vector2(0, 0),
+                        [Element.ClassicMana] = new Vector2(0, 0),
+                        [Element.FancyLife] = new Vector2(-30, 989),
+                        [Element.FancyMana] = new Vector2(-6, 811),
+                        [Element.HorizontalBars] = new Vector2(0, 0),
+                        [Element.BarLifeText] = new Vector2(0, 0),
+                        [Element.BarManaText] = new Vector2(0, 0),
+                        [Element.Buffs] = new Vector2(0, 0),
+                        [Element.Inventory] = new Vector2(106, 673),
+                        [Element.Crafting] = new Vector2(0, 0),
+                        [Element.Accessories] = new Vector2(0, 0)
                     }
                 };
                 Log.Info($"Creating layout: {layoutName}");

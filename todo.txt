@@ -47,3 +47,8 @@
 
 --------------------------------------------------------------
 I stopped updating here and went to Trello instead.
+--------------------------------------------------------------
+2025-06-08:
+Add position next to dragging
+Add snap
+Add scale elements

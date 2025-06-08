@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Helpers
 {
@@ -15,7 +16,9 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> Plus;
         public static Asset<Texture2D> Minus;
         public static Asset<Texture2D> Resize;
-        public static Asset<Texture2D> DragonLensToolIcon;
+        public static Asset<Texture2D> EditorIcon;
+        public static Asset<Texture2D> LayersIcon;
+        public static Asset<Texture2D> Hitbox;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

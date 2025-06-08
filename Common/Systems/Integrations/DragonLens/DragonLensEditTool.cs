@@ -3,6 +3,9 @@ using DragonLens.Core.Systems.ToolSystem;
 using DragonLens.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
+using Terraria.ModLoader;
+using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Systems.Integrations.DragonLens
 {
@@ -20,7 +23,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
         public override void OnActivate()
         {
-            UICustomizerSystem.ToggleEditMode();
+            EditorSystem.ToggleActive();
         }
 
         public override void DrawIcon(SpriteBatch spriteBatch, Rectangle position)
@@ -28,7 +31,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
             // base.DrawIcon(spriteBatch, position);
 
             // Draw the icon for the UI Editor tool
-            Asset<Texture2D> asset = Ass.DragonLensToolIcon;
+            Asset<Texture2D> asset = Ass.EditorIcon;
             if (asset == null || !asset.IsLoaded)
             {
                 Log.Info("DragonLensToolIcon is not loaded");
@@ -46,7 +49,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
             spriteBatch.Draw(tex, pos, null, Color.White, 0, tex.Size() / 2f, scale, 0, 0);
 
-            if (UICustomizerSystem.EditModeActive)
+            if (EditorSystem.IsActive)
             {
                 // Draw the icon with a glow effect when edit mode is active
                 GUIHelper.DrawOutline(spriteBatch, new Rectangle(position.X - 4, position.Y - 4, 46, 46), ThemeHandler.ButtonColor.InvertColor());

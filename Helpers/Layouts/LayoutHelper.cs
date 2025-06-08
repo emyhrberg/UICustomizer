@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Terraria;
 using UICustomizer.Common.Systems.Hooks;
+using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.MapThemeHelper;
-using static UICustomizer.Helpers.Layouts.OffsetHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
@@ -27,21 +28,21 @@ namespace UICustomizer.Helpers.Layouts
             {
                 ResourceTheme = currentTheme,
                 MapTheme = mapTheme,
-                Offsets = new Dictionary<Offset, Vector2>
+                Offsets = new Dictionary<Element, Vector2>
                 {
-                    [Offset.Chat] = new(ChatHook.OffsetX, ChatHook.OffsetY),
-                    [Offset.Hotbar] = new(HotbarHook.OffsetX, HotbarHook.OffsetY),
-                    [Offset.Map] = new(MapHook.OffsetX, MapHook.OffsetY),
-                    [Offset.InfoAccs] = new(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
-                    [Offset.ClassicLife] = new(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
-                    [Offset.ClassicMana] = new(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
-                    [Offset.FancyLife] = new(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
-                    [Offset.FancyMana] = new(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
-                    [Offset.HorizontalBars] = new(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
-                    [Offset.BarLifeText] = new(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
-                    [Offset.BarManaText] = new(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
-                    [Offset.Buffs] = new(BuffHook.OffsetX, BuffHook.OffsetY),
-                    [Offset.Inventory] = new(InventoryHook.OffsetX, InventoryHook.OffsetY),
+                    [Element.Chat] = new(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Element.Hotbar] = new(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Element.Map] = new(MapHook.OffsetX, MapHook.OffsetY),
+                    [Element.InfoAccs] = new(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Element.ClassicLife] = new(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Element.ClassicMana] = new(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Element.FancyLife] = new(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Element.FancyMana] = new(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Element.HorizontalBars] = new(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Element.BarLifeText] = new(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Element.BarManaText] = new(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Element.Buffs] = new(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Element.Inventory] = new(InventoryHook.OffsetX, InventoryHook.OffsetY),
                 }
             };
 
@@ -57,7 +58,7 @@ namespace UICustomizer.Helpers.Layouts
             try
             {
                 string path = FileHelper.GetLayoutFilePath(layoutName);
-                Log.Info($"Attempting to write layout '{layoutName}' to: {path}");
+                // Log.Info($"Attempting to write layout '{layoutName}' to: {path}");
 
                 // Check if directory exists
                 string directory = Path.GetDirectoryName(path);
@@ -70,21 +71,17 @@ namespace UICustomizer.Helpers.Layouts
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 File.WriteAllText(path, json);
 
-                Log.Info($"✅ Successfully wrote layout '{layoutName}' ({json.Length} characters)");
+                // Log.Info($"Successfully wrote layout '{layoutName}' ({json.Length} characters)");
 
                 // Verify file was created
-                if (File.Exists(path))
+                if (!File.Exists(path))
                 {
-                    Log.Info($"✅ Verified file exists: {path}");
-                }
-                else
-                {
-                    Log.Error($"❌ File was not created: {path}");
+                    Log.Error($"File was not created: {path}");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error($"❌ Failed to write layout '{layoutName}': {ex.Message}");
+                Log.Error($"Failed to write layout '{layoutName}': {ex.Message}");
                 Log.Error($"Stack trace: {ex.StackTrace}");
             }
         }
@@ -113,7 +110,7 @@ namespace UICustomizer.Helpers.Layouts
 
                 // Try to deserialize as new format first
                 var layoutData = JsonConvert.DeserializeObject<LayoutData>(json);
-                Dictionary<Offset, Vector2> positions;
+                Dictionary<Element, Vector2> positions;
                 ResourceTheme resourceTheme = ResourceTheme.Classic; // Default fallback
                 MapTheme mapTheme = MapTheme.Default; // Default fallback
 
@@ -129,7 +126,7 @@ namespace UICustomizer.Helpers.Layouts
                 else
                 {
                     // Legacy format - just positions, use defaults for themes
-                    positions = JsonConvert.DeserializeObject<Dictionary<Offset, Vector2>>(json);
+                    positions = JsonConvert.DeserializeObject<Dictionary<Element, Vector2>>(json);
                     if (positions == null)
                     {
                         Log.Error($"Failed to parse '{layoutName}.json'.");
@@ -155,33 +152,33 @@ namespace UICustomizer.Helpers.Layouts
             }
         }
 
-        private static void ApplyPositions(Dictionary<Offset, Vector2> positions)
+        private static void ApplyPositions(Dictionary<Element, Vector2> positions)
         {
-            if (positions.TryGetValue(Offset.Chat, out Vector2 chat))
+            if (positions.TryGetValue(Element.Chat, out Vector2 chat))
             { ChatHook.OffsetX = chat.X; ChatHook.OffsetY = chat.Y; }
-            if (positions.TryGetValue(Offset.Hotbar, out Vector2 hb))
+            if (positions.TryGetValue(Element.Hotbar, out Vector2 hb))
             { HotbarHook.OffsetX = hb.X; HotbarHook.OffsetY = hb.Y; }
-            if (positions.TryGetValue(Offset.Map, out Vector2 map))
+            if (positions.TryGetValue(Element.Map, out Vector2 map))
             { MapHook.OffsetX = map.X; MapHook.OffsetY = map.Y; }
-            if (positions.TryGetValue(Offset.InfoAccs, out Vector2 ia))
+            if (positions.TryGetValue(Element.InfoAccs, out Vector2 ia))
             { InfoAccsHook.OffsetX = ia.X; InfoAccsHook.OffsetY = ia.Y; }
-            if (positions.TryGetValue(Offset.ClassicLife, out Vector2 cl))
+            if (positions.TryGetValue(Element.ClassicLife, out Vector2 cl))
             { ClassicLifeHook.OffsetX = cl.X; ClassicLifeHook.OffsetY = cl.Y; }
-            if (positions.TryGetValue(Offset.ClassicMana, out Vector2 cm))
+            if (positions.TryGetValue(Element.ClassicMana, out Vector2 cm))
             { ClassicManaHook.OffsetX = cm.X; ClassicManaHook.OffsetY = cm.Y; }
-            if (positions.TryGetValue(Offset.FancyLife, out Vector2 fl))
+            if (positions.TryGetValue(Element.FancyLife, out Vector2 fl))
             { FancyLifeHook.OffsetX = fl.X; FancyLifeHook.OffsetY = fl.Y; }
-            if (positions.TryGetValue(Offset.FancyMana, out Vector2 fm))
+            if (positions.TryGetValue(Element.FancyMana, out Vector2 fm))
             { FancyManaHook.OffsetX = fm.X; FancyManaHook.OffsetY = fm.Y; }
-            if (positions.TryGetValue(Offset.HorizontalBars, out Vector2 hl))
+            if (positions.TryGetValue(Element.HorizontalBars, out Vector2 hl))
             { HorizontalBarsHook.OffsetX = hl.X; HorizontalBarsHook.OffsetY = hl.Y; }
-            if (positions.TryGetValue(Offset.BarLifeText, out Vector2 blt))
+            if (positions.TryGetValue(Element.BarLifeText, out Vector2 blt))
             { BarLifeTextHook.OffsetX = blt.X; BarLifeTextHook.OffsetY = blt.Y; }
-            if (positions.TryGetValue(Offset.BarManaText, out Vector2 bmt))
+            if (positions.TryGetValue(Element.BarManaText, out Vector2 bmt))
             { BarManaTextHook.OffsetX = bmt.X; BarManaTextHook.OffsetY = bmt.Y; }
-            if (positions.TryGetValue(Offset.Buffs, out Vector2 buff))
+            if (positions.TryGetValue(Element.Buffs, out Vector2 buff))
             { BuffHook.OffsetX = buff.X; BuffHook.OffsetY = buff.Y; }
-            if (positions.TryGetValue(Offset.Inventory, out Vector2 inv))
+            if (positions.TryGetValue(Element.Inventory, out Vector2 inv))
             { InventoryHook.OffsetX = (int)inv.X; InventoryHook.OffsetY = (int)inv.Y; }
         }
 

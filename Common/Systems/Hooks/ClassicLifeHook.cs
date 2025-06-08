@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
@@ -25,28 +26,36 @@ namespace UICustomizer.Common.Systems.Hooks
             {
                 ILCursor c = new(il);
 
-                // Move health hearts and its text X
-                // Find the 500(ldc.i4) and add OffsetX to it
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcI4(500)))
+                // Target ALL occurrences of 500 for X coordinates (both text and hearts)
+                while (c.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(500)))
                 {
-                    c.EmitDelegate((int value) => value + (int)OffsetX);
+                    c.Remove(); // Remove ldc.i4 500
+                    c.EmitLdcI4(500);
+                    c.EmitLdsfld(typeof(ClassicLifeHook).GetField(nameof(OffsetX)));
+                    c.EmitConvI4();
+                    c.EmitAdd();
                 }
 
-                // Move health hearts Y 
-                // Find the 32f (ldc.r4) and add OffsetY to it
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcR4(32f)))
+                // Target Y coordinates for text (6f) - look for specific pattern
+                c.Index = 0;
+                while (c.TryGotoNext(MoveType.Before,
+                    i => i.MatchLdcR4(6f),
+                    i => i.MatchNewobj<Vector2>()))
                 {
-                    c.EmitDelegate((float value) => value + OffsetY);
+                    c.Remove(); // Remove ldc.r4 6
+                    c.EmitLdcR4(6f);
+                    c.EmitLdsfld(typeof(ClassicLifeHook).GetField(nameof(OffsetY)));
+                    c.EmitAdd();
                 }
 
-                // Move text Y. Ldc.r4 6
-                c.Index = 0; // Reset cursor index to start searching again
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcR4(6f)))
+                // Target heart Y coordinate: 32f
+                c.Index = 0;
+                while (c.TryGotoNext(MoveType.Before, i => i.MatchLdcR4(32f)))
                 {
-                    c.EmitDelegate((float value) => value + OffsetY);
+                    c.Remove(); // Remove ldc.r4 32
+                    c.EmitLdcR4(32f);
+                    c.EmitLdsfld(typeof(ClassicLifeHook).GetField(nameof(OffsetY)));
+                    c.EmitAdd();
                 }
             }
             catch (Exception e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
@@ -13,14 +14,13 @@ namespace UICustomizer.Common.Systems.Hooks
         {
             // Hook the Vector2 constructor in DrawLifeBar method
             IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar += InjectLifeBarOffset;
-            // Hook the static DrawLifeBarText method
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectLifeBarTextOffset;
+            //IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectLifeBarTextOffset;
         }
 
         public override void Unload()
         {
             IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBar -= InjectLifeBarOffset;
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectLifeBarTextOffset;
+            //IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectLifeBarTextOffset;
         }
 
         private void InjectLifeBarOffset(ILContext il)

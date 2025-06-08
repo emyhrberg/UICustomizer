@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Terraria;
 using UICustomizer.Common.Systems.Hooks;
-using static UICustomizer.Helpers.Layouts.OffsetHelper;
+using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
@@ -65,21 +66,21 @@ namespace UICustomizer.Helpers.Layouts
             var layoutData = new LayoutData
             {
                 ResourceTheme = currentTheme,
-                Offsets = new Dictionary<Offset, Vector2>
+                Offsets = new Dictionary<Element, Vector2>
                 {
-                    [Offset.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
-                    [Offset.Hotbar] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
-                    [Offset.Map] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
-                    [Offset.InfoAccs] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
-                    [Offset.ClassicLife] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
-                    [Offset.ClassicMana] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
-                    [Offset.FancyLife] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
-                    [Offset.FancyMana] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
-                    [Offset.HorizontalBars] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
-                    [Offset.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
-                    [Offset.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
-                    [Offset.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
-                    [Offset.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY),
+                    [Element.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Element.Hotbar] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Element.Map] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
+                    [Element.InfoAccs] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Element.ClassicLife] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Element.ClassicMana] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Element.FancyLife] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Element.FancyMana] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Element.HorizontalBars] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Element.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Element.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Element.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY),
                 }
             };
 

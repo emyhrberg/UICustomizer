@@ -1,11 +1,11 @@
+using Terraria;
 using Terraria.GameContent.UI.Elements;
-using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
     public class CloseButton : UIPanel
     {
-        public CloseButton(string text = "X")
+        public CloseButton()
         {
             Width.Set(30, 0);
             Height.Set(30, 0);
@@ -13,7 +13,7 @@ namespace UICustomizer.UI
             VAlign = 0f;
             SetPadding(0);
 
-            UIText x = new(text, 0.45f, true)
+            UIText x = new("X", 0.45f, true)
             {
                 HAlign = 0.5f,
                 VAlign = 0.5f
@@ -33,11 +33,6 @@ namespace UICustomizer.UI
                 }
             };
             OnMouseOut += (_, _) => BorderColor = Color.Black;
-            OnLeftClick += (_, _) =>
-            {
-
-                UICustomizerSystem.ExitEditMode();
-            };
         }
     }
 }

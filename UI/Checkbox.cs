@@ -1,12 +1,20 @@
 using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
+using Terraria.UI;
+using UICustomizer.Helpers;
 
 namespace UICustomizer.UI
 {
     public enum CheckboxState { Unchecked, Checked }
+
+    /// <summary>
+    /// A simple checkbox UI element consisting of a text label and a checkbox box.
+    /// </summary>
     public class Checkbox : UIElement
     {
         public CheckboxState state = CheckboxState.Checked;
@@ -76,7 +84,7 @@ namespace UICustomizer.UI
 
             base.Draw(spriteBatch);
 
-            if (IsMouseHovering && hoverText != "")
+            if (IsMouseHovering && !string.IsNullOrEmpty(hoverText)) // ???
             {
                 UICommon.TooltipMouseText(hoverText);
             }

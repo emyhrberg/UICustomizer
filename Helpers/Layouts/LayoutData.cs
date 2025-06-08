@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
 using static UICustomizer.Helpers.Layouts.MapThemeHelper;
-using static UICustomizer.Helpers.Layouts.OffsetHelper;
+using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts
@@ -11,7 +11,7 @@ namespace UICustomizer.Helpers.Layouts
         /// <summary>
         /// Holds all the positions (offsets) of UI elements.
         /// </summary>
-        public Dictionary<Offset, Vector2> Offsets { get; set; } = [];
+        public Dictionary<Element, Vector2> Offsets { get; set; } = [];
 
         /// <summary>
         /// The life and mana theme for the layout. Uses StringEnumConverter to ensure string representation in JSON as opposed to integer values.

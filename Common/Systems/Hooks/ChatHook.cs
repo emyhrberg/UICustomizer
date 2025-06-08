@@ -1,6 +1,8 @@
 ﻿using System;
 using MonoMod.Cil;
+using Terraria;
 using Terraria.GameContent.UI.Chat;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {

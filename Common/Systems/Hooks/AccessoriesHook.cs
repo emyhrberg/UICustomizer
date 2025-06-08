@@ -1,6 +1,9 @@
 using System.Reflection;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria;
+using Terraria.ModLoader;
+using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
@@ -39,6 +42,27 @@ namespace UICustomizer.Common.Systems.Hooks
         private static void InjectEquipSlotsOffset(ILContext il)
         {
             var c = new ILCursor(il);
+
+            // Target the buff base position adjustments
+            if (c.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(247))) // num24 += 247
+            {
+                c.Remove();
+                c.EmitLdcI4(247);
+                c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetY)));
+                c.EmitConvI4();
+                c.EmitAdd();
+            }
+
+            if (c.TryGotoNext(MoveType.Before, i => i.MatchLdcI4(8))) // num23 += 8  
+            {
+                c.Remove();
+                c.EmitLdcI4(8);
+                c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetX)));
+                c.EmitConvI4();
+                c.EmitAdd();
+            }
+            // reset
+            c.Index = 0;
 
             // Target: r.X = num23 + l * -47;
             // Find where the rectangle X is calculated and stored
@@ -91,20 +115,23 @@ namespace UICustomizer.Common.Systems.Hooks
         {
             var c = new ILCursor(il);
 
-            // Find the X coordinate calculation (stloc.13)
-            if (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(13)))
+            // Target all occurrences of num7 (stloc.13) - X coordinate
+            while (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(13)))
             {
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetX)));
                 c.EmitConvI4();
                 c.EmitAdd();
+                c.Index++; // Move past the stloc to find the next one
             }
 
-            // Find the Y coordinate calculation (stloc.14)
-            if (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(14)))
+            // Reset cursor and target all occurrences of num8 (stloc.14) - Y coordinate  
+            c.Index = 0;
+            while (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(14)))
             {
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetY)));
                 c.EmitConvI4();
                 c.EmitAdd();
+                c.Index++; // Move past the stloc to find the next one
             }
         }
 

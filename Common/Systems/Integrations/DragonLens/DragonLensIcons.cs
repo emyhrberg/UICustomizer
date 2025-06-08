@@ -1,5 +1,7 @@
 using DragonLens.Core.Systems.ThemeSystem;
 using DragonLens.Core.Systems.ToolbarSystem;
+using Terraria.ModLoader;
+using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Systems.Integrations.DragonLens
 {
@@ -20,7 +22,8 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
                 foreach (var provider in ThemeHandler.allIconProviders.Values)
                 {
                     // assign (overwrites if the key exists already) – never throws
-                    provider.icons["UIEditor"] = Ass.DragonLensToolIcon.Value;
+                    provider.icons["UIEditor"] = Ass.EditorIcon.Value;
+                    provider.icons["Layers"] = Ass.LayersIcon.Value;
                 }
 
                 // rebuild toolbars *after* icons (and tools) have been injected

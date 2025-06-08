@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Helpers
 {
@@ -25,25 +27,25 @@ namespace UICustomizer.Helpers
             }
         }
 
-        private static DateTime lastChatTime = DateTime.UtcNow; // Add separate tracking for chat
+        //private static DateTime lastChatTime = DateTime.UtcNow; // Add separate tracking for chat
 
-        /// <summary>
-        /// Prints a message to Terraria's chat system with cooldown.
-        /// </summary>
-        /// <param name="msg">The message to display</param>
-        /// <param name="ms">Cooldown in milliseconds before allowing another message</param>
-        public static void ChatSlow(string msg, float ms=1000)
-        {
-            // Use TimeSpan to create the cooldown interval
-            TimeSpan interval = TimeSpan.FromMilliseconds(ms);
-            bool timeElapsed = DateTime.UtcNow - lastChatTime >= interval;
+        ///// <summary>
+        ///// Prints a message to Terraria's chat system with cooldown.
+        ///// </summary>
+        ///// <param name="msg">The message to display</param>
+        ///// <param name="ms">Cooldown in milliseconds before allowing another message</param>
+        //public static void ChatSlow(string msg, float ms=1000)
+        //{
+        //    // Use TimeSpan to create the cooldown interval
+        //    TimeSpan interval = TimeSpan.FromMilliseconds(ms);
+        //    bool timeElapsed = DateTime.UtcNow - lastChatTime >= interval;
 
-            if (timeElapsed)
-            {
-                Main.NewText(msg);
-                lastChatTime = DateTime.UtcNow;
-            }
-        }
+        //    if (timeElapsed)
+        //    {
+        //        Main.NewText(msg);
+        //        lastChatTime = DateTime.UtcNow;
+        //    }
+        //}
 
         /// <summary>
         /// Log a message once every x second(s)

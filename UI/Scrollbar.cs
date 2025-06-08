@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
 
 namespace UICustomizer.UI
 {
@@ -18,9 +19,10 @@ namespace UICustomizer.UI
 
         public Scrollbar()
         {
-            Width.Set(20, 0);
+            int w = 20;
+            Width.Set(w, 0);
             Height.Set(-30 - 12, 1);
-            Left.Set(-12, 1);
+            Left.Set(-12 - w / 2, 1);
             Top.Set(6, 0);
         }
 

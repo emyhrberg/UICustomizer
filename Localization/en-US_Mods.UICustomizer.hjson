@@ -1,8 +1,22 @@
-Configs.Config.DisplayName: Config
+Configs: {
+	Config: {
+		DisplayName: Config
+		Headers.UIEditor: U I Editor Header
+
+		ShowEditButton: {
+			Label: Show Edit Button
+			Tooltip: ""
+		}
+	}
+}
 
 Keybinds: {
 	DragonLensEditTool.DisplayName: Dragon Lens Edit Tool
 	"UI Editor.DisplayName": U I  Editor
+	"Toggle Layers And Packs.DisplayName": Toggle  Layers  And  Packs
+	"Toggle Layers And PacksRightClick.DisplayName": Toggle  Layers  And  Packs Right Click
+	"Layers And Packs.DisplayName": Layers  And  Packs
+	"Layers And PacksRightClick.DisplayName": Layers  And  Packs Right Click
 }
 
 Tools: {
@@ -14,5 +28,17 @@ Tools: {
 	"UI Editor": {
 		DisplayName: UI Editor
 		Description: The tool has no description! Add one in .hjson files!
+	}
+
+	"Toggle Layers And Packs": {
+		DisplayName: Toggle Layers And Packs
+		Description: The tool has no description! Add one in .hjson files!
+		RightClickName: Toggle Layers And Packs Right Click
+	}
+
+	"Layers And Packs": {
+		DisplayName: Layers And Packs
+		Description: The tool has no description! Add one in .hjson files!
+		RightClickName: Layers And Packs Right Click
 	}
 }

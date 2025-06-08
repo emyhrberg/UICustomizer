@@ -1,6 +1,8 @@
-using System.Reflection;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria;
+using Terraria.ModLoader;
+using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Systems.Hooks
 {
@@ -9,27 +11,24 @@ namespace UICustomizer.Common.Systems.Hooks
         public static float OffsetX = 0;
         public static float OffsetY = 0;
 
+        // delete this
         private delegate void orig_DrawGuideCraftText(int adjY, Color craftingTipColor, out int inventoryX, out int inventoryY);
 
         public override void Load()
         {
             IL_Main.DrawInventory += CraftingNog;
-
-            // MonoModHook private static void DrawGuideCraftText(int adjY, Color craftingTipColor, out int inventoryX, out int inventoryY)
-            // MethodInfo methodInfo = typeof(Main).GetMethod("DrawGuideCraftText", BindingFlags.Static | BindingFlags.NonPublic);
-            // MonoModHooks.Add(methodInfo, OnDrawGuideCraftText);
         }
         public override void Unload()
         {
             IL_Main.DrawInventory -= CraftingNog;
         }
 
-        private void OnDrawGuideCraftText(orig_DrawGuideCraftText orig, int adjY, Color craftingTipColor, out int inventoryX, out int inventoryY)
-        {
-            orig(adjY, craftingTipColor, out inventoryX, out inventoryY);
-            inventoryX += (int)OffsetX;
-            inventoryY += (int)OffsetY;
-        }
+        // private void OnDrawGuideCraftText(orig_DrawGuideCraftText orig, int adjY, Color craftingTipColor, out int inventoryX, out int inventoryY)
+        // {
+        //     orig(adjY, craftingTipColor, out inventoryX, out inventoryY);
+        //     inventoryX += (int)OffsetX;
+        //     inventoryY += (int)OffsetY;
+        // }
 
         private void CraftingNog(ILContext il)
         {

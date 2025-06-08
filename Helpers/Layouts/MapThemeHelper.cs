@@ -1,4 +1,5 @@
 using System.Linq;
+using Terraria;
 
 namespace UICustomizer.Helpers.Layouts
 {

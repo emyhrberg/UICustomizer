@@ -1,8 +1,8 @@
 namespace UICustomizer.Helpers.Layouts
 {
-    public static class OffsetHelper
+    public static class ElementHelper
     {
-        public enum Offset
+        public enum Element
         {
             Chat,
             Hotbar,
@@ -11,6 +11,7 @@ namespace UICustomizer.Helpers.Layouts
             ClassicLife,
             ClassicMana,
             FancyLife,
+            FancyLifeText,
             FancyMana,
             HorizontalBars,
             BarLifeText,
@@ -18,7 +19,8 @@ namespace UICustomizer.Helpers.Layouts
             Buffs,
             Inventory,
             Crafting,
-            Accessories
+            Accessories,
+            CraftingWindow
         }
     }
 }

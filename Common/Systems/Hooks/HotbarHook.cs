@@ -2,6 +2,8 @@ using System;
 using System.Reflection;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {

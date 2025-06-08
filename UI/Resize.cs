@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 
 namespace UICustomizer.UI
@@ -18,8 +19,8 @@ namespace UICustomizer.UI
             // Position the button inside the bottom-right corner
             HAlign = 1f;
             VAlign = 1f;
-            Left.Set(18, 0);
-            Top.Set(16, 0);
+            Left.Set(9, 0);
+            Top.Set(9, 0);
 
             Width.Set(35, 0f);
             Height.Set(35, 0f);
@@ -40,6 +41,8 @@ namespace UICustomizer.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            Left.Set(9, 0);
+            Top.Set(9, 0);
 
             if (draggingResize)
             {

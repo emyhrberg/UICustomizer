@@ -1,5 +1,7 @@
 using System;
 using MonoMod.Cil;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks
 {

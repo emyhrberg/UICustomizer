@@ -1,3 +1,5 @@
+using Terraria;
+
 namespace UICustomizer.Helpers.Layouts
 {
     public static class ResourceThemeHelper

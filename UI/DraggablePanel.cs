@@ -1,4 +1,8 @@
+using System;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
+using UICustomizer.UI.SliderElements;
 
 namespace UICustomizer.UI
 {
@@ -19,7 +23,7 @@ namespace UICustomizer.UI
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is CollapseIcon || target is Button)
+                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is Button)
                     return;
                 target = target.Parent;
             }
@@ -49,9 +53,9 @@ namespace UICustomizer.UI
         {
             Vector2 endMousePosition = evt.MousePosition;
             dragging = false;
-            Left.Set(endMousePosition.X - offset.X, 0f);
-            Top.Set(endMousePosition.Y - offset.Y, 0f);
-            Recalculate();
+            //Left.Set(endMousePosition.X - offset.X, 0f);
+            //Top.Set(endMousePosition.Y - offset.Y, 0f);
+            //Recalculate();
         }
 
         public override void Update(GameTime gameTime)
@@ -63,20 +67,44 @@ namespace UICustomizer.UI
                 Main.LocalPlayer.mouseInterface = true;
             }
 
+            if (SliderBase.IsAnySliderLocked)
+            {
+                dragging = false;
+                return;
+            }
+
             if (dragging)
             {
-                Left.Set(Main.mouseX - offset.X, 0f);
-                Top.Set(Main.mouseY - offset.Y, 0f);
+                //var p = Parent.GetDimensions().ToRectangle();
+                //Log.Info(p.Height.ToString());
+
+                // if stuck, cancel drag with RMB.
+                if (Main.mouseRight)
+                {
+                    dragging = false;
+                    return;
+                }
+
+                // Clamp left to Main.screenwidth
+                float x = Main.mouseX - offset.X;
+                float clampX = Math.Min(x, 0);
+                Left.Set(x, 0);
+
+                // Clamp top to Main.screenheight
+                float y = Main.mouseY - offset.Y;
+                float clampY = Math.Max(y, Main.screenHeight);
+                Top.Set(y, 0);
+
                 Recalculate();
             }
 
-            var parentSpace = Parent.GetDimensions().ToRectangle();
-            if (!GetDimensions().ToRectangle().Intersects(parentSpace))
-            {
-                Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
-                Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
-                Recalculate();
-            }
+            //var parentSpace = Parent.GetDimensions().ToRectangle();
+            //if (!GetDimensions().ToRectangle().Intersects(parentSpace))
+            //{
+            //    Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
+            //    Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
+            //    Recalculate();
+            //}
         }
     }
 }
