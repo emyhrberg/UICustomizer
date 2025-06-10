@@ -21,9 +21,11 @@ namespace UICustomizer.UI
         {
             int w = 20;
             Width.Set(w, 0);
-            Height.Set(-30 - 12, 1);
+            Height.Set(-30 - 12 - 40, 1);
             Left.Set(-12 - w / 2, 1);
             Top.Set(6, 0);
+            Height.Set(-94, 1);
+            Top.Set(14, 0);
         }
 
         public override void Update(GameTime gameTime)

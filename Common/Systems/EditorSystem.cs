@@ -13,35 +13,43 @@ namespace UICustomizer.Common.Systems
     [Autoload(Side = ModSide.Client)]
     public class EditorSystem : ModSystem
     {
-        // Handle edit mode state.
+        #region Active State
         public static bool IsActive { get; private set; } = false;
-        public static void SetActiveTrue()
+
+        public static void SetActive(bool active)
         {
-            IsActive = true;
-            var sys = ModContent.GetInstance<EditorSystem>();
-            sys?.state?.editorPanel?.editorTab?.Populate(); //hotfix for a bug where it wouldnt populate after hide all mode
-            SetEditing(true);
+            if (active)
+            {
+                IsActive = true;
+                var sys = ModContent.GetInstance<EditorSystem>();
+                sys?.state?.editorPanel?.editorTab?.Populate(); //hotfix for a bug where it wouldnt populate after hide all mode
+                SetEditing(true);
+            }
+            else
+            {
+                IsActive = false;
+                var sys = ModContent.GetInstance<EditorSystem>();
+                EditorPanel panel = sys?.state?.editorPanel;
+                panel?.CancelDrag(); // Force stop dragging
+                DarkSystem.SetDarknessLevel(0);
+            }
         }
 
-        public static void SetActiveFalse()
-        {
-            IsActive = false;
-            var sys = ModContent.GetInstance<EditorSystem>();
-            EditorPanel panel = sys?.state?.editorPanel;
-            panel?.CancelDrag(); // Force stop dragging
-            SetDarknessLevel(0);
-        }
+        #endregion
 
-        public static bool IsEditing = true;
-        public static void ToggleEditing() => IsEditing = !IsEditing;
+        #region Editing State
+
+        public static bool IsEditing = false;
         public static void SetEditing(bool editing) => IsEditing = editing;
+        #endregion
 
         public static void ToggleActive()
         {
+            // Switch between active and inactive.
             if (IsActive)
-                SetActiveFalse();
+                SetActive(false);
             else
-                SetActiveTrue();
+                SetActive(true);
         }
 
         // UI components
@@ -66,9 +74,7 @@ namespace UICustomizer.Common.Systems
             string lastLayoutName = FileHelper.LoadLastLayoutName();
             LayoutHelper.ApplyLayout(lastLayoutName);
 
-            // Exit edit mode if it was active
-            if (IsActive)
-                SetActiveFalse();
+            SetActive(true); // DEBUG MODE
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -78,46 +84,25 @@ namespace UICustomizer.Common.Systems
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            // Dark mode overlay at bottom
-            int firstVanillaLayer = layers.FindIndex(layer => layer.Name == "Vanilla: Interface Logic 1");
-            if (firstVanillaLayer != -1)
-            {
-                layers.Insert(firstVanillaLayer, new LegacyGameInterfaceLayer(
-                    "UICustomizer: Dark",
-                    () =>
-                    {
-                        DrawDarkOverlay();
-                        return true;
-                    },
-                    InterfaceScaleType.UI));
-            }
-
             // Main overlay
             int mouseText = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text");
             if (mouseText != -1)
             {
                 layers.Insert(mouseText, new LegacyGameInterfaceLayer(
-                    "UICustomizer: EditorSystem",
-                    () =>
+                    name: "UICustomizer: EditorSystem",
+                    drawMethod: () =>
                     {
+                        // hide all except save button mode
+                        if (SaveButtonOnlySystem.IsHideMode)
+                        {
+                            return true;
+                        }
+
                         userInterface?.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
-                    InterfaceScaleType.UI));
+                    scaleType: InterfaceScaleType.UI));
             }
         }
-
-        # region Dark Mode Overlay
-        private static float DarknessLevel = 0.0f;
-        public static void SetDarknessLevel(float num) => DarknessLevel = num;
-        public static float GetDarknessLevel() => DarknessLevel;
-
-
-        private static void DrawDarkOverlay()
-        {
-            // Draw a dark overlay covering the entire screen with the given darkness level
-            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * DarknessLevel);
-        }
-        # endregion
     }
 }

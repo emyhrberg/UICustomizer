@@ -6,13 +6,13 @@ using Terraria.ID;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems;
 
-namespace UICustomizer.UI
+namespace UICustomizer.UI.Layers
 {
     public class EditButton : UIText
     {
         private float scale = 0.6f;
 
-        public EditButton() : base("UI Editor", 0.6f, true)
+        public EditButton() : base("Edit", 0.6f, true)
         {
             Top.Set(-98, 1);
             Left.Set(-210, 1);
@@ -49,7 +49,7 @@ namespace UICustomizer.UI
             if (IsMouseHovering && scale < 0.75f) scale += 0.02f;
             if (!IsMouseHovering && scale > 0.6f) scale -= 0.02f;
 
-            SetText("UI Editor", scale, true);
+            SetText("Edit", scale, true);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

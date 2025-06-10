@@ -2,7 +2,6 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.UI.SliderElements;
 
 namespace UICustomizer.UI
 {
@@ -23,7 +22,7 @@ namespace UICustomizer.UI
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is Scrollbar || target is CloseButton || target is CheckboxBox || target is Checkbox || target is Button)
+                if (target is Scrollbar || target is CloseButton || target is CheckboxElement || target is Button)
                     return;
                 target = target.Parent;
             }
@@ -67,11 +66,7 @@ namespace UICustomizer.UI
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            if (SliderBase.IsAnySliderLocked)
-            {
-                dragging = false;
-                return;
-            }
+            if (ZenSlider.IsAnySliderHeld) return;
 
             if (dragging)
             {

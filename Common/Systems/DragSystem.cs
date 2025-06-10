@@ -4,6 +4,7 @@ using Iced.Intel;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
+using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.Helpers;
 using UICustomizer.Helpers.Layouts;
@@ -15,7 +16,7 @@ namespace UICustomizer.Common.Systems
     {
         private Vector2 _mouseStart;
         private Vector2 _offsetStart;
-        private Func<Rectangle>? _dragSource;   // null = no drag in progress
+        private Func<Rectangle> _dragSource;   // null = no drag in progress
 
         // Send text timer
         private static DateTime lastWarningSent = DateTime.UtcNow;
@@ -108,20 +109,21 @@ namespace UICustomizer.Common.Systems
                     if (someTimeElapsed)
                     {
                         lastWarningSent = DateTime.UtcNow;
+
+                        if (!Conf.C.ShowCombatTextTooltips) return;
                         CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Please enter edit mode to drag the element.");
                     }
                     return; // Exit early - don't set up drag
                 }
-
-                // Force switch to active layout
-                LayoutHelper.CurrentLayoutName = "Active";
-                var sys = ModContent.GetInstance<EditorSystem>();
-                sys?.state?.editorPanel?.editorTab?.Populate();
-
                 _dragSource = bounds;
                 _mouseStart = mouseUI;                      // store in UI units
                 _offsetStart = new Vector2(offsetX, offsetY);
                 Main.LocalPlayer.mouseInterface = true;
+
+                // Force switch to active layout
+                LayoutHelper.CurrentLayoutName = "Active";
+                var sys = ModContent.GetInstance<EditorSystem>();
+                sys.state.editorPanel.layoutsTab.Populate();
             }
 
             /* update drag (new offset for the element by modifying its offset using ref) */
@@ -137,9 +139,9 @@ namespace UICustomizer.Common.Systems
                 //    ClampToScreen(ref offsetX, ref offsetY, bounds);
                 //}
                 // only snap if the user has Snap enabled
-                if (UIEditorSettings.SnapToEdges)
+                if (EditorTabSettings.SnapToEdges)
                 {
-                    SnapToEdges(ref offsetX, ref offsetY, bounds, threshold: 20);
+                    SnapToEdges(ref offsetX, ref offsetY, bounds, threshold: EditorTabSettings.SnapThreshold);
                 }
 
                 if (!Main.mouseLeft)
@@ -153,6 +155,7 @@ namespace UICustomizer.Common.Systems
 
         #region Drag Helpers
 
+        [Obsolete("Use SnapToEdges instead. The new method has a threshold parameter and is more flexible.")]
         private void ClampToScreen(ref float offsetX, ref float offsetY, Func<Rectangle> bounds)
         {
             var r = bounds();
@@ -162,7 +165,7 @@ namespace UICustomizer.Common.Systems
             else if (r.Bottom > Main.screenHeight) offsetY -= (r.Bottom - Main.screenHeight);
         }
 
-        private void SnapToEdges(ref float offsetX, ref float offsetY, Func<Rectangle> bounds, int threshold)
+        private static void SnapToEdges(ref float offsetX, ref float offsetY, Func<Rectangle> bounds, int threshold)
         {
             var r = bounds();
             // horizontal snap
@@ -217,7 +220,7 @@ namespace UICustomizer.Common.Systems
             int h = 55;
 
             // Set width
-            if (UIEditorSettings.Fit)
+            if (EditorTabSettings.FitBounds)
             {
                 int c = 0; // buff count active
                 foreach (var b in Main.LocalPlayer.buffType)
@@ -265,7 +268,7 @@ namespace UICustomizer.Common.Systems
         {
             int h = 35;
 
-            if (UIEditorSettings.Fit)
+            if (EditorTabSettings.FitBounds)
             {
                 int shown = 0;
 
@@ -397,7 +400,7 @@ namespace UICustomizer.Common.Systems
             int w = 125; // default width
             int y = (int)(570 + CraftingHook.OffsetY);
 
-            if (UIEditorSettings.Fit)
+            if (EditorTabSettings.FitBounds)
             {
                 // Variables
                 int heightCount = Main.numAvailableRecipes;
@@ -457,7 +460,7 @@ namespace UICustomizer.Common.Systems
             int x = (int)(Main.screenWidth - 230 + AccessoriesHook.OffsetX);
             int y = 390 + (int)AccessoriesHook.OffsetY;
 
-            if (UIEditorSettings.Fit)
+            if (EditorTabSettings.FitBounds)
             {
                 int count = Main.LocalPlayer.GetAmountOfExtraAccessorySlotsToShow();
 
@@ -486,7 +489,7 @@ namespace UICustomizer.Common.Systems
             int w = (int)(45);
             int h = (int)(60);
 
-            if (UIEditorSettings.Fit)
+            if (EditorTabSettings.FitBounds)
             {
                 // --- Width ---
                 int widthCount = Main.numAvailableRecipes;

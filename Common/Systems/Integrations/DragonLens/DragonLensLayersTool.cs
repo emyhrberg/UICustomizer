@@ -23,7 +23,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
         public override void OnActivate()
         {
-            LayersSystem.ToggleActive();
+            LayerSystem.ToggleActive();
         }
 
         public override void OnRightClick()
@@ -46,17 +46,16 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
             }
             Texture2D tex = asset.Value;
 
-            float scale = 1;
 
             //if (tex.Width > position.Width || tex.Height > position.Height)
             //scale = tex.Width > tex.Height ? position.Width / tex.Width : position.Height / tex.Height;
 
-            scale = 0.45f;
-            Vector2 pos = new(position.Center.X + 2, position.Center.Y);
+            float scale = 1.85f;
+            Vector2 pos = new(position.Center.X, position.Center.Y);
 
             spriteBatch.Draw(tex, pos, null, Color.White, 0, tex.Size() / 2f, scale, 0, 0);
 
-            if (LayersSystem.IsActive)
+            if (LayerSystem.IsActive)
             {
                 // Draw the icon with a glow effect when edit mode is active
                 GUIHelper.DrawOutline(spriteBatch, new Rectangle(position.X - 4, position.Y - 4, 46, 46), ThemeHandler.ButtonColor.InvertColor());

@@ -3,17 +3,16 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using UICustomizer.Common.States;
-using UICustomizer.UI.Editor;
 
 namespace UICustomizer.Common.Systems
 {
-    public class LayersSystem : ModSystem
+    public class LayerSystem : ModSystem
     {
         public static readonly Dictionary<string, bool> LayerStates = [];
 
         // UI components
         private UserInterface userInterface;
-        public LayersState layersState;
+        public LayerState layersState;
 
         // Handle LayersPanel active
         public static bool IsActive { get; private set; } = false;
@@ -24,7 +23,7 @@ namespace UICustomizer.Common.Systems
         {
             base.OnWorldLoad();
             userInterface = new UserInterface();
-            layersState = new LayersState();
+            layersState = new LayerState();
             userInterface.SetState(layersState);
         }
         public override void UpdateUI(GameTime gameTime)
@@ -49,7 +48,7 @@ namespace UICustomizer.Common.Systems
             if (mouseText != -1)
             {
                 layers.Insert(mouseText, new LegacyGameInterfaceLayer(
-                    "UICustomizer: EditorSystem",
+                    "UICustomizer: LayerSystem",
                     () =>
                     {
                         userInterface?.Draw(Main.spriteBatch, new GameTime());

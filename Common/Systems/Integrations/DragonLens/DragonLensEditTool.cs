@@ -44,8 +44,8 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
             //if (tex.Width > position.Width || tex.Height > position.Height)
             //scale = tex.Width > tex.Height ? position.Width / tex.Width : position.Height / tex.Height;
 
-            scale = 0.35f;
-            Vector2 pos = new(position.Center.X + 2, position.Center.Y);
+            scale = 1.4f;
+            Vector2 pos = new(position.Center.X + 0, position.Center.Y);
 
             spriteBatch.Draw(tex, pos, null, Color.White, 0, tex.Size() / 2f, scale, 0, 0);
 

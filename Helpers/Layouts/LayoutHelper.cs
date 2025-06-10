@@ -144,7 +144,7 @@ namespace UICustomizer.Helpers.Layouts
 
                 CurrentLayoutName = layoutName;
                 Log.Info($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.");
-                Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", Color.LightGreen);
+                //Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", Color.LightGreen);
             }
             catch (Exception ex)
             {
@@ -188,5 +188,28 @@ namespace UICustomizer.Helpers.Layouts
             ApplyLayout(lastLayoutName);
         }
         #endregion
+        public static void ResetAllOffsets()
+        {
+            ChatHook.OffsetX = ChatHook.OffsetY = 0f;
+            HotbarHook.OffsetX = HotbarHook.OffsetY = 0f;
+            MapHook.OffsetX = MapHook.OffsetY = 0f;
+            ClassicLifeHook.OffsetX = ClassicLifeHook.OffsetY = 0f;
+            ClassicManaHook.OffsetX = ClassicManaHook.OffsetY = 0f;
+            FancyLifeHook.OffsetX = FancyLifeHook.OffsetY = 0f;
+            FancyManaHook.OffsetX = FancyManaHook.OffsetY = 0f;
+            FancyLifeTextHook.OffsetX = FancyLifeTextHook.OffsetY = 0f;
+            HorizontalBarsHook.OffsetX = HorizontalBarsHook.OffsetY = 0f;
+            InfoAccsHook.OffsetX = InfoAccsHook.OffsetY = 0f;
+            BuffHook.OffsetX = BuffHook.OffsetY = 0f;
+            BarLifeTextHook.OffsetX = BarLifeTextHook.OffsetY = 0f;
+            BarManaTextHook.OffsetX = BarManaTextHook.OffsetY = 0f;
+            InventoryHook.OffsetX = InventoryHook.OffsetY = 0f;
+            CraftingHook.OffsetX = CraftingHook.OffsetY = 0f;
+            AccessoriesHook.OffsetX = AccessoriesHook.OffsetY = 0f;
+            CraftWindowHook.OffsetX = CraftWindowHook.OffsetY = 0f;
+
+            // Write to active layout
+            LayoutHelper.SaveActiveLayout();
+        }
     }
 }

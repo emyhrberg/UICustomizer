@@ -16,7 +16,7 @@ namespace UICustomizer.UI.Editor
         public PositionsTab positionsTab;
         public LayoutsTab layoutsTab;
 
-        protected override Action CloseAction => EditorSystem.SetActiveFalse;
+        protected override Action CloseAction => () => EditorSystem.SetActive(false);
 
         protected override (Tab, Tab, Tab) CreateTabs()
         {
@@ -78,62 +78,62 @@ namespace UICustomizer.UI.Editor
         private void DrawHitboxes(SpriteBatch sb)
         {
             // Draw hover around every element
-            DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), Element.InfoAccs.ToString(), x: -70, color: elementColors[Element.InfoAccs]);
+            DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), Element.InfoAccs, x: -70, color: elementColors[Element.InfoAccs]);
 
             if (Main.drawingPlayerChat)
-                DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), Element.Map.ToString(), color: elementColors[Element.Map]);
+                DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), Element.Map, color: elementColors[Element.Map]);
 
             // Draw hotbar or inventory
             if (Main.playerInventory)
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), Element.Inventory.ToString(), x: -75, color: elementColors[Element.Inventory]);
-                DrawHitboxOutlineAndText(sb, DragSystem.CraftingBounds(), Element.Crafting.ToString(), x: -70, color: elementColors[Element.Crafting]);
-                DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), Element.Accessories.ToString(), x: -90, color: elementColors[Element.Accessories]);
+                DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), Element.Inventory, x: -75, color: elementColors[Element.Inventory]);
+                DrawHitboxOutlineAndText(sb, DragSystem.CraftingBounds(), Element.Crafting, x: -70, color: elementColors[Element.Crafting]);
+                DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), Element.Accessories, x: -90, color: elementColors[Element.Accessories]);
             }
             else
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), Element.Hotbar.ToString(), x: -55, color: elementColors[Element.Hotbar]);
-                DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), Element.Buffs.ToString(), x: -45, color: elementColors[Element.Buffs]);
+                DrawHitboxOutlineAndText(sb, DragSystem.HotbarBounds(), Element.Hotbar, x: -55, color: elementColors[Element.Hotbar]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BuffBounds(), Element.Buffs, x: -45, color: elementColors[Element.Buffs]);
             }
 
             if (Main.recBigList)
-                DrawHitboxOutlineAndText(sb, DragSystem.CraftingWindowBounds(), Element.CraftingWindow.ToString(), x: -125, color: elementColors[Element.CraftingWindow]);
+                DrawHitboxOutlineAndText(sb, DragSystem.CraftingWindowBounds(), Element.CraftingWindow, x: -125, color: elementColors[Element.CraftingWindow]);
 
             // Draw resource bars. Check which health and mana style is active:
             string activeSetName = Main.ResourceSetsManager.ActiveSet.DisplayedName;
             if (activeSetName.StartsWith("Classic"))
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.ClassicLifeBounds(), Element.ClassicLife.ToString(), x: -90, color: elementColors[Element.ClassicLife]);
-                DrawHitboxOutlineAndText(sb, DragSystem.ClassicManaBounds(), Element.ClassicMana.ToString(), x: -5, color: elementColors[Element.ClassicMana]);
+                DrawHitboxOutlineAndText(sb, DragSystem.ClassicLifeBounds(), Element.ClassicLife, x: -90, color: elementColors[Element.ClassicLife]);
+                DrawHitboxOutlineAndText(sb, DragSystem.ClassicManaBounds(), Element.ClassicMana, x: -5, color: elementColors[Element.ClassicMana]);
             }
             else if (activeSetName == "Fancy")
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeBounds(), Element.FancyLife.ToString(), x: -80, color: elementColors[Element.FancyLife]);
-                DrawHitboxOutlineAndText(sb, DragSystem.FancyManaBounds(), Element.FancyMana.ToString(), x: -5, color: elementColors[Element.FancyMana]);
+                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeBounds(), Element.FancyLife, x: -80, color: elementColors[Element.FancyLife]);
+                DrawHitboxOutlineAndText(sb, DragSystem.FancyManaBounds(), Element.FancyMana, x: -5, color: elementColors[Element.FancyMana]);
             }
             else if (activeSetName == "Fancy 2")
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeBounds(), Element.FancyLife.ToString(), x: -80, color: elementColors[Element.FancyLife]);
-                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeTextBounds(), Element.FancyLifeText.ToString(), x: -112, color: elementColors[Element.FancyLifeText]);
-                DrawHitboxOutlineAndText(sb, DragSystem.FancyManaBounds(), Element.FancyMana.ToString(), x: -5, color: elementColors[Element.FancyMana]);
+                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeBounds(), Element.FancyLife, x: -80, color: elementColors[Element.FancyLife]);
+                DrawHitboxOutlineAndText(sb, DragSystem.FancyLifeTextBounds(), Element.FancyLifeText, x: -112, color: elementColors[Element.FancyLifeText]);
+                DrawHitboxOutlineAndText(sb, DragSystem.FancyManaBounds(), Element.FancyMana, x: -5, color: elementColors[Element.FancyMana]);
             }
             else if (activeSetName == "Bars")
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars.ToString(), x: -120, color: elementColors[Element.HorizontalBars]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars, x: -120, color: elementColors[Element.HorizontalBars]);
             }
             else if (activeSetName == "Bars 2")
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars.ToString(), x: -120, color: elementColors[Element.HorizontalBars]);
-                DrawHitboxOutlineAndText(sb, DragSystem.BarLifeTextBounds(), Element.BarLifeText.ToString(), x: -95, color: elementColors[Element.BarLifeText]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars, x: -120, color: elementColors[Element.HorizontalBars]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarLifeTextBounds(), Element.BarLifeText, x: -95, color: elementColors[Element.BarLifeText]);
             }
             else if (activeSetName == "Bars 3")
             {
-                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars.ToString(), x: -120, color: elementColors[Element.HorizontalBars]);
-                DrawHitboxOutlineAndText(sb, DragSystem.BarLifeTextBounds(), Element.BarLifeText.ToString(), x: -95, color: elementColors[Element.BarLifeText]);
-                DrawHitboxOutlineAndText(sb, DragSystem.BarManaTextBounds(), Element.BarManaText.ToString(), x: -110, color: elementColors[Element.BarManaText]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarsBounds(), Element.HorizontalBars, x: -120, color: elementColors[Element.HorizontalBars]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarLifeTextBounds(), Element.BarLifeText, x: -95, color: elementColors[Element.BarLifeText]);
+                DrawHitboxOutlineAndText(sb, DragSystem.BarManaTextBounds(), Element.BarManaText, x: -110, color: elementColors[Element.BarManaText]);
             }
 
-            DrawHitboxOutlineAndText(sb, DragSystem.MapBounds(), Element.Map.ToString(), x: -40, color: elementColors[Element.Map]);
+            DrawHitboxOutlineAndText(sb, DragSystem.MapBounds(), Element.Map, x: -40, color: elementColors[Element.Map]);
         }
     }
 }

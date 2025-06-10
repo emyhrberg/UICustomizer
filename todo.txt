@@ -52,3 +52,12 @@ I stopped updating here and went to Trello instead.
 Add position next to dragging
 Add snap
 Add scale elements
+
+--------------------------------------------------------------
+Nvm, Im updating here, 2025-06-10:
+--------------------------------------------------------------
+TODO:
+- Add eye toggle for elements
+- Add scale elements
+- Fix UIElement debugger with mod filter panel
+- Add resize X (at least from min width 440 to max width 600 or something)

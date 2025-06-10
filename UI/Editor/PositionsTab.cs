@@ -2,6 +2,7 @@ using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using UICustomizer.Common.Systems.Hooks;
+using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
 namespace UICustomizer.UI.Editor
@@ -18,28 +19,49 @@ namespace UICustomizer.UI.Editor
         public override void Populate()
         {
             list.Clear();
-            list.SetPadding(2);
+            list.SetPadding(20);
+            list.ListPadding = 0;
+            list.Left.Set(-8, 0);
+            list.Top.Set(-10, 0);
+
+            const int rowCount = 17;
+            const float lineHeight = 18f;
 
             var positionsSection = new CollapsibleSection(
-                title: "Element Positions",
+                title: "Positions",
                 initialState: _positionsExpanded,
                 buildContent: BuildPositionsContent,
                 onToggle: () => _positionsExpanded = !_positionsExpanded,
-                contentHeight: () => 340f
+                contentHeightFunc: () => Math.Max(80, rowCount * lineHeight + 30),
+                buildHeader: header =>
+                {
+                    var resetAll = new Button(
+                        text: "Reset All",
+                        onClick: () =>
+                        {
+                            LayoutHelper.ResetAllOffsets();
+                        },
+                        tooltip: () => "Reset all positions",
+                        width: 85
+                    )
+                    {
+                        HAlign = 1f,
+                        VAlign = 0.5f,
+                        Left = { Pixels = -5 }
+                    };
+                    header.Append(resetAll);
+                }
             );
 
-            //Gap(8);
-            //positionsSection.Left.Set(0, 0);
-            //positionsSection.Width.Set(-20, 1f);
-
             list.Add(positionsSection);
+            list.Recalculate();
         }
 
         private void BuildPositionsContent(UIElement contentContainer)
         {
             const float LineHeight = 18f;
-            const float FirstColumnOffset = 135f;
-            const float CoordColumnWidth = 68f;
+            const float FirstColumnOffset = 100f;
+            const float CoordColumnWidth = 94f;
 
             var elements = new (Element element, Func<int> getX, Func<int> getY, Action<int, int> reset)[]
             {

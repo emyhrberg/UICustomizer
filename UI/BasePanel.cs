@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 using UICustomizer.Common.Systems;
 using UICustomizer.Helpers;
@@ -21,12 +22,12 @@ namespace UICustomizer.UI
         protected BasePanel()
         {
             // 1) panel sizing
-            Left.Set(-40, 0f);
-            Top.Set(-60, 0f);
-            Width.Set(300, 0f);
+            Left.Set(840, 0f);
+            Top.Set(-140, 0f);
+            Width.Set(320, 0f);
             Height.Set(440, 0f);
             VAlign = 1f;
-            HAlign = 1f;
+            HAlign = 0f;
             BackgroundColor = ColorHelper.SuperDarkBluePanel;
             SetPadding(0);
 
@@ -40,6 +41,9 @@ namespace UICustomizer.UI
             };
             _header.SetPadding(0);
             Append(_header);
+
+            HAlign = 0f;
+            
 
             // 3) shared scrollbar
             _scrollbar = new Scrollbar();
@@ -58,8 +62,10 @@ namespace UICustomizer.UI
             {
                 Top = { Pixels = 30 },
                 Width = { Percent = 1f },
-                Height = { Percent = 1f, Pixels = -30 }
+                Height = { Percent = 1f, Pixels = 0 }
             };
+            _body.Height.Set(16, 1);
+            _body.MaxHeight.Set(16, 1);
             Append(_body);
 
             // 7) resize handle
@@ -83,6 +89,24 @@ namespace UICustomizer.UI
                 float topOffset = newHeight - oldHeight;
                 Top.Pixels += topOffset;
 
+                Recalculate();
+            };
+            _resize.OnDragX += dx =>
+            {
+                if (!EditorSystem.IsActive) return;
+                CancelDrag();
+
+                float oldWidth = Width.Pixels;
+                float newWidth = oldWidth + dx;
+
+                // Clamp max and min height
+                if (newWidth > 1200 || newWidth < 320)
+                {
+                    return;
+                }
+
+                // Resize: Set new height and top!
+                Width.Set(newWidth, 0f);
                 Recalculate();
             };
             Append(_resize);
@@ -137,6 +161,10 @@ namespace UICustomizer.UI
             foreach (var tab in _allTabs)
                 tab.header.TextColor = tab == t ? Color.Yellow : Color.White;
 
+            foreach (var tab in _allTabs)
+                tab.BackgroundColor = UICommon.DefaultUIBlue;
+            _currentTab.BackgroundColor = new Color(173, 216, 230);
+
             _body.RemoveAllChildren();
             t.list.SetScrollbar(_scrollbar);
             _body.Append(t.list);
@@ -149,20 +177,6 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_currentTab is EditorTab editorTab)
-            {
-                _scrollbar.Visible = false;
-
-                if (editorTab.hideAllMode)
-                    return;
-
-            }
-
-            //else if (_currentTab is PositionsTab)
-            //    _scrollbar.Visible = false;
-            //else
-            _scrollbar.Visible = false; // DISABLE FOR ALL
-
 
             base.Draw(spriteBatch);
         }

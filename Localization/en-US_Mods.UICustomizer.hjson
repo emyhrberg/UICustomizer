@@ -7,6 +7,21 @@ Configs: {
 			Label: Show Edit Button
 			Tooltip: ""
 		}
+
+		ShowMessageWhenEnteringWorld: {
+			Label: Show Message When Entering World
+			Tooltip: ""
+		}
+
+		ShowCombatTextTooltips: {
+			Label: Show Combat Text Tooltips
+			Tooltip: ""
+		}
+
+		ShowLayersButton: {
+			Label: Show Layers Button
+			Tooltip: ""
+		}
 	}
 }
 

@@ -13,7 +13,7 @@ namespace UICustomizer.Common.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            LayersSystem.ToggleActive();
+            LayerSystem.ToggleActive();
         }
     }
 }

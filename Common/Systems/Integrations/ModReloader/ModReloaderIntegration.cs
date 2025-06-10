@@ -5,11 +5,13 @@ using UICustomizer.Helpers;
 namespace UICustomizer.Common.Systems.Integrations.ModReloader
 {
     [JITWhenModsEnabled("ModReloader")]
-    [ExtendsFromMod("DragonLens")]
+    [ExtendsFromMod("ModReloader")]
     public sealed class ModReloaderIntegration : ModPlayer
     {
         public override void OnEnterWorld()
         {
+            Log.Info("ModReloaderIntegration running...");
+
             if (ModLoader.TryGetMod("DragonLens", out Mod _))
             {
                 return;
@@ -17,6 +19,8 @@ namespace UICustomizer.Common.Systems.Integrations.ModReloader
 
             if (ModLoader.TryGetMod("ModReloader", out Mod MR))
             {
+                Log.Info("ModReloader foundz...");
+
                 AddEditButton(MR);
                 AddLayersButton(MR);
             }
@@ -27,10 +31,10 @@ namespace UICustomizer.Common.Systems.Integrations.ModReloader
             Log.Info("Adding AddLayersButton button for UICustomizer");
             MR.Call(
                 "AddButton",
-                "UI", // name
-                new Action(EditorSystem.ToggleActive),
-                Ass.EditorIcon, // asset
-                "Edit UI layout" // tooltip
+                "Layers", // name
+                () => LayerSystem.ToggleActive(),
+                Ass.LayersIcon, // asset
+                "Toggle UIElements, Drawn Interface Layers from all mods, and Toggle Resource Packs directly in-game." // tooltip
             );
             Log.Info("ModReloader AddLayersButton added for UICustomizer");
         }

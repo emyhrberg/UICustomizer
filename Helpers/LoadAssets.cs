@@ -19,6 +19,11 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> EditorIcon;
         public static Asset<Texture2D> LayersIcon;
         public static Asset<Texture2D> Hitbox;
+        public static Asset<Texture2D> Slider;
+        public static Asset<Texture2D> SliderHighlight;
+        public static Asset<Texture2D> EyeOpen;
+        public static Asset<Texture2D> EyeClosed;
+        public static Asset<Texture2D> EyeHover;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

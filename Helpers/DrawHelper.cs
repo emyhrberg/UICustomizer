@@ -3,12 +3,14 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using UICustomizer.Common.Systems;
+using UICustomizer.Helpers.Layouts;
+using static UICustomizer.Helpers.Layouts.ElementHelper;
 
 namespace UICustomizer.Helpers
 {
     public static class DrawHelper
     {
-        public static void DrawHitboxOutlineAndText(SpriteBatch sb, Rectangle rect, string elementName, int x = 0, int y = 0, Color color = default)
+        public static void DrawHitboxOutlineAndText(SpriteBatch sb, Rectangle rect, Element element, int x = 0, int y = 0, Color color = default)
         {
             if (color == default)
                 color = Color.Red;
@@ -17,7 +19,7 @@ namespace UICustomizer.Helpers
             if (sys == null || sys.state == null || sys.state.editorPanel == null) return;
 
             // Draw hitboxes
-            if (UIEditorSettings.ShowHitboxes)
+            if (EditorTabSettings.ShowHitboxes)
             {
                 const float fillScaleX = 0.985f;
                 const float fillScaleY = 0.97f;
@@ -32,24 +34,63 @@ namespace UICustomizer.Helpers
                     (int)(rect.Height * fillScaleY)
                 );
 
-                sb.Draw(TextureAssets.MagicPixel.Value, fillRect, color * UIEditorSettings.Opacity);
+                sb.Draw(TextureAssets.MagicPixel.Value, fillRect, color * EditorTabSettings.Opacity);
 
                 // Draw outline around the full-size rect
                 DrawSlices(sb, rect, color, fill: false, fillOpacity: 0f);
             }
 
+            // Draw eye toggle
+            // Try to get the interface layer name from the mapping
+            if (!ElementHelper.ElementInterfaceLayerMapping.TryGetValue(element, out string interfaceLayerName))
+            {
+                // Still draw the name if ShowNames is enabled, using the enum's string representation
+                if (EditorTabSettings.ShowNames)
+                {
+                    Vector2 pos = rect.Location.ToVector2();
+                    Utils.DrawBorderString(sb, element.ToString(), pos, Color.White);
+                }
+                return; // Exit early for this element if no mapping for eye toggle
+            }
+
+            // Draw eye toggle (only if mapping was found)
+            if (EditorTabSettings.ShowEyeToggle)
+            {
+                if (LayerSystem.LayerStates == null)
+                {
+                    return;
+                }
+
+                bool isCurrentlyVisible = LayerSystem.LayerStates.TryGetValue(interfaceLayerName, out bool currentState) ? currentState : true;
+                Rectangle eyeRect = new(rect.X - Ass.EyeOpen.Width(), rect.Y, Ass.EyeOpen.Width(), Ass.EyeOpen.Height());
+
+                if (eyeRect.Contains(Main.mouseX, Main.mouseY))
+                {
+                    sb.Draw(Ass.EyeHover.Value, eyeRect, Color.White); // Draw hover icon
+                    if (Main.mouseLeft && Main.mouseLeftRelease)
+                    {
+                        isCurrentlyVisible = !isCurrentlyVisible;
+                        // Use interfaceLayerName (from mapping) as the key for LayerSystem.LayerStates
+                        LayerSystem.LayerStates[interfaceLayerName] = isCurrentlyVisible;
+                        Main.mouseLeftRelease = false;
+                    }
+                }
+                else // Only draw the normal eye if not hovering
+                {
+                    sb.Draw(isCurrentlyVisible ? Ass.EyeOpen.Value : Ass.EyeClosed.Value, eyeRect, Color.White);
+                }
+            }
+
             // Draw names of the UI elements
-            if (UIEditorSettings.ShowNames)
+            // Use interfaceLayerName if available and ShowNames is true, otherwise use element.ToString()
+            if (EditorTabSettings.ShowNames)
             {
                 Vector2 pos = rect.Location.ToVector2();
-
-                // Use custom offsets if the user wants them
-                //if (UIEditorSettings.OffsetText)
-                //{
-                    //pos += new Vector2(x, y);
-                //}
-
-                Utils.DrawBorderString(sb, elementName, pos, Color.White);
+                // Display the mapped interfaceLayerName if available, otherwise the enum name.
+                string displayName = !string.IsNullOrEmpty(interfaceLayerName) ? interfaceLayerName : element.ToString();
+                if (EditorTabSettings.ShowEyeToggle) displayName = interfaceLayerName;
+                else displayName = element.ToString();
+                Utils.DrawBorderString(sb, displayName, pos, Color.White);
             }
         }
 
@@ -60,7 +101,7 @@ namespace UICustomizer.Helpers
         private static void DrawSlices(SpriteBatch sb, Rectangle t, Color col, bool fill = true, float fillOpacity = 0.3f)
         {
             var tex = Ass.Hitbox.Value;
-            int c = UIEditorSettings.Stroke;                         // 5-px corners / edge thickness
+            int c = EditorTabSettings.Stroke;                         // 5-px corners / edge thickness
             Rectangle sc = new(0, 0, c, c),
                       eh = new(c, 0, 30 - 2 * c, c),
                       ev = new(0, c, c, 30 - 2 * c),

@@ -4,19 +4,25 @@ using UICustomizer.UI.Layers;
 
 namespace UICustomizer.Common.States
 {
-    public class LayersState : UIState
+    public class LayerState : UIState
     {
         public LayersPanel layersPanel;
+        public LayersButton layersButton;
 
-        public LayersState()
+        public LayerState()
         {
             layersPanel = new();
             Append(layersPanel);
+
+            layersButton = new();
+            Append(layersButton);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            //layersButton = new();
+            //Append(layersButton);
         }
 
         public override void Draw(SpriteBatch sb)

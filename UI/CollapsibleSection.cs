@@ -2,8 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader.UI;
 using Terraria.UI;
 using UICustomizer.Helpers;
 
@@ -11,96 +11,87 @@ namespace UICustomizer.UI
 {
     public class CollapsibleSection : UIElement
     {
-        private float _headerHeight = 30f;
-        private readonly UIPanel _header;
-        private readonly CollapseIcon _icon; // Changed to CollapseIcon
-        private readonly UIText _label;
-        private readonly float _contentHeight;
-        private readonly Action<UIElement> _buildContent;
-        private readonly Action _onToggle;
-        private readonly Action<UIElement> _buildHeader;
+        private float headerHeight = 30f;
+        private readonly UIPanel headerPanel;
+        private readonly CollapseIcon icon;
+        private readonly UIText label;
+        private readonly float contentHeight;
+        private readonly Action<UIList> contentBuilder;
+        private readonly Action onToggleAction;
+        private readonly Action<UIElement> headerBuilder;
 
         public bool IsExpanded { get; private set; }
 
         public CollapsibleSection(
-          string title,
-          bool initialState,
-          Action<UIElement> buildContent,
-          Action onToggle,
-          Func<float> contentHeight = null,
-          Action<UIElement> buildHeader = null
+            string title,
+            Action<UIList> buildContent,
+            bool initialState=false,
+            Action onToggle=null,
+            Func<float> contentHeightFunc = null,
+            Action<UIElement> buildHeader = null
         )
         {
             IsExpanded = initialState;
-            _contentHeight = contentHeight?.Invoke() ?? 200f;
-            _buildContent = buildContent;
-            _onToggle = onToggle;
-            _buildHeader = buildHeader;
+            contentHeight = contentHeightFunc?.Invoke() ?? 200f;
+            contentBuilder = buildContent;
+            onToggleAction = onToggle;
+            headerBuilder = buildHeader;
+
             Width.Set(0, 1f);
-            Height.Set(_headerHeight + (IsExpanded ? _contentHeight : 0), 0);
+            Height.Set(headerHeight + (IsExpanded ? contentHeight : 0), 0);
 
-            // header bar
-            _header = new UIPanel
+            // build header panel
+            headerPanel = new UIPanel
             {
-                Width = { Percent = 1f, Pixels = -4f },
-                Left = { Percent = 0f, Pixels = 2f },
-                Height = { Pixels = _headerHeight }
+                Width = { Percent = 1f, Pixels = 0 },
+                Left = { Percent = 0f, Pixels = 0 },
+                Height = { Pixels = headerHeight }
             };
-            _header.SetPadding(0);
-            Append(_header);
+            headerPanel.SetPadding(0);
+            Append(headerPanel);
 
-            _icon = new CollapseIcon(initialState)
+            icon = new CollapseIcon(initialState)
             {
-                Left = { Pixels = 8 },
                 VAlign = 0.5f
             };
-            _header.Append(_icon);
+            headerPanel.Append(icon);
 
-            _label = new UIText(title, 0.4f, true)
+            label = new UIText(title, 0.45f, large: true)
             {
-                Left = { Pixels = 34 }, // Adjusted for 26px icon + padding
+                Left = { Pixels = 41 },
                 VAlign = 0.5f
             };
-            _header.Append(_label);
+            headerPanel.Append(label);
 
-            buildHeader?.Invoke(_header);
+            headerBuilder?.Invoke(headerPanel);
 
-            _header.OnLeftClick += (evt, _) =>
-            {
-                // We dont want to toggle when clicking on a checkbox
-                UIElement elm = evt.Target;
-                while (elm != null)
+            headerPanel.OnLeftClick += (evt, _) => {
+                UIElement target = evt.Target;
+                while (target != null)
                 {
-                    // if _any_ parent in the hierarchy is a Checkbox, skip toggling
-                    if (elm is Checkbox)
-                        return;
-                    elm = elm.Parent;
+                    if (target is CheckboxElement || target is Button) return;
+                    target = target.Parent;
                 }
-
                 Toggle();
             };
 
-            // if we're expanded initially, build & append the content
             if (IsExpanded)
                 AppendContent();
         }
 
         private void Toggle()
         {
-            // flip state + notify caller
             IsExpanded = !IsExpanded;
-            _onToggle?.Invoke();
+            onToggleAction?.Invoke();
 
-            // remove old content (if any)
-            foreach (var c in Children.ToArray())
-                if (c != _header)
-                    RemoveChild(c);
+            // remove old content
+            foreach (var child in Children.ToArray())
+                if (child != headerPanel)
+                    RemoveChild(child);
 
-            // Update icon state
-            _icon.SetExpanded(IsExpanded);
-            Height.Set(_headerHeight + (IsExpanded ? _contentHeight : 0), 0);
+            icon.SetExpanded(IsExpanded);
+            Height.Set(headerHeight + (IsExpanded ? contentHeight : 0), 0);
 
-            // rebuild content if now expanded
             if (IsExpanded)
                 AppendContent();
 
@@ -109,72 +100,84 @@ namespace UICustomizer.UI
 
         private void AppendContent()
         {
-            var content = new UIPanel
+            var panel = new UIPanel
             {
-                //BackgroundColor = Color.DarkGray,
-                //BorderColor = Color.DarkGray,
-                Top = { Pixels = _headerHeight },
-                Width = { Percent = 1f, Pixels = -4f },
-                Left = { Percent = 0f, Pixels = 2f },
-                Height = { Pixels = _contentHeight }
+                Top = { Pixels = headerHeight },
+                Width = { Percent = 1f, Pixels = 0 },
+                Left = { Percent = 0f, Pixels = 0f },
+                Height = { Pixels = contentHeight }
             };
-            content.SetPadding(8);
-            _buildContent(content);
-            Append(content);
+            panel.SetPadding(8);
+
+            var list = new UIList
+            {
+                Width = { Percent = 1f, Pixels = 0 },
+                Height = { Pixels = contentHeight }
+            };
+            panel.Append(list);
+
+            contentBuilder(list);
+            Append(panel);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+
+            base.Draw(spriteBatch);
+
+            // white underline beneath the header
+            var dims = headerPanel.GetDimensions();
+            int y = (int)(dims.Y + dims.Height);
+            int w = (int)dims.Width-4;
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+2, y, w, 1), Color.White);
         }
     }
 
     public class CollapseIcon : UIImage
     {
-        private bool _isExpanded;
-        private bool _isHovered;
+        private bool isExpanded;
+        private bool isHovered;
 
-        public CollapseIcon(bool initialExpanded = false) : base(initialExpanded ? Ass.Minus.Value : Ass.Plus.Value)
+        public CollapseIcon(bool initialExpanded = false)
+          : base(initialExpanded ? Ass.Minus.Value : Ass.Plus.Value)
         {
-            _isExpanded = initialExpanded;
+            isExpanded = initialExpanded;
             ScaleToFit = true;
-            AllowResizingDimensions = false; // Don't allow resizing to maintain
-            Width.Set(22, 0); // Force size
-            Height.Set(22, 0);
-            Left.Set(5, 0);
+            AllowResizingDimensions = false;
+            Width.Set(32, 0);
+            Height.Set(32, 0);
+            Left.Set(8, 0);
         }
 
         public void SetExpanded(bool expanded)
         {
-            _isExpanded = expanded;
-            SetImage(_isExpanded ? Ass.Minus.Value : Ass.Plus.Value);
-            Width.Set(22, 0);
-            Height.Set(22, 0);
-            Left.Set(5, 0);
+            isExpanded = expanded;
+            SetImage(isExpanded ? Ass.Minus.Value : Ass.Plus.Value);
+            Width.Set(32, 0);
+            Height.Set(32, 0);
+            //Left.Set(4, 0);
         }
 
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            _isHovered = true;
+            isHovered = true;
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
             base.MouseOut(evt);
-            _isHovered = false;
+            isHovered = false;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //Left.Set(0, 0);
+            //Width.Set(32, 0);
+            //Height.Set(32, 0);
             base.Draw(spriteBatch);
-
-            // Show tooltip when hovered
-            if (_isHovered && IsMouseHovering)
-            {
-                string tooltipText = _isExpanded ? "Collapse" : "Expand";
-                Main.hoverItemName = tooltipText;
-            }
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
+            if (isHovered && IsMouseHovering)
+                Main.hoverItemName = isExpanded ? "Collapse" : "Expand";
         }
     }
 }

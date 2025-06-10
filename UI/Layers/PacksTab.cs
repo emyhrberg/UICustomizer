@@ -5,7 +5,6 @@ using System.Linq;
 using Terraria;
 using Terraria.Initializers;
 using Terraria.IO;
-using Terraria.UI;
 using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI.Layers
@@ -28,7 +27,10 @@ namespace UICustomizer.UI.Layers
         public override void Populate()
         {
             list.Clear();
-            list.SetPadding(2);
+            list.SetPadding(20);
+            list.ListPadding = 0;
+            list.Top.Set(-10, 0);
+            list.Left.Set(-8, 0);
 
             // ensure allPacks is loaded
             if (allPacks == null)
@@ -50,40 +52,42 @@ namespace UICustomizer.UI.Layers
             void AddPackSection(string title, bool initial, Action<bool> setFlag, List<ResourcePack> source, bool enableOnClick)
             {
                 CollapsibleSection section = null;
-                section = new CollapsibleSection(title, initialState: initial, buildContent: content =>
-                {
-                    float y = 10;
-                    foreach (var pack in source)
+                section = new CollapsibleSection(
+                    title,
+                    initialState: initial,
+                    contentHeightFunc: () => Math.Max(80f, source.Count * 30f + 20f),
+                    buildContent: content =>
                     {
-                        var btn = new Button(
-                            text: pack.Name,
-                            tooltip: () => enableOnClick
-                                ? $"Click to enable {pack.Name}"
-                                : $"Click to disable {pack.Name}",
-                            onClick: () =>
-                            {
-                                if (!LayersSystem.IsActive) return;
+                        float y = 0;
+                        foreach (var pack in source)
+                        {
+                            var btn = new Button(
+                                text: pack.Name,
+                                tooltip: () => enableOnClick
+                                    ? $"Click to enable {pack.Name}"
+                                    : $"Click to disable {pack.Name}",
+                                onClick: () =>
+                                {
+                                    if (!LayerSystem.IsActive) return;
 
-                                pack.IsEnabled = enableOnClick;
-                                Main.AssetSourceController.UseResourcePacks(
-                                    new ResourcePackList(allPacks.Where(p => p.IsEnabled).ToList())
-                                );
-                                Populate(); // rebuild
-                            },
-                            onRightClick: () => Process.Start("explorer.exe", pack.FullPath),
-                            maxWidth: true
-                        );
-                        btn.Top.Pixels = y;
-                        content.Append(btn);
-                        y += 30;
-                    }
-                },
-                contentHeight: () => source.Count * 30 + 40f,
-                onToggle: () => setFlag(section.IsExpanded));
+                                    pack.IsEnabled = enableOnClick;
+                                    Main.AssetSourceController.UseResourcePacks(
+                                        new ResourcePackList(allPacks.Where(p => p.IsEnabled).ToList())
+                                    );
+                                    Populate();
+                                },
+                                onRightClick: () => Process.Start("explorer.exe", pack.FullPath),
+                                maxWidth: true
+                            );
+                            btn.Top.Pixels = y;
+                            content.Append(btn);
+                            y += 30;
+                        }
+                    },
+                    onToggle: () => setFlag(section.IsExpanded)
+                );
 
-                // remember collapsed state for next time
                 setFlag(section.IsExpanded);
-
                 list.Add(section);
             }
 

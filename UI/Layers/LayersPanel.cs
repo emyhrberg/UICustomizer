@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.UI;
 using UICustomizer.Common.Systems;
 
@@ -12,33 +13,43 @@ namespace UICustomizer.UI.Layers
         public LayersTab layersTab;
         public PacksTab packsTab;
 
-        protected override Action CloseAction => () => LayersSystem.SetActive(false);
+        public LayersPanel()
+        {
+            Left.Set(1300, 0f);
+        }
+
+        protected override Action CloseAction => () => LayerSystem.SetActive(false);
 
         protected override (Tab, Tab, Tab) CreateTabs()
         {
             var elementsTab = new ElementsTab();
             var layersTab = new LayersTab();
             var packsTab = new PacksTab();
-            return (elementsTab, layersTab, packsTab);
+            return (layersTab, elementsTab, packsTab);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (!LayersSystem.IsActive) return;
+            //Main.NewText(Top.Pixels);
+            //Main.NewText(Left.Pixels);
+            //Left.Set(0, 0);
+
+
+            if (!LayerSystem.IsActive) return;
 
             base.Update(gameTime);
         }
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            if (!LayersSystem.IsActive) return;
+            if (!LayerSystem.IsActive) return;
 
             base.LeftClick(evt);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!LayersSystem.IsActive) return; 
+            if (!LayerSystem.IsActive) return; 
             
             base.Draw(spriteBatch);
         }

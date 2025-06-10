@@ -15,58 +15,49 @@ namespace UICustomizer.UI
         public UIText buttonText;
         private readonly Func<string> tooltip;
 
-        public Button(string text, Func<string> tooltip, Action onClick, int topOffset = 0, bool maxWidth = false, Action onRightClick = null, int width = 100)
-        {
-            BackgroundColor = UICommon.DefaultUIBlue;
+        private bool _isHovering;
+        private float _hoverTimer;
+        private static readonly float HoverFadeTime = 0.2f;
+        private readonly Color _baseBg;
+        private readonly Color _hoverBg;
 
-            // Variables
-            this.tooltip = tooltip;
-            OnMouseOver += (_, _) =>
-            {
-                BackgroundColor = UICommon.DefaultUIBlueMouseOver * 0.1f;
-                //BorderColor = Color.Yellow;
-            };
-            OnMouseOut += (_, _) =>
-            {
-                BackgroundColor = UICommon.DefaultUIBlue;
-                BorderColor = Color.Black;
-            };
-            OnRightClick += (_, _) => onRightClick?.Invoke();
-            OnLeftMouseDown += (_, _) =>
-            {
-                BorderColor = Color.Yellow;
-            };
-            OnLeftMouseUp += (_, _) =>
-            {
-                BorderColor = Color.Black;
-            };
-            OnRightMouseDown += (_, _) =>
-            {
-                BorderColor = Color.Yellow;
-            };
-            OnRightMouseUp += (_, _) =>
-            {
-                BorderColor = Color.Black;
-            };
+        public Button(string text, Action onClick, Func<string> tooltip=default,  Action onRightClick = null, bool maxWidth=false, int width = 100, int height=30)
+        {
+            _baseBg = UICommon.DefaultUIBlue;
+            _hoverBg = UICommon.DefaultUIBlueMouseOver * 0.1f;
+            BackgroundColor = _baseBg;
+            BorderColor = Color.Black;
+
+            OnMouseOver += (_, _) => _isHovering = true;
+            OnMouseOut += (_, _) => _isHovering = false;
             OnLeftClick += (_, _) =>
             {
-                if (!EditorSystem.IsActive)
-                    return; // Ignore clicks if not in edit mode
-                onClick?.Invoke();
+                if (EditorSystem.IsActive)
+                    onClick?.Invoke();
+            };
+
+            this.tooltip = tooltip;
+
+            OnRightClick += (_, _) => onRightClick?.Invoke();
+            // OnLeftMouseDown += (_, _) => BorderColor = Color.Yellow;
+            // OnLeftMouseUp += (_, _) => BorderColor = Color.Black;
+            // OnRightMouseDown += (_, _) => BorderColor = Color.Yellow;
+            // OnRightMouseUp += (_, _) => BorderColor = Color.Black;
+            OnLeftClick += (_, _) =>
+            {
+                if (EditorSystem.IsActive)
+                    onClick?.Invoke();
             };
 
             // Panel size and position
             if (maxWidth)
-            {
-                Width.Set(-16, 1f); // Full width
-                Left.Set(8, 0);
-            }
+                Width.Set(width, 1); // Fixed width
             else
                 Width.Set(width, 0); // Fixed width
-            Height.Set(30, 0);
+            Height.Set(height, 0);
             VAlign = 0.0f;
             HAlign = 0.0f;
-            Top.Set(topOffset, 0);
+            Top.Set(0, 0);
             Left.Set(0, 0);
 
             // Add UIText in the middle
@@ -84,6 +75,17 @@ namespace UICustomizer.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // advance or reverse the hover timer
+            if (_isHovering)
+                _hoverTimer = Math.Min(0.2f, _hoverTimer + dt);
+            else
+                _hoverTimer = Math.Max(0f, _hoverTimer - dt);
+
+            // only interpolate the border color
+            float t = _hoverTimer / 0.2f;
+            BorderColor = Color.Lerp(Color.Black, Color.Yellow, t);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

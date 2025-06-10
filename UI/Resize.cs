@@ -8,6 +8,7 @@ namespace UICustomizer.UI
 {
     public class Resize : UIImageButton
     {
+        public static bool anyDraggingResize;
         public bool draggingResize;
         private float clickOffsetX, clickOffsetY;
 
@@ -19,14 +20,15 @@ namespace UICustomizer.UI
             // Position the button inside the bottom-right corner
             HAlign = 1f;
             VAlign = 1f;
-            Left.Set(9, 0);
-            Top.Set(9, 0);
+            Left.Set(4, 0);
+            Top.Set(6, 0);
 
             Width.Set(35, 0f);
             Height.Set(35, 0f);
 
             OnLeftMouseDown += (evt, _) =>
             {
+                anyDraggingResize = true;
                 draggingResize = true;
                 clickOffsetY = evt.MousePosition.Y - GetDimensions().Y;
                 clickOffsetX = evt.MousePosition.X - GetDimensions().X;
@@ -34,6 +36,7 @@ namespace UICustomizer.UI
 
             OnLeftMouseUp += (evt, listeningElement) =>
             {
+                anyDraggingResize = false;
                 draggingResize = false;
             };
         }
@@ -41,8 +44,10 @@ namespace UICustomizer.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Left.Set(9, 0);
-            Top.Set(9, 0);
+            Width.Set(35, 0f);
+            Height.Set(35, 0f);
+            Left.Set(4, 0);
+            Top.Set(6, 0);
 
             if (draggingResize)
             {

@@ -14,6 +14,15 @@ namespace UICustomizer.Common.Configs
 
         [DefaultValue(true)]
         public bool ShowEditButton;
+
+        [DefaultValue(true)]
+        public bool ShowLayersButton;
+
+        [DefaultValue(true)]
+        public bool ShowMessageWhenEnteringWorld;
+
+        [DefaultValue(true)]
+        public bool ShowCombatTextTooltips;
     }
 
     public static class Conf
