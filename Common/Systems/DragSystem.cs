@@ -97,10 +97,10 @@ namespace UICustomizer.Common.Systems
 
         private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)
         {
-            Vector2 mouseUI = Main.MouseScreen;
+            Vector2 mouseUI = Main.MouseScreen/Main.UIScale;
 
             /* start drag */
-            if (_dragSource is null && Main.mouseLeft && bounds().Contains(Main.MouseScreen.ToPoint()))
+            if (_dragSource is null && Main.mouseLeft && bounds().Contains(mouseUI.ToPoint()))
             {
                 // CHECK EDIT MODE FIRST - before any drag setup
                 if (!EditorSystem.IsEditing)
@@ -129,7 +129,7 @@ namespace UICustomizer.Common.Systems
             /* update drag (new offset for the element by modifying its offset using ref) */
             if (_dragSource == bounds)
             {
-                Vector2 deltaUI = Main.MouseScreen - _mouseStart;
+                Vector2 deltaUI = mouseUI - _mouseStart;
 
                 offsetX = _offsetStart.X + deltaUI.X;
                 offsetY = _offsetStart.Y + deltaUI.Y;
