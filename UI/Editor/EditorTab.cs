@@ -279,21 +279,18 @@ namespace UICustomizer.UI.Editor
 
             lifeBtn.OnLeftClick += (_, _) =>
             {
-                if (EditorSystem.IsActive) return;
+                //if (EditorSystem.IsActive) return;
                 lifeBtn.UpdateButtonText(GetLifeBtn());
             };
             lifeBtn.OnRightClick += (_, _) =>
             {
-                if (EditorSystem.IsActive) return;
+                //if (EditorSystem.IsActive) return;
                 lifeBtn.UpdateButtonText(GetLifeBtn());
             };
 
             // Map button to cycle through map styles
             var mapBtn = new Button($"{GetMapBtnText()}",
-            tooltip: () =>
-            {
-                return "";
-            },
+            tooltip: () =>{return "";},
             onRightClick: Main.MinimapFrameManagerInstance.CycleSelection,
             onClick: () =>
             {
@@ -308,12 +305,12 @@ namespace UICustomizer.UI.Editor
 
             mapBtn.OnLeftClick += (_, _) =>
             {
-                if (EditorSystem.IsActive) return;
+                //if (EditorSystem.IsActive) return;
                 mapBtn.UpdateButtonText(GetMapBtnText());
             };
             mapBtn.OnRightClick += (_, _) =>
             {
-                if (EditorSystem.IsActive) return;
+                //if (EditorSystem.IsActive) return;
                 mapBtn.UpdateButtonText(GetMapBtnText());
             };
 

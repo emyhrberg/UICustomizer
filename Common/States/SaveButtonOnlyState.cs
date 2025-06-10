@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.UI;
 using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
-using UICustomizer.UI;
+using UICustomizer.UI.Editor;
 
 namespace UICustomizer.Common.States
 {

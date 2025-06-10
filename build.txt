@@ -1,6 +1,6 @@
 displayName = UI Editor
 author = Erky
-version = 0.5
+version = 0.6
 side = client
-weakReferences = DragonLens
+weakReferences = DragonLens, ModReloader
 after = ModReloader

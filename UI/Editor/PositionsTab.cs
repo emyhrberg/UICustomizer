@@ -1,7 +1,8 @@
 using System;
+using Microsoft.Xna.Framework; // Required for Color
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Systems.Hooks;
+using UICustomizer.Common.Systems.Hooks; // Assuming your hooks are here
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
@@ -20,19 +21,19 @@ namespace UICustomizer.UI.Editor
         {
             list.Clear();
             list.SetPadding(20);
-            list.ListPadding = 0;
+            list.ListPadding = 0; // No extra padding between items in the list itself
             list.Left.Set(-8, 0);
             list.Top.Set(-10, 0);
 
-            const int rowCount = 17;
-            const float lineHeight = 18f;
+            int elementCount = Enum.GetValues(typeof(Element)).Length;
+            const float lineHeight = 22f;
 
             var positionsSection = new CollapsibleSection(
-                title: "Positions",
+                title: "Positions", // CHANGED BACK
                 initialState: _positionsExpanded,
                 buildContent: BuildPositionsContent,
                 onToggle: () => _positionsExpanded = !_positionsExpanded,
-                contentHeightFunc: () => Math.Max(80, rowCount * lineHeight + 30),
+                contentHeightFunc: () => Math.Max(80, elementCount * lineHeight + 10),
                 buildHeader: header =>
                 {
                     var resetAll = new Button(
@@ -47,7 +48,7 @@ namespace UICustomizer.UI.Editor
                     {
                         HAlign = 1f,
                         VAlign = 0.5f,
-                        Left = { Pixels = -5 }
+                        Left = { Pixels = 0 }
                     };
                     header.Append(resetAll);
                 }
@@ -59,11 +60,13 @@ namespace UICustomizer.UI.Editor
 
         private void BuildPositionsContent(UIElement contentContainer)
         {
-            const float LineHeight = 18f;
-            const float FirstColumnOffset = 100f;
-            const float CoordColumnWidth = 94f;
+            const float LineHeight = 22f;
+            const float ElementNameMaxWidth = 95f; 
+            const float CoordTextLeftOffset = ElementNameMaxWidth + 5f; 
+            const float CoordTextWidth = 85f;
+            const float ResetButtonLeftOffset = CoordTextLeftOffset + CoordTextWidth + 20f;
 
-            var elements = new (Element element, Func<int> getX, Func<int> getY, Action<int, int> reset)[]
+            var elementsData = new (Element element, Func<int> getX, Func<int> getY, Action<int, int> resetXY)[]
             {
                 ( Element.Hotbar,      () => (int)HotbarHook.OffsetX,      () => (int)HotbarHook.OffsetY,      (x,y) => { HotbarHook.OffsetX = x; HotbarHook.OffsetY = y; } ),
                 ( Element.Buffs,       () => (int)BuffHook.OffsetX,        () => (int)BuffHook.OffsetY,        (x,y) => { BuffHook.OffsetX = x;   BuffHook.OffsetY   = y; } ),
@@ -79,57 +82,66 @@ namespace UICustomizer.UI.Editor
                 ( Element.BarManaText, () => (int)BarManaTextHook.OffsetX, () => (int)BarManaTextHook.OffsetY, (x,y) => { BarManaTextHook.OffsetX = x;  BarManaTextHook.OffsetY  = y; } ),
                 ( Element.Chat,        () => (int)ChatHook.OffsetX,        () => (int)ChatHook.OffsetY,        (x,y) => { ChatHook.OffsetX = x;       ChatHook.OffsetY       = y; } ),
                 ( Element.Inventory,   () => (int)InventoryHook.OffsetX,   () => (int)InventoryHook.OffsetY,   (x,y) => { InventoryHook.OffsetX = x;  InventoryHook.OffsetY  = y; } ),
-                ( Element.Crafting,     () => (int)CraftingHook.OffsetX,() => (int)CraftingHook.OffsetY,(x,y) => { CraftingHook.OffsetX = x;  CraftingHook.OffsetY  = y; } ),
+                ( Element.Crafting,    () => (int)CraftingHook.OffsetX,    () => (int)CraftingHook.OffsetY,    (x,y) => { CraftingHook.OffsetX = x;  CraftingHook.OffsetY  = y; } ),
                 ( Element.Accessories, () => (int)AccessoriesHook.OffsetX, () => (int)AccessoriesHook.OffsetY, (x,y) => { AccessoriesHook.OffsetX = x;AccessoriesHook.OffsetY = y; } ),
                 ( Element.CraftingWindow,() => (int)CraftWindowHook.OffsetX,() => (int)CraftWindowHook.OffsetY,(x,y) => { CraftWindowHook.OffsetX = x;  CraftWindowHook.OffsetY  = y; } )
             };
 
             // Initialize coordinate text array
-            coordTexts = new UIText[elements.Length];
+            coordTexts = new UIText[elementsData.Length];
 
-            float yOff = 10f;
-            for (int i = 0; i < elements.Length; i++)
+            float yOff = 5f;
+            for (int i = 0; i < elementsData.Length; i++)
             {
-                var (element, getX, getY, reset) = elements[i];
+                // CHANGED: Deconstruction
+                var (element, getX, getY, resetXY) = elementsData[i];
 
-                // name
-                var nameText = new UIText($"{element}:", 0.35f, true)
+                // Element name (same as before)
+                var nameText = new UIText($"{element}:", 0.8f)
                 {
                     Left = { Pixels = 0 },
                     Top = { Pixels = yOff },
-                    TextColor = Color.LightBlue
+                    Width = { Pixels = ElementNameMaxWidth },
+                    TextOriginX = 0f,
+                    TextColor = Color.LightSkyBlue
                 };
                 contentContainer.Append(nameText);
 
-                // coords (store reference for updating)
-                coordTexts[i] = new UIText($"({getX()}, {getY()})", 0.35f, true)
+                // Coordinates (X, Y) (same as before)
+                coordTexts[i] = new UIText($"({getX()}, {getY()})", 0.8f)
                 {
-                    Left = { Pixels = FirstColumnOffset },
+                    Left = { Pixels = CoordTextLeftOffset },
                     Top = { Pixels = yOff },
+                    Width = { Pixels = CoordTextWidth },
+                    TextOriginX = 0f,
                     TextColor = Color.White
                 };
                 contentContainer.Append(coordTexts[i]);
 
-                // reset button
+                // REMOVE Width display block
+                // widthTexts[i] = new UIText($"W: {getWidth()}", 0.8f) ...
+                // contentContainer.Append(widthTexts[i]);
+
+                // Reset button for X,Y (Left.Pixels uses the adjusted ResetButtonLeftOffset)
                 var resetBtn = new UIPanel
                 {
-                    Width = { Pixels = 70 },
-                    Height = { Pixels = 20 },
-                    Left = { Pixels = FirstColumnOffset + CoordColumnWidth },
-                    Top = { Pixels = yOff - 5 },
-                    BackgroundColor = Color.DarkRed * 0.7f,
-                    BorderColor = Color.Red
+                    Width = { Pixels = 60 },
+                    Height = { Pixels = 18 },
+                    Left = { Pixels = ResetButtonLeftOffset }, // Uses adjusted constant
+                    Top = { Pixels = yOff - 1 },
+                    BackgroundColor = new Color(100, 40, 40) * 0.7f,
+                    BorderColor = new Color(150, 60, 60)
                 };
-                var resetTxt = new UIText("Reset", 0.32f, true)
+                var resetTxt = new UIText("Reset", 0.75f)
                 {
                     HAlign = 0.5f,
                     VAlign = 0.5f,
                     TextColor = Color.White
                 };
                 resetBtn.Append(resetTxt);
-                resetBtn.OnLeftClick += (_, _) => reset(0, 0);
-                resetBtn.OnMouseOver += (_, _) => resetBtn.BackgroundColor = Color.Red * 0.9f;
-                resetBtn.OnMouseOut += (_, _) => resetBtn.BackgroundColor = Color.DarkRed * 0.8f;
+                resetBtn.OnLeftClick += (_, _) => resetXY(0, 0);
+                resetBtn.OnMouseOver += (_, _) => resetBtn.BackgroundColor = new Color(150, 50, 50) * 0.9f;
+                resetBtn.OnMouseOut += (_, _) => resetBtn.BackgroundColor = new Color(100, 40, 40) * 0.7f;
 
                 contentContainer.Append(resetBtn);
 
@@ -141,16 +153,15 @@ namespace UICustomizer.UI.Editor
         {
             base.Update(gameTime);
 
-            // Update positions every frame if panel exists and is expanded
             if (_positionsExpanded && coordTexts != null)
             {
-                UpdatePositionTexts();
+                UpdatePositionAndWidthTexts();
             }
         }
 
-        private void UpdatePositionTexts()
+        private void UpdatePositionAndWidthTexts()
         {
-            var elements = new (Func<int> getX, Func<int> getY)[]
+            var elementsDataGetters = new (Func<int> getX, Func<int> getY)[]
             {
                 (() => (int)HotbarHook.OffsetX, () => (int)HotbarHook.OffsetY),
                 (() => (int)BuffHook.OffsetX, () => (int)BuffHook.OffsetY),
@@ -171,11 +182,15 @@ namespace UICustomizer.UI.Editor
                 (() => (int)CraftWindowHook.OffsetX, () => (int)CraftWindowHook.OffsetY)
             };
 
-            // Update existing coordinate texts
-            for (int i = 0; i < Math.Min(coordTexts.Length, elements.Length); i++)
+            if (coordTexts == null || elementsDataGetters.Length == 0) return;
+
+
+            for (int i = 0; i < Math.Min(coordTexts.Length, elementsDataGetters.Length); i++)
             {
-                var (getX, getY) = elements[i];
-                coordTexts[i].SetText($"({getX()}, {getY()})", 0.30f, true);
+                if (coordTexts[i] == null) continue;
+
+                var (getX, getY) = elementsDataGetters[i];
+                coordTexts[i].SetText($"({getX()}, {getY()})");
             }
         }
     }

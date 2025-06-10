@@ -6,7 +6,7 @@ using Terraria.ID;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems;
 
-namespace UICustomizer.UI.Layers
+namespace UICustomizer.UI.Editor
 {
     public class EditButton : UIText
     {

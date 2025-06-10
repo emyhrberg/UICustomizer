@@ -2,6 +2,7 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
 {
@@ -22,7 +23,8 @@ namespace UICustomizer.UI
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is Scrollbar || target is CloseButton || target is CheckboxElement || target is Button)
+                if (target is Scrollbar || target is CloseButton || target is CheckboxElement ||
+                    target is CheckboxEyeElement || target is Button)
                     return;
                 target = target.Parent;
             }
@@ -59,6 +61,8 @@ namespace UICustomizer.UI
 
         public override void Update(GameTime gameTime)
         {
+            if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
+
             base.Update(gameTime);
 
             if (ContainsPoint(Main.MouseScreen))

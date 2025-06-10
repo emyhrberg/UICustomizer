@@ -25,6 +25,8 @@ namespace UICustomizer.Common.Systems
             userInterface = new UserInterface();
             layersState = new LayerState();
             userInterface.SetState(layersState);
+
+            //SetActive(true); // DEBUG MODE
         }
         public override void UpdateUI(GameTime gameTime)
         {

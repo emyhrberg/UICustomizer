@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
-using System.Collections.Generic;
-using Terraria.ModLoader.UI;
 
 namespace UICustomizer.UI.Editor
 {
@@ -42,46 +42,44 @@ namespace UICustomizer.UI.Editor
             var layouts = FileHelper.GetLayouts().ToList();
 
             AddSection("Active Layout", BuildCurr, height: () => 50);
-            AddSection("Layout Presets",BuildLayoutsContent,() => Math.Max(80, layouts.Count * 30 + 10));
-            AddSection("Layout Options", BuildOptionsContent, () => 110);
+            AddSection("Layout Presets", BuildLayoutsContent, () => Math.Max(80, layouts.Count * 30 + 10));
+            AddSection("Layout Options", BuildOptionsContent, () => 120);
 
             list.Recalculate();
         }
 
         private void BuildCurr(UIElement content)
         {
-            const float h = 25f, pad = 5f;
             float y = 0;
+
             foreach (var name in FileHelper.GetLayouts().Where(n => n == "Active"))
             {
                 bool isCurrent = name == LayoutHelper.CurrentLayoutName;
-                var btn = new Button(name,
+                var btn = new Button("Active",
                     onClick: () =>
                     {
                         ModContent.GetInstance<EditorSystem>().state.editorPanel.CancelDrag();
-                        LayoutHelper.ApplyLayout(name);
-                        LayoutHelper.CurrentLayoutName = name;
+                        LayoutHelper.ApplyLayout("Active");
+                        LayoutHelper.CurrentLayoutName = "Active";
                         LayoutHelper.SaveLastLayout();
                         Populate();
                     },
-                    tooltip: () => isCurrent ? "Current layout" : "",
+                    tooltip: () => "Current layout",
                     maxWidth: true
                 )
                 {
                     Left = { Pixels = 0 },
-                    Top = { Pixels = y }
+                    Top = { Pixels = y },
+                    BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue,
+                    // BorderColor = isCurrent ? Color.Yellow : Color.Black
                 };
-                btn.BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue;
-                btn.BorderColor = isCurrent ? Color.Yellow : Color.Black;
-                //btn.OnMouseOut += (_) { };
                 content.Append(btn);
-                y += h + pad;
             }
         }
 
         private void BuildLayoutsContent(UIElement content)
         {
-            const float h = 25f, pad = 5f;
+            const float h = 30f, pad = 4f;
             float y = 0;
             foreach (var name in FileHelper.GetLayouts().Where(n => n != "Active"))
             {
@@ -100,9 +98,9 @@ namespace UICustomizer.UI.Editor
                 )
                 {
                     Left = { Pixels = 0 },
-                    Top = { Pixels = y }
+                    Top = { Pixels = y },
+                    BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue
                 };
-                btn.BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue;
                 //btn.BorderColor = isCurrent ? Color.Yellow : Color.Black; // doesnt work?
                 btn.OnRightClick += (_, _) =>
                 {
@@ -110,13 +108,14 @@ namespace UICustomizer.UI.Editor
                         FileHelper.OpenLayoutFile(name);
                 };
                 content.Append(btn);
+                //Gap(4);
                 y += h + pad;
             }
         }
 
         private void BuildOptionsContent(UIElement content)
         {
-            const float h = 25f, pad = 5f;
+            const float h = 30f, pad = 4f;
             float y = 0;
             var actions = new (string text, string tooltip, Action act)[]
             {

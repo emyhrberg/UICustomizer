@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI;
 using UICustomizer.UI.Editor;
-using UICustomizer.UI.Layers;
 
 namespace UICustomizer.Common.States
 {

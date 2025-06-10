@@ -6,7 +6,7 @@ namespace UICustomizer.Common.States
 {
     public class LayerState : UIState
     {
-        public LayersPanel layersPanel;
+        public LayerPanel layersPanel;
         public LayersButton layersButton;
 
         public LayerState()

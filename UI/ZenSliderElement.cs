@@ -77,14 +77,14 @@ namespace UICustomizer.UI
             }
         }
 
-        //public override void Draw(SpriteBatch spriteBatch)
-        //{
-        //    base.Draw(spriteBatch);
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
 
-        //    if (Label.IsMouseHovering && !string.IsNullOrEmpty(tooltip))
-        //    {
-        //        UICommon.TooltipMouseText(tooltip);
-        //    }
-        //}
+            if (Label.IsMouseHovering && !string.IsNullOrEmpty(tooltip))
+            {
+                UICommon.TooltipMouseText(tooltip);
+            }
+        }
     }
 }

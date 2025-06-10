@@ -6,14 +6,14 @@ using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI.Layers
 {
-    public class LayersPanel : BasePanel
+    public class LayerPanel : BasePanel
     {
         // Tabs
         public ElementsTab elementsTab;
         public LayersTab layersTab;
         public PacksTab packsTab;
 
-        public LayersPanel()
+        public LayerPanel()
         {
             Left.Set(1300, 0f);
         }

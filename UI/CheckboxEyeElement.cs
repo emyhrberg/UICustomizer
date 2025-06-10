@@ -1,6 +1,5 @@
 
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -14,53 +13,57 @@ namespace UICustomizer.UI
     /// <summary>
     /// A simple checkbox UI element consisting of a text label and a checkbox box.
     /// </summary>
-    public class CheckboxElement : UIElement
+    public class CheckboxEyeElement : UIPanel
     {
         private bool _isChecked;
-        private readonly CheckboxBox _box;
+        private readonly CheckboxEye eye;
         private readonly UIText _label;
         private readonly string _tooltip;
         private readonly Action<bool> _onStateChanged;
         public bool Active = false;
         public bool GetChecked() => _isChecked;
+        public bool skipDrawPanel;
 
-        public CheckboxElement(
+        public CheckboxEyeElement(
             string text,
             bool initialState,
             Action<bool> onStateChanged,
             int width = 50,
             string tooltip = "",
-            bool maxWidth=false,
-            int height = 30
+            bool maxWidth = false,
+            int height = 30,
+            bool skipDrawPanel=false
         )
         {
+            this.skipDrawPanel = skipDrawPanel;
             _isChecked = initialState;
             _onStateChanged = onStateChanged;
             _tooltip = tooltip;
 
             Height.Set(height, 0);
-            Width.Set(width, 0);
+            Width.Set(width+4, 1);
+            MaxWidth.Set(width+4, 1);
+            Left.Set(-2, 0);
 
-            // Box
-            _box = new CheckboxBox(!_isChecked ? Ass.Uncheck : Ass.Check); // cheeky hehe
-            _box.Left.Set(0, 0);
-            _box.Top.Set(0, 0);
+            // Eye
+            eye = new CheckboxEye(_isChecked ? Ass.EyeOpen : Ass.EyeClosed);
+            Append(eye);
 
             OnMouseOver += (_, _) =>
             {
-                    //_box.SetImage(ASS.HOVER)
+                eye.SetImage(Ass.EyeHover);
             };
             OnMouseOut += (_, _) =>
             {
-                    //_box.SetImage(_isChecked ? TODO
+                eye.SetImage(_isChecked ? Ass.EyeOpen : Ass.EyeClosed);
             };
 
-            Append(_box);
+            Append(eye);
 
             // Label
             _label = new UIText(text, 0.34f, true);
-            _label.Left.Set(36, 0);
-            _label.Top.Set(1, 0);
+            _label.Left.Set(24, 0);
+            _label.Top.Set(-1, 0);
             _label.VAlign = 0.5f;
             Append(_label);
         }
@@ -71,14 +74,37 @@ namespace UICustomizer.UI
             base.LeftClick(evt);
 
             _isChecked = !_isChecked;
-             _box.SetImage(_isChecked ? Ass.Check : Ass.Uncheck);
+            eye.SetImage(_isChecked ? Ass.EyeOpen : Ass.EyeClosed);
             _onStateChanged?.Invoke(_isChecked);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch sb)
         {
             if (!Active) return;
-            base.Draw(spriteBatch);
+
+
+            if (skipDrawPanel)
+            {
+                if (eye != null && eye._texture != null && eye._texture.IsLoaded)
+                {
+                    Texture2D textureToDraw = eye._texture.Value;
+                    float scale = 1.5f; // Define your desired scale factor, e.g., 1.5f for 150%
+                    Vector2 origin = textureToDraw.Size() * 0.5f; // Origin for scaling (center of the texture)
+                    Vector2 basePosition = GetDimensions().Position() + new Vector2(30, -6*scale); // Original top-left logic
+                    Vector2 drawPosition = basePosition + origin * scale; // Adjust if basePosition is top-left and scaling from origin
+
+                    sb.Draw(
+                        textureToDraw,
+                        drawPosition, 
+                        null,Color.White, 0f,origin,scale,SpriteEffects.None,0f         
+                    );
+                }
+            }
+            else
+            {
+                base.Draw(sb);
+            }
+
 
             Top.Set(0, 0);
 
@@ -86,14 +112,14 @@ namespace UICustomizer.UI
                 UICommon.TooltipMouseText(_tooltip);
         }
     }
-    public class CheckboxBox : UIImageButton
+    public class CheckboxEye : UIImageButton
     {
         private bool _isHovering;
         private float _hoverTimer;
         private static readonly float HoverFadeTime = 0.2f;
         private float opacity;
 
-        public CheckboxBox(Asset<Texture2D> texture) : base(texture)
+        public CheckboxEye(Asset<Texture2D> texture) : base(texture)
         {
             Width.Set(22, 0);
             Height.Set(22, 0);
@@ -119,13 +145,13 @@ namespace UICustomizer.UI
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // advance or reverse the hover timer
-            if (Parent is CheckboxElement c && c.IsMouseHovering)
-                _hoverTimer = Math.Min(HoverFadeTime, _hoverTimer + dt);
+            if (_isHovering)
+                _hoverTimer = Math.Min(0.5f, _hoverTimer + dt);
             else
                 _hoverTimer = Math.Max(0f, _hoverTimer - dt);
 
-            float t = _hoverTimer / HoverFadeTime;
-            opacity = MathHelper.Lerp(0.4f, 1.0f, t);
+            float t = _hoverTimer / 0.5f;
+            opacity = MathHelper.Lerp(1f, 0.4f, t);
 
             base.Update(gameTime);
         }
@@ -133,7 +159,8 @@ namespace UICustomizer.UI
         public override void Draw(SpriteBatch sb)
         {
             Vector2 pos = Parent.GetDimensions().Position();
-            pos += new Vector2(0, -3);
+            pos += new Vector2(3, -6);
+            //VAlign = 0.5f;
             sb.Draw(_texture.Value, pos, Color.White * opacity);
         }
     }

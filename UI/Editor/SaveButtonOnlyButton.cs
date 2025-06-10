@@ -5,7 +5,7 @@ using Terraria.UI;
 using UICustomizer.Common.Systems;
 using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.UI.Editor
 {
     public class SaveButtonOnlyButton : Button
     {

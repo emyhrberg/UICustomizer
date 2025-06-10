@@ -74,7 +74,7 @@ namespace UICustomizer.Common.Systems
             string lastLayoutName = FileHelper.LoadLastLayoutName();
             LayoutHelper.ApplyLayout(lastLayoutName);
 
-            SetActive(true); // DEBUG MODE
+            //SetActive(true); // DEBUG MODE
         }
 
         public override void UpdateUI(GameTime gameTime)

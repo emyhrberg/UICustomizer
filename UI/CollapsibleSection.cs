@@ -69,7 +69,8 @@ namespace UICustomizer.UI
                 UIElement target = evt.Target;
                 while (target != null)
                 {
-                    if (target is CheckboxElement || target is Button) return;
+                    if (target is CheckboxElement || target is CheckboxEyeElement || target is Button) 
+                        return;
                     target = target.Parent;
                 }
                 Toggle();
@@ -128,8 +129,8 @@ namespace UICustomizer.UI
             // white underline beneath the header
             var dims = headerPanel.GetDimensions();
             int y = (int)(dims.Y + dims.Height);
-            int w = (int)dims.Width-4;
-            spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+2, y, w, 1), Color.White);
+            int w = (int)dims.Width-14;
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+6, y-5, w, 1), Color.White);
         }
     }
 
