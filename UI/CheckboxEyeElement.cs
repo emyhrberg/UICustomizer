@@ -51,7 +51,7 @@ namespace UICustomizer.UI
 
             OnMouseOver += (_, _) =>
             {
-                eye.SetImage(Ass.EyeHover);
+                eye.SetImage(_isChecked ? Ass.EyeOpenHover : Ass.EyeClosedHover);
             };
             OnMouseOut += (_, _) =>
             {

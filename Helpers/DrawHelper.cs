@@ -66,7 +66,7 @@ namespace UICustomizer.Helpers
 
                 if (eyeRect.Contains(Main.mouseX, Main.mouseY))
                 {
-                    sb.Draw(Ass.EyeHover.Value, eyeRect, Color.White); // Draw hover icon
+                    sb.Draw(isCurrentlyVisible ? Ass.EyeOpenHover.Value : Ass.EyeClosedHover.Value, eyeRect, Color.White); // Draw hover icon
                     if (Main.mouseLeft && Main.mouseLeftRelease)
                     {
                         isCurrentlyVisible = !isCurrentlyVisible;

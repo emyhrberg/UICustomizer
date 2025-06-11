@@ -23,6 +23,9 @@ namespace UICustomizer.Common.Configs
 
         [DefaultValue(true)]
         public bool ShowCombatTextTooltips;
+
+        [DefaultValue(true)]
+        public bool DisableItemUseWhileDragging;
     }
 
     public static class Conf

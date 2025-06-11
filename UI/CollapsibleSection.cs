@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UICustomizer.Common.Systems;
 using UICustomizer.Helpers;
 
 namespace UICustomizer.UI
@@ -66,6 +67,8 @@ namespace UICustomizer.UI
             headerBuilder?.Invoke(headerPanel);
 
             headerPanel.OnLeftClick += (evt, _) => {
+                if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
+
                 UIElement target = evt.Target;
                 while (target != null)
                 {
@@ -139,6 +142,11 @@ namespace UICustomizer.UI
         private bool isExpanded;
         private bool isHovered;
 
+        private bool _isHovering;
+        private float _hoverTimer;
+        private static readonly float HoverFadeTime = 0.2f;
+        private float opacity;
+
         public CollapseIcon(bool initialExpanded = false)
           : base(initialExpanded ? Ass.Minus.Value : Ass.Plus.Value)
         {
@@ -173,9 +181,6 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Left.Set(0, 0);
-            //Width.Set(32, 0);
-            //Height.Set(32, 0);
             base.Draw(spriteBatch);
             if (isHovered && IsMouseHovering)
                 Main.hoverItemName = isExpanded ? "Collapse" : "Expand";

@@ -42,7 +42,7 @@ namespace UICustomizer.UI
             Width.Set(width, 0);
 
             // Box
-            _box = new CheckboxBox(!_isChecked ? Ass.Uncheck : Ass.Check); // cheeky hehe
+            _box = new CheckboxBox(!_isChecked ? Ass.CheckInactive : Ass.CheckActive); // cheeky hehe
             _box.Left.Set(0, 0);
             _box.Top.Set(0, 0);
 
@@ -71,7 +71,7 @@ namespace UICustomizer.UI
             base.LeftClick(evt);
 
             _isChecked = !_isChecked;
-             _box.SetImage(_isChecked ? Ass.Check : Ass.Uncheck);
+             _box.SetImage(_isChecked ? Ass.CheckActive : Ass.CheckInactive);
             _onStateChanged?.Invoke(_isChecked);
         }
 
@@ -129,7 +129,6 @@ namespace UICustomizer.UI
 
             base.Update(gameTime);
         }
-
         public override void Draw(SpriteBatch sb)
         {
             Vector2 pos = Parent.GetDimensions().Position();

@@ -19,6 +19,7 @@ namespace UICustomizer.UI
                 VAlign = 0.5f
             };
             Append(x);
+
             OnMouseOver += (_, _) =>
             {
                 BorderColor = Color.Yellow;
