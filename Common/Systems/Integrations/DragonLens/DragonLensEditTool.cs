@@ -17,9 +17,7 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
         public override string Name => "UI Editor";
 
-        public override string DisplayName => "UI Editor";
-
-        public override string Description => "Edit UI elements positions, set resource and map themes, and save and edit Layouts.";
+        public override string Description => "Edit the UI layout.";
 
         public override bool HasRightClick => false;
 

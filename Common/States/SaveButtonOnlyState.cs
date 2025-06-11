@@ -15,7 +15,7 @@ namespace UICustomizer.Common.States
         public SaveButtonOnlyState()
         {
             saveButton = new(
-                text: Loc.Get("EditorPanel.SaveButton.Label"),
+                text: "Save",
                 onClick: () =>
                     {
                         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -25,7 +25,7 @@ namespace UICustomizer.Common.States
                         SaveButtonOnlySystem.SetHideMode(false);
                         EditorSystem.SetActive(false);
                     },
-                tooltip: () => Loc.Get("EditorPanel.SaveButton.Tooltip"),
+                tooltip: () => "Save current layout",
                 onRightClick: () =>
                 {
                     // cancel hide‐all mode and re‐enter edit

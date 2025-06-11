@@ -88,9 +88,9 @@ namespace UICustomizer.UI
                 if (eye != null && eye._texture != null && eye._texture.IsLoaded)
                 {
                     Texture2D textureToDraw = eye._texture.Value;
-                    float scale = 1.1f; // Define your desired scale factor, e.g., 1.5f for 150%
+                    float scale = 1.5f; // Define your desired scale factor, e.g., 1.5f for 150%
                     Vector2 origin = textureToDraw.Size() * 0.5f; // Origin for scaling (center of the texture)
-                    Vector2 basePosition = GetDimensions().Position() + new Vector2(32, -3*scale); // Original top-left logic
+                    Vector2 basePosition = GetDimensions().Position() + new Vector2(30, -6*scale); // Original top-left logic
                     Vector2 drawPosition = basePosition + origin * scale; // Adjust if basePosition is top-left and scaling from origin
 
                     sb.Draw(

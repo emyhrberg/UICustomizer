@@ -14,10 +14,11 @@ namespace UICustomizer.UI.Editor
 
         public EditButton() : base("Edit", 0.6f, true)
         {
-            Width.Set(60, 0);
-            Height.Set(30, 0);
-            Top.Set(-40, 1);
-            Left.Set(-250, 1);
+            Top.Set(-98, 1);
+            Left.Set(-210, 1);
+
+            Width.Set(200, 0);
+            Height.Set(40, 0);
 
             TextOriginX = 0.5f;
             TextOriginY = 0.5f;
@@ -61,6 +62,15 @@ namespace UICustomizer.UI.Editor
         {
             if (!Conf.C.ShowEditButton) return;
             if (!Main.playerInventory) return;
+
+            Top.Set(-98, 1);
+            Width.Set(200, 0);
+
+            if (Main.LocalPlayer.extraAccessorySlots >= 1)
+            {
+                Top.Set(-80, 1);
+                Height.Set(30, 0);
+            }
 
             base.Draw(spriteBatch);
         }

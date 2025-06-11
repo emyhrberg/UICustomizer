@@ -1,15 +1,10 @@
 Configs: {
 	Config: {
 		DisplayName: Config
-		Headers.UIEditor: UI Editor Header
+		Headers.UIEditor: U I Editor Header
 
 		ShowEditButton: {
 			Label: Show Edit Button
-			Tooltip: ""
-		}
-
-		ShowLayersButton: {
-			Label: Show Layers Button
 			Tooltip: ""
 		}
 
@@ -23,6 +18,11 @@ Configs: {
 			Tooltip: ""
 		}
 
+		ShowLayersButton: {
+			Label: Show Layers Button
+			Tooltip: ""
+		}
+
 		DisableItemUseWhileDragging: {
 			Label: Disable Item Use While Dragging
 			Tooltip: ""
@@ -30,41 +30,35 @@ Configs: {
 	}
 }
 
-PlayerMessages: {
-	OnEnterWorld: {
-		Welcome: Welcome to {0} v{1}!
-		IntroPanels: There are two new tools, the [c/FFFF00:UI Editor] and the [c/FF0000:Layers Tool].
-		EditToolInfo: "[c/FFFF00:UI Editor] allows you to move elements and save your layouts."
-		LayersToolInfo: "[c/FF0000:Layers Tool] allows you to toggle elements, interface layers, and resource packs."
-		ToolIntegration: You can find them in DragonLens, Mod Reloader, Cheat Sheet and Heros Mod and next to Settings
-		ConfigInfo: Use the configuration to turn this message off and change other stuff, too.
-	}
-}
-
-EditorPanel: {
-	Icon: {
-		Label: UI Editor
-		Open: Open UI Editor
-		Close: Close UI Editor
-		Tooltip: Move elements and save layouts!
-	}
-
-	SaveButton: {
-		Label: Save
-		Tooltip: Save current layout and exit edit mode
-	}
-}
-
-LayerPanel: {
-	Icon: {
-		Label: Layers Tool
-		Open: Open Layers Tool
-		Close: Close Layers Tool
-		Tooltip: Toggle elements, interface layers, and resource packs!
-	}
-}
-
 Keybinds: {
-	"Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
-	"Toggle Layer Panel.DisplayName": Toggle  Layer  Panel
+	DragonLensEditTool.DisplayName: Dragon Lens Edit Tool
+	"UI Editor.DisplayName": U I  Editor
+	"Toggle Layers And Packs.DisplayName": Toggle  Layers  And  Packs
+	"Toggle Layers And PacksRightClick.DisplayName": Toggle  Layers  And  Packs Right Click
+	"Layers And Packs.DisplayName": Layers  And  Packs
+	"Layers And PacksRightClick.DisplayName": Layers  And  Packs Right Click
+}
+
+Tools: {
+	DragonLensEditTool: {
+		DisplayName: DragonLensEditTool
+		Description: The tool has no description! Add one in .hjson files!
+	}
+
+	"UI Editor": {
+		DisplayName: UI Editor
+		Description: The tool has no description! Add one in .hjson files!
+	}
+
+	"Toggle Layers And Packs": {
+		DisplayName: Toggle Layers And Packs
+		Description: The tool has no description! Add one in .hjson files!
+		RightClickName: Toggle Layers And Packs Right Click
+	}
+
+	"Layers And Packs": {
+		DisplayName: Layers And Packs
+		Description: The tool has no description! Add one in .hjson files!
+		RightClickName: Layers And Packs Right Click
+	}
 }

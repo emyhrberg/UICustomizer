@@ -28,10 +28,13 @@ namespace UICustomizer.UI.Layers
             return (layersTab, elementsTab, packsTab);
         }
 
-        int c = 0;
-
         public override void Update(GameTime gameTime)
         {
+            //Main.NewText(Top.Pixels);
+            //Main.NewText(Left.Pixels);
+            //Left.Set(0, 0);
+
+
             if (!LayerSystem.IsActive) return;
 
             base.Update(gameTime);
