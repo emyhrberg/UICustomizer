@@ -27,14 +27,20 @@ namespace UICustomizer.UI.Editor
             {
                 if (!Conf.C.ShowEditButton) return;
 
-                Main.LocalPlayer.mouseInterface = true; // prevents item use
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
                 EditorSystem.ToggleActive();
             };
             OnMouseOver += (_, _) =>
             {
                 if (!Conf.C.ShowEditButton) return;
 
-                Main.LocalPlayer.mouseInterface = true; // prevents item use
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
         }

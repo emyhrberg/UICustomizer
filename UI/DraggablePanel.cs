@@ -2,6 +2,7 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI
@@ -67,7 +68,10 @@ namespace UICustomizer.UI
 
             if (ContainsPoint(Main.MouseScreen))
             {
-                Main.LocalPlayer.mouseInterface = true;
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
             }
 
             if (ZenSlider.IsAnySliderHeld) return;

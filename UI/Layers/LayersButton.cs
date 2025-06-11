@@ -27,14 +27,20 @@ namespace UICustomizer.UI.Layers
             {
                 if (!Conf.C.ShowLayersButton) return;
 
-                Main.LocalPlayer.mouseInterface = true; // prevents item use
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
                 LayerSystem.ToggleActive();
             };
             OnMouseOver += (_, _) =>
             {
                 if (!Conf.C.ShowLayersButton) return;
 
-                Main.LocalPlayer.mouseInterface = true; // prevents item use
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
         }

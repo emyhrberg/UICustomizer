@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems;
-using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.Helpers;
 using UICustomizer.Helpers.Layouts;
 
@@ -250,14 +247,14 @@ namespace UICustomizer.UI.Editor
             var darkSlider = new ZenSliderElement("Dark", "Add underlying darkness", 0f, 1f, DarkSystem.GetDarknessLevel(), 0.01f, DarkSystem.SetDarknessLevel);
             list.Add(darkSlider);
 
-            var fillSlider = new ZenSliderElement("Fill", "Change fill of hitboxes", 0f, 1f, 1f, 0.01f, (val) => EditorTabSettings.Opacity = val);
-            list.Add(fillSlider);
+            //var fillSlider = new ZenSliderElement("Fill", "Change fill of hitboxes", 0f, 1f, 1f, 0.01f, (val) => EditorTabSettings.Opacity = val);
+            //list.Add(fillSlider);
 
             var snapThreshold = new ZenSliderElement("Snap", "Snap to edges threshold", 0f, 100f, EditorTabSettings.SnapThreshold, 0.1f, (val) => EditorTabSettings.SnapThreshold = (int)val);
             list.Add(snapThreshold);
 
-            var strokeSlider = new ZenSliderElement("Stroke", "Change hitboxes stroke size", 0f, 5, EditorTabSettings.Stroke, 0.1f, (val) => EditorTabSettings.Stroke = (int)val);
-            list.Add(strokeSlider);
+            //var strokeSlider = new ZenSliderElement("Stroke", "Change hitboxes stroke size", 0f, 5, EditorTabSettings.Stroke, 0.1f, (val) => EditorTabSettings.Stroke = (int)val);
+            //list.Add(strokeSlider);
         }
 
         private void BuildThemeEditor(UIList list)

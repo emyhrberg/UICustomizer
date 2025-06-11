@@ -118,7 +118,10 @@ namespace UICustomizer.Common.Systems
                 _dragSource = bounds;
                 _mouseStart = mouseUI;                      // store in UI units
                 _offsetStart = new Vector2(offsetX, offsetY);
-                Main.LocalPlayer.mouseInterface = true;
+                if (Conf.C.DisableItemUseWhileDragging)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
 
                 // Force switch to active layout
                 LayoutHelper.CurrentLayoutName = "Active";

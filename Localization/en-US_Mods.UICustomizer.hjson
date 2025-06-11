@@ -22,6 +22,11 @@ Configs: {
 			Label: Show Layers Button
 			Tooltip: ""
 		}
+
+		DisableItemUseWhileDragging: {
+			Label: Disable Item Use While Dragging
+			Tooltip: ""
+		}
 	}
 }
 
