@@ -52,11 +52,11 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked life bar filling");
+                    // Log.Info("Successfully hooked life bar filling");
                 }
                 else
                 {
-                    Log.Warn("Failed to find life bar filling");
+                    // Log.Warn("Failed to find life bar filling");
                 }
 
                 // Hook mana bar panels
@@ -66,11 +66,11 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked mana bar panels");
+                    // Log.Info("Successfully hooked mana bar panels");
                 }
                 else
                 {
-                    Log.Warn("Failed to find mana bar panels");
+                    // Log.Warn("Failed to find mana bar panels");
                 }
 
                 // Hook mana bar filling
@@ -84,11 +84,11 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked mana bar filling");
+                    // Log.Info("Successfully hooked mana bar filling");
                 }
                 else
                 {
-                    Log.Warn("Failed to find mana bar filling");
+                    // Log.Warn("Failed to find mana bar filling");
                 }
             }
             catch (Exception e)

@@ -72,7 +72,7 @@ namespace UICustomizer.UI
             _resize = new Resize(Ass.Resize) { HAlign = 1f, VAlign = 1f };
             _resize.OnDragY += dy =>
             {
-                if (!EditorSystem.IsActive) return;
+                //if (!EditorSystem.IsActive) return;
                 CancelDrag();
 
                 float oldHeight = Height.Pixels;
@@ -93,7 +93,7 @@ namespace UICustomizer.UI
             };
             _resize.OnDragX += dx =>
             {
-                if (!EditorSystem.IsActive) return;
+                //if (!EditorSystem.IsActive) return;
                 CancelDrag();
 
                 float oldWidth = Width.Pixels;

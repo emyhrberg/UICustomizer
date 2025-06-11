@@ -61,7 +61,7 @@ namespace UICustomizer.UI.Editor
                 initialState: moveExpanded,
                 buildContent: BuildUIEditor,
                 onToggle: () => _expandedSections["Move UI"] = !_expandedSections["Move UI"],
-                contentHeightFunc: () => 300f
+                contentHeightFunc: () => 220f
             ));
 
             bool setExpanded = _expandedSections.TryGetValue("Set UI", out var sv) ? sv : (_expandedSections["Set UI"] = true);
@@ -241,20 +241,31 @@ namespace UICustomizer.UI.Editor
 
             list.Add(row);
         }
-
         private static void PopulateSliders(UIList list)
         {
-            var darkSlider = new ZenSliderElement("Dark", "Add underlying darkness", 0f, 1f, DarkSystem.GetDarknessLevel(), 0.01f, DarkSystem.SetDarknessLevel);
-            list.Add(darkSlider);
+            // UI Scale slider: Apply on release, show live and applied values
+            var uiSlider = new ZenSliderElement(
+                "UI Scale",
+                "Changes the main scale of all UI",
+                0.5f, 2.0f, Main.UIScale, 0.01f,
+                (val) =>
+                {
+                    Main.UIScale = val;
+                    Main.temporaryGUIScaleSlider = val;
+                },
+                applyOnRelease: true 
+            ); 
+            list.Add(uiSlider);
 
-            //var fillSlider = new ZenSliderElement("Fill", "Change fill of hitboxes", 0f, 1f, 1f, 0.01f, (val) => EditorTabSettings.Opacity = val);
-            //list.Add(fillSlider);
-
-            var snapThreshold = new ZenSliderElement("Snap", "Snap to edges threshold", 0f, 100f, EditorTabSettings.SnapThreshold, 0.1f, (val) => EditorTabSettings.SnapThreshold = (int)val);
+            // Snap Threshold slider: Normal behavior (always update)
+            var snapThreshold = new ZenSliderElement(
+                "Snap",
+                "Snap to edges threshold",
+                0f, 100f, EditorTabSettings.SnapThreshold, 1f, 
+                (val) => EditorTabSettings.SnapThreshold = (int)val,
+                applyOnRelease: false 
+            );
             list.Add(snapThreshold);
-
-            //var strokeSlider = new ZenSliderElement("Stroke", "Change hitboxes stroke size", 0f, 5, EditorTabSettings.Stroke, 0.1f, (val) => EditorTabSettings.Stroke = (int)val);
-            //list.Add(strokeSlider);
         }
 
         private void BuildThemeEditor(UIList list)

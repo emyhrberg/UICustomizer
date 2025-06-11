@@ -1,10 +1,13 @@
+using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.UI;
-using UICustomizer.Helpers;
+using UICustomizer.Common.Systems;
+using UICustomizer.Helpers; // Assuming Ass is in here
 
 namespace UICustomizer.UI;
 
@@ -12,38 +15,48 @@ public sealed class ZenSlider : UIElement
 {
     public ZenSlider()
     {
-        Width.Set(0, 1f);
+        Width.Set(0, 1f); // Default width, ZenSliderElement will position Left and adjust Width
         Height.Set(16, 0f);
-
         InnerColor = Color.Gray;
     }
 
     public Color InnerColor;
-
     public static bool IsAnySliderHeld = false;
     public bool IsHeld = false;
-
     public float Ratio;
+
+    public event Action<float> OnValueAppliedOnMouseUp;
+    public event Action<float> OnDrag;
+    private bool _wasHeldLastFrame = false;
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
-        if (Main.alreadyGrabbingSunOrMoon)
-            return;
-
         base.LeftMouseDown(evt);
         if (evt.Target == this)
-
         {
             IsHeld = true;
             IsAnySliderHeld = true;
+            _wasHeldLastFrame = true;
         }
     }
 
     public override void LeftMouseUp(UIMouseEvent evt)
     {
         base.LeftMouseUp(evt);
+        if (IsHeld)
+        {
+            CalculatedStyle dims = GetDimensions();
+            if (dims.Width > 0)
+            {
+                float num = UserInterface.ActiveInstance.MousePosition.X - dims.X;
+                Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f);
+            }
+            OnValueAppliedOnMouseUp?.Invoke(Ratio);
+        }
+
         IsHeld = false;
         IsAnySliderHeld = false;
+        _wasHeldLastFrame = false;
     }
 
     public override void MouseOver(UIMouseEvent evt)
@@ -55,41 +68,63 @@ public sealed class ZenSlider : UIElement
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    public override void Update(GameTime gameTime)
     {
-        Left.Set(120, 0);
-        Width.Set(-125, 1);
-        CalculatedStyle dims = GetDimensions();
+        // if (!EditorSystem.IsActive) return;
 
-        // Dispite how impossible it should be I'm doing this to be extra safe.
-        if (IsHeld && !Main.alreadyGrabbingSunOrMoon)
+        base.Update(gameTime);
+
+        if (_wasHeldLastFrame && !IsHeld && !Main.mouseLeft)
         {
-            float num = UserInterface.ActiveInstance.MousePosition.X - dims.X;
-            Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1);
+            OnValueAppliedOnMouseUp?.Invoke(Ratio);
+            _wasHeldLastFrame = false;
         }
 
-        Texture2D slider = Ass.Slider.Value;
-        Texture2D sliderOutline = Ass.SliderHighlight.Value;
+        if (IsHeld)
+        {
+            _wasHeldLastFrame = true;
+        }
+    }
+
+    protected override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        //if (!EditorSystem.IsActive) return;
+
+        CalculatedStyle dims = GetDimensions();
+
+        if (IsHeld && !Main.alreadyGrabbingSunOrMoon)
+        {
+            if (dims.Width > 0)
+            {
+                float num = UserInterface.ActiveInstance.MousePosition.X - dims.X;
+                Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f);
+                OnDrag?.Invoke(Ratio);
+            }
+        }
+
+        Texture2D sliderTex = Ass.Slider.Value;
+        Texture2D sliderOutlineTex = Ass.SliderHighlight.Value;
 
         Rectangle size = dims.ToRectangle();
 
-        DrawBar(spriteBatch, slider, size, Color.White);
+        DrawBar(spriteBatch, sliderTex, size, Color.White);
         if (IsHeld || IsMouseHovering)
-            DrawBar(spriteBatch, sliderOutline, size, Main.OurFavoriteColor);
+            DrawBar(spriteBatch, sliderOutlineTex, size, Main.OurFavoriteColor);
 
-        size.Inflate(-4, -4);
-        spriteBatch.Draw(TextureAssets.MagicPixel.Value, size, InnerColor);
+        Rectangle innerBarArea = size;
+        innerBarArea.Inflate(-4, -4);
+        spriteBatch.Draw(TextureAssets.MagicPixel.Value, innerBarArea, InnerColor);
 
         Texture2D blip = TextureAssets.ColorSlider.Value;
-
         Vector2 blipOrigin = blip.Size() * 0.5f;
-        Vector2 blipPosition = new(size.X + (Ratio * size.Width), size.Center.Y);
+        Vector2 blipPosition = new(innerBarArea.X + (Ratio * innerBarArea.Width), innerBarArea.Center.Y);
 
-        spriteBatch.Draw(blip, blipPosition, null, Color.White, 0f, blipOrigin, 1f, 0, 0f);
+        spriteBatch.Draw(blip, blipPosition, null, Color.White, 0f, blipOrigin, 1f, SpriteEffects.None, 0f);
     }
 
     public static void DrawBar(SpriteBatch spriteBatch, Texture2D texture, Rectangle dimensions, Color color)
     {
+        if (texture == null) return;
         spriteBatch.Draw(texture, new Rectangle(dimensions.X, dimensions.Y, 6, dimensions.Height), new Rectangle(0, 0, 6, texture.Height), color);
         spriteBatch.Draw(texture, new Rectangle(dimensions.X + 6, dimensions.Y, dimensions.Width - 12, dimensions.Height), new Rectangle(6, 0, 2, texture.Height), color);
         spriteBatch.Draw(texture, new Rectangle(dimensions.X + dimensions.Width - 6, dimensions.Y, 6, dimensions.Height), new Rectangle(8, 0, 6, texture.Height), color);

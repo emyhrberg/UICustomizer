@@ -59,6 +59,13 @@ namespace UICustomizer.UI.Editor
             }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            if (!EditorSystem.IsActive) return;
+
+            base.Update(gameTime);
+        }
+
         public void PopulateRandomColors()
         {
             elementColors.Clear();

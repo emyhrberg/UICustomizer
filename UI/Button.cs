@@ -32,8 +32,7 @@ namespace UICustomizer.UI
             OnMouseOut += (_, _) => _isHovering = false;
             OnLeftClick += (_, _) =>
             {
-                if (EditorSystem.IsActive)
-                    onClick?.Invoke();
+                onClick?.Invoke();
             };
 
             this.tooltip = tooltip;
@@ -43,11 +42,6 @@ namespace UICustomizer.UI
             // OnLeftMouseUp += (_, _) => BorderColor = Color.Black;
             // OnRightMouseDown += (_, _) => BorderColor = Color.Yellow;
             // OnRightMouseUp += (_, _) => BorderColor = Color.Black;
-            OnLeftClick += (_, _) =>
-            {
-                if (EditorSystem.IsActive)
-                    onClick?.Invoke();
-            };
 
             // Panel size and position
             if (maxWidth)

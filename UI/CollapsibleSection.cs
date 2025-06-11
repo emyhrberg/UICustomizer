@@ -67,7 +67,7 @@ namespace UICustomizer.UI
             headerBuilder?.Invoke(headerPanel);
 
             headerPanel.OnLeftClick += (evt, _) => {
-                if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
+                //if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
 
                 UIElement target = evt.Target;
                 while (target != null)

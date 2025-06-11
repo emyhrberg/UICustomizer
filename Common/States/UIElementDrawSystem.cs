@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.States
 {

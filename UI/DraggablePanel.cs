@@ -62,7 +62,7 @@ namespace UICustomizer.UI
 
         public override void Update(GameTime gameTime)
         {
-            if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
+            //if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
 
             base.Update(gameTime);
 
@@ -78,36 +78,29 @@ namespace UICustomizer.UI
 
             if (dragging)
             {
-                //var p = Parent.GetDimensions().ToRectangle();
-                //Log.Info(p.Height.ToString());
+                float rawX = Main.mouseX - offset.X;
+                float rawY = Main.mouseY - offset.Y;
 
-                // if stuck, cancel drag with RMB.
-                if (Main.mouseRight)
-                {
-                    dragging = false;
-                    return;
-                }
+                var dims = GetDimensions();
+                float panelW = dims.Width;
+                float panelH = dims.Height;
 
-                // Clamp left to Main.screenwidth
-                float x = Main.mouseX - offset.X;
-                float clampX = Math.Min(x, 0);
-                Left.Set(x, 0);
+                float clampedX = Math.Clamp(rawX, 0, Main.screenWidth - panelW);
+                float clampedY = Math.Clamp(rawY, 0, Main.screenHeight - panelH);
 
-                // Clamp top to Main.screenheight
-                float y = Main.mouseY - offset.Y;
-                float clampY = Math.Max(y, Main.screenHeight);
-                Top.Set(y, 0);
-
+                // 4) Apply!
+                Left.Set(rawX, 0f);
+                Top.Set(rawY, 0f);
                 Recalculate();
             }
 
-            //var parentSpace = Parent.GetDimensions().ToRectangle();
-            //if (!GetDimensions().ToRectangle().Intersects(parentSpace))
-            //{
-            //    Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
-            //    Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
-            //    Recalculate();
-            //}
+            var parentSpace = Parent.GetDimensions().ToRectangle();
+            if (!GetDimensions().ToRectangle().Intersects(parentSpace))
+            {
+                Left.Pixels = Utils.Clamp(Left.Pixels, 0, parentSpace.Right - Width.Pixels);
+                Top.Pixels = Utils.Clamp(Top.Pixels, 0, parentSpace.Bottom - Height.Pixels);
+                Recalculate();
+            }
         }
     }
 }

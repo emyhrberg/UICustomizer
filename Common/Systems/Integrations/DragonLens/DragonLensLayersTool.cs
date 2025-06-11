@@ -17,6 +17,8 @@ namespace UICustomizer.Common.Systems.Integrations.DragonLens
 
         public override string Name => "Layers And Packs";
 
+        public override string DisplayName => "UI Editor";
+
         public override string Description => "Toggle UIElements, Drawn Interface Layers from all mods, and Toggle Resource Packs directly in-game.";
 
         public override bool HasRightClick => true;

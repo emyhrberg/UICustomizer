@@ -1,13 +1,10 @@
 
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.UI
 {
@@ -42,18 +39,9 @@ namespace UICustomizer.UI
             Width.Set(width, 0);
 
             // Box
-            _box = new CheckboxBox(!_isChecked ? Ass.CheckInactive : Ass.CheckActive); // cheeky hehe
+            _box = new CheckboxBox(!_isChecked ? Ass.CheckInactive : Ass.CheckActive);
             _box.Left.Set(0, 0);
             _box.Top.Set(0, 0);
-
-            OnMouseOver += (_, _) =>
-            {
-                    //_box.SetImage(ASS.HOVER)
-            };
-            OnMouseOut += (_, _) =>
-            {
-                    //_box.SetImage(_isChecked ? TODO
-            };
 
             Append(_box);
 
@@ -80,7 +68,7 @@ namespace UICustomizer.UI
             if (!Active) return;
             base.Draw(spriteBatch);
 
-            Top.Set(0, 0);
+            //Top.Set(0, 0);
 
             if (IsMouseHovering && !string.IsNullOrEmpty(_tooltip))
                 UICommon.TooltipMouseText(_tooltip);
@@ -88,30 +76,21 @@ namespace UICustomizer.UI
     }
     public class CheckboxBox : UIImageButton
     {
-        private bool _isHovering;
         private float _hoverTimer;
         private static readonly float HoverFadeTime = 0.2f;
         private float opacity;
 
         public CheckboxBox(Asset<Texture2D> texture) : base(texture)
         {
-            Width.Set(22, 0);
-            Height.Set(22, 0);
-            MaxWidth.Set(22, 0);
-            MaxHeight.Set(22, 0);
             VAlign = 0.5f;
-        }
 
-        public override void MouseOver(UIMouseEvent evt)
-        {
-            base.MouseOver(evt);
-            _isHovering = true;
-        }
+            int s = 30;
 
-        public override void MouseOut(UIMouseEvent evt)
-        {
-            base.MouseOut(evt);
-            _isHovering = false;
+            Width.Set(s, 0);
+            Height.Set(s, 0);
+            MaxWidth.Set(s, 0);
+            MaxHeight.Set(s, 0);
+            Left.Set(-24, 0);
         }
 
         public override void Update(GameTime gameTime)
@@ -131,9 +110,25 @@ namespace UICustomizer.UI
         }
         public override void Draw(SpriteBatch sb)
         {
-            Vector2 pos = Parent.GetDimensions().Position();
-            pos += new Vector2(0, -3);
-            sb.Draw(_texture.Value, pos, Color.White * opacity);
+            int s = 60;
+
+            //Width.Set(s, 0);
+            //Height.Set(s, 0);
+            //MaxWidth.Set(s, 0);
+            //MaxHeight.Set(s, 0);
+            //Left.Set(-12, 0);
+
+            CalculatedStyle dimensions = GetDimensions(); // This will use Width/Height set in constructor
+
+            if (_texture != null && _texture.IsLoaded)
+            {
+                //if (IsMouseHovering)
+                //{
+                //    SetImage(Ass.CheckActiveHover);
+                //}
+
+                sb.Draw(_texture.Value, dimensions.ToRectangle(), Color.White * 1.0f);
+            }
         }
     }
 

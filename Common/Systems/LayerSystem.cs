@@ -16,7 +16,25 @@ namespace UICustomizer.Common.Systems
 
         // Handle LayersPanel active
         public static bool IsActive { get; private set; } = false;
-        public static void SetActive(bool active) => IsActive = active;
+        public static void SetActive(bool active)
+        {
+            IsActive = active;
+            // Ensure the UI state is managed when IsActive changes
+            var sys = ModContent.GetInstance<LayerSystem>();
+            if (sys?.userInterface != null && sys.layersState != null)
+            {
+                if (IsActive && sys.userInterface.CurrentState == null)
+                {
+                    Main.NewText("state ON");
+                    sys.userInterface.SetState(sys.layersState);
+                }
+                else if (!IsActive && sys.userInterface.CurrentState != null)
+                {
+                    Main.NewText("state OFF");
+                    sys.userInterface.SetState(null);
+                }
+            }
+        }
         public static void ToggleActive() => SetActive(!IsActive);
 
         public override void OnWorldLoad()

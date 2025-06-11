@@ -18,39 +18,40 @@ namespace UICustomizer.Common.Systems
 
         public static void SetActive(bool active)
         {
+            var sys = ModContent.GetInstance<EditorSystem>();
             if (active)
             {
                 IsActive = true;
-                var sys = ModContent.GetInstance<EditorSystem>();
-                sys?.state?.editorPanel?.editorTab?.Populate(); //hotfix for a bug where it wouldnt populate after hide all mode
+                // attach the UI tree so it receives input and draws
+                //sys.userInterface.SetState(sys.state);
+                // hotfix: repopulate after toggling back on
+                sys.state.editorPanel.editorTab.Populate();
                 SetEditing(true);
             }
             else
             {
                 IsActive = false;
-                var sys = ModContent.GetInstance<EditorSystem>();
-                EditorPanel panel = sys?.state?.editorPanel;
-                panel?.CancelDrag(); // Force stop dragging
+                // detach the UI so it no longer handles clicks or draws
+                //sys.userInterface.SetState(null);
+                var panel = sys.state?.editorPanel;
+                panel?.CancelDrag(); // force-stop any drag in progress
                 DarkSystem.SetDarknessLevel(0);
             }
         }
-
         #endregion
 
         #region Editing State
-
         public static bool IsEditing = false;
         public static void SetEditing(bool editing) => IsEditing = editing;
         #endregion
 
         public static void ToggleActive()
         {
-            // Switch between active and inactive.
-            if (IsActive)
-                SetActive(false);
-            else
-                SetActive(true);
+            SetActive(!IsActive);
         }
+
+        // singleton instance
+        public static EditorSystem Instance;
 
         // UI components
         public UserInterface userInterface;
@@ -59,32 +60,37 @@ namespace UICustomizer.Common.Systems
         public override void OnModLoad()
         {
             base.OnModLoad();
-
+            Instance = this;
             DefaultLayouts.CreateAllDefaultLayouts();
         }
 
         public override void OnWorldLoad()
         {
             base.OnWorldLoad();
+
             userInterface = new UserInterface();
             state = new EditorState();
-            userInterface.SetState(state);
+            // don't call SetState here—only attach when SetActive(true) is invoked
 
-            // Apply last selected layout
+            // apply last layout
             string lastLayoutName = FileHelper.LoadLastLayoutName();
             LayoutHelper.ApplyLayout(lastLayoutName);
 
-            //SetActive(true); // DEBUG MODE
+            //SetActive(true); // DEBUG
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
-            userInterface?.Update(gameTime);
+            //if (!IsActive) return;
+            userInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            // Main overlay
+            // only insert our layer when active
+            if (!IsActive)
+                return;
+
             int mouseText = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text");
             if (mouseText != -1)
             {
@@ -92,13 +98,11 @@ namespace UICustomizer.Common.Systems
                     name: "UICustomizer: EditorSystem",
                     drawMethod: () =>
                     {
-                        // hide all except save button mode
+                        // if we're in "hide all except save button" mode, skip
                         if (SaveButtonOnlySystem.IsHideMode)
-                        {
                             return true;
-                        }
 
-                        userInterface?.Draw(Main.spriteBatch, new GameTime());
+                        userInterface.Draw(Main.spriteBatch, new GameTime());
                         return true;
                     },
                     scaleType: InterfaceScaleType.UI));

@@ -11,14 +11,12 @@ namespace UICustomizer.UI.Layers
     public class LayersButton : UIText
     {
         private float scale = 0.6f;
-
         public LayersButton() : base("Layers", 0.6f, true)
         {
-            Top.Set(-98, 1);
-            Left.Set(-210, 1);
-
-            Width.Set(200, 0);
-            Height.Set(40, 0);
+            Width.Set(60, 0);
+            Height.Set(30, 0);
+            Top.Set(-40, 1);
+            Left.Set(-345, 1);
 
             TextOriginX = 0.5f;
             TextOriginY = 0.5f;
@@ -62,15 +60,6 @@ namespace UICustomizer.UI.Layers
         {
             if (!Conf.C.ShowLayersButton) return;
             if (!Main.playerInventory) return;
-
-            Top.Set(-120, 1);
-            Width.Set(200, 0);
-
-            if (Main.LocalPlayer.extraAccessorySlots >= 1)
-            {
-                Top.Set(-110, 1);
-                Height.Set(30, 0);
-            }
 
             base.Draw(spriteBatch);
         }
