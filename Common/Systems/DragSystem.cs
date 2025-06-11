@@ -101,37 +101,39 @@ namespace UICustomizer.Common.Systems
 
             /* start drag */
             if (_dragSource is null && Main.mouseLeft && bounds().Contains(mouseUI.ToPoint()))
-            {
-                // CHECK EDIT MODE FIRST - before any drag setup
-                if (!EditorSystem.IsEditing)
+                if (_dragSource is null && Main.mouseLeft && bounds().Contains(mouseUI.ToPoint()))
                 {
-                    bool someTimeElapsed = DateTime.UtcNow - lastWarningSent >= TimeSpan.FromMilliseconds(500);
-                    if (someTimeElapsed)
+                    // CHECK EDIT MODE FIRST - before any drag setup
+                    if (!EditorSystem.IsEditing)
                     {
-                        lastWarningSent = DateTime.UtcNow;
+                        bool someTimeElapsed = DateTime.UtcNow - lastWarningSent >= TimeSpan.FromMilliseconds(500);
+                        if (someTimeElapsed)
+                        {
+                            lastWarningSent = DateTime.UtcNow;
 
-                        if (!Conf.C.ShowCombatTextTooltips) return;
-                        CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Please enter edit mode to drag the element.");
+                            if (!Conf.C.ShowCombatTextTooltips) return;
+                            CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Please enter edit mode to drag the element.");
+                        }
+                        return; // Exit early - don't set up drag
                     }
-                    return; // Exit early - don't set up drag
-                }
-                _dragSource = bounds;
-                _mouseStart = mouseUI;                      // store in UI units
-                _offsetStart = new Vector2(offsetX, offsetY);
-                if (Conf.C.DisableItemUseWhileDragging)
-                {
-                    Main.LocalPlayer.mouseInterface = true;
-                }
+                    _dragSource = bounds;
+                    _mouseStart = mouseUI;                      // store in UI units
+                    _offsetStart = new Vector2(offsetX, offsetY);
+                    if (Conf.C.DisableItemUseWhileDragging)
+                    {
+                        Main.LocalPlayer.mouseInterface = true;
+                    }
 
-                // Force switch to active layout
-                LayoutHelper.CurrentLayoutName = "Active";
-                var sys = ModContent.GetInstance<EditorSystem>();
-                sys.state.editorPanel.layoutsTab.Populate();
-            }
+                    // Force switch to active layout
+                    LayoutHelper.CurrentLayoutName = "Active";
+                    var sys = ModContent.GetInstance<EditorSystem>();
+                    sys.state.editorPanel.layoutsTab.Populate();
+                }
 
             /* update drag (new offset for the element by modifying its offset using ref) */
             if (_dragSource == bounds)
             {
+                Vector2 deltaUI = mouseUI - _mouseStart;
                 Vector2 deltaUI = mouseUI - _mouseStart;
 
                 offsetX = _offsetStart.X + deltaUI.X;
@@ -249,7 +251,7 @@ namespace UICustomizer.Common.Systems
                 if (c >= 22)
                     h = 36 * 4 + 10;
             }
-            
+
 
             int x = (int)(20 + BuffHook.OffsetX);
             int y = (int)(52 + 21 + BuffHook.OffsetY);
@@ -483,7 +485,7 @@ namespace UICustomizer.Common.Systems
                     x += 50;
                 }
             }
-            
+
             return new Rectangle(x, y, w, h);
         }
 
@@ -509,7 +511,7 @@ namespace UICustomizer.Common.Systems
                 if (count > extraH * 5) h += 45;
                 if (count > extraH * 6) h += 45;
             }
-            
+
 
             int x = (int)(295 + CraftWindowHook.OffsetX);
             int y = 330 + (int)CraftWindowHook.OffsetY;
