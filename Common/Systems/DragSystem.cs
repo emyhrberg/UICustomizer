@@ -16,7 +16,7 @@ namespace UICustomizer.Common.Systems
     {
         private Vector2 _mouseStart;
         private Vector2 _offsetStart;
-        private Func<Rectangle> _dragSource;   // null = no drag in progress
+        private Func<float, Rectangle> _dragSource;   // null = no drag in progress
 
         // Send text timer
         private static DateTime lastWarningSent = DateTime.UtcNow;
@@ -95,15 +95,16 @@ namespace UICustomizer.Common.Systems
             }
         }
 
-        private void HandleDrag(Func<Rectangle> bounds, ref float offsetX, ref float offsetY)
+        private void HandleDrag(Func< float,Rectangle> bounds, ref float offsetX, ref float offsetY)
         {
-            Vector2 mouseUI = Main.MouseScreen / Main.UIScale;
-            Rectangle boundsRect = bounds();
+            Vector2 mouseUI = Main.MouseScreen/ Main.UIScale;
+            Rectangle boundsRect = bounds(Main.UIScale);
 
             /* start drag */
             if (_dragSource is null && Main.mouseLeft && boundsRect.Contains(mouseUI.ToPoint()))
             {
                 Log.Info($"Dragging element at {mouseUI} with bounds {boundsRect}");
+                Log.Info($"Scales: {Main.UIScale}, map: {Main.MapScale}");
                 // CHECK EDIT MODE FIRST - before any drag setup
                 if (!EditorSystem.IsEditing)
                 {
@@ -134,15 +135,11 @@ namespace UICustomizer.Common.Systems
             /* update drag (new offset for the element by modifying its offset using ref) */
             if (_dragSource == bounds)
             {
-                Vector2 deltaUI = mouseUI - _mouseStart;
+                Vector2 deltaUI = (mouseUI - _mouseStart);
 
                 offsetX = _offsetStart.X + deltaUI.X;
                 offsetY = _offsetStart.Y + deltaUI.Y;
 
-                //if (UIEditorSettings.ClampToScreen)
-                //{
-                //    ClampToScreen(ref offsetX, ref offsetY, bounds);
-                //}
                 // only snap if the user has Snap enabled
                 if (EditorTabSettings.SnapToEdges)
                 {
@@ -170,27 +167,27 @@ namespace UICustomizer.Common.Systems
             else if (r.Bottom > Main.screenHeight) offsetY -= (r.Bottom - Main.screenHeight);
         }
 
-        private static void SnapToEdges(ref float offsetX, ref float offsetY, Func<Rectangle> bounds, int threshold)
+        private static void SnapToEdges(ref float offsetX, ref float offsetY, Func<float, Rectangle> bounds, int threshold)
         {
-            var r = bounds();
+            var r = bounds(Main.UIScale);
             // horizontal snap
             if (Math.Abs(r.Left) <= threshold)
                 offsetX -= r.Left;
-            else if (Math.Abs(r.Right - Main.screenWidth) <= threshold)
-                offsetX -= (r.Right - Main.screenWidth);
+            else if (Math.Abs(r.Right - Main.screenWidth / Main.UIScale) <= threshold)
+                offsetX -= (r.Right - Main.screenWidth / Main.UIScale);
 
             // vertical snap
             if (Math.Abs(r.Top) <= threshold)
                 offsetY -= r.Top;
-            else if (Math.Abs(r.Bottom - Main.screenHeight) <= threshold)
-                offsetY -= (r.Bottom - Main.screenHeight);
+            else if (Math.Abs(r.Bottom - Main.screenHeight / Main.UIScale) <= threshold)
+                offsetY -= (r.Bottom - Main.screenHeight / Main.UIScale);
         }
 
         #endregion
 
         #region Bounds (hardcoded...)
 
-        public static Rectangle ChatBounds()
+        public static Rectangle ChatBounds(float multiplier = 1)
         {
             // vanilla: centre horizontally, a bit above the bottom toolbar
             int w = TextureAssets.TextBack.Width() + 120; // not accurate, its much wider in fullscreen
@@ -205,11 +202,11 @@ namespace UICustomizer.Common.Systems
             }
             int h = TextureAssets.TextBack.Height();
             int x = (int)(78 + ChatHook.OffsetX);
-            int y = (int)(Main.screenHeight - 36 + ChatHook.OffsetY);
+            int y = (int)(Main.screenHeight - 72 + ChatHook.OffsetY);
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle HotbarBounds()
+        public static Rectangle HotbarBounds(float multiplier = 1)
         {
             int w = 440;               // vanilla 10×44-slot bar
             int h = 76;
@@ -219,7 +216,7 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle BuffBounds()
+        public static Rectangle BuffBounds(float multiplier = 1)
         {
             int w = 440;
             int h = 55;
@@ -258,18 +255,18 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle MapBounds()
+        public static Rectangle MapBounds(float multiplier = 1)
         {
             float s = Main.MapScale;
 
             int w = (int)(258 * s);
             int h = (int)(265 * s);
-            int x = (int)(Main.screenWidth / Main.UIScale) - 300 + (int)(MapHook.OffsetX);
+            int x = (int)((Main.screenWidth / multiplier) - 300 + MapHook.OffsetX);
             int y = 80 + (int)(MapHook.OffsetY);
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle InfoAccsBounds()
+        public static Rectangle InfoAccsBounds(float multiplier = 1)
         {
             int h = 35;
 
@@ -312,84 +309,84 @@ namespace UICustomizer.Common.Systems
             }
 
             int w = 255;
-            int x = (int)(Main.screenWidth - 300 + InfoAccsHook.OffsetX);
+            int x = (int)((Main.screenWidth / multiplier) - 300 + InfoAccsHook.OffsetX);
             int y = 347 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle ClassicLifeBounds()
+        public static Rectangle ClassicLifeBounds(float multiplier = 1)
         {
             int w = 263;
             int h = 78;
-            int x = (int)(Main.screenWidth - 305 + ClassicLifeHook.OffsetX);
+            int x = (int)((Main.screenWidth / multiplier) - 305 + ClassicLifeHook.OffsetX);
             int y = 4 + (int)ClassicLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle ClassicManaBounds()
+        public static Rectangle ClassicManaBounds(float multiplier = 1)
         {
             int w = 44;
             int h = 300;
-            int x = (int)(Main.screenWidth - 0 - w + ClassicManaHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 0 - w + ClassicManaHook.OffsetX);
             int y = 6 + (int)ClassicManaHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle FancyLifeBounds()
+        public static Rectangle FancyLifeBounds(float multiplier = 1)
         {
             int w = 255;
             int h = 78;
-            int x = (int)(Main.screenWidth - 300 + FancyLifeHook.OffsetX);
+            int x = (int)((Main.screenWidth / multiplier) - 300 + FancyLifeHook.OffsetX);
             int y = 4 + (int)FancyLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle FancyLifeTextBounds()
+        public static Rectangle FancyLifeTextBounds(float multiplier = 1)
         {
             int w = 120;
             int h = 30;
-            int x = (int)(Main.screenWidth - 230 + FancyLifeTextHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 230 + FancyLifeTextHook.OffsetX);
             int y = -4 + (int)FancyLifeTextHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle FancyManaBounds()
+        public static Rectangle FancyManaBounds(float multiplier = 1)
         {
             int w = 40;
             int h = 250;
-            int x = (int)(Main.screenWidth - 6 - w + FancyManaHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 6 - w + FancyManaHook.OffsetX);
             int y = 12 + (int)FancyManaHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle BarsBounds()
+        public static Rectangle BarsBounds(float multiplier = 1)
         {
             int w = 280;
             int h = 80;
-            int x = (int)(Main.screenWidth - 310 + HorizontalBarsHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 310 + HorizontalBarsHook.OffsetX);
             int y = 6 + (int)HorizontalBarsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle BarLifeTextBounds()
+        public static Rectangle BarLifeTextBounds(float multiplier = 1)
         {
             int w = 120;
             int h = 30;
-            int x = (int)(Main.screenWidth - 235 + BarLifeTextHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 235 + BarLifeTextHook.OffsetX);
             int y = -4 + (int)BarLifeTextHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle BarManaTextBounds()
+        public static Rectangle BarManaTextBounds(float multiplier = 1)
         {
             int w = 135;
             int h = 30;
-            int x = (int)(Main.screenWidth - 248 + BarManaTextHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 248 + BarManaTextHook.OffsetX);
             int y = 60 + (int)BarManaTextHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle InventoryBounds()
+        public static Rectangle InventoryBounds(float multiplier = 1)
         {
             //int slot = (int)(52f * Main.inventoryScale);    // vanilla slot size
             int w = 548;
@@ -399,7 +396,7 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle CraftingBounds()
+        public static Rectangle CraftingBounds(float multiplier = 1)
         {
             int h = 100;
             int w = 125; // default width
@@ -458,11 +455,11 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle AccessoriesBounds()
+        public static Rectangle AccessoriesBounds(float multiplier = 1)
         {
             int h = (int)(428);
             int w = (int)(225);
-            int x = (int)(Main.screenWidth - 230 + AccessoriesHook.OffsetX);
+            int x = (int)(Main.screenWidth/ multiplier - 230 + AccessoriesHook.OffsetX);
             int y = 390 + (int)AccessoriesHook.OffsetY;
 
             if (EditorTabSettings.FitBounds)
@@ -489,7 +486,7 @@ namespace UICustomizer.Common.Systems
             return new Rectangle(x, y, w, h);
         }
 
-        public static Rectangle CraftingWindowBounds()
+        public static Rectangle CraftingWindowBounds(float multiplier = 1)
         {
             int w = (int)(45);
             int h = (int)(60);
