@@ -36,7 +36,7 @@ PlayerMessages: {
 		IntroPanels: There are two new tools, the [c/FFFF00:UI Editor] and the [c/FF0000:Layers Tool].
 		EditToolInfo: "[c/FFFF00:UI Editor] allows you to move elements and save your layouts."
 		LayersToolInfo: "[c/FF0000:Layers Tool] allows you to toggle elements, interface layers, and resource packs."
-		ToolIntegration: You can find them in DragonLens, Mod Reloader, Cheat Sheet and Heros Mod and next to Settings
+		ToolIntegration: You can find these as tools in DragonLens, Cheat Sheet and more, and also next to the Settings button.
 		ConfigInfo: Use the configuration to turn this message off and change other stuff, too.
 	}
 }
@@ -67,4 +67,20 @@ LayerPanel: {
 Keybinds: {
 	"Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
 	"Toggle Layer Panel.DisplayName": Toggle  Layer  Panel
+	"UI Editor.DisplayName": U I  Editor
+	"Layers And Packs.DisplayName": Layers  And  Packs
+	"Layers And PacksRightClick.DisplayName": Layers  And  Packs Right Click
+}
+
+Tools: {
+	"UI Editor": {
+		DisplayName: UI Editor
+		Description: The tool has no description! Add one in .hjson files!
+	}
+
+	"Layers And Packs": {
+		DisplayName: Layers And Packs
+		Description: The tool has no description! Add one in .hjson files!
+		RightClickName: Layers And Packs Right Click
+	}
 }

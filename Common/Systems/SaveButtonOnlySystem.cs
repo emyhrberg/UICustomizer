@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria;
-using UICustomizer.UI;
-using UICustomizer.Common.Configs;
 using UICustomizer.Common.States;
 
 namespace UICustomizer.Common.Systems
