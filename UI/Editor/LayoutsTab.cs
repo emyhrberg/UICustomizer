@@ -104,8 +104,7 @@ namespace UICustomizer.UI.Editor
                 //btn.BorderColor = isCurrent ? Color.Yellow : Color.Black; // doesnt work?
                 btn.OnRightClick += (_, _) =>
                 {
-                    if (EditorSystem.IsActive)
-                        FileHelper.OpenLayoutFile(name);
+                    FileHelper.OpenLayoutFile(name);
                 };
                 content.Append(btn);
                 //Gap(4);
@@ -121,23 +120,17 @@ namespace UICustomizer.UI.Editor
             {
         ("Open layout folder", "Open the layouts folder", () =>
         {
-            if (EditorSystem.IsActive) FileHelper.OpenLayoutFolder();
+            FileHelper.OpenLayoutFolder();
         }),
         ("Save this layout", "Create a new layout file", () =>
         {
-            if (EditorSystem.IsActive)
-            {
                 FileHelper.CreateAndOpenNewLayoutFile("MyCustomLayout");
                 Populate();
-            }
         }),
         ("Remove all layouts", "Delete all layouts", () =>
         {
-            if (EditorSystem.IsActive)
-            {
                 FileHelper.DeleteAllLayouts();
                 Populate();
-            }
         })
             };
             foreach (var (txt, tip, act) in actions)

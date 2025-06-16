@@ -10,7 +10,7 @@ namespace UICustomizer.Common.Systems
     {
         #region Dark Mode Overlay
         private static float DarknessLevel = 0.0f;
-        public static void SetDarknessLevel(float num) => DarknessLevel = num;
+        public static void SetDarknessLevel(float num) => DarknessLevel = num*0.01f;
         public static float GetDarknessLevel() => DarknessLevel;
 
         private static void DrawDarkOverlay()

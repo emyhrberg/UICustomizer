@@ -13,10 +13,6 @@ namespace UICustomizer.Common.States
             // The entire panel that contains all the UI elements for editing.
             editorPanel = new();
             Append(editorPanel);
-
-            // The edit button next to settings button.
-            EditButton editButton = new();
-            Append(editButton);
         }
 
         public override void Draw(SpriteBatch sb)

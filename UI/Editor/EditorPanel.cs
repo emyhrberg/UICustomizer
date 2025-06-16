@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 using static UICustomizer.Helpers.DrawHelper;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
@@ -68,11 +67,8 @@ namespace UICustomizer.UI.Editor
 
         public override void Draw(SpriteBatch sb)
         {
-            if (EditorSystem.IsActive)
-            {
-                base.Draw(sb);
-                DrawHitboxes(sb);
-            }
+            base.Draw(sb);
+            DrawHitboxes(sb);
         }
 
         private void DrawHitboxes(SpriteBatch sb)

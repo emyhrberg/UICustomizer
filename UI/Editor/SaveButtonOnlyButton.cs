@@ -1,9 +1,6 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.UI;
 using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.UI.Editor
 {
@@ -20,7 +17,6 @@ namespace UICustomizer.UI.Editor
         {
             OnLeftMouseDown += (evt, _) =>
             {
-                if (!EditorSystem.IsActive) return;
                 _isPotentialDrag = true;
                 // store the absolute screen position, not the UI-relative one
                 _mouseDownPos = Main.MouseScreen;

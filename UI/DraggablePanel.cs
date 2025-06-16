@@ -62,8 +62,6 @@ namespace UICustomizer.UI
 
         public override void Update(GameTime gameTime)
         {
-            //if (!EditorSystem.IsActive || !LayerSystem.IsActive) return;
-
             base.Update(gameTime);
 
             if (ContainsPoint(Main.MouseScreen))

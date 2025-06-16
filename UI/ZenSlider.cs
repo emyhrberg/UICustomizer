@@ -1,13 +1,10 @@
 using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.UI;
-using UICustomizer.Common.Systems;
-using UICustomizer.Helpers; // Assuming Ass is in here
 
 namespace UICustomizer.UI;
 
@@ -70,8 +67,6 @@ public sealed class ZenSlider : UIElement
 
     public override void Update(GameTime gameTime)
     {
-        // if (!EditorSystem.IsActive) return;
-
         base.Update(gameTime);
 
         if (_wasHeldLastFrame && !IsHeld && !Main.mouseLeft)
@@ -88,8 +83,6 @@ public sealed class ZenSlider : UIElement
 
     protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        //if (!EditorSystem.IsActive) return;
-
         CalculatedStyle dims = GetDimensions();
 
         if (IsHeld && !Main.alreadyGrabbingSunOrMoon)

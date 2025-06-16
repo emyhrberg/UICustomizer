@@ -34,23 +34,16 @@ namespace UICustomizer.UI.Layers
             //Main.NewText(Left.Pixels);
             //Left.Set(0, 0);
 
-
-            if (!LayerSystem.IsActive) return;
-
             base.Update(gameTime);
         }
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            if (!LayerSystem.IsActive) return;
-
             base.LeftClick(evt);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!LayerSystem.IsActive) return; 
-            
             base.Draw(spriteBatch);
         }
     }

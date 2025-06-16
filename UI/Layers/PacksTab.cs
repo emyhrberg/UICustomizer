@@ -68,8 +68,6 @@ namespace UICustomizer.UI.Layers
                                     : $"Click to disable {pack.Name}",
                                 onClick: () =>
                                 {
-                                    if (!LayerSystem.IsActive) return;
-
                                     pack.IsEnabled = enableOnClick;
                                     Main.AssetSourceController.UseResourcePacks(
                                         new ResourcePackList(allPacks.Where(p => p.IsEnabled).ToList())

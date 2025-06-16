@@ -20,7 +20,6 @@ namespace UICustomizer.UI
         {
             OnLeftMouseDown += (evt, _) =>
             {
-                if (!EditorSystem.IsActive) return;
                 _isPotentialDrag = true;
                 // store the absolute screen position, not the UI-relative one
                 _mouseDownPos = Main.MouseScreen;

@@ -22,6 +22,7 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> EyeClosedHover;
         public static Asset<Texture2D> EyeOpen;
         public static Asset<Texture2D> EyeOpenHover;
+        public static Asset<Texture2D> Gradient;
         public static Asset<Texture2D> Hitbox;
         public static Asset<Texture2D> LayersIcon;
         public static Asset<Texture2D> Minus;

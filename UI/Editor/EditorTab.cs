@@ -6,7 +6,6 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 using UICustomizer.Helpers.Layouts;
 
 namespace UICustomizer.UI.Editor
@@ -36,7 +35,7 @@ namespace UICustomizer.UI.Editor
             [Checkbox.ShowHitboxes] = true,
             [Checkbox.FitBounds] = true,
             [Checkbox.ShowNames] = true,
-            [Checkbox.ShowElementToggle] = true
+            [Checkbox.ShowElementToggle] = false
         };
         #endregion
 
@@ -61,15 +60,15 @@ namespace UICustomizer.UI.Editor
                 initialState: moveExpanded,
                 buildContent: BuildUIEditor,
                 onToggle: () => _expandedSections["Move UI"] = !_expandedSections["Move UI"],
-                contentHeightFunc: () => 220f
+                contentHeightFunc: () => 250f
             ));
 
-            bool setExpanded = _expandedSections.TryGetValue("Set UI", out var sv) ? sv : (_expandedSections["Set UI"] = true);
+            bool setExpanded = _expandedSections.TryGetValue("Set Theme", out var sv) ? sv : (_expandedSections["Set Theme"] = true);
             list.Add(new CollapsibleSection(
-                title: "Set UI",
+                title: "Set Theme",
                 initialState: setExpanded,
                 buildContent: BuildThemeEditor,
-                onToggle: () => _expandedSections["Set UI"] = !_expandedSections["Set UI"],
+                onToggle: () => _expandedSections["Set Theme"] = !_expandedSections["Set Theme"],
                 contentHeightFunc: () => 90f
             ));
         }
@@ -108,7 +107,7 @@ namespace UICustomizer.UI.Editor
                 width: 70
             );
 
-            var resetBtn = new Button(resetText, LayoutHelper.ResetAllOffsets, () => "Reset all offsets",  width: 70);
+            var resetBtn = new Button(resetText, LayoutHelper.ResetAllOffsets, () => "Reset all offsets", width: 70);
 
             var row = new UIElement();
             row.Width.Set(0, 1);
@@ -253,19 +252,31 @@ namespace UICustomizer.UI.Editor
                     Main.UIScale = val;
                     Main.temporaryGUIScaleSlider = val;
                 },
-                applyOnRelease: true 
-            ); 
+                applyOnRelease: true
+            );
             list.Add(uiSlider);
 
             // Snap Threshold slider: Normal behavior (always update)
             var snapThreshold = new ZenSliderElement(
                 "Snap",
                 "Snap to edges threshold",
-                0f, 100f, EditorTabSettings.SnapThreshold, 1f, 
+                0f, 100f, EditorTabSettings.SnapThreshold, 1f,
                 (val) => EditorTabSettings.SnapThreshold = (int)val,
-                applyOnRelease: false 
+                applyOnRelease: false
             );
             list.Add(snapThreshold);
+
+            // Snap Threshold slider: Normal behavior (always update)
+            var darkSlider = new ZenSliderElement(
+                "Dark",
+                "Set darkness level to see elements easier",
+                0f, 100f, 
+                defaultValue: DarkSystem.GetDarknessLevel(), 
+                step: 1f,
+                onValueChanged: DarkSystem.SetDarknessLevel,
+                applyOnRelease: false
+            );
+            list.Add(darkSlider);
         }
 
         private void BuildThemeEditor(UIList list)
@@ -287,18 +298,16 @@ namespace UICustomizer.UI.Editor
 
             lifeBtn.OnLeftClick += (_, _) =>
             {
-                //if (EditorSystem.IsActive) return;
                 lifeBtn.UpdateButtonText(GetLifeBtn());
             };
             lifeBtn.OnRightClick += (_, _) =>
             {
-                //if (EditorSystem.IsActive) return;
                 lifeBtn.UpdateButtonText(GetLifeBtn());
             };
 
             // Map button to cycle through map styles
             var mapBtn = new Button($"{GetMapBtnText()}",
-            tooltip: () =>{return "";},
+            tooltip: () => { return ""; },
             onRightClick: Main.MinimapFrameManagerInstance.CycleSelection,
             onClick: () =>
             {
@@ -313,12 +322,10 @@ namespace UICustomizer.UI.Editor
 
             mapBtn.OnLeftClick += (_, _) =>
             {
-                //if (EditorSystem.IsActive) return;
                 mapBtn.UpdateButtonText(GetMapBtnText());
             };
             mapBtn.OnRightClick += (_, _) =>
             {
-                //if (EditorSystem.IsActive) return;
                 mapBtn.UpdateButtonText(GetMapBtnText());
             };
 

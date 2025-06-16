@@ -7,15 +7,11 @@ namespace UICustomizer.Common.States
     public class LayerState : UIState
     {
         public LayerPanel layersPanel;
-        public LayersButton layersButton;
 
         public LayerState()
         {
             layersPanel = new();
             Append(layersPanel);
-
-            layersButton = new();
-            Append(layersButton);
         }
 
         public override void Update(GameTime gameTime)
