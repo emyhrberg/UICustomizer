@@ -45,7 +45,7 @@ namespace UICustomizer.Common.Systems.Integrations.ModReloader
             MR.Call(
                 "AddButton",
                 "UI", // name
-                () => (EditorSystem.ToggleActive),
+                () => EditorSystem.ToggleActive(),
                 Ass.EditorIcon, // asset
                 "Edit UI layout" // tooltip
             );

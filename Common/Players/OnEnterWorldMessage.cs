@@ -12,11 +12,13 @@ namespace UICustomizer.Common.Players
 
             if (!Conf.C.ShowMessageWhenEnteringWorld) return;
 
-            string msg = $"[Welcome to {this.Mod.DisplayName} v{this.Mod.Version}!]\n";
-            msg += "There are two panels, type [c/FFFF00:/edit] or [c/FFFF00:/layers] in chat to use them. There is also a button above Settings.\n";
-            msg += "[c/FFFF00:/edit] allows you to move elements and save your layouts.\n";
-            msg += "[c/FFFF00:/layers] allows you to toggle elements, interface layers, and resource packs\n";
-            msg += "Use the configuration to toggle this message and set other stuff, too.";
+            string msg = "";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.Welcome", this.Mod.DisplayName, this.Mod.Version)}\n";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.IntroPanels")}\n";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.EditToolInfo")}\n";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.LayersToolInfo")}\n";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.ToolIntegration")}\n";
+            msg += $"{Loc.Get("PlayerMessages.OnEnterWorld.ConfigInfo")}";
 
             Main.NewText(msg, Color.LightGray);
         }

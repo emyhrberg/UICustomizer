@@ -3,6 +3,12 @@
 		"Terraria": {
 			"commandName": "Executable",
 			"executablePath": "$(DotNetName)",
+			"commandLineArgs": "$(tMLPath)",
+			"workingDirectory": "$(tMLSteamPath)"
+		},
+		"TerrariaSkipSelect": {
+			"commandName": "Executable",
+			"executablePath": "$(DotNetName)",
 			"commandLineArgs": "$(tMLPath) -skipselect",
 			"workingDirectory": "$(tMLSteamPath)"
 		},
