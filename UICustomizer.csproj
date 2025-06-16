@@ -3,33 +3,4 @@
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
 
-	<!-- Modify build process to make it faster-->
-	<PropertyGroup>
-		<DefineConstants>$(DefineConstants);BUILDINGFROMCSPROJ_MOD</DefineConstants>
-		<OutputType>Exe</OutputType>
-	</PropertyGroup>
-
-	<!-- References -->
-
-	<!-- DragonLens reference -->
-	<ItemGroup>
-		<Reference Include="DragonLens">
-			<HintPath>lib\DragonLens.dll</HintPath>
-		</Reference>
-    </ItemGroup>
-
-    <!-- Mod Reloader reference -->
-	<ItemGroup>
-		<Reference Include="ModReloader">
-			<HintPath>lib\ModReloader.dll</HintPath>
-		</Reference>
-    </ItemGroup>
-
-	<!-- Makes use of Krafs Publicizer when compiling tModLoader.dll, making all access modifiers public -->
-    <ItemGroup>
-		<PackageReference Include="Krafs.Publicizer" PrivateAssets="true" Version="2.2.1" />
-		<Publicize Include="tModLoader" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
-        <Publicize Include="DragonLens" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
-    </ItemGroup>
-
 </Project>

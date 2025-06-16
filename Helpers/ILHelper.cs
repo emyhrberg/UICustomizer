@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using MonoMod.Cil;
 
 namespace UICustomizer.Helpers
@@ -83,41 +82,5 @@ namespace UICustomizer.Helpers
                 throw new ILEditException(message, ex);
             }
         }
-
-        // public static void InjectVec2CtorOffset(ILContext il, float offsetX, float offsetY)
-        // {
-        //     Edit(il, c =>
-        //     {
-        //         while (c.TryGotoNext(MoveType.After,
-        //             i => i.MatchNewobj<Vector2>()))
-        //         {
-        //             c.EmitDelegate<Func<Vector2, Vector2>>(pos =>
-        //             {
-        //                 return new Vector2(pos.X + offsetX, pos.Y + offsetY);
-        //             });
-        //         }
-        //     });
-        // }
-
-        // private void InjectMapOffset(ILContext il)
-        // {
-        //     try
-        //     {
-        //         ILCursor c = new(il);
-
-        //         while (c.TryGotoNext(MoveType.After,
-        //             i => i.MatchNewobj<Vector2>()))
-        //         {
-        //             c.EmitDelegate<Func<Vector2, Vector2>>(pos =>
-        //             {
-        //                 return new Vector2(pos.X + OffsetX, pos.Y + OffsetY);
-        //             });
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         throw new ILPatchFailureException(Mod, il, e);
-        //     }
-        // }
     }
 }

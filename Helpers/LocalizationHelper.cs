@@ -1,8 +1,10 @@
 ﻿namespace UICustomizer.Helpers
 {
-    // Loc: Short for Localization
+    /// <summary>
+    /// Loc (short for Localization):
     // This class is used to get the localization text for the UICustomizer mod.
     // Is found in en-US.Mods.UICustomizer.json and other localization files.
+    /// </summary>
     public static class Loc
     {
         /// <summary>

@@ -1,16 +1,74 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Terraria;
+using log4net.Core;
 using Terraria.ModLoader;
 
 namespace UICustomizer.Helpers
 {
-    public static class Log
+    public static class LogHelper
     {
         // Helper for time to log a message once every x seconds
         private static DateTime lastLogTime = DateTime.UtcNow;
 
+        /// <summary>
+        /// Sends a log message with a class name prefix.
+        /// If only a message is provided, it defaults to a constant log level of Info.
+        /// </summary>
+        /// <param name="message">the message to send</param>
+        /// <param name="logLevel">the severity level of the message</param>
+        /// <param name="seconds">the delay in seconds between which to send messages</param>
+        /// <param name="callerFilePath">the file source of the sent message, displayed in log as [CallerFilePath]: Message...</param>
+        public static void Log(string message, Level logLevel = default, int seconds = 1, [CallerFilePath] string callerFilePath = "")
+        {
+            // Ensure mod is active.
+            var instance = ModInstance;
+            if (instance == null || instance.Logger == null)
+                return; // Skip logging if the mod is unloading or null
+
+            // Default to a standard log level if no argument is provided.
+            logLevel ??= Level.Info;
+
+            // Extract the class name from the caller's file path.
+            string className = Path.GetFileNameWithoutExtension(callerFilePath);
+
+            // Use TimeSpanFactory to create a x-second interval.
+            TimeSpan interval = TimeSpan.FromSeconds(seconds);
+            bool timeElapsed = DateTime.UtcNow - lastLogTime >= interval;
+            if (!timeElapsed)
+            {
+                return;
+            }
+            lastLogTime = DateTime.UtcNow;
+
+            // Prepend the class name to the log message.
+            string msgToLog = $"[{className}] {message}";
+
+            switch (logLevel?.Name?.ToUpperInvariant())
+            {
+                case "DEBUG":
+                    instance.Logger.Debug(msgToLog);
+                    break;
+                case "INFO":
+                    instance.Logger.Info(msgToLog);
+                    break;
+                case "WARN":
+                    instance.Logger.Warn(msgToLog);
+                    break;
+                case "ERROR":
+                    instance.Logger.Error(msgToLog);
+                    break;
+                default:
+                    instance.Logger.Info(msgToLog);
+                    break;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Safely gets the instance of the UICustomizer mod.
+        /// </summary>
         private static Mod ModInstance
         {
             get
@@ -21,82 +79,10 @@ namespace UICustomizer.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Error("Error getting mod instance: " + ex.Message);
+                    Console.WriteLine($"Error getting UICustomizer mod instance: {ex.Message}");
                     return null;
                 }
             }
-        }
-
-        //private static DateTime lastChatTime = DateTime.UtcNow; // Add separate tracking for chat
-
-        ///// <summary>
-        ///// Prints a message to Terraria's chat system with cooldown.
-        ///// </summary>
-        ///// <param name="msg">The message to display</param>
-        ///// <param name="ms">Cooldown in milliseconds before allowing another message</param>
-        //public static void ChatSlow(string msg, float ms=1000)
-        //{
-        //    // Use TimeSpan to create the cooldown interval
-        //    TimeSpan interval = TimeSpan.FromMilliseconds(ms);
-        //    bool timeElapsed = DateTime.UtcNow - lastChatTime >= interval;
-
-        //    if (timeElapsed)
-        //    {
-        //        Main.NewText(msg);
-        //        lastChatTime = DateTime.UtcNow;
-        //    }
-        //}
-
-        /// <summary>
-        /// Log a message once every x second(s)
-        /// </summary>
-        public static void SlowInfo(string message, int seconds = 1, [CallerFilePath] string callerFilePath = "")
-        {
-            // Extract the class name from the caller's file path.
-            string className = Path.GetFileNameWithoutExtension(callerFilePath);
-            var instance = ModInstance;
-            if (instance == null || instance.Logger == null)
-                return; // Skip logging if the mod is unloading or null
-
-            // Use TimeSpanFactory to create a x-second interval.
-            TimeSpan interval = TimeSpan.FromSeconds(seconds);
-            bool timeElapsed = DateTime.UtcNow - lastLogTime >= interval;
-            if (timeElapsed)
-            {
-                // Prepend the class name to the log message.
-                instance.Logger.Info($"[{className}] {message}");
-                lastLogTime = DateTime.UtcNow;
-            }
-        }
-
-        public static void Info(string message, [CallerFilePath] string callerFilePath = "")
-        {
-            // Extract the class name from the caller's file path.
-            string className = Path.GetFileNameWithoutExtension(callerFilePath);
-            var instance = ModInstance;
-            if (instance == null || instance.Logger == null)
-                return; // Skip logging if the mod is unloading or null
-
-            // Prepend the class name to the log message.
-            instance.Logger.Info($"[{className}] {message}");
-        }
-
-        public static void Warn(string message)
-        {
-            var instance = ModInstance;
-            if (instance == null || instance.Logger == null)
-                return; // Skip logging if the mod is unloading or null
-
-            instance.Logger.Warn(message);
-        }
-
-        public static void Error(string message)
-        {
-            var instance = ModInstance;
-            if (instance == null || instance.Logger == null)
-                return; // Skip logging if the mod is unloading or null
-
-            instance.Logger.Error(message);
         }
     }
 }

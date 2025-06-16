@@ -11,26 +11,8 @@ namespace UICustomizer.Helpers
     public static class Ass
     {
         // Add assets here
-        public static Asset<Texture2D> CheckActive;
-        public static Asset<Texture2D> CheckActiveHover;
-        public static Asset<Texture2D> CheckInactive;
-        public static Asset<Texture2D> CheckInactiveHover;
-        public static Asset<Texture2D> Close;
-        public static Asset<Texture2D> CloseHover;
-        public static Asset<Texture2D> EditorIcon;
-        public static Asset<Texture2D> EyeClosed;
-        public static Asset<Texture2D> EyeClosedHover;
         public static Asset<Texture2D> EyeOpen;
-        public static Asset<Texture2D> EyeOpenHover;
-        public static Asset<Texture2D> Hitbox;
-        public static Asset<Texture2D> LayersIcon;
-        public static Asset<Texture2D> Minus;
-        public static Asset<Texture2D> MinusHover;
-        public static Asset<Texture2D> Plus;
-        public static Asset<Texture2D> PlusHover;
-        public static Asset<Texture2D> Resize;
-        public static Asset<Texture2D> Slider;
-        public static Asset<Texture2D> SliderHighlight;
+        public static Asset<Texture2D> EyeClosed;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

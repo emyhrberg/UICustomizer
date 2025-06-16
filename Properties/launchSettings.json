@@ -6,7 +6,7 @@
 			"commandLineArgs": "$(tMLPath)",
 			"workingDirectory": "$(tMLSteamPath)"
 		},
-		"TerrariaSkipSelect": {
+		"Terraria (skip select)": {
 			"commandName": "Executable",
 			"executablePath": "$(DotNetName)",
 			"commandLineArgs": "$(tMLPath) -skipselect",
