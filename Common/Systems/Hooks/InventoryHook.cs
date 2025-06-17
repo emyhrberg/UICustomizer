@@ -98,7 +98,7 @@ namespace UICustomizer.Common.Systems.Hooks
 
         private static void InjectBestiaryIconOffset(ILContext il)
         {
-            Log.Info("Injecting bestiary icon offset");
+            // Log.Info("Injecting bestiary icon offset");
 
             IL.Edit(il, c =>
             {
@@ -107,11 +107,11 @@ namespace UICustomizer.Common.Systems.Hooks
                     i => i.MatchCallOrCallvirt<Rectangle>(".ctor")))
                 {
                     counter++;
-                    Log.Info("Counter: " + counter);
+                    // Log.Info("Counter: " + counter);
 
                     if (counter == 2)
                     {
-                        Log.Info("Found bestiary icon rectangle constructor");
+                        // Log.Info("Found bestiary icon rectangle constructor");
                         // This is the rectangle for the bestiary icon
                         if (c.TryGotoPrev(i => i.MatchLdloca(out int index)))
                         {
@@ -119,10 +119,10 @@ namespace UICustomizer.Common.Systems.Hooks
                             if (c.TryGotoPrev(i => i.MatchLdloca(out localIndex)))
                             {
                                 // Move forward to the second Rectangle constructor call
-                                Log.Info("Found local index: " + localIndex);
+                                // Log.Info("Found local index: " + localIndex);
                                 c.GotoNext(MoveType.After, i => i.MatchCallOrCallvirt<Rectangle>(".ctor"));
                                 c.GotoNext(MoveType.After, i => i.MatchCallOrCallvirt<Rectangle>(".ctor"));
-                                Log.Info("Found bestiary icon rectangle constructor at local index: " + localIndex);
+                                // Log.Info("Found bestiary icon rectangle constructor at local index: " + localIndex);
                             }
 
                             c.Emit(OpCodes.Ldloca_S, (byte)localIndex);
@@ -148,7 +148,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitLdsfld(typeof(InventoryHook).GetField(offsetFieldName));
                 c.EmitConvI4(); // Convert float to int32
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
+                // Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
             }
             else
             {
@@ -164,7 +164,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitLdsfld(typeof(InventoryHook).GetField(offsetFieldName));
                 c.EmitConvR4();
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at ldc.i4 {num}");
+                // Log.Info($"Successfully injected {offsetFieldName} at ldc.i4 {num}");
             }
             c.Index = 0;
         }
@@ -179,7 +179,7 @@ namespace UICustomizer.Common.Systems.Hooks
 
                 c.EmitLdsfld(typeof(InventoryHook).GetField(offsetFieldName));
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at ldc.r4 {num}");
+                // Log.Info($"Successfully injected {offsetFieldName} at ldc.r4 {num}");
                 counter++;
             }
             c.Index = 0;

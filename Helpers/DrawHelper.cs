@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
@@ -120,13 +121,67 @@ namespace UICustomizer.Helpers
             sb.Draw(tex, new Rectangle(t.Right - c, t.Bottom - c, c, c), sc, col, 0, Vector2.Zero, SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally, 0); // BR
             sb.Draw(tex, new Rectangle(t.X, t.Bottom - c, c, c), sc, col, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0); // BL
         }
-
-        public static void DrawInfoText(SpriteBatch sb, string text, Vector2 position, Color color)
+        public static int NewText(Rectangle location, Color color, string text, bool dramatic = false, bool dot = false)
         {
-            if (string.IsNullOrEmpty(text)) return;
+            if (Main.netMode == NetmodeID.Server)
+            {
+                return 100;
+            }
 
-            // Draw the info text at the specified position
-            Utils.DrawBorderString(sb, text, position, color);
+            for (int i = 0; i < 100; i++)
+            {
+                if (Main.combatText[i].active)
+                {
+                    continue;
+                }
+
+                int num = 0;
+
+                Vector2 vector = FontAssets.CombatText[num].Value.MeasureString(text);
+                Main.combatText[i].alpha = 1f;
+                Main.combatText[i].alphaDir = -1;
+                Main.combatText[i].active = true;
+                Main.combatText[i].scale = 0f;
+                Main.combatText[i].rotation = 0f;
+                Main.combatText[i].position.X = (float)location.X + (float)location.Width * 0.5f - vector.X * 0.5f;
+                Main.combatText[i].position.Y = (float)location.Y + (float)location.Height * 0.25f - vector.Y * 0.5f;
+                Main.combatText[i].position.X += Main.rand.Next(-(int)((double)location.Width * 0.5), (int)((double)location.Width * 0.5) + 1);
+                Main.combatText[i].position.Y += Main.rand.Next(-(int)((double)location.Height * 0.5), (int)((double)location.Height * 0.5) + 1);
+                Main.combatText[i].color = color;
+                Main.combatText[i].text = text;
+                Main.combatText[i].velocity.Y = -7f;
+                if (Main.player[Main.myPlayer].gravDir == -1f)
+                {
+                    Main.combatText[i].velocity.Y *= -1f;
+                    Main.combatText[i].position.Y = (float)location.Y + (float)location.Height * 0.75f + vector.Y * 0.5f;
+                }
+
+                Main.combatText[i].lifeTime = 60;
+                Main.combatText[i].crit = dramatic;
+                Main.combatText[i].dot = dot;
+                if (dramatic)
+                {
+                    Main.combatText[i].text = text;
+                    Main.combatText[i].lifeTime *= 2;
+                    Main.combatText[i].velocity.Y *= 2f;
+                    Main.combatText[i].velocity.X = (float)Main.rand.Next(-25, 26) * 0.05f;
+                    Main.combatText[i].rotation = (float)(Main.combatText[i].lifeTime / 2) * 0.002f;
+                    if (Main.combatText[i].velocity.X < 0f)
+                    {
+                        Main.combatText[i].rotation *= -1f;
+                    }
+                }
+
+                if (dot)
+                {
+                    Main.combatText[i].velocity.Y = -4f;
+                    Main.combatText[i].lifeTime = 40;
+                }
+
+                return i;
+            }
+
+            return 100;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace UICustomizer.UI.Editor
                 initialState: _positionsExpanded,
                 buildContent: BuildPositionsContent,
                 onToggle: () => _positionsExpanded = !_positionsExpanded,
-                contentHeightFunc: () => Math.Max(80, elementCount * lineHeight + 10),
+                contentHeightFunc: () => Math.Max(80, elementCount * lineHeight + 18),
                 buildHeader: header =>
                 {
                     var resetAll = new Button(
@@ -103,7 +103,7 @@ namespace UICustomizer.UI.Editor
                     Top = { Pixels = yOff },
                     Width = { Pixels = ElementNameMaxWidth },
                     TextOriginX = 0f,
-                    TextColor = Color.LightSkyBlue
+                    TextColor = Color.White
                 };
                 contentContainer.Append(nameText);
 

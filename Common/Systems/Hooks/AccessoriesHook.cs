@@ -193,7 +193,7 @@ namespace UICustomizer.Common.Systems.Hooks
             c.GotoNext(MoveType.Before, i => i.MatchLdcR4(47f));
             c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetX)));
             c.EmitAdd();
-            Log.Info("Successfully injected OffsetX for mini achievement");
+            // Log.Info("Successfully injected OffsetX for mini achievement");
 
             // Mini achievement Y: Find first ldc.r4 20f
             // Mini achievement Y: Find the Y calculation and add Y offset
@@ -212,7 +212,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 // Add our Y offset
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetY)));
                 c.EmitAdd();
-                Log.Info("Successfully injected OffsetY for mini achievement");
+                // Log.Info("Successfully injected OffsetY for mini achievement");
             }
             else
             {
@@ -226,7 +226,7 @@ namespace UICustomizer.Common.Systems.Hooks
             {
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetX)));
                 c.EmitAdd();
-                Log.Info("Successfully injected OffsetX for defense icon");
+                // Log.Info("Successfully injected OffsetX for defense icon");
             }
 
             // Defense icon Y coordinate
@@ -237,7 +237,7 @@ namespace UICustomizer.Common.Systems.Hooks
             {
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(nameof(OffsetY)));
                 c.EmitAdd();
-                Log.Info("Successfully injected OffsetY for defense icon");
+                // Log.Info("Successfully injected OffsetY for defense icon");
             }
         }
 
@@ -248,7 +248,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitLdsfld(typeof(AccessoriesHook).GetField(offsetFieldName));
                 c.EmitConvI4(); // Convert float to int32
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
+                // Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
             }
             else
             {

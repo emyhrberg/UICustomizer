@@ -52,7 +52,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked life bar filling");
+                    // Log.Info("Successfully hooked life bar filling");
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked mana bar panels");
+                    // Log.Info("Successfully hooked mana bar panels");
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 {
                     c.EmitDelegate<Func<Vector2, Vector2>>(vec =>
                         new Vector2(vec.X + OffsetX, vec.Y + OffsetY));
-                    Log.Info("Successfully hooked mana bar filling");
+                    // Log.Info("Successfully hooked mana bar filling");
                 }
                 else
                 {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
@@ -37,82 +37,72 @@ public sealed class ZenSlider : UIElement
         }
     }
 
+   
+
+    public override void MouseOver(UIMouseEvent evt)
+    {
+        base.MouseOver(evt);
+        SoundEngine.PlaySound(SoundID.MenuTick);
+    }
+
     public override void LeftMouseUp(UIMouseEvent evt)
     {
         base.LeftMouseUp(evt);
         if (IsHeld)
         {
-            CalculatedStyle dims = GetDimensions();
+            var dims = GetDimensions();
             if (dims.Width > 0)
             {
-                float num = UserInterface.ActiveInstance.MousePosition.X - dims.X;
-                Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f);
+                float num = Main.MouseScreen.X - dims.X;
+                Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f); // <- changed this because UserInterface.ActiveInstance was mis-scaled
+                Log.Info($"ZenSlider → LeftMouseUp Ratio: {Ratio:F2}"); // debug
             }
             OnValueAppliedOnMouseUp?.Invoke(Ratio);
         }
-
         IsHeld = false;
         IsAnySliderHeld = false;
         _wasHeldLastFrame = false;
     }
 
-    public override void MouseOver(UIMouseEvent evt)
-    {
-        if (Main.alreadyGrabbingSunOrMoon)
-            return;
-
-        base.MouseOver(evt);
-        SoundEngine.PlaySound(SoundID.MenuTick);
-    }
-
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
-        if (_wasHeldLastFrame && !IsHeld && !Main.mouseLeft)
-        {
-            OnValueAppliedOnMouseUp?.Invoke(Ratio);
-            _wasHeldLastFrame = false;
-        }
-
         if (IsHeld)
         {
-            _wasHeldLastFrame = true;
-        }
-    }
-
-    protected override void DrawSelf(SpriteBatch spriteBatch)
-    {
-        CalculatedStyle dims = GetDimensions();
-
-        if (IsHeld && !Main.alreadyGrabbingSunOrMoon)
-        {
-            if (dims.Width > 0)
+            var dims = GetDimensions();
+            float num = Main.MouseScreen.X - dims.X;
+            float newRatio = MathHelper.Clamp(num / dims.Width, 0f, 1f); // <- changed this because UserInterface.ActiveInstance was mis-scaled
+            if (Math.Abs(newRatio - Ratio) > float.Epsilon)
             {
-                float num = UserInterface.ActiveInstance.MousePosition.X - dims.X;
-                Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f);
+                Ratio = newRatio;
+                Log.Info($"ZenSlider → Dragging Ratio: {Ratio:F2}"); // debug
                 OnDrag?.Invoke(Ratio);
             }
         }
+    }
+
+    protected override void DrawSelf(SpriteBatch sb)
+    {
+        CalculatedStyle dims = GetDimensions();
+        Rectangle size = dims.ToRectangle();
 
         Texture2D sliderTex = Ass.Slider.Value;
         Texture2D sliderOutlineTex = Ass.SliderHighlight.Value;
 
-        Rectangle size = dims.ToRectangle();
-
-        DrawBar(spriteBatch, sliderTex, size, Color.White);
+        DrawBar(sb, sliderTex, size, Color.White);
         if (IsHeld || IsMouseHovering)
-            DrawBar(spriteBatch, sliderOutlineTex, size, Main.OurFavoriteColor);
+            DrawBar(sb, sliderOutlineTex, size, Main.OurFavoriteColor);
 
         Rectangle innerBarArea = size;
         innerBarArea.Inflate(-4, -4);
-        spriteBatch.Draw(TextureAssets.MagicPixel.Value, innerBarArea, InnerColor);
+        sb.Draw(Ass.Gradient.Value, innerBarArea, Color.White);
+        //spriteBatch.Draw(TextureAssets.MagicPixel.Value, innerBarArea, InnerColor);
 
         Texture2D blip = TextureAssets.ColorSlider.Value;
         Vector2 blipOrigin = blip.Size() * 0.5f;
         Vector2 blipPosition = new(innerBarArea.X + (Ratio * innerBarArea.Width), innerBarArea.Center.Y);
 
-        spriteBatch.Draw(blip, blipPosition, null, Color.White, 0f, blipOrigin, 1f, SpriteEffects.None, 0f);
+        sb.Draw(blip, blipPosition, null, Color.White, 0f, blipOrigin, 1f, SpriteEffects.None, 0f);
     }
 
     public static void DrawBar(SpriteBatch spriteBatch, Texture2D texture, Rectangle dimensions, Color color)

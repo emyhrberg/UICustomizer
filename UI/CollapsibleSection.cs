@@ -26,8 +26,8 @@ namespace UICustomizer.UI
         public CollapsibleSection(
             string title,
             Action<UIList> buildContent,
-            bool initialState=false,
-            Action onToggle=null,
+            bool initialState = false,
+            Action onToggle = null,
             Func<float> contentHeightFunc = null,
             Action<UIElement> buildHeader = null
         )
@@ -66,11 +66,12 @@ namespace UICustomizer.UI
 
             headerBuilder?.Invoke(headerPanel);
 
-            headerPanel.OnLeftClick += (evt, _) => {
+            headerPanel.OnLeftClick += (evt, _) =>
+            {
                 UIElement target = evt.Target;
                 while (target != null)
                 {
-                    if (target is CheckboxElement || target is CheckboxEyeElement || target is Button) 
+                    if (target is CheckboxEyeElement || target is Button || target is ToggleAllEyeElement)
                         return;
                     target = target.Parent;
                 }
@@ -130,7 +131,7 @@ namespace UICustomizer.UI
             // white underline beneath the header
             var dims = headerPanel.GetDimensions();
             int y = (int)(dims.Y + dims.Height);
-            int w = (int)dims.Width-14;
+            int w = (int)dims.Width - 14;
             //spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+6, y-5, w, 1), Color.White);
         }
     }

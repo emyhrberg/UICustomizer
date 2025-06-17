@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 
@@ -32,16 +34,27 @@ namespace UICustomizer.UI
             this.applyOnReleaseBehavior = applyOnRelease;
 
             Width.Set(0, 1f);
-            Height.Set(30, 0);
+            Height.Set(23, 0);
 
-            Label = new UIText("", 0.85f)
+            Label = new UIText("", 1.00f, false)
             {
-                Left = { Pixels = 6 },
+                Left = { Pixels = 0 },
                 VAlign = 0.5f,
                 TextOriginX = 0f,
-                TextOriginY = 0.5f
+                TextOriginY = 0.5f,
+                TextColor = Color.Gray
             };
             Append(Label);
+
+            Label.OnMouseOver += (_, _) =>
+            {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                Label.TextColor = Color.White;
+            };
+            Label.OnMouseOut += (_, _) =>
+            {
+                Label.TextColor = Color.Gray;
+            };
 
             Slider = new ZenSlider()
             {
@@ -112,15 +125,6 @@ namespace UICustomizer.UI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            if (!applyOnReleaseBehavior && Slider.IsHeld)
-            {
-                float expectedSnappedRatio = (appliedValue - Min) / (Max - Min);
-                if (Math.Abs(Slider.Ratio - expectedSnappedRatio) > float.Epsilon * 10) // Added a slightly larger tolerance
-                {
-                    Slider.Ratio = expectedSnappedRatio;
-                }
-            }
         }
         private void UpdateLabelText()
         {

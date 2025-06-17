@@ -25,7 +25,6 @@ namespace UICustomizer.Helpers.Layouts
             CraftingWindow
         }
 
-        // In ElementHelper.cs
         public static Dictionary<Element, string> ElementInterfaceLayerMapping = new()
         {
             [Element.Chat] = "Vanilla: Player Chat",

@@ -46,8 +46,8 @@ namespace UICustomizer.UI
             base.Update(gameTime);
             Width.Set(35, 0f);
             Height.Set(35, 0f);
-            Left.Set(4, 0);
-            Top.Set(6, 0);
+            Left.Set(10, 0);
+            Top.Set(8, 0);
 
             if (draggingResize)
             {

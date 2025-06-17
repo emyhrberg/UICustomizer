@@ -77,7 +77,7 @@ namespace UICustomizer.UI.Editor
             DrawHitboxOutlineAndText(sb, DragSystem.InfoAccsBounds(), Element.InfoAccs, x: -70, color: elementColors[Element.InfoAccs]);
 
             if (Main.drawingPlayerChat)
-                DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), Element.Map, color: elementColors[Element.Map]);
+                DrawHitboxOutlineAndText(sb, DragSystem.ChatBounds(), Element.Chat, color: elementColors[Element.Chat]);
 
             // Draw hotbar or inventory
             if (Main.playerInventory)

@@ -58,7 +58,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitAdd();               // Add OffsetX to X coordinate
                 c.EmitLdloc(tempLocal);    // Reload modified Y
 
-                Log.Info("Successfully injected offsets for 'Crafting' text");
+                // Log.Info("Successfully injected offsets for 'Crafting' text");
             }
 
             IL.Edit(il, c =>
@@ -88,7 +88,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitLdsfld(typeof(CraftingHook).GetField(offsetFieldName));
                 c.EmitConvI4(); // Convert float to int32
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
+                // Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
             }
             else
             {

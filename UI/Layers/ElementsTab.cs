@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
 using Terraria.UI;
 using UICustomizer.Common.States;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.UI.Layers
 {
@@ -16,7 +13,7 @@ namespace UICustomizer.UI.Layers
         private int _knownModCount = -1;
         private int _knownTotalElementCount = -1;
 
-        private readonly Dictionary<string, CheckboxEyeElement> _sectionToggleAllCheckboxes = [];
+        private readonly Dictionary<string, ToggleAllEyeElement> _sectionToggleAllCheckboxes = [];
 
         public ElementsTab() : base("Elements") { }
 
@@ -32,7 +29,7 @@ namespace UICustomizer.UI.Layers
             _sectionToggleAllCheckboxes.Clear();
 
             list.SetPadding(20);
-            list.ListPadding = 2;
+            list.ListPadding = 0;
             list.Left.Set(-8, 0);
             list.Top.Set(-10, 0);
 
@@ -84,7 +81,7 @@ namespace UICustomizer.UI.Layers
             if (list == null) return;
 
             const float elementCheckboxHeight = 25f;
-            float contentHeight = Math.Max(20f, elements.Count * elementCheckboxHeight+20);
+            float contentHeight = Math.Max(20f, elements.Count * elementCheckboxHeight + 20);
 
             if (!_expandedSections.ContainsKey(modName))
             {
@@ -112,12 +109,9 @@ namespace UICustomizer.UI.Layers
                             },
                             tooltip: elementFullName,
                             maxWidth: true,
-                            width: -2,
-                            height: (int)elementCheckboxHeight - 2
-                        )
-                        {
-                            Active = true,
-                        };
+                            width: -4,
+                            height: 23
+                        );
                         contentList.Add(chk);
                     }
                 },
@@ -134,11 +128,10 @@ namespace UICustomizer.UI.Layers
 
         private void SetupSectionHeaderControls(UIElement header, string modName, List<string> elements)
         {
-            // header.RemoveAllChildren(); // Clear previous controls if any
-
+            // count text
             int totalInSection = elements.Count;
-            int enabledInSection = elements.Count(elName => UIElementDrawSystem.elementVisibilityStates.TryGetValue(elName, out bool vis) && vis);
-
+            int enabledInSection = elements.Count(elName =>
+                UIElementDrawSystem.elementVisibilityStates.TryGetValue(elName, out bool vis) && vis);
             var countText = new UIText($"({enabledInSection}/{totalInSection})", 0.8f)
             {
                 VAlign = 0.5f,
@@ -148,32 +141,22 @@ namespace UICustomizer.UI.Layers
             };
             header.Append(countText);
 
-            bool allCurrentlyEnabled = totalInSection > 0 && enabledInSection == totalInSection;
-            var toggleAllChk = new CheckboxEyeElement(
-                text: "",
-                initialState: allCurrentlyEnabled,
-                onStateChanged: (newState) =>
-                {
-                    foreach (var elName in elements)
-                    {
-                        UIElementDrawSystem.elementVisibilityStates[elName] = newState;
-                    }
-                    Populate();
-                },
-                width: 22, height: 22, maxWidth: false,
-                tooltip: $"Toggle all in {modName}",
-                skipDrawPanel: true // For the header icon, skip panel drawing
-            )
+            // "toggle all" eye
+            bool allOn = totalInSection > 0 && enabledInSection == totalInSection;
+            var toggleAll = new ToggleAllEyeElement(Ass.EyeOpen);
+            // initialize image to match current state
+            toggleAll.SetImage(allOn ? Ass.EyeOpen : Ass.EyeClosed);
+
+            // when clicked, flip every element in this section
+            toggleAll.OnToggle += newState =>
             {
-                Active = true,
-                HAlign = 1f,
-                VAlign = 0.5f,
-                Left = { Pixels = -50, Percent = 1f },
-                Top = { Pixels = 0, Percent = 0f }
+                foreach (var elName in elements)
+                    UIElementDrawSystem.elementVisibilityStates[elName] = newState;
+                Populate();
             };
 
-            _sectionToggleAllCheckboxes[modName] = toggleAllChk; // Store reference
-            header.Append(toggleAllChk);
+            _sectionToggleAllCheckboxes[modName] = toggleAll;
+            header.Append(toggleAll);
         }
 
         // Call this when an individual checkbox state changes to update its section header

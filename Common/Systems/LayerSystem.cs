@@ -16,7 +16,29 @@ namespace UICustomizer.Common.Systems
 
         // Handle LayersPanel active
         public static bool IsActive { get; private set; } = false;
-        public static void SetActive(bool active) => IsActive = active;
+        public static void SetActive(bool active)
+        {
+            IsActive = active;
+            var sys = ModContent.GetInstance<LayerSystem>();
+
+            if (active)
+            {
+                sys.userInterface.SetState(sys.layersState);
+            }
+            else
+            {
+                sys.userInterface.SetState(null);
+            }
+
+            //if (sys.userInterface.CurrentState == null)
+            //{
+            //    Main.NewText("no state");
+            //}
+            //else
+            //{
+            //    Main.NewText(sys.userInterface.CurrentState.ToString());
+            //}
+        }
         public static void ToggleActive() => SetActive(!IsActive);
 
         public override void OnWorldLoad()
@@ -24,7 +46,7 @@ namespace UICustomizer.Common.Systems
             base.OnWorldLoad();
             userInterface = new UserInterface();
             layersState = new LayerState();
-            userInterface.SetState(layersState);
+            userInterface.SetState(null); // <- technically not needed
 
             //SetActive(true); // DEBUG MODE
         }

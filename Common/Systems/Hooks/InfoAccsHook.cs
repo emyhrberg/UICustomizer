@@ -52,7 +52,7 @@ namespace UICustomizer.Common.Systems.Hooks
 
         private void InjectInfoAccsOffset(ILContext il)
         {
-            Log.Info("IL info accs text and icon patching...");
+            // Log.Info("IL info accs text and icon patching...");
 
             try
             {

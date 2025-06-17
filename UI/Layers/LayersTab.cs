@@ -13,6 +13,7 @@ namespace UICustomizer.UI.Layers
     {
         private int _knownCount = -1;
         private readonly Dictionary<string, bool> expandedSections = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, ToggleAllEyeElement> _sectionToggleAllCheckboxes = [];
 
         public LayersTab() : base("Layers") { }
 
@@ -76,18 +77,15 @@ namespace UICustomizer.UI.Layers
         private void BuildSection(string title, Func<string, bool> predicate)
         {
             bool isExpanded = expandedSections.TryGetValue(title, out var v) ? v : (expandedSections[title] = false);
-
             Func<string, bool> actualPred = title == "DragonLens"
                 ? n => n.StartsWith("BrickAndMortar:", StringComparison.OrdinalIgnoreCase)
                 : predicate;
-
             Func<float> height = () =>
             {
-                if (LayerSystem.LayerStates.Count(kv => actualPred(kv.Key) == true) == 1)
-                {
-                    return 35;
-                }
-                return Math.Max(80, LayerSystem.LayerStates.Count(kv => actualPred(kv.Key)) * 25) + 10;
+                var count = LayerSystem.LayerStates.Count(kv => actualPred(kv.Key));
+                return count == 1
+                    ? 35
+                    : Math.Max(80, count * 25) + 10;
             };
 
             var section = new CollapsibleSection(
@@ -100,14 +98,11 @@ namespace UICustomizer.UI.Layers
                             kv.Key,
                             kv.Value,
                             newState => LayerSystem.LayerStates[kv.Key] = newState,
-                            width: 0,
+                            width: -5,
                             tooltip: kv.Key.Length > 30 ? kv.Key : null,
                             maxWidth: true,
-                            height: 20
-                        )
-                        { Active = true };
-                        //chk.OnLeftClick += (_, _) => { Populate(); };
-
+                            height: 23
+                        );
                         content.Add(chk);
                     }
                 },
@@ -116,49 +111,35 @@ namespace UICustomizer.UI.Layers
                 contentHeightFunc: height,
                 buildHeader: header =>
                 {
-                    var relevantLayers = LayerSystem.LayerStates.Where(kv => actualPred(kv.Key)).ToList();
-                    int totalCount = relevantLayers.Count;
-                    int enabledCount = relevantLayers.Count(kv => kv.Value); // Count where Value is true
+                    var relevant = LayerSystem.LayerStates.Where(kv => actualPred(kv.Key)).ToList();
+                    int total = relevant.Count;
+                    int enabled = relevant.Count(kv => kv.Value);
 
-                    // Text for the count, e.g., "(5)"
-                    // Text for the count, e.g., "(3/5)"
-                    var countText = new UIText($"({enabledCount}/{totalCount})", 0.3f, true)
+                    var countText = new UIText($"({enabled}/{total})", 0.3f, true)
                     {
                         VAlign = 0.5f,
                         HAlign = 1f
                     };
                     countText.Left.Set(-49, 0);
-                    countText.Top.Set(0, 0f);
+                    countText.Top.Set(0, 0);
                     header.Append(countText);
 
-                    bool allOn = LayerSystem.LayerStates
-                        .Where(kv => actualPred(kv.Key))
-                        .All(kv => kv.Value);
-
-                    var toggleAll = new CheckboxEyeElement(
-                        "",
-                        allOn,
-                        newState =>
-                        {
-                            foreach (var key in LayerSystem.LayerStates.Keys.Where(k => actualPred(k)))
-                                LayerSystem.LayerStates[key] = newState;
-                            Populate();
-                        },
-                        width: 30,
-                        maxWidth: false,
-                        tooltip: $"Toggle every {title} layer",
-                        skipDrawPanel: true
-                    )
+                    bool allOn = relevant.All(kv => kv.Value);
+                    var toggleAllEye = new ToggleAllEyeElement(Ass.EyeOpen);
+                    toggleAllEye.SetState(allOn);          // ← sync internal flag + image
+                    toggleAllEye.OnToggle += newState =>
                     {
-                        Active = true,
-                        HAlign = 1f,
-                        VAlign = 0.5f
+                        foreach (var key in LayerSystem.LayerStates.Keys.Where(actualPred))
+                            LayerSystem.LayerStates[key] = newState;
+                        Populate();
                     };
-                    toggleAll.Left.Set(-42, 1);
-                    toggleAll.Top.Set(2, 0);
-                    header.Append(toggleAll);
+                    _sectionToggleAllCheckboxes[title] = toggleAllEye;
+                    header.Append(toggleAllEye);
                 }
             );
+            section.SetPadding(0);      // remove the panel’s default 10px on all sides
+            //section.ListPadding = 0f;
+            list.SetPadding(20f);
             list.Add(section);
         }
 

@@ -49,7 +49,7 @@ namespace UICustomizer.UI.Editor
         public override void Populate()
         {
             list.Clear();
-            list.ListPadding = 20;
+            //list.ListPadding = 10;
             list.SetPadding(20);
             list.Left.Set(-8, 0);
             list.Top.Set(-10, 0);
@@ -60,7 +60,7 @@ namespace UICustomizer.UI.Editor
                 initialState: moveExpanded,
                 buildContent: BuildUIEditor,
                 onToggle: () => _expandedSections["Move UI"] = !_expandedSections["Move UI"],
-                contentHeightFunc: () => 250f
+                contentHeightFunc: () => 345f
             ));
 
             bool setExpanded = _expandedSections.TryGetValue("Set Theme", out var sv) ? sv : (_expandedSections["Set Theme"] = true);
@@ -75,8 +75,10 @@ namespace UICustomizer.UI.Editor
 
         private void BuildUIEditor(UIList list)
         {
+            list.SetPadding(0);
             PopulateButtons(list);
-            PopulateCheckboxes(list);
+            PopulateOptions(list);
+            //PopulateCheckboxes(list);
             PopulateSliders(list);
         }
 
@@ -88,7 +90,6 @@ namespace UICustomizer.UI.Editor
 
             var saveBtn = new Button(saveText, () =>
             {
-                EditorSystem.SetEditing(false);
                 EditorSystem.SetActive(false);
 
                 if (!Conf.C.ShowCombatTextTooltips) return;
@@ -134,90 +135,148 @@ namespace UICustomizer.UI.Editor
             });
         }
 
-        private void PopulateCheckboxes(UIList list)
+        private void PopulateOptions(UIList list)
         {
-            var checkboxEdit = new CheckboxElement(
-                text: "Edit Mode",
-                initialState: checkboxStates[Checkbox.EditMode],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.EditMode] = newState;
-                    EditorSystem.SetEditing(newState);
-                },
-                width: 100,
-                tooltip: "Enable edit mode to be able to drag elements"
-            )
-            { Active = true };
+            list.SetPadding(5);
+            var spacer = new UIElement();
+            spacer.Height.Set(10, 0);
+            list.Add(spacer);
 
-            var checkboxSnap = new CheckboxElement(
-                text: "Snap Edges",
-                initialState: checkboxStates[Checkbox.SnapToEdges],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.SnapToEdges] = newState;
-                    EditorTabSettings.SnapToEdges = newState;
-                },
-                width: 100,
-                tooltip: "Clamps to the edges of the screen when dragging"
-            )
-            { Active = true };
+            var optionsHeader = new UIText("Settings", 1, false);
+            optionsHeader.HAlign = 0.5f;
+            list.Add(optionsHeader);
 
-            var checkboxHitboxes = new CheckboxElement(
-                text: "Show Hitboxes",
-                initialState: checkboxStates[Checkbox.ShowHitboxes],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.ShowHitboxes] = newState;
-                    EditorTabSettings.ShowHitboxes = newState;
-                },
-                width: 100,
-                tooltip: "Show hitboxes of all elements"
-            )
-            { Active = true };
+            var spacer2 = new UIElement();
+            spacer2.Height.Set(0, 0);
+            list.Add(spacer2);
 
-            var checkboxFitBounds = new CheckboxElement(
-                text: "Fit Bounds",
-                initialState: checkboxStates[Checkbox.FitBounds],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.FitBounds] = newState;
-                    EditorTabSettings.FitBounds = newState;
-                },
-                width: 100,
-                tooltip: "Dynamically adjust hitbox bounds when resizing"
-            )
-            { Active = true };
+            var editMode = new OnOffText(
+                "Edit Mode",
+                () => EditorTabSettings.EditMode,
+                value => EditorTabSettings.EditMode = value
+            );
+            list.Add(editMode);
 
-            var checkboxNames = new CheckboxElement(
-                text: "Names",
-                initialState: checkboxStates[Checkbox.ShowNames],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.ShowNames] = newState;
-                    EditorTabSettings.ShowNames = newState;
-                },
-                width: 100,
-                tooltip: "Show the names of elements"
-            )
-            { Active = true };
+            var showHitboxes = new OnOffText(
+                "Show Hitboxes",
+                () => EditorTabSettings.ShowHitboxes,
+                value => EditorTabSettings.ShowHitboxes = value
+            );
+            list.Add(showHitboxes);
 
-            var checkboxEyeToggle = new CheckboxElement(
-                text: "Eye Toggle",
-                initialState: checkboxStates[Checkbox.ShowElementToggle],
-                onStateChanged: newState =>
-                {
-                    checkboxStates[Checkbox.ShowElementToggle] = newState;
-                    EditorTabSettings.ShowEyeToggle = newState;
-                },
-                width: 100,
-                tooltip: "Show eye icon to toggle visibility"
-            )
-            { Active = true };
+            var showElementNames = new OnOffText(
+                "Show Element Names",
+                () => EditorTabSettings.ShowNames,
+                value => EditorTabSettings.ShowNames = value
+            );
+            list.Add(showElementNames);
 
-            AddRow(list, checkboxEdit, checkboxSnap);
-            AddRow(list, checkboxFitBounds, checkboxNames);
-            AddRow(list, checkboxHitboxes, checkboxEyeToggle);
+            var fitBounds = new OnOffText(
+                "Fit Hitbox Bounds",
+                () => EditorTabSettings.FitBounds,
+                value => EditorTabSettings.FitBounds = value
+            );
+            list.Add(fitBounds);
+
+            var snapToEdges = new OnOffText(
+                "Snap To Edges",
+                () => EditorTabSettings.SnapToEdges,
+                value => EditorTabSettings.SnapToEdges = value
+            );
+            list.Add(snapToEdges);
+
+            var showEyeToggle = new OnOffText(
+                "Show Layer Toggle",
+                () => EditorTabSettings.ShowEyeToggle,
+                value => EditorTabSettings.ShowEyeToggle = value
+            );
+            list.Add(showEyeToggle);
         }
+
+        // private void PopulateCheckboxes(UIList list)
+        // {
+        //     var checkboxEdit = new CheckboxElement(
+        //         text: "Edit Mode",
+        //         initialState: checkboxStates[Checkbox.EditMode],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.EditMode] = newState;
+        //             EditorTabSettings.EditMode = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Enable edit mode to be able to drag elements"
+        //     )
+        //     { Active = true };
+
+        //     var checkboxSnap = new CheckboxElement(
+        //         text: "Snap Edges",
+        //         initialState: checkboxStates[Checkbox.SnapToEdges],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.SnapToEdges] = newState;
+        //             EditorTabSettings.SnapToEdges = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Clamps to the edges of the screen when dragging"
+        //     )
+        //     { Active = true };
+
+        //     var checkboxHitboxes = new CheckboxElement(
+        //         text: "Show Hitboxes",
+        //         initialState: checkboxStates[Checkbox.ShowHitboxes],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.ShowHitboxes] = newState;
+        //             EditorTabSettings.ShowHitboxes = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Show hitboxes of all elements"
+        //     )
+        //     { Active = true };
+
+        //     var checkboxFitBounds = new CheckboxElement(
+        //         text: "Fit Bounds",
+        //         initialState: checkboxStates[Checkbox.FitBounds],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.FitBounds] = newState;
+        //             EditorTabSettings.FitBounds = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Dynamically adjust hitbox bounds when resizing"
+        //     )
+        //     { Active = true };
+
+        //     var checkboxNames = new CheckboxElement(
+        //         text: "Names",
+        //         initialState: checkboxStates[Checkbox.ShowNames],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.ShowNames] = newState;
+        //             EditorTabSettings.ShowNames = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Show the names of elements"
+        //     )
+        //     { Active = true };
+
+        //     var checkboxEyeToggle = new CheckboxElement(
+        //         text: "Eye Toggle",
+        //         initialState: checkboxStates[Checkbox.ShowElementToggle],
+        //         onStateChanged: newState =>
+        //         {
+        //             checkboxStates[Checkbox.ShowElementToggle] = newState;
+        //             EditorTabSettings.ShowEyeToggle = newState;
+        //         },
+        //         width: 100,
+        //         tooltip: "Show eye icon to toggle visibility"
+        //     )
+        //     { Active = true };
+
+        //     AddRow(list, checkboxEdit, checkboxSnap);
+        //     AddRow(list, checkboxFitBounds, checkboxNames);
+        //     AddRow(list, checkboxHitboxes, checkboxEyeToggle);
+        // }
 
         private static void AddRow(UIList list, params UIElement[] elements)
         {
@@ -242,39 +301,51 @@ namespace UICustomizer.UI.Editor
         }
         private static void PopulateSliders(UIList list)
         {
+            var spacer = new UIElement();
+            spacer.Height.Set(10, 0);
+            list.Add(spacer);
+
+            var optionsHeader = new UIText("Sliders", 1, false);
+            optionsHeader.HAlign = 0.5f;
+            list.Add(optionsHeader);
+
+            var spacer2 = new UIElement();
+            spacer2.Height.Set(0, 0);
+            list.Add(spacer2);
+
             // UI Scale slider: Apply on release, show live and applied values
             var uiSlider = new ZenSliderElement(
-                "UI Scale",
-                "Changes the main scale of all UI",
-                0.5f, 2.0f, Main.UIScale, 0.01f,
-                (val) =>
-                {
-                    Main.UIScale = val;
-                    Main.temporaryGUIScaleSlider = val;
-                },
-                applyOnRelease: true
+               "UI Scale",
+               "Changes the main scale of all UI",
+               0.5f, 2.0f, Main.UIScale, 0.01f,
+               (val) =>
+               {
+                   Main.UIScale = val;
+                   Main.temporaryGUIScaleSlider = val;
+               },
+               applyOnRelease: true
             );
             list.Add(uiSlider);
 
             // Snap Threshold slider: Normal behavior (always update)
             var snapThreshold = new ZenSliderElement(
-                "Snap",
-                "Snap to edges threshold",
-                0f, 100f, EditorTabSettings.SnapThreshold, 1f,
-                (val) => EditorTabSettings.SnapThreshold = (int)val,
-                applyOnRelease: false
+               "Snap",
+               "Snap to edges threshold",
+               0f, 100f, EditorTabSettings.SnapThreshold, 1f,
+               (val) => EditorTabSettings.SnapThreshold = (int)val,
+               applyOnRelease: false
             );
             list.Add(snapThreshold);
 
             // Snap Threshold slider: Normal behavior (always update)
             var darkSlider = new ZenSliderElement(
-                "Dark",
-                "Set darkness level to see elements easier",
-                0f, 100f, 
-                defaultValue: DarkSystem.GetDarknessLevel(), 
-                step: 1f,
-                onValueChanged: DarkSystem.SetDarknessLevel,
-                applyOnRelease: false
+               "Dark",
+               "Set darkness level to see elements easier",
+               0f, 100f,
+               defaultValue: DarkSystem.GetDarknessLevel(),
+               step: 1f,
+               onValueChanged: DarkSystem.SetDarknessLevel,
+               applyOnRelease: false
             );
             list.Add(darkSlider);
         }

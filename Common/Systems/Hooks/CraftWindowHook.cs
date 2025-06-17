@@ -37,7 +37,7 @@ namespace UICustomizer.Common.Systems.Hooks
                 c.EmitLdsfld(typeof(CraftWindowHook).GetField(offsetFieldName));
                 c.EmitConvI4(); // Convert float to int32
                 c.EmitAdd();
-                Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
+                // Log.Info($"Successfully injected {offsetFieldName} at stloc.{localIndex}");
             }
             else
             {

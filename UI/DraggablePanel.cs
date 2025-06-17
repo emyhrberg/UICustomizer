@@ -24,8 +24,9 @@ namespace UICustomizer.UI
             UIElement target = evt.Target;
             while (target != null)
             {
-                if (target is Scrollbar || target is CloseButton || target is CheckboxElement ||
-                    target is CheckboxEyeElement || target is Button)
+                if (target is Scrollbar || target is CloseButton ||
+                    target is CheckboxEyeElement || target is Button ||
+                    target is ToggleAllEyeElement)
                     return;
                 target = target.Parent;
             }

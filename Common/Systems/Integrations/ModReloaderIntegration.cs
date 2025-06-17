@@ -1,11 +1,8 @@
-using System;
 using Terraria.ModLoader;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.Common.Systems.Integrations.ModReloader
+namespace UICustomizer.Common.Systems.Integrations
 {
     [JITWhenModsEnabled("ModReloader")]
-    [ExtendsFromMod("ModReloader")]
     public sealed class ModReloaderIntegration : ModPlayer
     {
         public override void OnEnterWorld()
@@ -21,12 +18,11 @@ namespace UICustomizer.Common.Systems.Integrations.ModReloader
             {
                 Log.Info("ModReloader foundz...");
 
-                AddEditButton(MR);
-                AddLayersButton(MR);
+                AddButtons(MR);
             }
         }
 
-        private void AddLayersButton(Mod MR)
+        private void AddButtons(Mod MR)
         {
             Log.Info("Adding AddLayersButton button for UICustomizer");
             MR.Call(
@@ -37,10 +33,7 @@ namespace UICustomizer.Common.Systems.Integrations.ModReloader
                 "Toggle UIElements, Drawn Interface Layers from all mods, and Toggle Resource Packs directly in-game." // tooltip
             );
             Log.Info("ModReloader AddLayersButton added for UICustomizer");
-        }
 
-        private void AddEditButton(Mod MR)
-        {
             Log.Info("Adding ModReloader button for UICustomizer");
             MR.Call(
                 "AddButton",

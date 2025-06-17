@@ -20,9 +20,7 @@ namespace UICustomizer.UI
         private readonly UIText _label;
         private readonly string _tooltip;
         private readonly Action<bool> _onStateChanged;
-        public bool Active = false;
         public bool GetChecked() => _isChecked;
-        public bool skipDrawPanel;
 
         public CheckboxEyeElement(
             string text,
@@ -31,11 +29,9 @@ namespace UICustomizer.UI
             int width = 50,
             string tooltip = "",
             bool maxWidth = false,
-            int height = 30,
-            bool skipDrawPanel=false
+            int height = 30
         )
         {
-            this.skipDrawPanel = skipDrawPanel;
             _isChecked = initialState;
             _onStateChanged = onStateChanged;
             _tooltip = tooltip;
@@ -43,7 +39,7 @@ namespace UICustomizer.UI
             Height.Set(height, 0);
             Width.Set(width+4, 1);
             MaxWidth.Set(width+4, 1);
-            Left.Set(-2, 0);
+            //Left.Set(-2, 0);
 
             // Eye
             eye = new CheckboxEye(_isChecked ? Ass.EyeOpen : Ass.EyeClosed);
@@ -70,7 +66,6 @@ namespace UICustomizer.UI
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            if (!Active) return;
             base.LeftClick(evt);
 
             _isChecked = !_isChecked;
@@ -80,33 +75,7 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch sb)
         {
-            if (!Active) return;
-
-
-            if (skipDrawPanel)
-            {
-                if (eye != null && eye._texture != null && eye._texture.IsLoaded)
-                {
-                    Texture2D textureToDraw = eye._texture.Value;
-                    float scale = 1.5f; // Define your desired scale factor, e.g., 1.5f for 150%
-                    Vector2 origin = textureToDraw.Size() * 0.5f; // Origin for scaling (center of the texture)
-                    Vector2 basePosition = GetDimensions().Position() + new Vector2(30, -6*scale); // Original top-left logic
-                    Vector2 drawPosition = basePosition + origin * scale; // Adjust if basePosition is top-left and scaling from origin
-
-                    sb.Draw(
-                        textureToDraw,
-                        drawPosition, 
-                        null,Color.White, 0f,origin,scale,SpriteEffects.None,0f         
-                    );
-                }
-            }
-            else
-            {
-                base.Draw(sb);
-            }
-
-
-            Top.Set(0, 0);
+            base.Draw(sb);
 
             if (IsMouseHovering && !string.IsNullOrEmpty(_tooltip))
                 UICommon.TooltipMouseText(_tooltip);
@@ -158,10 +127,11 @@ namespace UICustomizer.UI
 
         public override void Draw(SpriteBatch sb)
         {
-            Vector2 pos = Parent.GetDimensions().Position();
-            pos += new Vector2(3, -6);
+            base.Draw(sb);
+            //Vector2 pos = Parent.GetDimensions().Position();
+            //pos += new Vector2(3, -6);
             //VAlign = 0.5f;
-            sb.Draw(_texture.Value, pos, Color.White * opacity);
+            //sb.Draw(_texture.Value, pos, Color.White * opacity);
         }
     }
 

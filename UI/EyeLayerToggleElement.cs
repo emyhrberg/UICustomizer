@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.UI
 {
@@ -28,6 +27,4 @@ namespace UICustomizer.UI
             base.Draw(spriteBatch);
         }
     }
-
-    
 }

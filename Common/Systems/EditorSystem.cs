@@ -18,29 +18,22 @@ namespace UICustomizer.Common.Systems
 
         public static void SetActive(bool active)
         {
+            IsActive = active;
+            var sys = ModContent.GetInstance<EditorSystem>();
+
             if (active)
             {
-                IsActive = true;
-                var sys = ModContent.GetInstance<EditorSystem>();
-                sys?.state?.editorPanel?.editorTab?.Populate(); //hotfix for a bug where it wouldnt populate after hide all mode
-                SetEditing(true);
+                sys.userInterface.SetState(sys.state);
+                sys.state.editorPanel.editorTab.Populate(); //hotfix for a bug where it wouldnt populate after hide all mode
             }
             else
             {
-                IsActive = false;
-                var sys = ModContent.GetInstance<EditorSystem>();
-                EditorPanel panel = sys?.state?.editorPanel;
-                panel?.CancelDrag(); // Force stop dragging
+                sys.userInterface.SetState(null);
+                sys.state.editorPanel.CancelDrag(); // Force stop dragging
                 DarkSystem.SetDarknessLevel(0);
             }
         }
 
-        #endregion
-
-        #region Editing State
-
-        public static bool IsEditing = false;
-        public static void SetEditing(bool editing) => IsEditing = editing;
         #endregion
 
         public static void ToggleActive()
@@ -68,7 +61,9 @@ namespace UICustomizer.Common.Systems
             base.OnWorldLoad();
             userInterface = new UserInterface();
             state = new EditorState();
-            userInterface.SetState(state);
+
+            //userInterface.SetState(state);
+            userInterface.SetState(null);
 
             // Apply last selected layout
             string lastLayoutName = FileHelper.LoadLastLayoutName();

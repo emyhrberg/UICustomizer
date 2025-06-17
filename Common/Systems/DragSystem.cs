@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Iced.Intel;
+using System.Reflection;
+using System.Threading;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader;
+using Terraria.ModLoader.UI;
+using Terraria.UI.Chat;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks;
-using UICustomizer.Helpers;
 using UICustomizer.Helpers.Layouts;
-using UICustomizer.UI;
 
 namespace UICustomizer.Common.Systems
 {
@@ -17,6 +20,7 @@ namespace UICustomizer.Common.Systems
         private Vector2 _mouseStart;
         private Vector2 _offsetStart;
         private Func<float, Rectangle> _dragSource;   // null = no drag in progress
+        private static bool wasMouseDownLastFrame = false;
 
         // Send text timer
         private static DateTime lastWarningSent = DateTime.UtcNow;
@@ -93,6 +97,8 @@ namespace UICustomizer.Common.Systems
                 HandleDrag(BarLifeTextBounds, ref BarLifeTextHook.OffsetX, ref BarLifeTextHook.OffsetY);
                 HandleDrag(BarManaTextBounds, ref BarManaTextHook.OffsetX, ref BarManaTextHook.OffsetY);
             }
+
+            wasMouseDownLastFrame = Main.mouseLeft;
         }
 
         private void HandleDrag(Func< float,Rectangle> bounds, ref float offsetX, ref float offsetY)
@@ -106,18 +112,36 @@ namespace UICustomizer.Common.Systems
                 Log.Info($"Dragging element at {mouseUI} with bounds {boundsRect}");
                 Log.Info($"Scales: {Main.UIScale}, map: {Main.MapScale}");
                 // CHECK EDIT MODE FIRST - before any drag setup
-                if (!EditorSystem.IsEditing)
+                if (!EditorTabSettings.EditMode)
                 {
-                    bool someTimeElapsed = DateTime.UtcNow - lastWarningSent >= TimeSpan.FromMilliseconds(500);
+                    bool justClicked = Main.mouseLeft && !wasMouseDownLastFrame;
+                    if (justClicked)
+                    {
+                        Rectangle p = Main.LocalPlayer.getRect();
+                        CombatText.NewText(p, Color.Red, "Please enter edit mode to drag the element.");
+                    }
+
+                    bool someTimeElapsed = DateTime.UtcNow - lastWarningSent >= TimeSpan.FromMilliseconds(50);
                     if (someTimeElapsed)
                     {
                         lastWarningSent = DateTime.UtcNow;
 
-                            if (!Conf.C.ShowCombatTextTooltips) return;
-                            CombatText.NewText(Main.LocalPlayer.getRect(), Color.Red, "Please enter edit mode to drag the element.");
-                        }
-                        return; // Exit early - don't set up drag
+                        if (!Conf.C.ShowCombatTextTooltips) return;
+
+                        Vector2 mouse = Main.MouseWorld;
+
+                        Rectangle textRect = new(
+                            (int)(mouse.X - boundsRect.Width / 2f),
+                            (int)(mouse.Y - boundsRect.Height / 2f),
+                            boundsRect.Width,
+                            boundsRect.Height
+                        );
+
+                        //UICommon.TooltipMouseText("a");
+                        
                     }
+                    return; // Exit early - don't set up drag
+                }
                     _dragSource = bounds;
                     _mouseStart = mouseUI;                      // store in UI units
                     _offsetStart = new Vector2(offsetX, offsetY);
@@ -187,23 +211,21 @@ namespace UICustomizer.Common.Systems
 
         #region Bounds (hardcoded...)
 
-        public static Rectangle ChatBounds(float multiplier = 1)
+        public static Rectangle ChatBounds(float multiplier = 1f)
         {
-            // vanilla: centre horizontally, a bit above the bottom toolbar
-            int w = TextureAssets.TextBack.Width() + 120; // not accurate, its much wider in fullscreen
-            //Log.SlowInfo(Main.screenWidth.ToString());
-            if (Main.screenWidth > 1000)
-            {
-                w += 200;
-            }
-            if (Main.screenWidth > 1800)
-            {
-                w += 801;
-            }
-            int h = TextureAssets.TextBack.Height();
+            // --- Width & X ---
+            int w = TextureAssets.TextBack.Width() + 120;
+            if (Main.screenWidth > 1000) w += 200;
+            if (Main.screenWidth > 1800) w += 801;
             int x = (int)(78 + ChatHook.OffsetX);
-            int y = (int)(Main.screenHeight - 72 + ChatHook.OffsetY);
-            return new Rectangle(x, y, w, h);
+
+            // --- Height & Y ---
+            int rowH = TextureAssets.TextBack.Height(); // one row height = 32f
+            int hFull = rowH * 10;
+            int yFull = (int)(Main.screenHeight - hFull - 50 + ChatHook.OffsetY);
+
+            // --- Return ---
+            return new Rectangle(x, yFull, w, hFull);
         }
 
         public static Rectangle HotbarBounds(float multiplier = 1)
@@ -232,8 +254,6 @@ namespace UICustomizer.Common.Systems
                         c++;
                     }
                 }
-
-
 
                 if (c == 1) w = 55;
                 else if (c == 2) w = 95;
@@ -400,7 +420,7 @@ namespace UICustomizer.Common.Systems
         {
             int h = 100;
             int w = 125; // default width
-            int y = (int)(570 + CraftingHook.OffsetY);
+            int y = (int)(570 - h + CraftingHook.OffsetY);
 
             if (EditorTabSettings.FitBounds)
             {
@@ -410,7 +430,12 @@ namespace UICustomizer.Common.Systems
                 int bot = heightCount - 1 - currLine; // distance from currLine to bottom line
 
                 // --- Height ---
-                if (heightCount <= 3)
+                if (heightCount == 0)
+                {
+                    h = 70;
+                    w = 125;
+                }
+                else if (heightCount <= 3)
                 {
                     h += 80;
                     y -= 120 / 2;
@@ -448,10 +473,12 @@ namespace UICustomizer.Common.Systems
                 // WRITE ACCESS CRASH HERE?!
                 int widthCount = recipe.requiredItem.Count(item => !item.IsAir); // unique items required to craft
 
-                if (widthCount > 1) w += 10 * widthCount;
+                if (widthCount > 1 && heightCount != 0) w += 10 * widthCount;
             }
 
             int x = (int)(20 + CraftingHook.OffsetX);
+            //Main.NewText("width" + w);
+
             return new Rectangle(x, y, w, h);
         }
 
