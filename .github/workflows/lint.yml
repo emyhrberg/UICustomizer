@@ -7,13 +7,14 @@ on:
     branches: ["main"]
 
 jobs:
-  lint:
+  dotnet-lint:
     runs-on: windows-latest
     env:
       TargetFramework: net8.0
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -23,25 +24,23 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Pull TML
-        # switch to a Bash shell so we can use curl/unzip
+      - name: Download tModLoader
+        run: |
+          curl -s -L https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip -o tModLoader.zip
+
+      - name: Extract tModLoader
+        run: |
+          unzip -q -o tModLoader.zip -d ../tModLoader
+          rm tModLoader.zip
+
+      - name: Create tModLoader.targets
         shell: bash
         run: |
-          cd ..
-          mkdir -p tmod
-          # write your targets file
-          cat <<'EOF' > tModLoader.targets
+          cat >> ../tModLoader.targets << EOF
           <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-            <Import Project="./tmod/tMLMod.targets" />
+            <Import Project="tModLoader\tMLMod.targets" />
           </Project>
           EOF
-          # download & unpack
-          cd tmod
-          curl -L -o tModLoader.zip \
-            https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
-          unzip tModLoader.zip
-          # back into your project
-          cd ../UICustomizer
 
       - name: Lint
         run: dotnet format style UICustomizer.sln --verify-no-changes
