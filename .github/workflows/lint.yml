@@ -1,6 +1,4 @@
-# courtesy of
-# https://github.com/EndlessEscapade/endless-escapade/blob/dev/.github/workflows/lint.yml
-name: Linter
+name: .NET Lint
 
 on:
   push:
@@ -13,11 +11,31 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Restore .NET dependencies
-      run: dotnet restore
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Lint
-      run: dotnet format style UICustomizer.sln --verify-no-changes
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Pull TML
+        run: |
+          cd ..
+          mkdir ./tmod
+          touch tModLoader.targets
+
+          echo '<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+              <Import Project=".\tmod\tMLMod.targets" />
+          </Project>' > tModLoader.targets
+
+          cd ./tmod
+          wget https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
+          unzip tModLoader.zip
+          cd ..
+          cd ./UICustomizer
+
+      - name: Lint
+        run: dotnet format style UICustomizer.sln --verify-no-changes
