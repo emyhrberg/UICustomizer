@@ -9,6 +9,8 @@ on:
 jobs:
   lint:
     runs-on: windows-latest
+    env:
+      TargetFramework: net8.0
 
     steps:
       - uses: actions/checkout@v4
