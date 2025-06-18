@@ -1,0 +1,47 @@
+name: .NET Lint
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    runs-on: windows-latest
+    env:
+      TargetFramework: net8.0
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Pull TML
+        # switch to a Bash shell so we can use curl/unzip
+        shell: bash
+        run: |
+          cd ..
+          mkdir -p tmod
+          # write your targets file
+          cat <<'EOF' > tModLoader.targets
+          <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+            <Import Project="./tmod/tMLMod.targets" />
+          </Project>
+          EOF
+          # download & unpack
+          cd tmod
+          curl -L -o tModLoader.zip \
+            https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
+          unzip tModLoader.zip
+          # back into your project
+          cd ../UICustomizer
+
+      - name: Lint
+        run: dotnet format style UICustomizer.sln --verify-no-changes
