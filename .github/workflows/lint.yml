@@ -24,20 +24,24 @@ jobs:
         run: dotnet restore
 
       - name: Pull TML
+        # switch to a Bash shell so we can use curl/unzip
+        shell: bash
         run: |
           cd ..
-          mkdir ./tmod
-          touch tModLoader.targets
-
-          echo '<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-              <Import Project=".\tmod\tMLMod.targets" />
-          </Project>' > tModLoader.targets
-
-          cd ./tmod
-          wget https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
+          mkdir -p tmod
+          # write your targets file
+          cat <<'EOF' > tModLoader.targets
+          <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+            <Import Project="./tmod/tMLMod.targets" />
+          </Project>
+          EOF
+          # download & unpack
+          cd tmod
+          curl -L -o tModLoader.zip \
+            https://github.com/tModLoader/tModLoader/releases/latest/download/tModLoader.zip
           unzip tModLoader.zip
-          cd ..
-          cd ./UICustomizer
+          # back into your project
+          cd ../UICustomizer
 
       - name: Lint
         run: dotnet format style UICustomizer.sln --verify-no-changes
