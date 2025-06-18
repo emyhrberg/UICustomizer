@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3408391079">
-    <img src="icon_workshop.png" alt="Logo" width="150">
+    <img src="../icon_workshop.png" alt="Logo" width="150">
   </a>
 
   <h3 align="center">UI Customizer</h3>
