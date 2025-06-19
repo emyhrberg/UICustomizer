@@ -57,16 +57,6 @@ namespace UICustomizer.Common.Systems
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            // build dictionary the first time or when new layers appear
-            foreach (var l in layers)
-                if (!LayerStates.ContainsKey(l.Name))
-                    LayerStates[l.Name] = true; // default ON
-
-            // apply user choices (never crash if something disappeared)
-            foreach (var l in layers)
-                if (LayerStates.TryGetValue(l.Name, out bool show) && !show)
-                    l.Active = false;
-
             // Main overlay
             int mouseText = layers.FindIndex(l => l.Name == "Vanilla: Mouse Text");
             if (mouseText != -1)
@@ -80,6 +70,16 @@ namespace UICustomizer.Common.Systems
                     },
                     InterfaceScaleType.UI));
             }
+
+            // build dictionary the first time or when new layers appear
+            foreach (var l in layers)
+                if (!LayerStates.ContainsKey(l.Name))
+                    LayerStates[l.Name] = true; // default ON
+
+            // apply user choices (never crash if something disappeared)
+            foreach (var l in layers)
+                if (LayerStates.TryGetValue(l.Name, out bool show) && !show)
+                    l.Active = false;
         }
     }
 }

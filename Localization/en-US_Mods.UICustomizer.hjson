@@ -27,6 +27,11 @@ Configs: {
 			Label: Disable Item Use While Dragging
 			Tooltip: ""
 		}
+
+		EditMainMenu: {
+			Label: Edit Main Menu
+			Tooltip: ""
+		}
 	}
 }
 

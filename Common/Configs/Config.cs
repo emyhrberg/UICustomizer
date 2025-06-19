@@ -26,6 +26,9 @@ namespace UICustomizer.Common.Configs
 
         [DefaultValue(true)]
         public bool DisableItemUseWhileDragging;
+
+        [DefaultValue(true)]
+        public bool EditMainMenu;
     }
 
     public static class Conf
