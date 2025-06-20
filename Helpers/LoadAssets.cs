@@ -11,12 +11,6 @@ namespace UICustomizer.Helpers
     public static class Ass
     {
         // Add assets here
-        public static Asset<Texture2D> CheckActive;
-        public static Asset<Texture2D> CheckActiveHover;
-        public static Asset<Texture2D> CheckInactive;
-        public static Asset<Texture2D> CheckInactiveHover;
-        public static Asset<Texture2D> Close;
-        public static Asset<Texture2D> CloseHover;
         public static Asset<Texture2D> EditorIcon;
         public static Asset<Texture2D> EyeClosed;
         public static Asset<Texture2D> EyeClosedHover;

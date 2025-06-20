@@ -1,7 +1,11 @@
 Configs: {
 	Config: {
 		DisplayName: Config
-		Headers.UIEditor: UI Editor Header
+
+		Headers: {
+			UIEditor: UI Editor Header
+			MainMenu: Main Menu Header
+		}
 
 		ShowEditButton: {
 			Label: Show Edit Button
@@ -30,6 +34,11 @@ Configs: {
 
 		EditMainMenu: {
 			Label: Edit Main Menu
+			Tooltip: ""
+		}
+
+		MainMenuTextColor: {
+			Label: Main Menu Text Color
 			Tooltip: ""
 		}
 	}

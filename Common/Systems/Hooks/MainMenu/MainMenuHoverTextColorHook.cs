@@ -16,27 +16,24 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         {
             IL.Edit(il, c =>
             {
-            //Target: ldc.r4 255(many exist)
-                 c.GotoNext(MoveType.After, i => i.MatchLdcR4(255f),
-                            i => i.MatchLdloc(186));
-                c.EmitPop();
-                c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(R)));
-                Log.Info($"R value set to: {R} at index {c.Index}");
+                //  c.GotoNext(MoveType.After, i => i.MatchLdcR4(255f),
+                //             i => i.MatchLdloc(186));
+                //c.EmitPop();
+                //c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(R)));
+                //Log.Info($"R value set to: {R} at index {c.Index}");
 
-            //Target: ldc.r4 215(only one exists)
-                c.GotoNext(MoveType.After, i => i.MatchLdcR4(215f));
-                c.Index++;
-                c.EmitPop();
-                c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(G)));
-                Log.Info($"G value set to: {G} at index {c.Index}");
+                //c.GotoNext(MoveType.After, i => i.MatchLdcR4(215f));
+                //c.Index++;
+                //c.EmitPop();
+                //c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(G)));
+                //Log.Info($"G value set to: {G} at index {c.Index}");
 
-            //Target: ldc.r4 0(many exist)
-                c.GotoNext(MoveType.After, i => i.MatchLdcR4(0f),
-                           i => i.MatchLdloc(186));
-                c.Index++;
-                c.EmitPop();
-                c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(B)));
-                Log.Info($"B value set to: {B} at index {c.Index}");
+                //c.GotoNext(MoveType.After, i => i.MatchLdcR4(0f),
+                //           i => i.MatchLdloc(186));
+                //c.Index++;
+                //c.EmitPop();
+                //c.EmitLdsfld(typeof(MainMenuHoverTextColorHook).GetField(nameof(B)));
+                //Log.Info($"B value set to: {B} at index {c.Index}");
             });
         }
     }

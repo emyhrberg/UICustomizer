@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using UICustomizer.Common.Systems.Hooks.MainMenu;
 using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Configs
@@ -27,9 +28,29 @@ namespace UICustomizer.Common.Configs
         [DefaultValue(true)]
         public bool DisableItemUseWhileDragging;
 
+        
+
+        [Header("MainMenu")]
+
         [DefaultValue(true)]
         public bool EditMainMenu;
+
+        [DefaultValue(typeof(Color), "0, 0, 0, 0")]
+        public Color MainMenuTextColor = Color.Black;
+
+        public override void OnChanged()
+        {
+            base.OnChanged();
+
+            var mainmenu = ModContent.GetInstance<MainMenuDraw>();
+            if (mainmenu == null) return;
+            mainmenu.rRatio = MainMenuTextColor.R / 255;
+            mainmenu.gRatio = MainMenuTextColor.G / 255;
+            mainmenu.bRatio = MainMenuTextColor.B / 255;
+            Log.Info("red conf" + Conf.C.MainMenuTextColor);
+        }
     }
+
 
     public static class Conf
     {
