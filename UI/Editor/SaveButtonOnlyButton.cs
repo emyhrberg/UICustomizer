@@ -1,6 +1,5 @@
 ﻿using System;
 using Terraria;
-using UICustomizer.Common.Systems;
 
 namespace UICustomizer.UI.Editor
 {

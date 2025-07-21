@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
-using UICustomizer.Helpers;
 
 namespace UICustomizer.Common.Configs
 {
@@ -27,8 +26,6 @@ namespace UICustomizer.Common.Configs
 
         [DefaultValue(true)]
         public bool DisableItemUseWhileDragging;
-
-        
 
         [Header("MainMenu")]
 

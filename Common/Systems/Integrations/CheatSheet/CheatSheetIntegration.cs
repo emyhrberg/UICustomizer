@@ -1,7 +1,7 @@
 ﻿using CheatSheet;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Integrations
+namespace UICustomizer.Common.Systems.Integrations.CheatSheet
 {
     [JITWhenModsEnabled("CheatSheet")]
     public class CheatSheetIntegration : ModSystem

@@ -20,14 +20,9 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private void StopTimeInMenu(On_Main.orig_UpdateMenu orig)
         {
-            // Log.Info(TimeIsPausedBySlider.ToString());
-
-            //TimeIsPausedBySlider = true;
-
             // Only freeze time if we are in the menu AND our flag is set.
             if (Main.gameMenu && TimeIsPausedBySlider)
             {
-                //Log.Info("b");
                 return;
             }
             orig();

@@ -9,7 +9,6 @@ namespace UICustomizer.Common.States
     public class EditorState : UIState
     {
         public EditorPanel editorPanel;
-
         public EditorState()
         {
             // The entire panel that contains all the UI elements for editing.

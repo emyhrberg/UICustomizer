@@ -17,8 +17,6 @@ namespace UICustomizer.Common.States
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            //layersButton = new();
-            //Append(layersButton);
         }
 
         public override void Draw(SpriteBatch sb)

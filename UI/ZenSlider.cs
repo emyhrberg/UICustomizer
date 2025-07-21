@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -10,14 +11,10 @@ namespace UICustomizer.UI;
 
 public sealed class ZenSlider : UIElement
 {
-    public ZenSlider()
-    {
-        Width.Set(0, 1f); // Default width, ZenSliderElement will position Left and adjust Width
-        Height.Set(16, 0f);
-        InnerColor = Color.Gray;
-    }
-
     public Color InnerColor;
+    public Asset<Texture2D> InnerTexture;
+    public Asset<Texture2D> OuterTexture;
+
     public static bool IsAnySliderHeld = false;
     public bool IsHeld = false;
     public float Ratio;
@@ -25,6 +22,15 @@ public sealed class ZenSlider : UIElement
     public event Action<float> OnValueAppliedOnMouseUp;
     public event Action<float> OnDrag;
     private bool _wasHeldLastFrame = false;
+
+    public ZenSlider()
+    {
+        Width.Set(0, 1f); // Default width, ZenSliderElement will position Left and adjust Width
+        Height.Set(16, 0f);
+        InnerColor = Color.Gray;
+        InnerTexture = Ass.Slider;
+        OuterTexture = Ass.SliderHighlight;
+    }
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
@@ -36,9 +42,6 @@ public sealed class ZenSlider : UIElement
             _wasHeldLastFrame = true;
         }
     }
-
-   
-
     public override void MouseOver(UIMouseEvent evt)
     {
         base.MouseOver(evt);
@@ -71,11 +74,11 @@ public sealed class ZenSlider : UIElement
         {
             var dims = GetDimensions();
             float num = Main.MouseScreen.X - dims.X;
-            float newRatio = MathHelper.Clamp(num / dims.Width, 0f, 1f); // <- changed this because UserInterface.ActiveInstance was mis-scaled
+            float newRatio = MathHelper.Clamp(num / dims.Width, 0f, 1f);
             if (Math.Abs(newRatio - Ratio) > float.Epsilon)
             {
                 Ratio = newRatio;
-                Log.Info($"ZenSlider → Dragging Ratio: {Ratio:F2}"); // debug
+                //Log.Info($"ZenSlider → Dragging Ratio: {Ratio:F2}"); // debug
                 OnDrag?.Invoke(Ratio);
             }
         }
@@ -83,21 +86,21 @@ public sealed class ZenSlider : UIElement
 
     protected override void DrawSelf(SpriteBatch sb)
     {
-        CalculatedStyle dims = GetDimensions();
-        Rectangle size = dims.ToRectangle();
+        Rectangle rect = GetDimensions().ToRectangle();
 
-        Texture2D sliderTex = Ass.Slider.Value;
-        Texture2D sliderOutlineTex = Ass.SliderHighlight.Value;
-
-        DrawBar(sb, sliderTex, size, Color.White);
+        // Draw bar around the slider
+        DrawBar(sb, Ass.Slider.Value, rect, Color.White);
+        
+        // Draw yellow hover
         if (IsHeld || IsMouseHovering)
-            DrawBar(sb, sliderOutlineTex, size, Main.OurFavoriteColor);
+            DrawBar(sb, OuterTexture.Value, rect, Main.OurFavoriteColor);
 
-        Rectangle innerBarArea = size;
+        // Draw inner area
+        Rectangle innerBarArea = rect;
         innerBarArea.Inflate(-4, -4);
-        sb.Draw(Ass.Gradient.Value, innerBarArea, Color.White);
-        //spriteBatch.Draw(TextureAssets.MagicPixel.Value, innerBarArea, InnerColor);
+        sb.Draw(InnerTexture.Value, innerBarArea, Color.White);
 
+        // Draw blip
         Texture2D blip = TextureAssets.ColorSlider.Value;
         Vector2 blipOrigin = blip.Size() * 0.5f;
         Vector2 blipPosition = new(innerBarArea.X + (Ratio * innerBarArea.Width), innerBarArea.Center.Y);
@@ -108,6 +111,7 @@ public sealed class ZenSlider : UIElement
     public static void DrawBar(SpriteBatch spriteBatch, Texture2D texture, Rectangle dimensions, Color color)
     {
         if (texture == null) return;
+        // Draw left, right and center parts of the slider
         spriteBatch.Draw(texture, new Rectangle(dimensions.X, dimensions.Y, 6, dimensions.Height), new Rectangle(0, 0, 6, texture.Height), color);
         spriteBatch.Draw(texture, new Rectangle(dimensions.X + 6, dimensions.Y, dimensions.Width - 12, dimensions.Height), new Rectangle(6, 0, 2, texture.Height), color);
         spriteBatch.Draw(texture, new Rectangle(dimensions.X + dimensions.Width - 6, dimensions.Y, 6, dimensions.Height), new Rectangle(8, 0, 6, texture.Height), color);

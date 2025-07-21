@@ -16,7 +16,6 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> EyeClosedHover;
         public static Asset<Texture2D> EyeOpen;
         public static Asset<Texture2D> EyeOpenHover;
-        public static Asset<Texture2D> Gradient;
         public static Asset<Texture2D> Hitbox;
         public static Asset<Texture2D> LayersIcon;
         public static Asset<Texture2D> Minus;
@@ -25,6 +24,8 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> PlusHover;
         public static Asset<Texture2D> Resize;
         public static Asset<Texture2D> Slider;
+        public static Asset<Texture2D> SliderGradient;
+        public static Asset<Texture2D> SliderHueGradient;
         public static Asset<Texture2D> SliderHighlight;
 
         // This bool automatically initializes all specified assets

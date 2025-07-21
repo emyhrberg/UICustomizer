@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader;
-using Terraria.ModLoader.UI;
-using Terraria.UI.Chat;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.Helpers.Layouts;

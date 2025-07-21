@@ -1,6 +1,6 @@
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Integrations
+namespace UICustomizer.Common.Systems.Integrations.ModReloader
 {
     [JITWhenModsEnabled("ModReloader")]
     public sealed class ModReloaderIntegration : ModPlayer

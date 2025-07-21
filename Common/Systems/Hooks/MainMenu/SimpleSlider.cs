@@ -72,7 +72,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
             // Draw inner gradient bar
             size.Inflate(-4, -4);
-            sb.Draw(Ass.Gradient.Value, size, Color.White);
+            sb.Draw(Ass.SliderGradient.Value, size, Color.White);
 
             // Draw blip
             Texture2D blip = TextureAssets.ColorSlider.Value;
@@ -142,7 +142,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
             // Draw inner gradient bar
             size.Inflate(-4, -4);
-            sb.Draw(Ass.Gradient.Value, size, Color.White);
+            sb.Draw(Ass.SliderGradient.Value, size, Color.White);
 
             // Draw blip
             Texture2D blip = TextureAssets.ColorSlider.Value;
