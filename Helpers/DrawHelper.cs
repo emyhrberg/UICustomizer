@@ -121,6 +121,25 @@ namespace UICustomizer.Helpers
             sb.Draw(tex, new Rectangle(t.Right - c, t.Bottom - c, c, c), sc, col, 0, Vector2.Zero, SpriteEffects.FlipVertically | SpriteEffects.FlipHorizontally, 0); // BR
             sb.Draw(tex, new Rectangle(t.X, t.Bottom - c, c, c), sc, col, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0); // BL
         }
+
+        public static void DrawTextAtMouse(SpriteBatch sb, string text)
+        {
+            // This method is used for drawing tooltips in main menu
+            // Inspired by UICharacterCreation::Draw()
+            float x = FontAssets.MouseText.Value.MeasureString(text).X;
+            Vector2 vector = new Vector2(Main.mouseX, Main.mouseY) + new Vector2(16f);
+            if (vector.Y > (float)(Main.screenHeight - 15))
+            {
+                vector.Y = Main.screenHeight - 15;
+            }
+            if (vector.X > (float)Main.screenWidth - x + 40)
+            {
+                vector.X = Main.screenWidth - 460;
+            }
+            Utils.DrawBorderStringFourWay(
+                sb, FontAssets.MouseText.Value, text, vector.X, vector.Y, new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor), Color.Black, Vector2.Zero);
+        }
+        
         public static int NewText(Rectangle location, Color color, string text, bool dramatic = false, bool dot = false)
         {
             if (Main.netMode == NetmodeID.Server)

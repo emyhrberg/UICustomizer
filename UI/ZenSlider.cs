@@ -9,7 +9,7 @@ using Terraria.UI;
 
 namespace UICustomizer.UI;
 
-public sealed class ZenSlider : UIElement
+public class ZenSlider : UIElement
 {
     public Color InnerColor;
     public Asset<Texture2D> InnerTexture;
@@ -58,7 +58,7 @@ public sealed class ZenSlider : UIElement
             {
                 float num = Main.MouseScreen.X - dims.X;
                 Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f); // <- changed this because UserInterface.ActiveInstance was mis-scaled
-                Log.Info($"ZenSlider → LeftMouseUp Ratio: {Ratio:F2}"); // debug
+                //Log.Info($"ZenSlider → LeftMouseUp Ratio: {Ratio:F2}"); // debug
             }
             OnValueAppliedOnMouseUp?.Invoke(Ratio);
         }

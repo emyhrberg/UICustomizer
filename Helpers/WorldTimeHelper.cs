@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System;
+using Terraria;
 
 namespace UICustomizer.Helpers
 {
@@ -6,51 +7,55 @@ namespace UICustomizer.Helpers
     {
         public static void SetTime(float ratio)
         {
-            const float dayDuration = 54000f;
-            const float totalCycleDuration = 86400f; // Day (54000) + Night (32400)
-            float currentTickInCycle = ratio * totalCycleDuration;
+            // 0 … 1  → always stay inside one 24-hour cycle
+            ratio = (ratio % 1f + 1f) % 1f;
 
-            if (currentTickInCycle < dayDuration)
+            const float dayTicks = 54000f;   // 4 h 30 m … 7 h 30 m  (sunrise → sunset)
+            const float totalTicks = 86400f;   // 24 hours
+
+            float ticks = ratio * totalTicks;
+
+            if (ticks < dayTicks)              // day phase
             {
                 Main.dayTime = true;
-                Main.time = currentTickInCycle;
+                Main.time = ticks;          //   0 … 53999
             }
-            else
+            else                               // night phase
             {
                 Main.dayTime = false;
-                Main.time = currentTickInCycle - dayDuration;
+                Main.time = ticks - dayTicks;   //   0 … 32399
             }
         }
 
         public static float GetRatioFromTime()
         {
-            const float dayDuration = 54000f;
-            const float totalCycleDuration = 86400f;
+            const float dayTicks = 54000f;
+            const float totalTicks = 86400f;
 
-            double currentTimeInCycle = Main.time;
-            if (!Main.dayTime)
-            {
-                currentTimeInCycle += dayDuration;
-            }
-
-            return (float)(currentTimeInCycle / totalCycleDuration);
+            double ticks = Main.time + (Main.dayTime ? 0 : dayTicks);   // add night offset
+            return (float)(ticks / totalTicks);                         // 0 … 1
         }
-        
-        /// <summary>
-        /// Get the current formatted time like 04:30 AM or 8:59 PM
-        /// </summary>
+
+        /// <remarks>Terraria’s clock starts at 4 : 30 AM.</remarks>
         public static string GetFormattedTime()
         {
-            // Calculate the total time in ticks since the start of the day
-            double time = Main.time + (Main.dayTime ? 0 : 54000);
+            const double dayTicks = 54000.0;      // sunrise → sunset
+            double ticks = Main.time + (Main.dayTime ? 0 : dayTicks);
 
-            // Terraria's in-game time starts at 4:30 AM, so add 4.5 hours
-            double hours = (time / 3600.0) + 4.5;
-            int hour12 = ((int)hours % 12 == 0) ? 12 : (int)hours % 12;
-            int minutes = (int)(time % 3600 / 60);
-            string period = hours >= 12 ? "PM" : "AM";
+            //   ticks → hours since 4 : 30
+            double hours24 = 4.5 + ticks / 3600.0;   // 3600 ticks = 1 h
+            hours24 %= 24.0;                         // wrap past midnight
 
-            return $"{hour12}:{minutes:D2} {period}";
+            int h = (int)hours24;
+            int m = (int)Math.Round((hours24 - h) * 60.0);
+
+            if (m == 60) { m = 0; h = (h + 1) % 24; }
+
+            string ampm = h >= 12 ? "PM" : "AM";
+            int h12 = h % 12; if (h12 == 0) h12 = 12;
+
+            return $"{h12}:{m:D2} {ampm}";
         }
+
     }
 }

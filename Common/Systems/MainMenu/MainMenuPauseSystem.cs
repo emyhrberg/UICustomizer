@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu
+namespace UICustomizer.Common.Systems.MainMenu
 {
     public class MainMenuPauseSystem : ModSystem
     {

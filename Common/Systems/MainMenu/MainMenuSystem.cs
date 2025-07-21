@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using UICustomizer.Common.Configs;
 
 namespace UICustomizer.Common.Systems.MainMenu;
 
@@ -13,6 +14,8 @@ internal sealed class MainMenuSystem : ModSystem
     public override void PostSetupContent()
     {
         if (Main.dedServ) return;
+
+        if (Conf.C is null || !Conf.C.EditMainMenu) return;
 
         ui = new UserInterface();
         state = new MainMenuState();
@@ -34,6 +37,9 @@ internal sealed class MainMenuSystem : ModSystem
 
     private void PostUpdateUIStates(On_Main.orig_UpdateUIStates orig, GameTime gameTime)
     {
+        // crashes when changing in config
+        //bool enabled = Conf.C?.EditMainMenu ?? false;   // read once
+
         if (Main.gameMenu && Main.menuMode == 0)
         {
             if (ui.CurrentState == null)
@@ -43,11 +49,12 @@ internal sealed class MainMenuSystem : ModSystem
         }
         else if (ui.CurrentState != null)
         {
-            ui.SetState(null);
+            ui.SetState(null);          // hide the panel
         }
 
         orig(gameTime);
     }
+
 
     public override void Unload()
     {
