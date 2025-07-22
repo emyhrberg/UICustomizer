@@ -14,7 +14,9 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private static bool ModifyColor(ref Color color, int r, int g, int b, int a, float interpolator)
         {
-            Color = color;
+            Color = Color.Lerp(Color, Main.OurFavoriteColor, interpolator);
+            //Color = Color.Lerp(Color, MainMenuHoverTextColorHook.Color, interpolator);
+            Log.Info("new color: " + color + ", and Color:" + Color);
             return true;
         }
 
