@@ -250,14 +250,14 @@ public sealed class MainMenuState : UIState
         UIText drawHeader = new("Draw") { HAlign = 0.5f };
         drawSection.Append(drawHeader);
 
-        UIText logoToggle = new("Logo: Off") { Top = { Pixels = 30 }, HAlign = 0.5f };
+        UIText logoToggle = new("Logo: On") { Top = { Pixels = 30 }, HAlign = 0.5f };
         drawSection.Append(logoToggle);
 
         logoToggle.OnLeftMouseDown += (_, __) =>
         {
             // TODO impl logo toggle 
-            MainMenuPauseSystem.TimeIsPausedBySlider = !MainMenuPauseSystem.TimeIsPausedBySlider;
-            logoToggle.SetText($"Logo: {(MainMenuPauseSystem.TimeIsPausedBySlider ? "On" : "Off")}");
+            SkipLogoDrawHook.DrawLogo = !SkipLogoDrawHook.DrawLogo;
+            logoToggle.SetText($"Logo: {(SkipLogoDrawHook.DrawLogo ? "On" : "Off")}");
         };
     }
 
