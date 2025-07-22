@@ -9,29 +9,56 @@ using UICustomizer.UI.MainMenuElements.TagElements;
 
 namespace UICustomizer.Common.Systems.MainMenu;
 
-internal sealed class MainMenuState : UIState
+public sealed class MainMenuState : UIState
 {
     // Parent Elements
     private UIText headerText;
-    private ExpandablePanel panel;        // collapsible panel (timeHeader + body)
-    private UIList list;       // inner list that lives inside the panel
+    private ExpandablePanel panel;  
+    private UIList list;      
 
-    // Text Color Section
-    private BoxSection textColorSection;
-    private ResetTag resetTag;
-    private HueSlider hueSlider;   // color picker for text color
-    private CopyTag copy;
-    private PasteTag paste;
-    private RandomizeTag rand;
-    private PanelTag panelTag;
+    public enum TextColorType
+    {
+        Fill,
+        Outline,
+        Hover
+    }
 
-    // Text Color Values
-    private Color _lastColor = MainMenuTextColorHook.MainMenuTextColor;
+    // Outline Text Color Section
+    private BoxSection outlineTextColorSection;
+    private ResetTag outlineReset;
+    private HueSlider outlineHue;  
+    private CopyTag outlineCopy;
+    private PasteTag outlinePaste;
+    private RandomizeTag outlineRand;
+    private PanelTag outlinePanelTag;
+    private Color _lastOutlineColor = MainMenuOutlineTextColorHook.Color;
+
+    // Fill Text Color Section
+    private BoxSection fillTextColorSection;
+    private ResetTag fillReset;
+    private HueSlider fillHue;
+    private CopyTag fillCopy;
+    private PasteTag fillPaste;
+    private RandomizeTag fillRand;
+    private PanelTag fillPanelTag;
+    private Color _lastFillColor = MainMenuFillTextColorHook.Color;
+
+    // Hover Text Color Section
+    private BoxSection hoverTextColorSection;
+    private ResetTag hoverReset;
+    private HueSlider hoverHue;
+    private CopyTag hoverCopy;
+    private PasteTag hoverPaste;
+    private RandomizeTag hoverRand;
+    private PanelTag hoverPanelTag;
+    private Color _lastHoverColor = MainMenuHoverTextColorHook.Color;
 
     // Time Section
     private BoxSection timeSection;
     private TimeSlider timeSlider;
 
+    // Draw section
+    private BoxSection drawSection;
     
     public MainMenuState()
     {
@@ -60,60 +87,122 @@ internal sealed class MainMenuState : UIState
         list = new UIList
         {
             Width = { Pixels = -22f, Percent = 1f },
-            MinHeight = { Pixels = 330 }, // enough to show both sections
-            //Height = { Pixels = Main.screenHeight - 100 },
+            MinHeight = { Pixels = 700 }, // total height for panel expanded is hardcoded for some reason
             Top = { Pixels = 30f },
             ListPadding = 4f
         };
         panel.VisibleWhenExpanded.Add(list);
 
-        BuildTextColorSection();
+        BuildFillTextColorSection(TextColorType.Fill);
+        BuildOutlineTextColorSection(TextColorType.Outline);
+        BuildHoverTextColorSection(TextColorType.Hover);
         BuildTimeSection();
+        BuildDrawSection();
     }
 
-    private void BuildTextColorSection()
+    private void BuildFillTextColorSection(TextColorType type)
     {
-        textColorSection = new();
+        fillTextColorSection = new();
 
-        // Text color header and reset icon is a top element
-        UIElement topRow = new UIElement
+        UIElement topRow = new() { Width = { Percent = 1f }, Height = { Pixels = 24f } };
+        UIText header = new("Fill Text Color") { HAlign = 0.5f, VAlign = 0.5f, Top = { Pixels = 4f } };
+        fillReset = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/HairStyle_Arrow"), type)
         {
-            Width = { Percent = 1f },
-            Height = { Pixels = 24f }
+            HAlign = 1f,
+            Top = { Pixels = -3f },
+            Left = { Pixels = -3f }
         };
 
-        UIText textColorHeader = new("Text Color")
+        topRow.Append(header);
+        topRow.Append(fillReset);
+        fillTextColorSection.Append(topRow);
+
+        fillHue = new(type);
+        fillTextColorSection.Append(fillHue);
+
+        fillCopy = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Copy"), type);
+        fillTextColorSection.Append(fillCopy);
+
+        fillPaste = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Paste"), type);
+        fillTextColorSection.Append(fillPaste);
+
+        fillRand = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Randomize"), type);
+        fillTextColorSection.Append(fillRand);
+
+        fillPanelTag = new();
+        fillTextColorSection.Append(fillPanelTag);
+
+        list.Add(fillTextColorSection);
+    }
+
+    private void BuildOutlineTextColorSection(TextColorType type)
+    {
+        outlineTextColorSection = new();
+
+        UIElement topRow = new() { Width = { Percent = 1f }, Height = { Pixels = 24f } };
+        UIText header = new("Outline Text Color") { HAlign = 0.5f, VAlign = 0.5f, Top = { Pixels = 4f } };
+        outlineReset = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/HairStyle_Arrow"), type)
         {
-            Top = { Pixels = 4f },
-            VAlign = 0.5f
+            HAlign = 1f,
+            Top = { Pixels = -3f },
+            Left = { Pixels = -3f }
         };
 
-        resetTag = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Copy"));
-        resetTag.Top.Set(0f, 0f);
-        resetTag.Left.Pixels = textColorHeader.MinWidth.Pixels + 50f; // adjust as needed
-        resetTag.HAlign = 0f;
+        topRow.Append(header);
+        topRow.Append(outlineReset);
+        outlineTextColorSection.Append(topRow);
 
-        topRow.Append(textColorHeader);
-        topRow.Append(resetTag);
+        outlineHue = new(type);
+        outlineTextColorSection.Append(outlineHue);
 
-        textColorSection.Append(topRow);
+        outlineCopy = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Copy"), type);
+        outlineTextColorSection.Append(outlineCopy);
 
-        hueSlider = new();
-        textColorSection.Append(hueSlider);
+        outlinePaste = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Paste"), type);
+        outlineTextColorSection.Append(outlinePaste);
 
-        copy = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Copy"));
-        textColorSection.Append(copy);
+        outlineRand = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Randomize"), type);
+        outlineTextColorSection.Append(outlineRand);
 
-        paste = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Paste"));
-        textColorSection.Append(paste);
+        outlinePanelTag = new();
+        outlineTextColorSection.Append(outlinePanelTag);
 
-        rand = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Randomize"));
-        textColorSection.Append(rand);
+        list.Add(outlineTextColorSection);
+    }
 
-        panelTag = new();
-        textColorSection.Append(panelTag);
+    private void BuildHoverTextColorSection(TextColorType type)
+    {
+        hoverTextColorSection = new();
 
-        list.Add(textColorSection);
+        UIElement topRow = new() { Width = { Percent = 1f }, Height = { Pixels = 24f } };
+        UIText header = new("Hover Text Color") { HAlign = 0.5f, VAlign = 0.5f, Top = { Pixels = 4f } };
+        hoverReset = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/HairStyle_Arrow"), type)
+        {
+            HAlign = 1f,
+            Top = { Pixels = -3f },
+            Left = { Pixels = -3f }
+        };
+
+        topRow.Append(header);
+        topRow.Append(hoverReset);
+        hoverTextColorSection.Append(topRow);
+
+        hoverHue = new(type);
+        hoverTextColorSection.Append(hoverHue);
+
+        hoverCopy = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Copy"), type);
+        hoverTextColorSection.Append(hoverCopy);
+
+        hoverPaste = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Paste"), type);
+        hoverTextColorSection.Append(hoverPaste);
+
+        hoverRand = new(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Randomize"), type);
+        hoverTextColorSection.Append(hoverRand);
+
+        hoverPanelTag = new();
+        hoverTextColorSection.Append(hoverPanelTag);
+
+        list.Add(hoverTextColorSection);
     }
 
     private void BuildTimeSection()
@@ -130,15 +219,11 @@ internal sealed class MainMenuState : UIState
         UIText timeText = new(WorldTimeHelper.GetFormattedTime()) { Top = { Pixels = 50 }, HAlign = 0.5f };
         timeSection.Append(timeText);
 
-        UIText pauseToggle = new("Pause: Off") { Top = { Pixels = 74 }, HAlign = 0.5f };
+        UIText pauseToggle = new("Pause: Off") { Top = { Pixels = 50 + 24 }, HAlign = 0.5f };
         timeSection.Append(pauseToggle);
 
-        void refresh()
-        {
-            timeText.SetText(WorldTimeHelper.GetFormattedTime());
-            timeSlider.Ratio = WorldTimeHelper.GetRatioFromTime();
-            pauseToggle.SetText($"Pause: {(MainMenuPauseSystem.TimeIsPausedBySlider ? "On" : "Off")}");
-        }
+        UIText dayRate = new("Main.time: ") { Top = { Pixels = 74 + 24 }, HAlign = 0.5f };
+        timeSection.Append(dayRate);
 
         pauseToggle.OnLeftMouseDown += (_, __) =>
         {
@@ -146,7 +231,34 @@ internal sealed class MainMenuState : UIState
             refresh();
         };
 
+        void refresh()
+        {
+            timeText.SetText(WorldTimeHelper.GetFormattedTime());
+            timeSlider.Ratio = WorldTimeHelper.GetRatioFromTime();
+            pauseToggle.SetText($"Pause: {(MainMenuPauseSystem.TimeIsPausedBySlider ? "On" : "Off")}");
+            dayRate.SetText($"Main.time: {(int)Main.time}");
+        }
+
         timeSection.OnUpdate += _ => refresh();
+    }
+
+    private void BuildDrawSection()
+    {
+        drawSection = new();
+        list.Add(drawSection);
+
+        UIText drawHeader = new("Draw") { HAlign = 0.5f };
+        drawSection.Append(drawHeader);
+
+        UIText logoToggle = new("Logo: Off") { Top = { Pixels = 30 }, HAlign = 0.5f };
+        drawSection.Append(logoToggle);
+
+        logoToggle.OnLeftMouseDown += (_, __) =>
+        {
+            // TODO impl logo toggle 
+            MainMenuPauseSystem.TimeIsPausedBySlider = !MainMenuPauseSystem.TimeIsPausedBySlider;
+            logoToggle.SetText($"Logo: {(MainMenuPauseSystem.TimeIsPausedBySlider ? "On" : "Off")}");
+        };
     }
 
     public override void Draw(SpriteBatch sb)
@@ -158,23 +270,32 @@ internal sealed class MainMenuState : UIState
 
     private void DrawHoverTooltips(SpriteBatch sb)
     {
-        UIElement hovered = null;
+        UIElement[] hoverables =
+        [
+        fillCopy, fillPaste, fillRand, fillReset,
+        outlineCopy, outlinePaste, outlineRand, outlineReset,
+        hoverCopy, hoverPaste, hoverRand, hoverReset
+        ];
 
-        if (copy.IsMouseHovering) hovered = copy;
-        else if (paste.IsMouseHovering) hovered = paste;
-        else if (rand.IsMouseHovering) hovered = rand;
-
-        string text = hovered switch
+        foreach (UIElement element in hoverables)
         {
-            CopyTag => "Copy color",
-            PasteTag => "Paste color",
-            RandomizeTag => "Randomize color",
-            _ => null
-        };
+            if (!element.IsMouseHovering)
+                continue;
 
-        if (text != null)
-        {
-            DrawHelper.DrawTextAtMouse(sb, text);
+            string text = element switch
+            {
+                CopyTag => "Copy color",
+                PasteTag => "Paste color",
+                RandomizeTag => "Randomize color",
+                ResetTag => "Reset",
+                _ => null
+            };
+
+            if (text != null)
+            {
+                DrawHelper.DrawTextAtMouse(sb, text);
+                break; // only draw tooltip for the first hovered
+            }
         }
     }
 
@@ -182,19 +303,53 @@ internal sealed class MainMenuState : UIState
     {
         base.Update(gameTime);
 
-        // Sync UI widgets if someone changed the colour behind their back
-        Color current = MainMenuTextColorHook.MainMenuTextColor;
+        UpdateOutlineTextColor();
+        UpdateFillTextColor();
+        UpdateHoverTextColor();
+    }
 
-        if (current != _lastColor)
+    private void UpdateOutlineTextColor()
+    {
+        Color currentOutline = MainMenuOutlineTextColorHook.Color;
+
+        if (currentOutline != _lastOutlineColor)
         {
-            _lastColor = current;
+            _lastOutlineColor = currentOutline;
 
             // 1) move the hue slider knob  (HSV hue in [0,1])
-            float h = Main.rgbToHsl(current).X;
-            hueSlider.Ratio = h;
+            float h = Main.rgbToHsl(currentOutline).X;
+            outlineHue.Ratio = h;
 
             // 2) update the little #RRGGBB label
-            panelTag.tagText.SetText($"#{current.R:X2}{current.G:X2}{current.B:X2}");
+            outlinePanelTag.tagText.SetText($"#{currentOutline.R:X2}{currentOutline.G:X2}{currentOutline.B:X2}");
+        }
+    }
+
+    private void UpdateFillTextColor()
+    {
+        Color currentFill = MainMenuFillTextColorHook.Color;
+        if (currentFill != _lastFillColor)
+        {
+            _lastFillColor = currentFill;
+
+            float h = Main.rgbToHsl(currentFill).X;
+            fillHue.Ratio = h;
+
+            fillPanelTag.tagText.SetText($"#{currentFill.R:X2}{currentFill.G:X2}{currentFill.B:X2}");
+        }
+    }
+
+    private void UpdateHoverTextColor()
+    {
+        Color currentHover = MainMenuHoverTextColorHook.Color;
+        if (currentHover != _lastHoverColor)
+        {
+            _lastHoverColor = currentHover;
+
+            float h = Main.rgbToHsl(currentHover).X;
+            hoverHue.Ratio = h;
+
+            hoverPanelTag.tagText.SetText($"#{currentHover.R:X2}{currentHover.G:X2}{currentHover.B:X2}");
         }
     }
 }

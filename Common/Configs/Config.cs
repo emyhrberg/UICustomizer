@@ -41,10 +41,10 @@ namespace UICustomizer.Common.Configs
 
             //var mainmenu = ModContent.GetInstance<MainMenuDraw>();
             //if (mainmenu == null) return;
-            //mainmenu.rRatio = MainMenuTextColor.R / 255;
-            //mainmenu.gRatio = MainMenuTextColor.G / 255;
-            //mainmenu.bRatio = MainMenuTextColor.B / 255;
-            //Log.Info("red conf" + Conf.C.MainMenuTextColor);
+            //mainmenu.rRatio = Color.R / 255;
+            //mainmenu.gRatio = Color.G / 255;
+            //mainmenu.bRatio = Color.B / 255;
+            //Log.Info("red conf" + Conf.C.Color);
         }
     }
 

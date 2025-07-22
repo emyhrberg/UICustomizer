@@ -1,19 +1,26 @@
 using Terraria.GameContent.UI.States;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
+using static UICustomizer.Common.Systems.MainMenu.MainMenuState;
 
 namespace UICustomizer.UI.MainMenuElements
 {
     internal class HueSlider : ZenSlider
     {
-        public HueSlider()
+        public HueSlider(TextColorType type)
         {
             Top.Set(40, 0);
             InnerTexture = Ass.SliderHueGradient;
 
-            static void updateColor(float value)
+            void updateColor(float value)
             {
                 Color updatedColor = UICharacterCreation.ScaledHslToRgb(value, 1f, 0.5f);
-                MainMenuTextColorHook.MainMenuTextColor = updatedColor;
+                var a = type switch
+                {
+                    TextColorType.Fill => MainMenuFillTextColorHook.Color = updatedColor,
+                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color = updatedColor,
+                    TextColorType.Hover => MainMenuHoverTextColorHook.Color = updatedColor,
+                    _ => throw new System.NotImplementedException(),
+                };
             }
 
             OnDrag += updateColor;
@@ -22,7 +29,6 @@ namespace UICustomizer.UI.MainMenuElements
 
         public override void Update(GameTime gameTime)
         {
-            Top.Set(40, 0);
             base.Update(gameTime);
         }
     }

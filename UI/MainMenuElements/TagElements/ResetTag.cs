@@ -1,17 +1,15 @@
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using ReLogic.OS;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
-using static System.Net.Mime.MediaTypeNames;
 using static UICustomizer.Common.Systems.MainMenu.MainMenuState;
 
 namespace UICustomizer.UI.MainMenuElements.TagElements
 {
-    public class CopyTag : UIColoredImageButton
+    public class ResetTag : UIColoredImageButton
     {
-        public CopyTag(Asset<Texture2D> texture, TextColorType type, bool isSmall = true) : base(texture, isSmall)
+        public ResetTag(Asset<Texture2D> texture, TextColorType type, bool isSmall = true) : base(texture, isSmall)
         {
             VAlign = 1f;
             Left.Set(0, 0);
@@ -20,18 +18,18 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
             {
                 Color c = type switch
                 {
-                    TextColorType.Fill => MainMenuFillTextColorHook.Color,
-                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color,
-                    TextColorType.Hover => MainMenuHoverTextColorHook.Color,
+                    TextColorType.Fill => MainMenuFillTextColorHook.Color = Color.Gray,
+                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color = Color.Black,
+                    TextColorType.Hover => MainMenuHoverTextColorHook.Color = Main.OurFavoriteColor,
                     _ => MainMenuFillTextColorHook.Color
                 };
-
-                string hex = $"{c.R:X2}{c.G:X2}{c.B:X2}";
-                Platform.Get<IClipboard>().Value = hex;
             };
         }
         public override void Update(GameTime gameTime)
         {
+            HAlign = 1f;
+            Top.Set(3f, 0f);
+            Left.Set(6f, 0f);
             base.Update(gameTime);
         }
 
@@ -39,6 +37,11 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
         {
             base.Draw(sb);
             //Log.Info(Main.MouseScreen.ToScreenPosition().ToString());
+
+            if (IsMouseHovering)
+            {
+                DrawHelper.DrawTextAtMouse(sb, "Reset");
+            }
         }
     }
 }
