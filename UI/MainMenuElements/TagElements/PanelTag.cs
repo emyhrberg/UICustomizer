@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader.UI;
 
 namespace UICustomizer.UI.MainMenuElements.TagElements
 {
@@ -30,25 +31,9 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
 
             if (IsMouseHovering)
             {
-                Color c = HexToColor(tagText.Text);
-                DrawHelper.DrawTextAtMouse(spriteBatch, $"R: {c.R}  G: {c.G}");
+                Color c = ColorHelper.HexToColor(tagText.Text);
+                UICommon.TooltipMouseText($"R: {c.R}  G: {c.G} B; {c.B}");
             }
         }
-
-        public Color HexToColor(string hex)
-        {
-            if (hex.StartsWith("#"))
-                hex = hex[1..]; // remove '#'
-
-            if (hex.Length != 6)
-                throw new ArgumentException("Hex must be 6 characters long.");
-
-            byte r = Convert.ToByte(hex.Substring(0, 2), 16);
-            byte g = Convert.ToByte(hex.Substring(2, 2), 16);
-            byte b = Convert.ToByte(hex.Substring(4, 2), 16);
-
-            return new Color(r, g, b);
-        }
-
     }
 }

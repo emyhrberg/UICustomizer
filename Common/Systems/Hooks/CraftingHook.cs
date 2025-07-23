@@ -23,7 +23,7 @@ namespace UICustomizer.Common.Systems.Hooks
             IL_Main.DrawInventory -= CraftingNog;
         }
 
-        // private void OnDrawGuideCraftText(orig_DrawGuideCraftText orig, int adjY, Color craftingTipColor, out int inventoryX, out int inventoryY)
+        // private void OnDrawGuideCraftText(orig_DrawGuideCraftText orig, int adjY, NormalColor craftingTipColor, out int inventoryX, out int inventoryY)
         // {
         //     orig(adjY, craftingTipColor, out inventoryX, out inventoryY);
         //     inventoryX += (int)OffsetX;

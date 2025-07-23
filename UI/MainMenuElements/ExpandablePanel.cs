@@ -20,7 +20,7 @@ namespace UICustomizer.UI.MainMenuElements
             expandButton.Top.Set(4, 0);
             expandButton.Left.Set(-30, 1);
 
-            Collapse(); // start collapsed
+            //Collapse(); // start collapsed // TODO UPDATE ON RELEASE
         }
 
         public override void Update(GameTime gameTime)

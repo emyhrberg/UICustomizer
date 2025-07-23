@@ -6,7 +6,7 @@ namespace UICustomizer.Common.Systems.MainMenu
     public class MainMenuPauseSystem : ModSystem
     {
         // This flag will be controlled by the slider logic.
-        public static bool TimeIsPausedBySlider = false;
+        public static bool IsPaused = false;
 
         public override void Load()
         {
@@ -21,7 +21,7 @@ namespace UICustomizer.Common.Systems.MainMenu
         private void StopTimeInMenu(On_Main.orig_UpdateMenu orig)
         {
             // Only freeze time if we are in the menu AND our flag is set.
-            if (Main.gameMenu && TimeIsPausedBySlider)
+            if (Main.gameMenu && IsPaused)
             {
                 return;
             }

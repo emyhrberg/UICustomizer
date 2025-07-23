@@ -132,7 +132,7 @@ namespace UICustomizer.UI
             var dims = headerPanel.GetDimensions();
             int y = (int)(dims.Y + dims.Height);
             int w = (int)dims.Width - 14;
-            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+6, y-5, w, 1), Color.White);
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)dims.X+6, y-5, w, 1), NormalColor.White);
         }
     }
 

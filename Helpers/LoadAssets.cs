@@ -17,16 +17,22 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> EyeOpen;
         public static Asset<Texture2D> EyeOpenHover;
         public static Asset<Texture2D> Hitbox;
+        public static Asset<Texture2D> Inventory_Tick_Off;
+        public static Asset<Texture2D> Inventory_Tick_On;
         public static Asset<Texture2D> LayersIcon;
         public static Asset<Texture2D> Minus;
         public static Asset<Texture2D> MinusHover;
+        public static Asset<Texture2D> Pause;
+        public static Asset<Texture2D> Play;
         public static Asset<Texture2D> Plus;
         public static Asset<Texture2D> PlusHover;
+        public static Asset<Texture2D> Reset;
         public static Asset<Texture2D> Resize;
         public static Asset<Texture2D> Slider;
         public static Asset<Texture2D> SliderGradient;
         public static Asset<Texture2D> SliderHueGradient;
         public static Asset<Texture2D> SliderHighlight;
+        public static Asset<Texture2D> SliderTime;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

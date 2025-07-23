@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.OS;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader.UI;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using static UICustomizer.Common.Systems.MainMenu.MainMenuState;
 
@@ -31,9 +32,9 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
 
                     var a = type switch
                     {
-                        TextColorType.Fill => MainMenuFillTextColorHook.Color = updatedColor,
+                        TextColorType.Fill => MainMenuTextColorHook.NormalColor = updatedColor,
                         TextColorType.Outline => MainMenuOutlineTextColorHook.Color = updatedColor,
-                        TextColorType.Hover => MainMenuHoverTextColorHook.Color = updatedColor,
+                        TextColorType.Hover => MainMenuTextColorHook.HoverColor = updatedColor,
                         _ => throw new System.NotImplementedException(),
                     };
                 }
@@ -50,7 +51,7 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
 
             if (IsMouseHovering)
             {
-                DrawHelper.DrawTextAtMouse(sb, "Paste color");
+                UICommon.TooltipMouseText("Paste color");
             }
         }
     }

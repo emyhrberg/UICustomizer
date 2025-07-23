@@ -61,3 +61,28 @@ TODO:
 - Add scale elements
 - Fix UIElement debugger with mod filter panel
 [x] Add resize X (at least from min width 440 to max width 600 or something)
+
+--------------------------------------------------------------
+2025-07-22:
+--------------------------------------------------------------
+TODO:
+- Add lock/disappear for main menu edits
+- Add config options for main menu edits: text color, time, draw logo, etc
+
+--------------------------------------------------------------
+2025-07-23:
+--------------------------------------------------------------
+TODO:
+- Upload custom logo
+- Edit logo: scale, position, 
+- Skip draw logo
+- Skip draw background
+- Config elments for each color tag
+- Sync color tags and ensure more smoothness
+
+BUGS:
+1. Play pause is shifting and out of sync
+2. 
+
+IMPROVE:
+UI Editor panel

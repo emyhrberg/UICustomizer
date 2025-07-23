@@ -143,7 +143,7 @@ namespace UICustomizer.Helpers.Layouts
 
                 CurrentLayoutName = layoutName;
                 Log.Info($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.");
-                //Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", Color.LightGreen);
+                //Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", NormalColor.LightGreen);
             }
             catch (Exception ex)
             {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
+using UICustomizer.Common.Systems.MainMenu;
 
 namespace UICustomizer.Common.Configs
 {
@@ -10,13 +10,24 @@ namespace UICustomizer.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [Header("UIEditor")]
+        [Header("MainMenu")]
 
         [DefaultValue(true)]
-        public bool ShowEditButton;
+        public bool EditMainMenu = true;
 
         [DefaultValue(true)]
-        public bool ShowLayersButton;
+        public bool ShowMainMenu = true;
+
+        [CustomModConfigItem(typeof(ColorTagConfigElement))]
+        public string FillColor;
+
+        [CustomModConfigItem(typeof(ColorTagConfigElement))]
+        public string NormalColor;
+
+        [CustomModConfigItem(typeof(ColorTagConfigElement))]
+        public string HoverColor;
+
+        [Header("Misc")]
 
         [DefaultValue(true)]
         public bool ShowMessageWhenEnteringWorld;
@@ -27,24 +38,32 @@ namespace UICustomizer.Common.Configs
         [DefaultValue(true)]
         public bool DisableItemUseWhileDragging;
 
-        [Header("MainMenu")]
-
-        [DefaultValue(true)]
-        public bool EditMainMenu;
-
-        [DefaultValue(typeof(Color), "0, 0, 0, 0")]
-        public Color MainMenuTextColor = Color.Black;
-
         public override void OnChanged()
         {
             base.OnChanged();
 
+            if (ModContent.GetInstance<Config> == null)
+            {
+                Log.Info("Config is null for some reason");
+                return;
+            }
+
+            // Update eye toggle
+            var sys = ModContent.GetInstance<MainMenuSystem>();
+            if (sys == null)
+            {
+                Log.Info("MainMenuSystem is null for some reason");
+                return;
+            }
+
+            sys.state.eyeToggle.isOn = Conf.C.ShowMainMenu;
+
             //var mainmenu = ModContent.GetInstance<MainMenuDraw>();
             //if (mainmenu == null) return;
-            //mainmenu.rRatio = Color.R / 255;
-            //mainmenu.gRatio = Color.G / 255;
-            //mainmenu.bRatio = Color.B / 255;
-            //Log.Info("red conf" + Conf.C.Color);
+            //mainmenu.rRatio = NormalColor.R / 255;
+            //mainmenu.gRatio = NormalColor.G / 255;
+            //mainmenu.bRatio = NormalColor.B / 255;
+            //Log.Info("red conf" + Conf.C.NormalColor);
         }
     }
 

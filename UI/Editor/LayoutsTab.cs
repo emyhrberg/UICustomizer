@@ -71,7 +71,7 @@ namespace UICustomizer.UI.Editor
                     Left = { Pixels = 0 },
                     Top = { Pixels = y },
                     BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue,
-                    // BorderColor = isCurrent ? Color.Yellow : Color.Black
+                    // BorderColor = isCurrent ? NormalColor.Yellow : NormalColor.Black
                 };
                 content.Append(btn);
             }
@@ -101,7 +101,7 @@ namespace UICustomizer.UI.Editor
                     Top = { Pixels = y },
                     BackgroundColor = isCurrent ? Color.Green : UICommon.DefaultUIBlue
                 };
-                //btn.BorderColor = isCurrent ? Color.Yellow : Color.Black; // doesnt work?
+                //btn.BorderColor = isCurrent ? NormalColor.Yellow : NormalColor.Black; // doesnt work?
                 btn.OnRightClick += (_, _) =>
                 {
                     FileHelper.OpenLayoutFile(name);

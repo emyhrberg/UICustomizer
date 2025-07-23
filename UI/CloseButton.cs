@@ -25,7 +25,7 @@ namespace UICustomizer.UI
                 BorderColor = Color.Yellow;
                 if (Main.mouseLeft)
                 {
-                     //x._color = Color.Yellow;
+                     //x._color = NormalColor.Yellow;
                     if (Main.mouseLeftRelease)
                     {
                         x._color = Color.White;

@@ -133,7 +133,7 @@
 //        {
 //            Vector2 pos = Parent.GetDimensions().Position();
 //            pos += new Vector2(0, -3);
-//            sb.Draw(_texture.Value, pos, Color.White * opacity);
+//            sb.Draw(_texture.Value, pos, NormalColor.White * opacity);
 //        }
 //    }
 

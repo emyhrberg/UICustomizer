@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Xna.Framework; // Required for Color
+using Microsoft.Xna.Framework; // Required for NormalColor
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 using UICustomizer.Common.Systems.Hooks; // Assuming your hooks are here

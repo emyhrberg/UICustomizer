@@ -8,7 +8,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
     {
         public static Color Color;
         public override void Load() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu += EditAllMenuTextColors);
-        public override void Unload() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu += EditAllMenuTextColors);
+        public override void Unload() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu -= EditAllMenuTextColors);
         private void EditAllMenuTextColors(ILContext il)
         {
             IL.Edit(il, c =>

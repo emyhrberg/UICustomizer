@@ -16,9 +16,9 @@ namespace UICustomizer.UI.MainMenuElements
                 Color updatedColor = UICharacterCreation.ScaledHslToRgb(value, 1f, 0.5f);
                 var a = type switch
                 {
-                    TextColorType.Fill => MainMenuFillTextColorHook.Color = updatedColor,
+                    TextColorType.Fill => MainMenuTextColorHook.NormalColor = updatedColor,
                     TextColorType.Outline => MainMenuOutlineTextColorHook.Color = updatedColor,
-                    TextColorType.Hover => MainMenuHoverTextColorHook.Color = updatedColor,
+                    TextColorType.Hover => MainMenuTextColorHook.HoverColor = updatedColor,
                     _ => throw new System.NotImplementedException(),
                 };
             }

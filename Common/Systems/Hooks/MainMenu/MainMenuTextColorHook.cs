@@ -6,17 +6,23 @@ using Terraria.ModLoader;
 
 namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
-    public class MainMenuFillTextColorHook : ModSystem
+    public class MainMenuTextColorHook : ModSystem
     {
-        public static Color Color;
+        public static Color NormalColor;
+        public static Color HoverColor = Main.OurFavoriteColor;
         public override void Load() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
         public override void Unload() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu -= ModifyColors);
 
         private static bool ModifyColor(ref Color color, int r, int g, int b, int a, float interpolator)
         {
-            //Color = Color.Lerp(Color, MainMenuHoverTextColorHook.Color, interpolator);
-            Log.Info("new color: " + color + ", and Color:" + Color);
-            color = MainMenuFillTextColorHook.Color;
+            // If nothing is set, return here
+            if (NormalColor == default)
+            {
+                //Log.Warn("MainMenuFillTextColorHook.Color is default, skipping color modification.");
+                return false;
+            }
+
+            color = Color.Lerp(NormalColor, HoverColor, interpolator);
             return true;
         }
 

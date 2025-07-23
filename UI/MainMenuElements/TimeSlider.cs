@@ -1,38 +1,26 @@
-using Terraria.GameContent.UI.States;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
-
 namespace UICustomizer.UI.MainMenuElements
 {
     internal class TimeSlider : ZenSlider
     {
         public TimeSlider()
         {
-            Width.Set(-10, 1);
-            Top.Set(24, 0);
+            Width.Set(0, 1);
+            Top.Set(24+24, 0);
             Ratio = WorldTimeHelper.GetRatioFromTime();
+            InnerTexture = Ass.SliderTime;
 
-            void refresh()
+            void refresh(float v)
             {
-                // timeText.SetText(WorldTimeHelper.GetFormattedTime());
+                WorldTimeHelper.SetTime(v);
                 Ratio = WorldTimeHelper.GetRatioFromTime();
-                // pauseToggle.SetText($"Pause: {(MainMenuPauseSystem.TimeIsPausedBySlider ? "On" : "Off")}");
             }
 
-            OnDrag += v =>
-            {
-                WorldTimeHelper.SetTime(v);
-                refresh();
-            };
-            OnValueAppliedOnMouseUp += v =>
-            {
-                WorldTimeHelper.SetTime(v);
-                refresh();
-            };
+            OnDrag += refresh;
+            OnValueAppliedOnMouseUp += refresh;
         }
 
         public override void Update(GameTime gameTime)
         {
-            InnerTexture = Ass.SliderGradient;
             base.Update(gameTime);
         }
     }

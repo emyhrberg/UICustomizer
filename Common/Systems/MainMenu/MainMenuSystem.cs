@@ -9,7 +9,7 @@ namespace UICustomizer.Common.Systems.MainMenu;
 internal sealed class MainMenuSystem : ModSystem
 {
     private UserInterface ui;
-    private MainMenuState state;
+    public MainMenuState state;
 
     public override void PostSetupContent()
     {
