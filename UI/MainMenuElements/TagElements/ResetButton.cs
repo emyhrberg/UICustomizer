@@ -11,7 +11,7 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
 {
     public class ResetButton : UIColoredImageButton
     {
-        public ResetButton(Asset<Texture2D> texture, TextColorType type, bool isSmall = true) : base(texture, isSmall)
+        public ResetButton(Asset<Texture2D> texture, TextColorType type) : base(texture, true)
         {
             HAlign = 1f;
             Top.Set(3f, 0f);
@@ -21,14 +21,14 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
             {
                 Color c = type switch
                 {
-                    TextColorType.Fill => MainMenuTextColorHook.NormalColor = Color.Gray,
-                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color = Color.Black,
+                    TextColorType.Fill => MainMenuTextColorHook.FillColor = Color.Gray,
+                    TextColorType.Outline => MainMenuOutlineTextColorHook.OutlineColor = Color.Black,
                     TextColorType.Hover => MainMenuTextColorHook.HoverColor = Main.OurFavoriteColor,
-                    _ => MainMenuTextColorHook.NormalColor
+                    _ => MainMenuTextColorHook.FillColor
                 };
             };
         }
-        public ResetButton(Asset<Texture2D> texture, bool isSmall = true) : base(texture, isSmall)
+        public ResetButton() : base(Ass.Reset, true)
         {
             HAlign = 1f;
             Top.Set(3f, 0f);

@@ -46,6 +46,16 @@ Configs: {
 			Label: Disable Item Use While Dragging
 			Tooltip: ""
 		}
+
+		OutlineColor: {
+			Tooltip: ""
+			Label: Outline Color
+		}
+
+		ShowBackToMainMenu: {
+			Label: Show Back To Main Menu
+			Tooltip: ""
+		}
 	}
 }
 

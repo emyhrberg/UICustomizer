@@ -1,28 +1,28 @@
-using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
-using Terraria.UI;
 using UICustomizer.Common.Systems.MainMenu;
 
 namespace UICustomizer.UI.MainMenuElements
 {
     public class PlayPause : UIColoredImageButton
     {
-        private Asset<Texture2D> playTex;
-        private Asset<Texture2D> pauseTex;
+        public bool isPaused = true; // default
 
-        public PlayPause(bool isSmall = true) : base(Ass.Pause, isSmall)
+        public PlayPause() : base(Ass.Pause, true)
         {
-            playTex = Ass.Play;
-            pauseTex = Ass.Pause;
-
             HAlign = 1f;
             Width.Set(22, 0);
             Height.Set(22, 0);
             Top.Set(3, 0);
+
+            SetImage(Ass.Pause);
+
+            OnLeftClick += (_, _) =>
+            {
+                isPaused = !isPaused;
+                SetImage(isPaused ? Ass.Pause : Ass.Play);
+            };
         }
 
         public override void Update(GameTime gameTime)
@@ -40,11 +40,5 @@ namespace UICustomizer.UI.MainMenuElements
                 UICommon.TooltipMouseText(tooltip);
             }
         }
-
-        public override void LeftClick(UIMouseEvent evt)
-        {
-            MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
-        }
     }
-
 }

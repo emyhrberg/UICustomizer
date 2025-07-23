@@ -73,7 +73,7 @@ namespace UICustomizer.UI
                 }
             }
 
-            if (ZenSlider.IsAnySliderHeld) return;
+            if (ZoeSlider.IsAnySliderHeld) return;
 
             if (dragging)
             {

@@ -9,7 +9,7 @@ using Terraria.UI;
 
 namespace UICustomizer.UI;
 
-public class ZenSlider : UIElement
+public class ZoeSlider : UIElement
 {
     public Color InnerColor;
     public Asset<Texture2D> InnerTexture;
@@ -17,18 +17,17 @@ public class ZenSlider : UIElement
 
     public static bool IsAnySliderHeld = false;
     public bool IsHeld = false;
-    public float Ratio;
+    public float Ratio; // aka Value
 
     public event Action<float> OnValueAppliedOnMouseUp;
     public event Action<float> OnDrag;
-    private bool _wasHeldLastFrame = false;
 
-    public ZenSlider()
+    public ZoeSlider()
     {
         Width.Set(0, 1f); // Default width, ZenSliderElement will position Left and adjust Width
         Height.Set(16, 0f);
         InnerColor = Color.Gray;
-        InnerTexture = Ass.Slider;
+        InnerTexture = Ass.SliderGradient;
         OuterTexture = Ass.SliderHighlight;
     }
 
@@ -39,7 +38,6 @@ public class ZenSlider : UIElement
         {
             IsHeld = true;
             IsAnySliderHeld = true;
-            _wasHeldLastFrame = true;
         }
     }
     public override void MouseOver(UIMouseEvent evt)
@@ -58,13 +56,12 @@ public class ZenSlider : UIElement
             {
                 float num = Main.MouseScreen.X - dims.X;
                 Ratio = MathHelper.Clamp(num / dims.Width, 0f, 1f); // <- changed this because UserInterface.ActiveInstance was mis-scaled
-                //Log.Info($"ZenSlider → LeftMouseUp Ratio: {Ratio:F2}"); // debug
+                //Log.Info($"ZoeSlider → LeftMouseUp Ratio: {Ratio:F2}"); // debug
             }
             OnValueAppliedOnMouseUp?.Invoke(Ratio);
         }
         IsHeld = false;
         IsAnySliderHeld = false;
-        _wasHeldLastFrame = false;
     }
 
     public override void Update(GameTime gameTime)
@@ -78,7 +75,7 @@ public class ZenSlider : UIElement
             if (Math.Abs(newRatio - Ratio) > float.Epsilon)
             {
                 Ratio = newRatio;
-                //Log.Info($"ZenSlider → Dragging Ratio: {Ratio:F2}"); // debug
+                //Log.Info($"ZoeSlider → Dragging Ratio: {Ratio:F2}"); // debug
                 OnDrag?.Invoke(Ratio);
             }
         }

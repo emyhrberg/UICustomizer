@@ -12,7 +12,7 @@ namespace UICustomizer.UI
     {
         private readonly string labelTextKey;
         public UIText Label;
-        public ZenSlider Slider;
+        public ZoeSlider Slider;
         public float Min { get; }
         public float Max { get; }
         private readonly float step;
@@ -56,7 +56,7 @@ namespace UICustomizer.UI
                 Label.TextColor = Color.Gray;
             };
 
-            Slider = new ZenSlider()
+            Slider = new ZoeSlider()
             {
                 Left = { Pixels = 120 },
                 Width = { Pixels = -125, Percent = 1f },

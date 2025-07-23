@@ -59,7 +59,7 @@ namespace UICustomizer.Common.Systems.Integrations.Heros
             }
             else
             {
-                //Main.NewText($"✅ You regained permission to use the {permissionName} button!", NormalColor.LightGreen);
+                //Main.NewText($"✅ You regained permission to use the {permissionName} button!", OutlineColor.LightGreen);
                 Log.Info($"You regained permission for {permissionName} button. You can use it again.");
             }
         }

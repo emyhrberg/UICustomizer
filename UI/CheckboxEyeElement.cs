@@ -131,7 +131,7 @@ namespace UICustomizer.UI
             //Vector2 pos = Parent.GetDimensions().Position();
             //pos += new Vector2(3, -6);
             //VAlign = 0.5f;
-            //sb.Draw(_texture.Value, pos, NormalColor.White * opacity);
+            //sb.Draw(_texture.Value, pos, OutlineColor.White * opacity);
         }
     }
 

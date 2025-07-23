@@ -21,8 +21,8 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
 
                 var a = type switch
                 {
-                    TextColorType.Fill => MainMenuTextColorHook.NormalColor = updatedColor,
-                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color = updatedColor,
+                    TextColorType.Fill => MainMenuTextColorHook.FillColor = updatedColor,
+                    TextColorType.Outline => MainMenuOutlineTextColorHook.OutlineColor = updatedColor,
                     TextColorType.Hover => MainMenuTextColorHook.HoverColor = updatedColor,
                     _ => throw new System.NotImplementedException(),
                 };

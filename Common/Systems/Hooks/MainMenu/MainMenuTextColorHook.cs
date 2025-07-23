@@ -2,13 +2,15 @@
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
+using Terraria.GameContent.UI.States;
 using Terraria.ModLoader;
+using UICustomizer.Common.Configs;
 
 namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
     public class MainMenuTextColorHook : ModSystem
     {
-        public static Color NormalColor;
+        public static Color FillColor;
         public static Color HoverColor = Main.OurFavoriteColor;
         public override void Load() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
         public override void Unload() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu -= ModifyColors);
@@ -16,13 +18,17 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         private static bool ModifyColor(ref Color color, int r, int g, int b, int a, float interpolator)
         {
             // If nothing is set, return here
-            if (NormalColor == default)
+            if (FillColor == default)
             {
-                //Log.Warn("MainMenuFillTextColorHook.Color is default, skipping color modification.");
+                //Log.Warn("MainMenuFillTextColorHook.OutlineColor is default, skipping color modification.");
                 return false;
             }
 
-            color = Color.Lerp(NormalColor, HoverColor, interpolator);
+            // If config is not default, use it
+            //FillColor = ColorHelper.HexToColor(Conf.C.FillColor);
+            //HoverColor = ColorHelper.HexToColor(Conf.C.HoverColor);
+
+            color = Color.Lerp(FillColor, HoverColor, interpolator);
             return true;
         }
 

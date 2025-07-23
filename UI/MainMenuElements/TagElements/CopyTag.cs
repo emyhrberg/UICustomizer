@@ -21,10 +21,10 @@ namespace UICustomizer.UI.MainMenuElements.TagElements
             {
                 Color c = type switch
                 {
-                    TextColorType.Fill => MainMenuTextColorHook.NormalColor,
-                    TextColorType.Outline => MainMenuOutlineTextColorHook.Color,
+                    TextColorType.Fill => MainMenuTextColorHook.FillColor,
+                    TextColorType.Outline => MainMenuOutlineTextColorHook.OutlineColor,
                     TextColorType.Hover => MainMenuTextColorHook.HoverColor,
-                    _ => MainMenuTextColorHook.NormalColor
+                    _ => MainMenuTextColorHook.FillColor
                 };
 
                 string hex = $"{c.R:X2}{c.G:X2}{c.B:X2}";

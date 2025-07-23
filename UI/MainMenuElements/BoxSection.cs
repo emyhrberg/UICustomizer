@@ -5,10 +5,10 @@ namespace UICustomizer.UI.MainMenuElements
 {
     internal class BoxSection : UIPanel
     {
-        public BoxSection()
+        public BoxSection(float height=130f)
         {
             Width.Set(-28, 1);
-            Height.Set(130, 0);
+            Height.Set(height, 0);
             HAlign = 0.5f;
             PaddingTop = 4f;
             Left.Set(12, 0);
@@ -17,7 +17,6 @@ namespace UICustomizer.UI.MainMenuElements
 
         public override void Update(GameTime gameTime)
         {
-            Width.Set(-28, 1);
             base.Update(gameTime);
         }
 

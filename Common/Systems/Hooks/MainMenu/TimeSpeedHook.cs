@@ -7,8 +7,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu;
 
 public sealed class TimeSpeedHook : ModSystem
 {
-    public static float MenuTimeSpeed = 1f; // Default speed is 1x
-
+    public static float Speed = 1f; // Default speed is 1x
     public override void Load() => IL_Main.UpdateMenu += ModifyMenuTime;
     public override void Unload() => IL_Main.UpdateMenu -= ModifyMenuTime;
 
@@ -18,7 +17,6 @@ public sealed class TimeSpeedHook : ModSystem
         {
             ILCursor c = new(il);
 
-            // Fixes moon type changing mid day, which can look weird during a solar eclipse.
             ILLabel skipRandomMoonType = c.DefineLabel();
 
             c.GotoNext(MoveType.Before,
@@ -32,7 +30,6 @@ public sealed class TimeSpeedHook : ModSystem
 
             c.MarkLabel(skipRandomMoonType);
 
-            // Handle negative time.
             c.GotoNext(MoveType.AfterLabel,
                 i => i.MatchBrfalse(out _),
                 i => i.MatchRet());
@@ -53,12 +50,12 @@ public sealed class TimeSpeedHook : ModSystem
             c.GotoNext(MoveType.After,
                 i => i.MatchLdcR8(33.88235294117647));
 
-            c.EmitDelegate((double time) => time * TimeSpeedHook.MenuTimeSpeed);
+            c.EmitDelegate((double time) => time * TimeSpeedHook.Speed);
 
             c.GotoNext(MoveType.After,
                 i => i.MatchLdcR8(30.857142857142858));
 
-            c.EmitDelegate((double time) => time * TimeSpeedHook.MenuTimeSpeed);
+            c.EmitDelegate((double time) => time * TimeSpeedHook.Speed);
         }
         catch (Exception e)
         {

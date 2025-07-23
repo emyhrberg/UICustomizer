@@ -38,10 +38,10 @@ namespace UICustomizer.UI
             this.tooltip = tooltip;
 
             OnRightClick += (_, _) => onRightClick?.Invoke();
-            // OnLeftMouseDown += (_, _) => BorderColor = NormalColor.Yellow;
-            // OnLeftMouseUp += (_, _) => BorderColor = NormalColor.Black;
-            // OnRightMouseDown += (_, _) => BorderColor = NormalColor.Yellow;
-            // OnRightMouseUp += (_, _) => BorderColor = NormalColor.Black;
+            // OnLeftMouseDown += (_, _) => BorderColor = OutlineColor.Yellow;
+            // OnLeftMouseUp += (_, _) => BorderColor = OutlineColor.Black;
+            // OnRightMouseDown += (_, _) => BorderColor = OutlineColor.Yellow;
+            // OnRightMouseUp += (_, _) => BorderColor = OutlineColor.Black;
 
             // Panel size and position
             if (maxWidth)

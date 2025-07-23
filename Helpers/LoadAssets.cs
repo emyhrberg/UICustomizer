@@ -34,6 +34,13 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> SliderHighlight;
         public static Asset<Texture2D> SliderTime;
 
+        // Numbers
+        public static Asset<Texture2D> F;
+        public static Asset<Texture2D> F_Fill;
+        public static Asset<Texture2D> H;
+        public static Asset<Texture2D> O;
+        public static Asset<Texture2D> O_Outline;
+
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }
 
