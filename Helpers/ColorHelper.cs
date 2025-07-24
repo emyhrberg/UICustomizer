@@ -32,5 +32,20 @@ namespace UICustomizer.Helpers
             if (a == b) return 0f;
             return MathHelper.Clamp((value - a) / (b - a), 0f, 1f);
         }
+
+        public static Color TryParseHex(string hex, Color fallback)
+        {
+            if (string.IsNullOrWhiteSpace(hex))
+                return fallback;
+
+            try
+            {
+                return HexToColor(hex);
+            }
+            catch
+            {
+                return fallback;
+            }
+        }
     }
 }

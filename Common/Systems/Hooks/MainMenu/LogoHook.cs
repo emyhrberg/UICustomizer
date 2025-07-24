@@ -10,9 +10,12 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
     public class LogoHook : ModSystem
     {
         public Hook logoHook;
+        public static bool IsDrawing = true; // Whether the logo should be drawn
         public static float LogoScale = 1f;
         public static float LogoRotation = 0f;
-        public static Color LogoColor;
+        public static Color LogoColor = Color.White;
+
+        public static Texture2D? CustomLogoTexture;
 
         public override void Load() => CreateLogoHook();
         public override void Unload() => logoHook = null;
@@ -34,22 +37,50 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                     UpdateAndDrawModMenuInner_Hook)
                 );
 
-            // Note: The target is a duplicate Action of the parameter types twice for some reason or something
+            // Note: The 'target' in the Hook is a duplicate Action of the parameter types twice for some reason or something
         }
 
         private void UpdateAndDrawModMenuInner_Hook(
-            Action<SpriteBatch, GameTime, Color, float, float> orig,
-            SpriteBatch spriteBatch, GameTime gameTime, Color color, float logoRotation, float logoScale)
+    Action<SpriteBatch, GameTime, Color, float, float> orig,
+    SpriteBatch spriteBatch, GameTime gameTime, Color color,
+    float logoRotation, float logoScale)
         {
-            if (MenuLoader.CurrentMenu is ModMenu menu)
+            // 1) Skip drawing entirely if wanted
+            if (!IsDrawing) return;          // keep the fast‑return
+
+            // 2) Rotation override (keep vanilla otherwise)
+            if (Math.Abs(LogoRotation) > float.Epsilon)          // ≠ 0
+                logoRotation = LogoRotation;
+
+            // 3) Scale override (keep vanilla otherwise)
+            if (Math.Abs(LogoScale - 1f) > float.Epsilon)        // ≠ 1
+                logoScale = LogoScale;
+
+            // 4) Colour override (use alpha‑0 as "no override")
+            if (LogoColor.A != 0)
+                color = LogoColor;
+
+            // ② if the user loaded a texture, draw it manually and skip the vanilla logo.
+            if (CustomLogoTexture is not null)
             {
-                logoRotation = LogoHook.LogoRotation;
-                logoScale = LogoHook.LogoScale;
-                color = LogoHook.LogoColor;
+                var pos = new Vector2(Main.screenWidth / 2f, 100f);
+                var origin = new Vector2(CustomLogoTexture.Width / 2f,
+                                         CustomLogoTexture.Height / 2f);
+
+                spriteBatch.Draw(CustomLogoTexture,
+                                 position: pos,
+                                 sourceRectangle: null,
+                                 color: LogoColor == default ? Color.White : LogoColor,
+                                 rotation: LogoRotation,
+                                 origin: origin,
+                                 scale: LogoScale,
+                                 effects: SpriteEffects.None,
+                                 layerDepth: 0f);
+                return; // done – do NOT call orig()
             }
 
-            Color test = Color.Red;
-            orig(spriteBatch, gameTime, test, logoRotation, logoScale);
+            // 5) Finally call vanilla with whichever values survived
+            orig(spriteBatch, gameTime, color, logoRotation, logoScale);
         }
     }
 }

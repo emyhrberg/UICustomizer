@@ -1,8 +1,6 @@
 ﻿using System;
-using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
-using Terraria.GameContent.UI.States;
 using Terraria.ModLoader;
 using UICustomizer.Common.Configs;
 
@@ -10,13 +8,39 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
     public class MainMenuTextColorHook : ModSystem
     {
+        public static class DefaultMenuColours
+        {
+            public static readonly Color Fill = new(142,142,142);         // #8E8E8E
+            public static readonly Color Outline = Color.Black;          // #000000
+            public static readonly Color Hover = new(255, 215, 0); // #FFD700 (Gold)
+        }
+
         public static Color FillColor;
-        public static Color HoverColor = Main.OurFavoriteColor;
-        public override void Load() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
+        public static Color OutlineColor;
+        public static Color HoverColor;
+        public override void Load()
+        {
+            var cfg = Conf.C;
+
+            // 1) start with the hard defaults
+            FillColor = DefaultMenuColours.Fill;
+            OutlineColor = DefaultMenuColours.Outline;
+            HoverColor = DefaultMenuColours.Hover;
+
+            // 2) overwrite only if the user actually stored something
+            FillColor = ColorHelper.TryParseHex(cfg?.FillColor, FillColor);
+            OutlineColor = ColorHelper.TryParseHex(cfg?.OutlineColor, OutlineColor);
+            HoverColor = ColorHelper.TryParseHex(cfg?.HoverColor, HoverColor);
+
+            Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
+        }
+
         public override void Unload() => Main.QueueMainThreadAction(() => IL_Main.DrawMenu -= ModifyColors);
 
         private static bool ModifyColor(ref Color color, int r, int g, int b, int a, float interpolator)
         {
+            //Log.Info($"[MainMenuTextColorHook] Vanilla menu colour R:{r} G:{g} B:{b} A:{a}");
+
             // If nothing is set, return here
             if (FillColor == default)
             {
@@ -34,9 +58,14 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private void ModifyColors(ILContext il)
         {
-            try
+            IL.Edit(il, c =>
             {
-                ILCursor c = new(il);
+                // My edit
+                c.GotoNext(MoveType.Before, i => i.MatchStloc(177));
+                c.EmitPop();
+                c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(OutlineColor)));
+
+                c.Index = 0; // Reset here to make room for Zoe's edit <3
 
                 int colorIndex = -1;
 
@@ -129,12 +158,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 });
 
                 c.EmitBrtrue(jumpColorCtorTarget);
-            }
-            catch (Exception e)
-            {
-                Log.Error("Err! " + e.Message);
-                throw new Exception(e.Message);
-            }
+            });
         }
     }
 }

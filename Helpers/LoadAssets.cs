@@ -33,6 +33,7 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> SliderHueGradient;
         public static Asset<Texture2D> SliderHighlight;
         public static Asset<Texture2D> SliderTime;
+        public static Asset<Texture2D> SmallPanelHighlight;
 
         // Numbers
         public static Asset<Texture2D> F;

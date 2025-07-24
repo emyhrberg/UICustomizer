@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
 using Terraria.Audio;
@@ -8,7 +6,6 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 using UICustomizer.Common.Configs;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UICustomizer.Common.Systems.MainMenu.Config
 {

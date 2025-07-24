@@ -1,0 +1,32 @@
+﻿using MonoMod.Cil;
+using Terraria;
+using Terraria.ModLoader;
+
+namespace UICustomizer.Common.Systems.Hooks.MainMenu
+{
+    public class ParallaxSpeedHook : ModSystem
+    {
+        public static float Speed = 5;
+
+        public override void Load()
+        {
+            IL_Main.DrawMenu += ModifyParallaxSpeed;
+        }
+        public override void Unload()
+        {
+            IL_Main.DrawMenu -= ModifyParallaxSpeed;
+        }
+        private void ModifyParallaxSpeed(ILContext il)
+        {
+            IL.Edit(il, c =>
+            {
+                c.GotoNext(MoveType.Before,
+                    i => i.MatchStsfld<Main>(nameof(Main.MenuXMovement)));
+
+                c.EmitPop();
+
+                c.EmitDelegate(() => Speed);
+            });
+        }
+    }
+}

@@ -22,14 +22,13 @@ namespace UICustomizer.Common.Configs
         public bool ShowBackToMainMenu = true;
 
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string FillColor;
+        public string FillColor;    // null → new(142,142,142)
 
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string OutlineColor;
+        public string OutlineColor; // null → Color.Black
 
-        [DefaultValue(true)]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string HoverColor;
+        public string HoverColor;   // null → Main.OurFavoriteColor or new(255,215,0)
 
         [Header("Misc")]
 

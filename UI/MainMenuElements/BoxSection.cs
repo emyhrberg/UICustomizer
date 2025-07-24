@@ -3,9 +3,9 @@ using Terraria.GameContent.UI.Elements;
 
 namespace UICustomizer.UI.MainMenuElements
 {
-    internal class BoxSection : UIPanel
+    public class BoxSection : UIPanel
     {
-        public BoxSection(float height=130f)
+        public BoxSection(float height = 130f)
         {
             Width.Set(-28, 1);
             Height.Set(height, 0);

@@ -89,7 +89,7 @@ namespace UICustomizer.UI.Layers
                 list.Add(section);
             }
 
-            // Enabled packs section
+            // IsDrawing packs section
             AddPackSection(
                 title: "Enabled Packs",
                 initial: _enabledPacksExpanded,
