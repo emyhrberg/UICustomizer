@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ModLoader;
+using Terraria.Utilities.FileBrowser;
+using UICustomizer.Common.Systems.Hooks.MainMenu;
 
-#if WINDOWS
-// WinForms exists only on Windows; wrapping the alias keeps the file single‑platform‑safe.
-using WinForms = System.Windows.Forms;
-#endif
-
-namespace UICustomizer.Common.Systems.Hooks.MainMenu;
+namespace UICustomizer.Helpers;
 
 /// <summary>
 /// Lets the user choose an image file and hands the texture off to <see cref="LogoHook"/>.
@@ -16,47 +15,57 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu;
 public static class LogoFileHelper
 {
     /// <summary>Run when the “Choose File” button is clicked.</summary>
-    public static void UploadFile()
+    public static string UploadFile()
     {
-        if (Main.dedServ)                // no dialogs on headless servers
-            return;
+        if (Main.dedServ)
+            return null;
 
         string path = ShowOpenFileDialog();
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
-            return;
+            return null;
 
         try
         {
-            // load image into GPU memory
             using var fs = File.OpenRead(path);
             Texture2D tex = Texture2D.FromStream(Main.graphics.GraphicsDevice, fs);
             tex.Name = Path.GetFileName(path);
 
-            // dispose previous custom logo (avoid VRAM leak)
             LogoHook.CustomLogoTexture?.Dispose();
             LogoHook.CustomLogoTexture = tex;
 
-            Main.NewText($"Loaded custom logo: {tex.Name}", Microsoft.Xna.Framework.Color.LimeGreen);
+            Main.NewText($"Loaded custom logo: {tex.Name}", Color.LimeGreen);
+            return tex.Name;
         }
         catch (Exception ex)
         {
-            Main.NewText($"Failed to load image – {ex.Message}", Microsoft.Xna.Framework.Color.Red);
+            Main.NewText($"Failed to load image – {ex.Message}", Color.Red);
+            return null;
         }
     }
 
     /// <returns>Full path of the chosen file, or <c>null</c> if cancelled / unsupported.</returns>
     private static string ShowOpenFileDialog()
     {
-#if WINDOWS
-        using var dlg = new WinForms.OpenFileDialog
+        var extensions = new ExtensionFilter[]
         {
-            Title  = "Select a logo image",
-            Filter = "Image files|*.png;*.jpg;*.jpeg;*.bmp;*.gif|All files|*.*"
+        new() {
+            Name = "Images",
+            Extensions = ["png", "jpg", "jpeg"]
+        }
         };
-        return dlg.ShowDialog() == WinForms.DialogResult.OK ? dlg.FileName : null;
-#else
-        Main.NewText("File chooser is only implemented on Windows for now.", Microsoft.Xna.Framework.Color.Orange);
+
+        // NFD returns null on cancel – just bubble that straight out.
+        return OpenFilePanel("Open icon", extensions);
+    }
+
+    public static string OpenFilePanel(string title, ExtensionFilter[] extensions, string path = null)
+    {
+        string[] value = extensions.SelectMany((ExtensionFilter x) => x.Extensions).ToArray();
+        string result = default(string);
+        if ((int)nativefiledialog.NFD_OpenDialog(string.Join(",", value), path, out result) == 1)
+        {
+            return result;
+        }
         return null;
-#endif
     }
 }

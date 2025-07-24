@@ -186,11 +186,14 @@ public sealed class MainMenuState : UIState
         logoSection.Append(resetRotation);
 
         // --- Upload Logo ---
-        OnOffTextButton fileChoose = new("Choose File", NoOnOff: true) { HAlign = 0.0f, Left = { Pixels = 10 }, Top = { Pixels = 94+25 } };
-        fileChoose.OnLeftClick += (_, _) => LogoFileHelper.UploadFile();
+        OnOffTextButton fileChoose = new("Choose File", NoOnOff: true) { HAlign = 0.0f, Left = { Pixels = 10 }, Top = { Pixels = 94 + 25 } };
+        UIText fileText = new("No file chosen", 0.9f) { HAlign = 0.5f, Left = { Pixels = 50 }, Top = { Pixels = 94 + 25 } };
+        fileChoose.OnLeftClick += (_, _) => {
+            string fileName = LogoFileHelper.UploadFile();
+            if (!string.IsNullOrEmpty(fileName))
+                fileText.SetText(fileName);
+        };
         logoSection.Append(fileChoose);
-
-        UIText fileText = new("No file chosen", 0.9f) { HAlign = 0.5f, Left = { Pixels = 50 }, Top = { Pixels = 94+25 } };
         logoSection.Append(fileText);
 
         // --- Update ---

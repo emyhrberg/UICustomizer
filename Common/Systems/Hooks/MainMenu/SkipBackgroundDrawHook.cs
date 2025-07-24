@@ -13,21 +13,33 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private Hook _bgHook;      // DrawBackground  (underground layers)
         private Hook _drawBGHook;  // DrawBG          (surface‑sky)
+        private Hook _renderBGHook;
 
         public override void Load()
         {
-            // ----- underground / menu backdrop -----
-            var m = typeof(Main).GetMethod("DrawBackground",
-                                           BindingFlags.NonPublic | BindingFlags.Instance);
-            if (m != null)
-                _bgHook = new Hook(m,
-                    new Action<Action<Main>, Main>((orig, self) =>
-                    {
-                        if (IsDrawing)
-                            orig(self);
-                    }));
+            //var m1 = typeof(Main).GetMethod("RenderBackground",
+            //                               BindingFlags.NonPublic | BindingFlags.Instance);
 
-            // ----- surface‑sky while playing -----
+            //if (m1 == null) Log.Info("null RBG");
+
+            //if (m1 != null)
+            //    _renderBGHook = new Hook(m1,
+            //        new Action<Action<Main>, Main>((orig, self) =>
+            //        {
+            //            if (IsDrawing)
+            //                orig(self);
+            //        }));
+
+            //var m = typeof(Main).GetMethod("DrawBackground",
+            //                               BindingFlags.NonPublic | BindingFlags.Instance);
+            //if (m != null)
+            //    _bgHook = new Hook(m,
+            //        new Action<Action<Main>, Main>((orig, self) =>
+            //        {
+            //            if (IsDrawing)
+            //                orig(self);
+            //        }));
+
             var m2 = typeof(Main).GetMethod("DrawBG",
                                             BindingFlags.NonPublic | BindingFlags.Instance);
             if (m2 != null)
@@ -43,6 +55,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         {
             _bgHook?.Dispose();
             _drawBGHook?.Dispose();
+            _renderBGHook?.Dispose();
         }
     }
 }
