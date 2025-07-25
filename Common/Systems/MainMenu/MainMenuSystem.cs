@@ -49,7 +49,7 @@ internal sealed class MainMenuSystem : ModSystem
         }
         else if (ui.CurrentState != null)
         {
-            ui.SetState(null);          // hide the panel
+            ui.SetState(null);          // hide the colorPanel
         }
 
         orig(gameTime);

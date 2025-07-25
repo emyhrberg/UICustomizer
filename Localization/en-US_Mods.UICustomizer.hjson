@@ -18,18 +18,18 @@ Configs: {
 		}
 
 		FillColor: {
-			Label: Fill Color
-			Tooltip: ""
+			Label: Fill
+			Tooltip: Fill text color of the main menu options
 		}
 
 		NormalColor: {
-			Label: Normal Color
-			Tooltip: ""
+			Label: Outline
+			Tooltip: Outline text color of the main menu options
 		}
 
 		HoverColor: {
-			Label: Hover Color
-			Tooltip: ""
+			Label: Hover
+			Tooltip: Outline hover text color of the main menu options
 		}
 
 		ShowMessageWhenEnteringWorld: {
@@ -54,6 +54,55 @@ Configs: {
 
 		ShowBackToMainMenu: {
 			Label: Show Back To Main Menu
+			Tooltip: ""
+		}
+
+		MainMenuDraw: {
+			Label: Draw
+			Tooltip: ""
+		}
+	}
+
+	MainMenuDraw: {
+		Tooltip: ""
+
+		DrawBackground: {
+			Label: Draw Background
+			Tooltip: ""
+		}
+
+		DrawClouds: {
+			Label: Draw Clouds
+			Tooltip: ""
+		}
+
+		DrawSun: {
+			Label: Draw Sun
+			Tooltip: ""
+		}
+
+		DrawSky: {
+			Label: Draw Sky
+			Tooltip: ""
+		}
+
+		DrawLogo: {
+			Label: Draw Logo
+			Tooltip: ""
+		}
+
+		DrawMainText: {
+			Label: Draw Main Text
+			Tooltip: ""
+		}
+
+		DrawSocial: {
+			Label: Draw Social
+			Tooltip: ""
+		}
+
+		DrawVersion: {
+			Label: Draw Version
 			Tooltip: ""
 		}
 	}

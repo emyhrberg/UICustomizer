@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.ModLoader.UI;
 
 namespace UICustomizer.UI.MainMenuElements
@@ -9,7 +8,7 @@ namespace UICustomizer.UI.MainMenuElements
         public ExpandablePanel()
         {
             defaultHeight = 30f;
-            Width.Set(300, 0);
+            Width.Set(320, 0);
             Height.Set(30, 0);
             OverflowHidden = false;
             BackgroundColor = ColorHelper.DarkBluePanel * 0.5f;

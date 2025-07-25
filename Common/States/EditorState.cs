@@ -11,7 +11,7 @@ namespace UICustomizer.Common.States
         public EditorPanel editorPanel;
         public EditorState()
         {
-            // The entire panel that contains all the UI elements for editing.
+            // The entire colorPanel that contains all the UI elements for editing.
             editorPanel = new();
             Append(editorPanel);
         }

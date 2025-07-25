@@ -28,9 +28,14 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             HoverColor = DefaultMenuColours.Hover;
 
             // 2) overwrite only if the user actually stored something
-            FillColor = ColorHelper.TryParseHex(cfg?.FillColor, FillColor);
-            OutlineColor = ColorHelper.TryParseHex(cfg?.OutlineColor, OutlineColor);
-            HoverColor = ColorHelper.TryParseHex(cfg?.HoverColor, HoverColor);
+            if (ColorHelper.TryParseHex(cfg?.FillColor, out var fill))
+                FillColor = fill;
+
+            if (ColorHelper.TryParseHex(cfg?.OutlineColor, out var outline))
+                OutlineColor = outline;
+
+            if (ColorHelper.TryParseHex(cfg?.HoverColor, out var hover))
+                HoverColor = hover;
 
             Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
         }

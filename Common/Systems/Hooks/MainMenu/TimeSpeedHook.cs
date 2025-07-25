@@ -7,7 +7,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu;
 
 public sealed class TimeSpeedHook : ModSystem
 {
-    public static float Speed = 1f; // Default speed is 1x
+    public static float Speed = 1f; // Default rotationSlider is 1x
     public override void Load() => IL_Main.UpdateMenu += ModifyMenuTime;
     public override void Unload() => IL_Main.UpdateMenu -= ModifyMenuTime;
 
@@ -46,7 +46,7 @@ public sealed class TimeSpeedHook : ModSystem
                 Main.dayTime = !Main.dayTime;
             });
 
-            // Change the speed of time.
+            // Change the rotationSlider of scaleSlider.
             c.GotoNext(MoveType.After,
                 i => i.MatchLdcR8(33.88235294117647));
 

@@ -137,7 +137,7 @@ namespace UICustomizer.UI.Layers
                     header.Append(toggleAllEye);
                 }
             );
-            section.SetPadding(0);      // remove the panel’s default 10px on all sides
+            section.SetPadding(0);      // remove the colorPanel’s default 10px on all sides
             //section.ListPadding = 0f;
             list.SetPadding(20f);
             list.Add(section);

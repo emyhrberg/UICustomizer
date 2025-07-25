@@ -20,7 +20,7 @@ namespace UICustomizer.Common.Systems.MainMenu
 
         private void StopTimeInMenu(On_Main.orig_UpdateMenu orig)
         {
-            // Only freeze time if we are in the menu AND our flag is set.
+            // Only freeze scaleSlider if we are in the menu AND our flag is set.
             if (Main.gameMenu && IsPaused)
             {
                 return;

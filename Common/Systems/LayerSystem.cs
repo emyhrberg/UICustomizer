@@ -71,7 +71,7 @@ namespace UICustomizer.Common.Systems
                     InterfaceScaleType.UI));
             }
 
-            // build dictionary the first time or when new layers appear
+            // build dictionary the first scaleSlider or when new layers appear
             foreach (var l in layers)
                 if (!LayerStates.ContainsKey(l.Name))
                     LayerStates[l.Name] = true; // default ON

@@ -21,7 +21,7 @@ namespace UICustomizer.UI
 
         protected BasePanel()
         {
-            // 1) panel sizing
+            // 1) colorPanel sizing
             Left.Set(840, 0f);
             Top.Set(-140, 0f);
             Width.Set(320, 0f);

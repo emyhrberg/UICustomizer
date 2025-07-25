@@ -20,7 +20,7 @@ namespace UICustomizer.UI
         {
             base.LeftMouseDown(evt);
 
-            // If the mouse‐target (or any of its parents) is a Scrollbar, do NOT start a panel‐drag.
+            // If the mouse‐target (or any of its parents) is a Scrollbar, do NOT start a colorPanel‐drag.
             UIElement target = evt.Target;
             while (target != null)
             {

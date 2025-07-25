@@ -8,7 +8,7 @@ namespace UICustomizer.Helpers
 {
     public static class Log
     {
-        // Helper for time to log a message once every x seconds
+        // Helper for scaleSlider to log a message once every x seconds
         private static DateTime lastLogTime = DateTime.UtcNow;
 
         private static Mod ModInstance

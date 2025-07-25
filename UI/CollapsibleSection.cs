@@ -41,7 +41,7 @@ namespace UICustomizer.UI
             Width.Set(0, 1f);
             Height.Set(headerHeight + (IsExpanded ? contentHeight : 0), 0);
 
-            // build header panel
+            // build header colorPanel
             headerPanel = new UIPanel
             {
                 Width = { Percent = 1f, Pixels = 0 },

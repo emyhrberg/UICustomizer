@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using UICustomizer.Common.Systems.MainMenu;
@@ -21,14 +20,20 @@ namespace UICustomizer.Common.Configs
         [DefaultValue(true)]
         public bool ShowBackToMainMenu = true;
 
+        [DefaultValue("#8E8E8E")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string FillColor;    // null → new(142,142,142)
+        public string FillColor;    // null → new(142,142,142)=#8E8E8E
 
+        [DefaultValue("#000000")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string OutlineColor; // null → Color.Black
+        public string OutlineColor; // null → Color.Black=#000000
 
+        [DefaultValue("#FFD700")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string HoverColor;   // null → Main.OurFavoriteColor or new(255,215,0)
+        public string HoverColor;   // null → Main.OurFavoriteColor or new(255,215,0)=#FFD700
+
+        [Expand(false, false)]
+        public MainMenuDraw MainMenuDraw = new();
 
         [Header("Misc")]
 
@@ -73,36 +78,30 @@ namespace UICustomizer.Common.Configs
     }
 
 
+    public class MainMenuDraw
+    {
+        // First column
+        [DefaultValue(true)] public bool DrawBackground;
+        [DefaultValue(true)] public bool DrawClouds;
+        [DefaultValue(true)] public bool DrawSun;
+        [DefaultValue(true)] public bool DrawSky;
+
+        // Second column
+        [DefaultValue(true)] public bool DrawLogo;
+        [DefaultValue(true)] public bool DrawMainText;
+        [DefaultValue(true)] public bool DrawSocial;
+        [DefaultValue(true)] public bool DrawVersion;
+    }
+
     public static class Conf
     {
         public static void Save()
         {
-            try
-            {
-                ConfigManager.Save(C);
-            }
-            catch
-            {
-                Log.Error("An error occurred while manually saving ModConfig!.");
-            }
+            try { ConfigManager.Save(C); }
+            catch { Log.Error("An error occurred while manually saving ModConfig!."); }
         }
 
-        // Instance of the Config class
-        // Use it like 'Conf.C.YourConfigField' for easy access to the config values
-        public static Config C
-        {
-            get
-            {
-                try
-                {
-                    return ModContent.GetInstance<Config>();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Error getting config instance: " + ex.Message);
-                    return null;
-                }
-            }
-        }
+        /// <summary> Easy access to the ModConfig instance. </summary>
+        public static Config C => ModContent.GetInstance<Config>();
     }
 }

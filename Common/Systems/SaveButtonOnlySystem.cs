@@ -47,7 +47,7 @@ namespace UICustomizer.Common.Systems
                     btn.Top.Set(saveButtonRect.Y, 0);
                     btn.Recalculate();
 
-                    // Use the real draw-time GameTime
+                    // Use the real draw-scaleSlider GameTime
                     saveUI.Draw(Main.spriteBatch, Main._drawInterfaceGameTime);
                     return true;
                 },

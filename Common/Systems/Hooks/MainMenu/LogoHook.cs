@@ -13,7 +13,9 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static bool IsDrawing = true; // Whether the logo should be drawn
         public static float LogoScale = 1f;
         public static float LogoRotation = 0f;
-        public static Color LogoColor = Color.White;
+        public static Color LogoColor;
+        public static float LogoOffsetX = 0f; // Horizontal offset
+        public static float LogoOffsetY = 0f; // Vertical offset
 
         public static Texture2D? CustomLogoTexture;
 
@@ -60,10 +62,11 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             if (LogoColor.A != 0)
                 color = LogoColor;
 
-            // ② if the user loaded a texture, draw it manually and skip the vanilla logo.
+            // if the user loaded a texture, draw it manually and skip the vanilla logo.
             if (CustomLogoTexture is not null)
             {
                 var pos = new Vector2(Main.screenWidth / 2f, 100f);
+                pos += new Vector2(LogoOffsetX, LogoOffsetY);
                 var origin = new Vector2(CustomLogoTexture.Width / 2f,
                                          CustomLogoTexture.Height / 2f);
 
