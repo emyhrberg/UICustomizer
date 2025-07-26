@@ -30,13 +30,11 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> Resize;
         public static Asset<Texture2D> Slider;
         public static Asset<Texture2D> SliderGradient;
-        public static Asset<Texture2D> SliderHueGradient;
         public static Asset<Texture2D> SliderHighlight;
         public static Asset<Texture2D> SliderTime;
         public static Asset<Texture2D> SmallPanelHighlight;
-        public static Asset<Texture2D> TimeScale;
 
-        // Numbers
+        // Letters
         public static Asset<Texture2D> C;
         public static Asset<Texture2D> F;
         public static Asset<Texture2D> H;
@@ -45,10 +43,6 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> R;
         public static Asset<Texture2D> S;
         public static Asset<Texture2D> T;
-
-        // Numbers with outline
-        public static Asset<Texture2D> F_Fill;
-        public static Asset<Texture2D> O_Outline;
 
         // This bool automatically initializes all specified assets
         public static bool Initialized { get; set; }

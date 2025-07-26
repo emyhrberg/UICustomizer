@@ -105,6 +105,11 @@ Configs: {
 			Label: Draw Version
 			Tooltip: ""
 		}
+
+		DrawStars: {
+			Label: Draw Stars
+			Tooltip: ""
+		}
 	}
 }
 

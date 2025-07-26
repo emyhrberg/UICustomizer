@@ -69,7 +69,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             {
                 Top = { Pixels = 45 },
                 Ratio = WorldTimeHelper.GetRatioFromTime(),
-                InnerTexture = Ass.TimeScale
+                InnerTexture = Ass.SliderTime
                 //InnerTexture = Ass.SliderTime
             };
             timeSlider.OnDrag += WorldTimeHelper.SetTime;

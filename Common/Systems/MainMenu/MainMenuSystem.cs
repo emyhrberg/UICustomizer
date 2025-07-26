@@ -1,7 +1,9 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using UICustomizer.Common.Configs;
+using static Terraria.GameContent.PlayerEyeHelper;
 
 namespace UICustomizer.Common.Systems.MainMenu;
 
@@ -10,36 +12,39 @@ internal sealed class MainMenuSystem : ModSystem
 {
     private UserInterface ui;
     public MainMenuState state;
+    public MainMenuEyeState eyeState;
 
     public override void PostSetupContent()
     {
-        if (Main.dedServ) return;
-
         if (Conf.C is null || !Conf.C.EditMainMenu) return;
 
         ui = new UserInterface();
         state = new MainMenuState();
         ui.SetState(state);
 
-        On_Main.DrawMenu += PreDrawMenu;
+        On_Main.DrawVersionNumber += DrawMenuUI;
         On_Main.UpdateUIStates += PostUpdateUIStates;
+
+        // Setup eye toggle
+        eyeState = new MainMenuEyeState();
+        state.eyeToggle.OnLeftClick += (_, _) => { ui.SetState(eyeState); };
+        eyeState.eyeToggle.OnLeftClick += (_, _) => ui.SetState(state);
     }
 
-    private void PreDrawMenu(On_Main.orig_DrawMenu orig, Main self, GameTime gameTime)
+    private void DrawMenuUI(On_Main.orig_DrawVersionNumber orig, Color menuColor, float upBump)
     {
+        orig(menuColor, upBump);
+
         if (Main.gameMenu && Main.menuMode == 0 && ui?.CurrentState != null)
         {
+            //Main.spriteBatch.Begin(default, default, default, default, default, default, Main.UIScaleMatrix);
             ui.Draw(Main.spriteBatch, new GameTime());
+            //Main.spriteBatch.End();
         }
-
-        orig(self, gameTime);
     }
 
     private void PostUpdateUIStates(On_Main.orig_UpdateUIStates orig, GameTime gameTime)
     {
-        // crashes when changing in config
-        //bool enabled = Conf.C?.EditMainMenu ?? false;   // read once
-
         if (Main.gameMenu && Main.menuMode == 0)
         {
             if (ui.CurrentState == null)
@@ -49,16 +54,15 @@ internal sealed class MainMenuSystem : ModSystem
         }
         else if (ui.CurrentState != null)
         {
-            ui.SetState(null);          // hide the colorPanel
+            ui.SetState(null); 
         }
 
         orig(gameTime);
     }
 
-
     public override void Unload()
     {
-        On_Main.DrawMenu -= PreDrawMenu;
+        On_Main.DrawVersionNumber -= DrawMenuUI;
         On_Main.UpdateUIStates -= PostUpdateUIStates;
         ui = null;
         state = null;

@@ -6,7 +6,7 @@ namespace UICustomizer.UI.MainMenuElements
     internal class OnOffTextButton : UIText
     {
         public bool isOn = true;
-        public OnOffTextButton(string text, float textScale = 0.85f, bool initiallyOn = true, bool large = false, bool NoOnOff=false) : base(text, textScale, large)
+        public OnOffTextButton(string text, bool initiallyOn = true, bool NoOnOff = false) : base(text, textScale: 0.82f, large: false)
         {
             if (!initiallyOn) isOn = false;
 
@@ -18,11 +18,13 @@ namespace UICustomizer.UI.MainMenuElements
             HAlign = 0.5f;
             TextColor = Color.Gray;
 
-            OnMouseOver += (_,_) => {
+            OnMouseOver += (_, _) =>
+            {
                 TextColor = Color.White;
             };
 
-            OnMouseOut += (_, _) => {
+            OnMouseOut += (_, _) =>
+            {
                 TextColor = Color.Gray;
             };
 

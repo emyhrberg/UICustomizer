@@ -40,8 +40,7 @@ namespace UICustomizer.Common.States
             orig(self, spriteBatch); // Normal UI behavior
 
             // Do some invalid checks
-            if (Main.dedServ || Main.gameMenu)
-                return;
+            if (Main.gameMenu) return;
             //if (self.GetOuterDimensions().Width > 900 || self.GetOuterDimensions().Height > 900)
             //    return;
 

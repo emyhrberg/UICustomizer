@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil;
 using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
@@ -18,6 +20,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static Color FillColor;
         public static Color OutlineColor;
         public static Color HoverColor;
+        public static bool IsDrawing = true;
         public override void Load()
         {
             var cfg = Conf.C;
@@ -63,8 +66,29 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private void ModifyColors(ILContext il)
         {
+            int counter = 0;
+            Log.Info("ModifyColors! " + counter++);
+
             IL.Edit(il, c =>
             {
+                //while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
+                //{
+                //    int oldIndex = c.Index;
+
+                //    // place the label after the function
+                //    ILLabel label = il.DefineLabel();
+                //    c.MarkLabel(label);
+                //    // go back up to right before the statement, where the instance for the function is loaded
+                //    c.GotoPrev(MoveType.Before, i => i.MatchLdsfld<Main>("spriteBatch"));
+                //    // place the if statement using the label you already made
+                //    c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(IsDrawing)));
+                //    c.EmitBrfalse(label);
+
+                //    // move back down to after the statement to prevent contounously going in a loop
+                //    c.Index = oldIndex;
+                //}
+                //c.Index = 0;
+
                 // My edit
                 c.GotoNext(MoveType.Before, i => i.MatchStloc(177));
                 c.EmitPop();

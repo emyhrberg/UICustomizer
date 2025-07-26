@@ -66,7 +66,9 @@ namespace UICustomizer.Common.Configs
             }
 
             // Update eye toggle
+            Log.Info("eyetoggleon?" + sys.state.eyeToggle.isOn);
             sys.state.eyeToggle.isOn = Conf.C.ShowMainMenu;
+            Log.Info("eyetoggleon?" + sys.state.eyeToggle.isOn);
 
             //var mainmenu = ModContent.GetInstance<MainMenuDraw>();
             //if (mainmenu == null) return;
@@ -82,14 +84,13 @@ namespace UICustomizer.Common.Configs
     {
         // First column
         [DefaultValue(true)] public bool DrawBackground;
-        [DefaultValue(true)] public bool DrawClouds;
         [DefaultValue(true)] public bool DrawSun;
         [DefaultValue(true)] public bool DrawSky;
+        [DefaultValue(true)] public bool DrawStars;
 
         // Second column
         [DefaultValue(true)] public bool DrawLogo;
         [DefaultValue(true)] public bool DrawMainText;
-        [DefaultValue(true)] public bool DrawSocial;
         [DefaultValue(true)] public bool DrawVersion;
     }
 

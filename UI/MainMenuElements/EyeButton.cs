@@ -22,7 +22,7 @@ namespace UICustomizer.UI.MainMenuElements
             ImageScale = 0.62f;
 
             HAlign = 1f;
-            Left.Set(-30, 0);
+            Left.Set(-60, 0);
             Top.Set(-3, 0);
         }
 
@@ -50,7 +50,7 @@ namespace UICustomizer.UI.MainMenuElements
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Left.Set(-30-22-8, 0);
+            //Left.Set(-30-22-8, 0);
 
             base.Draw(spriteBatch);
 

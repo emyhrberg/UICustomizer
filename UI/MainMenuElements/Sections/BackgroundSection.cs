@@ -10,10 +10,10 @@ using static Terraria.GameContent.UI.States.UICharacterCreation;
 
 namespace UICustomizer.UI.MainMenuElements.Sections
 {
-    internal sealed class LogoSection : BaseSection
+    internal sealed class BackgroundSection : BaseSection
     {
-        private enum LogoTab { Scale, Rotation, Color, Position }
-        private LogoTab tab = LogoTab.Scale;   // start on Scale
+        private enum BackgroundTab { Scale, Rotation, Color, Position }
+        private BackgroundTab tab = BackgroundTab.Scale;   // start on Scale
 
         // ─── UI elements ────────────────────────────────────────────────
         private readonly UIText header;
@@ -29,7 +29,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         private readonly UIPanel hexTag;
         private readonly UIText hexText;
 
-        private readonly ResetButton resetCurrentTabBtn;
+        private readonly ResetButton resetBtn;
         private readonly ResetButton resetLogoBtn;
 
         private readonly OnOffTextButton fileChoose;
@@ -38,7 +38,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // working HSL
         private Vector3 hsl;
 
-        public LogoSection()
+        public BackgroundSection()
         {
             Height.Set(200, 0);
 
@@ -46,36 +46,45 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             header = new UIText(string.Empty)
             {
                 HAlign = 0.5f,
-                //Left = { Pixels = -32 },
                 Top = { Pixels = 8 + 32 }
             };
             Append(header);
 
             // ─── 2. Tab buttons ────────────────────────────────────────
-            btnScale = MakeTab(Ass.S, LogoTab.Scale, 0);
-            btnRot = MakeTab(Ass.R, LogoTab.Rotation, 32);
-            btnPos = MakeTab(Ass.P, LogoTab.Position, 64);
-            btnCol = MakeTab(Ass.C, LogoTab.Color, 94);
+            btnScale = MakeTab(Ass.S, BackgroundTab.Scale, 0);
+            btnRot = MakeTab(Ass.R, BackgroundTab.Rotation, 32);
+            btnPos = MakeTab(Ass.P, BackgroundTab.Position, 64);
+            btnCol = MakeTab(Ass.C, BackgroundTab.Color, 94);
 
             // ─── 3. Reset ──────────────────────────────────────────────
-            resetCurrentTabBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
-            resetCurrentTabBtn.OnLeftMouseDown += (_, _) => ResetCurrentTab();
+            resetBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
+            resetBtn.OnLeftMouseDown += (_, _) => ResetCurrentTab();
+
+            resetLogoBtn = new()
+            {
+                VAlign = 1f
+            };
+            resetLogoBtn.OnLeftClick += (_, _) =>
+            {
+                BackgroundHook.ResetCustomBackground();      // clear the loaded texture
+                fileText.SetText("No file chosen");
+            };
 
             // ─── 4. Sliders ────────────────────────────────────────────
             scaleSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            scaleSlider.OnDrag += v => LogoHook.Scale = MathHelper.Lerp(0, 10, v);
+            scaleSlider.OnDrag += v => BackgroundHook.Scale = MathHelper.Lerp(0, 10, v);
 
             rotationSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            rotationSlider.OnDrag += v => LogoHook.Rotation = MathHelper.Lerp(0, 6, v);
+            rotationSlider.OnDrag += v => BackgroundHook.Rotation = MathHelper.Lerp(0, 6, v);
 
             xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
             xPosSlider.OnDrag += v =>
-                LogoHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
+                BackgroundHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, v);
 
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
             yPosSlider.OnDrag += v =>
-                LogoHook.OffsetY = MathHelper.Lerp(-Main.screenWidth * 0.5f,
+                BackgroundHook.OffsetY = MathHelper.Lerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, v);
 
             // ─── 5. Colour panel ───────────────────────────────────────
@@ -99,9 +108,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             // helper buttons & hex tag
             float rowY = colorPanel.Top.Pixels + colorPanel.Height.Pixels + 8;
 
-            copyBtn = MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(() => LogoHook.Color));
-            pasteBtn = MakeBtn("Paste", 32, rowY, () => ColorHelper.PasteHex(ref hsl, c => LogoHook.Color = c, hexText));
-            randBtn = MakeBtn("Randomize", 64, rowY, () => ColorHelper.RandomizeColor(ref hsl, c => LogoHook.Color = c, hexText));
+            copyBtn = MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(() => BackgroundHook.Color));
+            pasteBtn = MakeBtn("Paste", 32, rowY, () => ColorHelper.PasteHex(ref hsl, c => BackgroundHook.Color = c, hexText));
+            randBtn = MakeBtn("Randomize", 64, rowY, () => ColorHelper.RandomizeColor(ref hsl, c => BackgroundHook.Color = c, hexText));
 
             hexTag = new UIPanel
             {
@@ -133,29 +142,19 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             };
             fileChoose.OnLeftClick += (_, _) =>
             {
-                var f = UploadFileHelper.UploadFile(UploadFileHelper.FileType.Logo);
+                var f = UploadFileHelper.UploadFile(UploadFileHelper.FileType.Background);
                 if (!string.IsNullOrEmpty(f)) fileText.SetText(f);
             };
 
-            resetLogoBtn = new()
-            {
-                VAlign = 1f
-            };
-            resetLogoBtn.OnLeftClick += (_, _) =>
-            {
-                LogoHook.ResetCustomLogo();      // clear the loaded texture
-                fileText.SetText("No file chosen");
-            };
-
             // ─── initialise state ───────────────────────────────────────
-            hsl = Main.rgbToHsl(LogoHook.Color);
-            SelectTab(LogoTab.Scale);          // show initial controls
+            hsl = Main.rgbToHsl(BackgroundHook.Color);
+            SelectTab(BackgroundTab.Scale);          // show initial controls
         }
 
         // ───────────────────────────────────────────────────────────────
         //  Helper builders
         // ───────────────────────────────────────────────────────────────
-        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, LogoTab t, float left)
+        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, BackgroundTab t, float left)
         {
             var b = new SmallColoredImageButton(tex, t.ToString())
             {
@@ -193,7 +192,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             };
 
             Action<float> set = v =>
-                ColorHelper.ApplyHslValue(ref hsl, id, v, c => LogoHook.Color = c, hexText);
+                ColorHelper.ApplyHslValue(ref hsl, id, v, c => BackgroundHook.Color = c, hexText);
 
             Func<float, Color> grad = x => id switch
             {
@@ -213,41 +212,41 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // ───────────────────────────────────────────────────────────────
         //  Tab logic
         // ───────────────────────────────────────────────────────────────
-        private void SelectTab(LogoTab t)
+        private void SelectTab(BackgroundTab t)
         {
             tab = t;
 
             // visual state for tab buttons
-            btnScale.SetSelected(t == LogoTab.Scale);
-            btnRot.SetSelected(t == LogoTab.Rotation);
-            btnCol.SetSelected(t == LogoTab.Color);
-            btnPos.SetSelected(t == LogoTab.Position);
+            btnScale.SetSelected(t == BackgroundTab.Scale);
+            btnRot.SetSelected(t == BackgroundTab.Rotation);
+            btnCol.SetSelected(t == BackgroundTab.Color);
+            btnPos.SetSelected(t == BackgroundTab.Position);
 
             // purge everything that can change per-tab
             ClearDynamic();
 
-            Append(resetCurrentTabBtn);
+            Append(resetBtn);
 
             switch (t)
             {
-                case LogoTab.Scale:
-                    header.SetText($"Logo Scale: {LogoHook.Scale:F2}");
+                case BackgroundTab.Scale:
+                    header.SetText($"Background Scale: {BackgroundHook.Scale:F2}");
                     Append(scaleSlider);
                     break;
 
-                case LogoTab.Rotation:
-                    header.SetText($"Logo Rotation: {LogoHook.Rotation:F2}");
+                case BackgroundTab.Rotation:
+                    header.SetText($"Background Rotation: {BackgroundHook.Rotation:F2}");
                     Append(rotationSlider);
                     break;
 
-                case LogoTab.Position:
-                    header.SetText("Logo Position");
+                case BackgroundTab.Position:
+                    header.SetText("Background Position");
                     Append(xPosSlider);
                     Append(yPosSlider);
                     break;
 
-                case LogoTab.Color:
-                    header.SetText("Logo Color");
+                case BackgroundTab.Color:
+                    header.SetText("Background Color");
                     Append(colorPanel);
                     Append(copyBtn);
                     Append(pasteBtn);
@@ -257,7 +256,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             }
 
             // color header custom pos
-            if (t == LogoTab.Color)
+            if (t == BackgroundTab.Color)
             {
                 header.Top.Set(8, 0);
                 header.HAlign = 1f;
@@ -289,7 +288,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             pasteBtn.Remove();
             randBtn.Remove();
 
-            resetCurrentTabBtn.Remove();
+            resetBtn.Remove();
             resetLogoBtn.Remove();
             fileChoose.Remove();
             fileText.Remove();
@@ -299,25 +298,25 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         {
             switch (tab)
             {
-                case LogoTab.Scale:
-                    LogoHook.Scale = 1;
-                    scaleSlider.Ratio = 0;            // since InverseLerp(0,10,1)=0
+                case BackgroundTab.Scale:
+                    BackgroundHook.Scale = 1;
+                    scaleSlider.Ratio = 0;
                     break;
 
-                case LogoTab.Rotation:
-                    LogoHook.Rotation = 0;
+                case BackgroundTab.Rotation:
+                    BackgroundHook.Rotation = 0;
                     rotationSlider.Ratio = 0;
                     break;
 
-                case LogoTab.Position:
-                    LogoHook.OffsetX = LogoHook.OffsetY = 0;
+                case BackgroundTab.Position:
+                    BackgroundHook.OffsetX = BackgroundHook.OffsetY = 0;
                     xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
                     break;
 
-                case LogoTab.Color:
-                    LogoHook.Color = Color.White;
-                    hsl = Main.rgbToHsl(LogoHook.Color);
-                    hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                case BackgroundTab.Color:
+                    BackgroundHook.Color = Color.White;
+                    hsl = Main.rgbToHsl(BackgroundHook.Color);
+                    hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
                     break;
             }
         }
@@ -328,17 +327,17 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             base.Update(gt);
             switch (tab)
             {
-                case LogoTab.Scale:
-                    header.SetText($"Logo Scale: {LogoHook.Scale:F2}");
+                case BackgroundTab.Scale:
+                    header.SetText($"Background Scale: {BackgroundHook.Scale:F2}");
                     break;
-                case LogoTab.Rotation:
-                    header.SetText($"Logo Rotation: {LogoHook.Rotation:F2}");
+                case BackgroundTab.Rotation:
+                    header.SetText($"Background Rotation: {BackgroundHook.Rotation:F2}");
                     break;
-                case LogoTab.Position:
-                    header.SetText($"Logo Position: {LogoHook.OffsetX:F2}, {LogoHook.OffsetY:F2}");
+                case BackgroundTab.Position:
+                    header.SetText($"Background Position: {BackgroundHook.OffsetX:F2}, {BackgroundHook.OffsetY:F2}");
                     break;
-                case LogoTab.Color:
-                    hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                case BackgroundTab.Color:
+                    hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
                     break;
             }
         }

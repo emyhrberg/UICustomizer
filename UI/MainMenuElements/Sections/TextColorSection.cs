@@ -8,6 +8,7 @@ using Terraria.UI;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace UICustomizer.UI.MainMenuElements.Sections
 {
@@ -89,10 +90,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             float rowY = panel.Top.Pixels + panel.Height.Pixels + 8f;
 
             // 6) Copy / Paste / Randomize
-            var (get, set) = GetColorAccessors();
-            MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(get));
-            MakeBtn("Paste", 32, rowY, () => ColorHelper.PasteHex(ref hsl, set, hexText));
-            MakeBtn("Randomize", 64, rowY, () => ColorHelper.RandomizeColor(ref hsl, set, hexText));
+            MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(GetColorAccessors().get));
+            MakeBtn("Paste", 32, rowY, () => ColorHelper.PasteHex(ref hsl, GetColorAccessors().set, hexText));
+            MakeBtn("Randomize", 64, rowY, () => ColorHelper.RandomizeColor(ref hsl, GetColorAccessors().set, hexText));
 
             // ─── 7) Big hex-value colorPanel, right-aligned to the slider colorPanel ───
             hexTag = new UIPanel
@@ -140,7 +140,11 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             // 2) Push edits through the common routine
             var (get, set) = GetColorAccessors();
-            Action<float> setter = v => ColorHelper.ApplyHslValue(ref hsl, id, v, set, hexText);
+            Action<float> setter = v =>   
+            {
+                var(_, dynSet) = GetColorAccessors();           // fetch *current* tab
+                ColorHelper.ApplyHslValue(ref hsl, id, v, dynSet, hexText);
+            };
 
             // 3) Per-slider preview gradient
             Func<float, Color> gradient = x => id switch

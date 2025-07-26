@@ -15,23 +15,23 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         public override void Load()
         {
-            // private static void DrawCloud(int, Color, float)
-            var m = typeof(Main).GetMethod(
-    "DrawCloud",
-    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
-    null,
-    new[] { typeof(int), typeof(Color), typeof(float) },
-    null);
+            // local lambda: DrawSurfaceBG -> g__DrawCloud
+            MethodInfo m = typeof(Main).GetMethod(
+                $"<{nameof(Main.DrawSurfaceBG)}>g__DrawCloud|1826_0",
+                BindingFlags.NonPublic | BindingFlags.Static);
+
             if (m == null)
             {
-                Log.Error("Main.DrawCloud not found – cloud hook skipped");
+                Log.Error("DrawSurfaceBG → DrawCloud lambda not found – cloud hook skipped");
                 return;
             }
 
-            _cloudHook = new Hook(m,
-                new Action<Action<int, Color, float>, int, Color, float>((orig, idx, col, yOff) => {
-                    if (IsDrawing)
-                        orig(idx, col, yOff);          // vanilla cloud draw
+            _cloudHook = new Hook(
+                m,
+                new Action<Action<int, Color, float>, int, Color, float>((orig, idx, col, yOff) =>
+                {
+                    if (!IsDrawing) return;   
+                    orig(idx, col, yOff);     
                 }));
         }
 

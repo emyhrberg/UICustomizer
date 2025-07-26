@@ -12,12 +12,10 @@ namespace UICustomizer.Helpers;
 /// <summary>
 /// Lets the user choose an image file and hands the texture off to <see cref="LogoHook"/>.
 /// </summary>
-public static class UploadFileHelper
+public static class LogoFileHelper
 {
-    public enum FileType { Background, Logo }
-
     /// <summary>Run when the “Choose File” button is clicked.</summary>
-    public static string UploadFile(FileType fileType)
+    public static string UploadFile()
     {
         string path = ShowOpenFileDialog();
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -29,16 +27,8 @@ public static class UploadFileHelper
             Texture2D tex = Texture2D.FromStream(Main.graphics.GraphicsDevice, fs);
             tex.Name = Path.GetFileName(path);
 
-            if (fileType == FileType.Logo)
-            {
-                LogoHook.CustomLogoTexture?.Dispose();
-                LogoHook.CustomLogoTexture = tex;
-            }
-            else
-            {
-                BackgroundHook.CustomBackgroundTexture?.Dispose();
-                BackgroundHook.CustomBackgroundTexture = tex;
-            }
+            LogoHook.CustomLogoTexture?.Dispose();
+            LogoHook.CustomLogoTexture = tex;
 
             Main.NewText($"Loaded custom logo: {tex.Name}", Color.LimeGreen);
             return tex.Name;

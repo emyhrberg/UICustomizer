@@ -58,9 +58,9 @@ public sealed class MainMenuState : UIState
         list = new UIList
         {
             Width = { Pixels = -22f, Percent = 1f },
-            MinHeight = { Pixels = 750 }, // total height for colorPanel expanded is hardcoded for some reason
-            Top = { Pixels = 30+6f },
-            ListPadding = 12f, // AFFECTS ALL SECTIONS!
+            MinHeight = { Pixels = 790 }, // total height for colorPanel expanded is hardcoded for some reason
+            Top = { Pixels = 30 + 6f },
+            ListPadding = 0f, // AFFECTS ALL SECTIONS!
             ManualSortMethod = _ => { }
         };
         panel.VisibleWhenExpanded.Add(list);
@@ -69,11 +69,13 @@ public sealed class MainMenuState : UIState
         TextColorSection textColorSection = new();
         TimeSection timeSection = new();
         LogoSection logoSection = new();
+        BackgroundSection backgroundSection = new();
         DrawSection drawSection = new();
 
         list.Add(textColorSection);
         list.Add(timeSection);
         list.Add(logoSection);
+        list.Add(backgroundSection);
         list.Add(drawSection);
     }
 
