@@ -65,7 +65,8 @@ namespace UICustomizer.UI.MainMenuElements
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            Toggle();
+            base.LeftClick(evt);
+            //Toggle();
         }
     }
 }

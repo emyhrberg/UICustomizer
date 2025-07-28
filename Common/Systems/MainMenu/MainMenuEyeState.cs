@@ -1,14 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader.UI;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
-using UICustomizer.UI;
 using UICustomizer.UI.MainMenuElements;
-using UICustomizer.UI.MainMenuElements.Sections;
 
 namespace UICustomizer.Common.Systems.MainMenu;
 
@@ -22,7 +14,8 @@ public sealed class MainMenuEyeState : UIState
         if (Conf.C is null || !Conf.C.EditMainMenu)
             return;
 
-        eyeToggle = new EyeButton(Ass.Inventory_Tick_On);
+        eyeToggle = new EyeButton(Ass.Inventory_Tick_Off);
+        eyeToggle.isOn = false;
         Append(eyeToggle);
     }
 

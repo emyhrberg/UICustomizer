@@ -56,6 +56,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             rotationTab = MakeTab(Ass.R, LogoTab.Rotation, 32);
             positionTab = MakeTab(Ass.P, LogoTab.Position, 64);
             colorTab = MakeTab(Ass.C, LogoTab.Color, 94);
+            if (ColorHelper.TryParseHex(Conf.C.MainMenuLogo.Color, out var color))
+            {
+                colorTab.SetColor(color);
+            }
 
             // ─── 3. Reset ──────────────────────────────────────────────
             resetCurrentTabBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
