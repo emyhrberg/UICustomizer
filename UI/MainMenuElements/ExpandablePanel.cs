@@ -14,7 +14,8 @@ namespace UICustomizer.UI.MainMenuElements
             BackgroundColor = ColorHelper.DarkBluePanel * 0.5f;
             SetPadding(0);
             HAlign = 1f;
-            Top.Set(10, 0);
+            Top.Set(3, 0);
+            Left.Set(-3, 0);
 
             expandButton.Top.Set(4, 0);
             expandButton.Left.Set(-30, 1);

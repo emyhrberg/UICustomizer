@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -18,7 +19,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // ─── UI elements ────────────────────────────────────────────────
         private readonly UIText header;
 
-        private readonly SmallColoredImageButton btnScale, btnRot, btnCol, btnPos;
+        private readonly TabButton scaleTab, rotationTab, colorTab, positionTab;
 
         private readonly ZoeSlider scaleSlider, rotationSlider;
         private readonly ZoeSlider xPosSlider, yPosSlider;
@@ -51,10 +52,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             Append(header);
 
             // ─── 2. Tab buttons ────────────────────────────────────────
-            btnScale = MakeTab(Ass.S, BackgroundTab.Scale, 0);
-            btnRot = MakeTab(Ass.R, BackgroundTab.Rotation, 32);
-            btnPos = MakeTab(Ass.P, BackgroundTab.Position, 64);
-            btnCol = MakeTab(Ass.C, BackgroundTab.Color, 94);
+            scaleTab = MakeTab(Ass.S, BackgroundTab.Scale, 0);
+            rotationTab = MakeTab(Ass.R, BackgroundTab.Rotation, 32);
+            positionTab = MakeTab(Ass.P, BackgroundTab.Position, 64);
+            colorTab = MakeTab(Ass.C, BackgroundTab.Color, 94);
 
             // ─── 3. Reset ──────────────────────────────────────────────
             resetBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
@@ -84,8 +85,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
             yPosSlider.OnDrag += v =>
-                BackgroundHook.OffsetY = MathHelper.Lerp(-Main.screenWidth * 0.5f,
-                                                       +Main.screenWidth * 0.5f, v);
+                BackgroundHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
+                                                       +Main.screenHeight * 0.5f, v);
+            xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
 
             // ─── 5. Colour panel ───────────────────────────────────────
             colorPanel = new UIPanel
@@ -134,7 +136,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 Left = { Pixels = 10 },
                 Top = { Pixels = 160 }
             };
-            fileText = new UIText("No file chosen", 0.9f)
+            fileText = new OnOffTextButton("No file chosen", NoOnOff: true, ShowOnHover: true)
             {
                 HAlign = 0.5f,
                 Left = { Pixels = 50 },
@@ -142,9 +144,23 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             };
             fileChoose.OnLeftClick += (_, _) =>
             {
-                var f = UploadFileHelper.UploadFile(UploadFileHelper.FileType.Background);
-                if (!string.IsNullOrEmpty(f)) fileText.SetText(f);
+                string file = FileUploadHelper.OpenFileDialog();
+                if (string.IsNullOrWhiteSpace(file) || !File.Exists(file))
+                    return;
+
+                Texture2D tex = FileUploadHelper.ReadAndCreateTextureFromPath(file);
+                if (tex == null)
+                    return;
+
+                BackgroundHook.CustomBackgroundTexture = tex;
+                Conf.C.MainMenuBackground.BackgroundFileName = file;   // store path
+                Conf.Save();
+
+                fileText.SetText(file);
             };
+            string filePath = Conf.C.MainMenuBackground.BackgroundFileName;
+            if (!string.IsNullOrEmpty(filePath))
+                fileText.SetText(filePath);
 
             // ─── initialise state ───────────────────────────────────────
             hsl = Main.rgbToHsl(BackgroundHook.Color);
@@ -154,9 +170,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // ───────────────────────────────────────────────────────────────
         //  Helper builders
         // ───────────────────────────────────────────────────────────────
-        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, BackgroundTab t, float left)
+        private TabButton MakeTab(Asset<Texture2D> tex, BackgroundTab t, float left)
         {
-            var b = new SmallColoredImageButton(tex, t.ToString())
+            TabButton b = new(t.ToString())
             {
                 Left = { Pixels = left },
                 Top = { Pixels = 4 },
@@ -192,7 +208,16 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             };
 
             Action<float> set = v =>
+            {
                 ColorHelper.ApplyHslValue(ref hsl, id, v, c => BackgroundHook.Color = c, hexText);
+
+                // Save to config
+                if (tab==BackgroundTab.Color)
+                {
+                    Conf.C.MainMenuBackground.Color = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                    Conf.Save();
+                }
+            };
 
             Func<float, Color> grad = x => id switch
             {
@@ -217,10 +242,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             tab = t;
 
             // visual state for tab buttons
-            btnScale.SetSelected(t == BackgroundTab.Scale);
-            btnRot.SetSelected(t == BackgroundTab.Rotation);
-            btnCol.SetSelected(t == BackgroundTab.Color);
-            btnPos.SetSelected(t == BackgroundTab.Position);
+            scaleTab.SetSelected(t == BackgroundTab.Scale);
+            rotationTab.SetSelected(t == BackgroundTab.Rotation);
+            colorTab.SetSelected(t == BackgroundTab.Color);
+            positionTab.SetSelected(t == BackgroundTab.Position);
 
             // purge everything that can change per-tab
             ClearDynamic();
@@ -246,7 +271,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     break;
 
                 case BackgroundTab.Color:
-                    header.SetText("Background Color");
+                    header.SetText("BG Color");
                     Append(colorPanel);
                     Append(copyBtn);
                     Append(pasteBtn);
@@ -338,6 +363,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     break;
                 case BackgroundTab.Color:
                     hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
+                    colorTab.SetColor(BackgroundHook.Color);
                     break;
             }
         }

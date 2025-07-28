@@ -18,17 +18,23 @@ internal sealed class MainMenuSystem : ModSystem
     {
         if (Conf.C is null || !Conf.C.EditMainMenu) return;
 
+        // Initialize the user interface
         ui = new UserInterface();
-        state = new MainMenuState();
-        ui.SetState(state);
 
-        On_Main.DrawVersionNumber += DrawMenuUI;
-        On_Main.UpdateUIStates += PostUpdateUIStates;
+        // Setup main menu state
+        state = new MainMenuState();
+        state.eyeToggle.OnLeftClick += (_, _) => { ui.SetState(eyeState); };
 
         // Setup eye toggle
         eyeState = new MainMenuEyeState();
-        state.eyeToggle.OnLeftClick += (_, _) => { ui.SetState(eyeState); };
         eyeState.eyeToggle.OnLeftClick += (_, _) => ui.SetState(state);
+
+        // Set the initial state to the main menu state
+        ui.SetState(state);
+
+        // Hook into the main menu drawing and updating
+        On_Main.DrawVersionNumber += DrawMenuUI;
+        On_Main.UpdateUIStates += PostUpdateUIStates;
     }
 
     private void DrawMenuUI(On_Main.orig_DrawVersionNumber orig, Color menuColor, float upBump)

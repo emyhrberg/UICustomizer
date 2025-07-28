@@ -12,7 +12,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
     {
         public static class DefaultMenuColours
         {
-            public static readonly Color Fill = new(142,142,142);         // #8E8E8E
+            public static readonly Color Fill = new(142, 142, 142);         // #8E8E8E
             public static readonly Color Outline = Color.Black;          // #000000
             public static readonly Color Hover = new(255, 215, 0); // #FFD700 (Gold)
         }
@@ -21,6 +21,11 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static Color OutlineColor;
         public static Color HoverColor;
         public static bool IsDrawing = true;
+
+        // Extra customization position and scale
+        public static float Scale;
+        public static float OffsetX;
+        public static float OffsetY;
         public override void Load()
         {
             var cfg = Conf.C;
@@ -30,14 +35,16 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             OutlineColor = DefaultMenuColours.Outline;
             HoverColor = DefaultMenuColours.Hover;
 
+            Log.Info("found fill: " + cfg?.MainMenuTextColor.FillColor);
+
             // 2) overwrite only if the user actually stored something
-            if (ColorHelper.TryParseHex(cfg?.FillColor, out var fill))
+            if (ColorHelper.TryParseHex(cfg?.MainMenuTextColor.FillColor, out var fill))
                 FillColor = fill;
 
-            if (ColorHelper.TryParseHex(cfg?.OutlineColor, out var outline))
+            if (ColorHelper.TryParseHex(cfg?.MainMenuTextColor.OutlineColor, out var outline))
                 OutlineColor = outline;
 
-            if (ColorHelper.TryParseHex(cfg?.HoverColor, out var hover))
+            if (ColorHelper.TryParseHex(cfg?.MainMenuTextColor.HoverColor, out var hover))
                 HoverColor = hover;
 
             Main.QueueMainThreadAction(() => IL_Main.DrawMenu += ModifyColors);
@@ -66,28 +73,39 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private void ModifyColors(ILContext il)
         {
-            int counter = 0;
-            Log.Info("ModifyColors! " + counter++);
+            int counter = 1;
 
             IL.Edit(il, c =>
             {
-                //while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
-                //{
-                //    int oldIndex = c.Index;
+                while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
+                {
+                    if (counter == 4)
+                    {
+                        // Conditionally emit false if IsDrawing is false, effectivelly skipping the call.
+                        ILLabel label = il.DefineLabel();
+                        c.MarkLabel(label);
+                        int oldIndex = c.Index;
+                        c.GotoPrev(MoveType.Before, i => i.MatchLdsfld<Main>("spriteBatch"));
+                        c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(IsDrawing)));
+                        c.EmitBrfalse(label);
+                        c.Index = oldIndex + 2;
 
-                //    // place the label after the function
-                //    ILLabel label = il.DefineLabel();
-                //    c.MarkLabel(label);
-                //    // go back up to right before the statement, where the instance for the function is loaded
-                //    c.GotoPrev(MoveType.Before, i => i.MatchLdsfld<Main>("spriteBatch"));
-                //    // place the if statement using the label you already made
-                //    c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(IsDrawing)));
-                //    c.EmitBrfalse(label);
+                        // Match to the new Vector2 call and add offsetX and offsetY to it
+                        if (!c.TryGotoNext(MoveType.After,
+                        i => i.MatchNewobj<Vector2>()))
+                        {
+                            Log.Warn("could not locate Vector2 ctor.");
+                            return;
+                        }
 
-                //    // move back down to after the statement to prevent contounously going in a loop
-                //    c.Index = oldIndex;
-                //}
-                //c.Index = 0;
+                        c.EmitDelegate<Func<Vector2, Vector2>>(pos =>
+                            pos + new Vector2(OffsetX, OffsetY));
+                    }
+                    Log.Info("ModifyColors! " + counter++);
+
+                    
+                }
+                c.Index = 0;
 
                 // My edit
                 c.GotoNext(MoveType.Before, i => i.MatchStloc(177));

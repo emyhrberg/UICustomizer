@@ -13,7 +13,8 @@ namespace UICustomizer.UI.MainMenuElements
         {
             ImageScale = 0.62f;
             Top.Set(-3, 0);
-            HAlign = 0f;
+            HAlign = 1f;
+            Left.Set(-30, 0);
         }
 
         public override void Update(GameTime gameTime)
@@ -23,8 +24,6 @@ namespace UICustomizer.UI.MainMenuElements
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            HAlign = 1f;
-            Left.Set(-30, 0);
             base.Draw(spriteBatch);
 
             if (IsMouseHovering)

@@ -18,7 +18,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // ─── UI elements ────────────────────────────────────────────────
         private readonly UIText header;
 
-        private readonly SmallColoredImageButton btnScale, btnRot, btnCol, btnPos;
+        private readonly TabButton scaleTab, rotationTab, colorTab, positionTab;
 
         private readonly ZoeSlider scaleSlider, rotationSlider;
         private readonly ZoeSlider xPosSlider, yPosSlider;
@@ -52,10 +52,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             Append(header);
 
             // ─── 2. Tab buttons ────────────────────────────────────────
-            btnScale = MakeTab(Ass.S, LogoTab.Scale, 0);
-            btnRot = MakeTab(Ass.R, LogoTab.Rotation, 32);
-            btnPos = MakeTab(Ass.P, LogoTab.Position, 64);
-            btnCol = MakeTab(Ass.C, LogoTab.Color, 94);
+            scaleTab = MakeTab(Ass.S, LogoTab.Scale, 0);
+            rotationTab = MakeTab(Ass.R, LogoTab.Rotation, 32);
+            positionTab = MakeTab(Ass.P, LogoTab.Position, 64);
+            colorTab = MakeTab(Ass.C, LogoTab.Color, 94);
 
             // ─── 3. Reset ──────────────────────────────────────────────
             resetCurrentTabBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
@@ -66,7 +66,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             scaleSlider.OnDrag += v => LogoHook.Scale = MathHelper.Lerp(0, 10, v);
 
             rotationSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            rotationSlider.OnDrag += v => LogoHook.Rotation = MathHelper.Lerp(0, 6, v);
+            rotationSlider.OnDrag += v => LogoHook.Rotation = MathHelper.Lerp(0, 6.28f, v);
 
             xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
             xPosSlider.OnDrag += v =>
@@ -75,8 +75,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
             yPosSlider.OnDrag += v =>
-                LogoHook.OffsetY = MathHelper.Lerp(-Main.screenWidth * 0.5f,
-                                                       +Main.screenWidth * 0.5f, v);
+                LogoHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
+                                                       +Main.screenHeight * 0.5f, v);
+            xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
 
             // ─── 5. Colour panel ───────────────────────────────────────
             colorPanel = new UIPanel
@@ -125,16 +126,27 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 Left = { Pixels = 10 },
                 Top = { Pixels = 160 }
             };
-            fileText = new UIText("No file chosen", 0.9f)
+            fileText = new OnOffTextButton("No file chosen", NoOnOff: true, ShowOnHover: true)
             {
                 HAlign = 0.5f,
                 Left = { Pixels = 50 },
                 Top = { Pixels = 160 }
             };
+            string filePath = Conf.C.MainMenuLogo.LogoFileName;
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                fileText.SetText(filePath);
+            }
             fileChoose.OnLeftClick += (_, _) =>
             {
-                var f = UploadFileHelper.UploadFile(UploadFileHelper.FileType.Logo);
-                if (!string.IsNullOrEmpty(f)) fileText.SetText(f);
+                string file = FileUploadHelper.OpenFileDialog();
+                Texture2D tex = FileUploadHelper.ReadAndCreateTextureFromPath(file);
+                LogoHook.CustomLogoTexture = tex; // set the texture in the hook
+                Conf.C.MainMenuLogo.LogoFileName = tex.Name;
+                Conf.Save();
+
+                if (!string.IsNullOrEmpty(tex.Name))
+                    fileText.SetText(tex.Name);
             };
 
             resetLogoBtn = new()
@@ -155,9 +167,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         // ───────────────────────────────────────────────────────────────
         //  Helper builders
         // ───────────────────────────────────────────────────────────────
-        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, LogoTab t, float left)
+        private TabButton MakeTab(Asset<Texture2D> tex, LogoTab t, float left)
         {
-            var b = new SmallColoredImageButton(tex, t.ToString())
+            var b = new TabButton(t.ToString())
             {
                 Left = { Pixels = left },
                 Top = { Pixels = 4 },
@@ -193,7 +205,15 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             };
 
             Action<float> set = v =>
+            {
                 ColorHelper.ApplyHslValue(ref hsl, id, v, c => LogoHook.Color = c, hexText);
+
+                if (tab == LogoTab.Color)
+                {
+                    Conf.C.MainMenuLogo.Color = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                    Conf.Save();
+                }
+            };
 
             Func<float, Color> grad = x => id switch
             {
@@ -218,10 +238,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             tab = t;
 
             // visual state for tab buttons
-            btnScale.SetSelected(t == LogoTab.Scale);
-            btnRot.SetSelected(t == LogoTab.Rotation);
-            btnCol.SetSelected(t == LogoTab.Color);
-            btnPos.SetSelected(t == LogoTab.Position);
+            scaleTab.SetSelected(t == LogoTab.Scale);
+            rotationTab.SetSelected(t == LogoTab.Rotation);
+            colorTab.SetSelected(t == LogoTab.Color);
+            positionTab.SetSelected(t == LogoTab.Position);
 
             // purge everything that can change per-tab
             ClearDynamic();
@@ -266,8 +286,8 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             else
             {
                 // file chooser only on non-colour tabs
-                Append(fileChoose);
                 Append(fileText);
+                Append(fileChoose);
                 Append(resetLogoBtn);
 
                 header.Top.Set(8 + 32, 0);
@@ -339,6 +359,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     break;
                 case LogoTab.Color:
                     hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                    colorTab.SetColor(LogoHook.Color);
                     break;
             }
         }

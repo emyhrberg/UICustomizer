@@ -15,36 +15,40 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static bool IsDrawing = true;
         public static Texture2D? CustomBackgroundTexture;
 
-        // user-tweakable transforms
-        public static float Scale = 1f;      // 1 = fill screen
-        public static float Rotation = 0f;     // radians
+        public static float Scale = 1f;      
+        public static float Rotation = 0f;    
         public static Color Color = Color.White;
         public static float OffsetX = 0f;
         public static float OffsetY = 0f;
 
         private Hook _drawBGHook;
 
-        // ─────────────────────────── HOOK ────────────────────────────
         public override void Load()
         {
-            MethodInfo m = typeof(Main).GetMethod("DrawBG",
-                              BindingFlags.Instance | BindingFlags.NonPublic);
-            if (m == null)
+            // Load color from config
+            if (ColorHelper.TryParseHex(Conf.C.MainMenuBackground.Color, out var color))
             {
-                Log.Warn("Main.DrawBG not found – background hook disabled.");
-                return;
+                Color = color;
             }
 
-            // DrawBG(GameTime) detour
+            // Load path from config
+            string path = Conf.C.MainMenuBackground.BackgroundFileName;
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                Main.QueueMainThreadAction(() =>
+                {
+                    CustomBackgroundTexture =
+                        FileUploadHelper.ReadAndCreateTextureFromPath(path);
+                });
+            }
+
+            // Create and run the patching of the DrawBG hook
+            MethodInfo m = typeof(Main).GetMethod("DrawBG", BindingFlags.Instance | BindingFlags.NonPublic);
+
             if (m != null)
             {
-                _drawBGHook = new Hook(m,
-                    new Action<Action<Main>, Main>((orig, self) =>
-                    {
-                        Detour(orig, self);
-                    }));
-
-                _drawBGHook = new Hook(m, new Action<Action<Main>, Main>(Detour));
+                _drawBGHook = new Hook(m, new Action<Action<Main>, Main>(DrawBGDetour));
             }
         }
 
@@ -54,14 +58,14 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             ResetCustomBackground();
         }
 
-        private static void Detour(Action<Main> orig, Main self)
+        private static void DrawBGDetour(Action<Main> orig, Main self)
         {
             if (!IsDrawing)
-                return;                     // nothing at all
+                return;                    
 
             if (CustomBackgroundTexture is null)
             {
-                orig(self);            // vanilla sky
+                orig(self);           
                 return;
             }
 
@@ -76,51 +80,13 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             Vector2 pos = new(Main.screenWidth * 0.5f + OffsetX,
                                  Main.screenHeight * 0.5f + OffsetY);
 
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,
-                                   BlendState.AlphaBlend,
-                                   SamplerState.LinearClamp,
-                                   DepthStencilState.None,
-                                   RasterizerState.CullCounterClockwise,
-                                   null,
-                                   Matrix.Identity);
-
-            Main.spriteBatch.Draw(tex,
-                                  pos,
-                                  null,
-                                  Color,
-                                  Rotation,
-                                  origin,
-                                  drawScale,
-                                  SpriteEffects.None,
-                                  0f);
-
-            Main.spriteBatch.End();
-        }
-
-        // ───────────────────── helper for your UI ────────────────────
-        public static void LoadCustomBackground(string path)
-        {
-            ResetCustomBackground();
-
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-                return;
-
-            using FileStream fs = File.OpenRead(path);
-            CustomBackgroundTexture =
-                Texture2D.FromStream(Main.graphics.GraphicsDevice, fs);
-
-            // reset transforms
-            Scale = 1f;
-            Rotation = 0f;
-            Color = Color.White;
-            OffsetX = OffsetY = 0f;
+            Main.spriteBatch.Draw(tex, pos, null,Color,Rotation,origin, drawScale,SpriteEffects.None,0f);
         }
 
         public static void ResetCustomBackground()
         {
-            if (CustomBackgroundTexture is { IsDisposed: false })
-                CustomBackgroundTexture.Dispose();
             CustomBackgroundTexture = null;
+            Conf.C.MainMenuBackground.BackgroundFileName = null;
         }
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using UICustomizer.Common.Systems.MainMenu;
@@ -28,7 +28,6 @@ namespace UICustomizer.UI.MainMenuElements
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            //UpdateIcon();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

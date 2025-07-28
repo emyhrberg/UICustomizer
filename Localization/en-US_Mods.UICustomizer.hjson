@@ -61,6 +61,26 @@ Configs: {
 			Label: Draw
 			Tooltip: ""
 		}
+
+		MainMenuTextColor: {
+			Label: Main Menu Text Color
+			Tooltip: ""
+		}
+
+		MainMenuTime: {
+			Label: Main Menu Time
+			Tooltip: ""
+		}
+
+		MainMenuLogo: {
+			Label: Main Menu Logo
+			Tooltip: ""
+		}
+
+		MainMenuBackground: {
+			Label: Main Menu Background
+			Tooltip: ""
+		}
 	}
 
 	MainMenuDraw: {
@@ -108,6 +128,132 @@ Configs: {
 
 		DrawStars: {
 			Label: Draw Stars
+			Tooltip: ""
+		}
+	}
+
+	MainMenuTextColor: {
+		Tooltip: ""
+
+		FillColor: {
+			Label: Fill Color
+			Tooltip: ""
+		}
+
+		OutlineColor: {
+			Label: Outline Color
+			Tooltip: ""
+		}
+
+		HoverColor: {
+			Label: Hover Color
+			Tooltip: ""
+		}
+
+		Scale: {
+			Label: Scale
+			Tooltip: ""
+		}
+
+		OffsetX: {
+			Label: Offset X
+			Tooltip: ""
+		}
+
+		OffsetY: {
+			Label: Offset Y
+			Tooltip: ""
+		}
+	}
+
+	MainMenuTime: {
+		Tooltip: ""
+
+		Time: {
+			Label: Time
+			Tooltip: ""
+		}
+
+		Speed: {
+			Label: Speed
+			Tooltip: ""
+		}
+
+		ParallaxSpeed: {
+			Label: Parallax Speed
+			Tooltip: ""
+		}
+
+		IsPaused: {
+			Label: Is Paused
+			Tooltip: ""
+		}
+	}
+
+	MainMenuLogo: {
+		Tooltip: ""
+
+		Scale: {
+			Label: Scale
+			Tooltip: ""
+		}
+
+		Rotation: {
+			Label: Rotation
+			Tooltip: ""
+		}
+
+		Position: {
+			Label: Position
+			Tooltip: ""
+		}
+
+		Color: {
+			Label: Color
+			Tooltip: ""
+		}
+
+		CustomLogoTexture: {
+			Label: Custom Logo Texture
+			Tooltip: ""
+		}
+
+		LogoFileName: {
+			Label: Logo File Name
+			Tooltip: ""
+		}
+	}
+
+	MainMenuBackground: {
+		Tooltip: ""
+
+		Scale: {
+			Label: Scale
+			Tooltip: ""
+		}
+
+		Rotation: {
+			Label: Rotation
+			Tooltip: ""
+		}
+
+		Position: {
+			Label: Position
+			Tooltip: ""
+		}
+
+		Color: {
+			Label: Color
+			Tooltip: ""
+		}
+
+		CustomBackgroundTexture: {
+			Label: Custom Background Texture
+			Tooltip: ""
+		}
+
+		BackgroundFileName: {
+			Label: Background File Name
 			Tooltip: ""
 		}
 	}

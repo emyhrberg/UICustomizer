@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil;
+using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
+using UICustomizer.Common.Configs;
 
 namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
     public class LogoHook : ModSystem
     {
         public Hook logoHook;
+        public ILHook logoILHook;
         public static bool IsDrawing = true; // Whether the logo should be drawn
         public static float Scale = 1f;
         public static float Rotation = 0f;
@@ -19,38 +23,82 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         public static Texture2D? CustomLogoTexture;
 
-        public override void Load() => CreateLogoHook();
-        public override void Unload() => logoHook = null;
-
-        private void CreateLogoHook()
+        public override void Load()
         {
+            // Load color from config
+            if (ColorHelper.TryParseHex(Conf.C.MainMenuLogo.Color, out var color))
+            {
+                Color = color;
+            }
+
+            // Load custom logo texture from config into the class variable here
+            string path = Conf.C.MainMenuLogo.LogoFileName;
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                Main.QueueMainThreadAction(() =>
+                {
+                    CustomLogoTexture =
+                        FileUploadHelper.ReadAndCreateTextureFromPath(path);
+                });
+            }
+
             // Method
-            MethodInfo method = typeof(MenuLoader).GetMethod("UpdateAndDrawModMenuInner", BindingFlags.NonPublic | BindingFlags.Static);
-            if (method == null)
+            MethodInfo m = typeof(MenuLoader).GetMethod("UpdateAndDrawModMenuInner", BindingFlags.NonPublic | BindingFlags.Static);
+            if (m == null)
             {
                 Log.Error("Failed to find UpdateAndDrawModMenuInner method for LogoHook.");
                 return;
             }
 
-            // Hook
+            // Create Logo Hook
             logoHook = new Hook(
-                source: method,
+                source: m,
                 target: new Action<Action<SpriteBatch, GameTime, Color, float, float>, SpriteBatch, GameTime, Color, float, float>(
                     UpdateAndDrawModMenuInner_Hook)
                 );
-
             // Note: The 'target' in the Hook is a duplicate Action of the parameter types twice for some reason or something
+
+            // Create IL Logo Hook
+            logoILHook = new(m, ModifyLogoPos);
         }
+        public override void Unload()
+        { 
+            logoHook = null;
+            logoILHook?.Dispose();
+            ResetCustomLogo();
+        }
+
+        private static void ModifyLogoPos(ILContext il)
+        {
+            IL.Edit(il, c =>
+            {
+                if (!c.TryGotoNext(MoveType.After,
+                        i => i.MatchNewobj<Vector2>()))
+                {
+                    Log.Warn("LogoHook: could not locate Vector2 ctor for logo position.");
+                    return;
+                }
+
+                c.EmitDelegate<Func<Vector2, Vector2>>(pos =>
+                    pos + new Vector2(OffsetX, OffsetY));
+            });
+        }
+
 
         private void UpdateAndDrawModMenuInner_Hook(
     Action<SpriteBatch, GameTime, Color, float, float> orig,
     SpriteBatch spriteBatch, GameTime gameTime, Color color,
     float logoRotation, float logoScale)
         {
-            orig(spriteBatch, gameTime, color, logoRotation, logoScale);
-
             // 1) Skip drawing entirely if wanted
-            if (!IsDrawing) return;          // keep the fast‑return
+            if (!IsDrawing)
+            {
+                // Draw with 0 scale instead of IL hook and skipping calls
+                // It's true - yes i'm lazy!
+                orig(spriteBatch, gameTime, color, logoRotation, 0);
+                return;
+            }
 
             // 2) Rotation override (keep vanilla otherwise)
             if (Math.Abs(Rotation) > float.Epsilon)          // ≠ 0
@@ -81,22 +129,22 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                                  scale: Scale,
                                  effects: SpriteEffects.None,
                                  layerDepth: 0f);
-                return; // done – do NOT call orig()
+
+                // Call orig with scale 0;
+                // effectively drawing everything except the logo (since it's drawn at scale 0)
+                orig(spriteBatch, gameTime, color, logoRotation, 0);
+                return;
             }
 
             // 5) Finally call vanilla with whichever values survived
+            orig(spriteBatch, gameTime, color, logoRotation, logoScale);
         }
-        
-        
-        
-        
+
         public static void ResetCustomLogo()
         {
-            // free the texture if we loaded one
-            if (CustomLogoTexture != null && !CustomLogoTexture.IsDisposed)
-                CustomLogoTexture.Dispose();
-
             CustomLogoTexture = null;          // fall back to orig logo
+            Conf.C.MainMenuLogo.LogoFileName = null; // reset config and save
+            Conf.Save();
         }
 
     }

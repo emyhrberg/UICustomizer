@@ -10,6 +10,7 @@ namespace UICustomizer.Common.Systems.MainMenu
 
         public override void Load()
         {
+            IsPaused = Conf.C.MainMenuTime.IsPaused;
             On_Main.UpdateMenu += StopTimeInMenu;
         }
 

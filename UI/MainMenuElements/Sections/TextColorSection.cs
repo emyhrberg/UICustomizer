@@ -5,26 +5,27 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace UICustomizer.UI.MainMenuElements.Sections
 {
     internal class TextColorSection : BaseSection
     {
-        private enum ColorTab { Fill, Outline, Hover }
+        private enum ColorTab { Fill, Outline, Hover, Scale, Position }
         private ColorTab tab = ColorTab.Fill;
 
         private readonly UIText header;
-        private readonly SmallColoredImageButton btnF, btnO, btnH;
+        private readonly TabButton fillTab, outlineTab, hueTab, scaleTab, positionTab;
         private readonly UIColoredSlider hue, sat, lum;
         private readonly UIPanel panel;
         private readonly UIPanel hexTag;
         private readonly UIText hexText;
         private readonly ResetButton reset;
         private Vector3 hsl; // current HSL
+
+        // Extra sliders
+        private ZoeSlider scaleSlider, xPosSlider, yPosSlider;
 
         public TextColorSection()
         {
@@ -39,9 +40,11 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             });
 
             // 2) Tabs
-            btnF = MakeTab(Ass.F, ColorTab.Fill, 0);
-            btnO = MakeTab(Ass.O, ColorTab.Outline, 32);
-            btnH = MakeTab(Ass.H, ColorTab.Hover, 32 + 32);
+            fillTab = MakeTab(Ass.F, ColorTab.Fill, 0);
+            outlineTab = MakeTab(Ass.O, ColorTab.Outline, 32);
+            hueTab = MakeTab(Ass.H, ColorTab.Hover, 32 + 32);
+            scaleTab = MakeTab(Ass.S, ColorTab.Scale, 32 + 32 + 32);
+            positionTab = MakeTab(Ass.P, ColorTab.Position, 32 + 32 + 32 + 32);
 
             reset = new ResetButton();
             reset.OnLeftMouseDown += (_, _) =>
@@ -49,22 +52,40 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 // 1) pick the appropriate default
                 Color def = tab switch
                 {
-                    ColorTab.Fill => Color.Gray,
-                    ColorTab.Outline => Color.Black,
-                    _ => Main.OurFavoriteColor
+                    ColorTab.Fill => MainMenuTextColorHook.DefaultMenuColours.Fill,
+                    ColorTab.Outline => MainMenuTextColorHook.DefaultMenuColours.Outline,
+                    ColorTab.Hover => MainMenuTextColorHook.DefaultMenuColours.Hover,
+                    _ => Color.White // default case to white
                 };
                 hsl = Main.rgbToHsl(def);
 
-                // 3) update config
                 string hex = $"#{def.R:X2}{def.G:X2}{def.B:X2}";
                 switch (tab)
                 {
-                    case ColorTab.Fill: Conf.C.FillColor = hex; break;
-                    case ColorTab.Outline: Conf.C.OutlineColor = hex; break;
-                    default: Conf.C.HoverColor = hex; break;
+                    case ColorTab.Fill: 
+                        Conf.C.MainMenuTextColor.FillColor = hex;
+                        fillTab.SetColor(def);
+                        break;
+                    case ColorTab.Outline: 
+                        Conf.C.MainMenuTextColor.OutlineColor = hex;
+                        outlineTab.SetColor(def);
+                        break;
+                    case ColorTab.Hover: 
+                        Conf.C.MainMenuTextColor.HoverColor = hex;
+                        hueTab.SetColor(def);
+                        Log.Info("color set to Hover: " + def);
+                        break;
+                    case ColorTab.Scale:
+                        MainMenuTextColorHook.Scale = 1;
+                        scaleSlider.Ratio = 0;
+                        break;
+                    case ColorTab.Position:
+                        MainMenuTextColorHook.OffsetX = MainMenuTextColorHook.OffsetY = 0;
+                        xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
+                        break;
                 }
+                Log.Info("color set to def: " + def);
 
-                // 4) persist to disk
                 Conf.Save();
             };
             Append(reset);
@@ -83,11 +104,29 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             // 4) Three sliders, spaced 30 px
             hue = MakeSlider(HSLSliderId.Hue);
             sat = MakeSlider(HSLSliderId.Saturation);
-            lum = MakeSlider(HSLSliderId.Luminance); 
+            lum = MakeSlider(HSLSliderId.Luminance);
             panel.Append(hue);
             panel.Append(sat);
             panel.Append(lum);
             float rowY = panel.Top.Pixels + panel.Height.Pixels + 8f;
+
+            // 2 extra sliders
+            scaleSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
+            scaleSlider.OnDrag += v => MainMenuTextColorHook.Scale = MathHelper.Lerp(0, 10, v);
+
+            xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider.OnDrag += v =>
+            {
+                MainMenuTextColorHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
+                                                       +Main.screenWidth * 0.5f, v); 
+                Log.Info("x pos:" + MainMenuTextColorHook.OffsetX);
+            };
+
+            yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider.OnDrag += v =>
+                MainMenuTextColorHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
+                                                       +Main.screenHeight * 0.5f, v);
+            xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
 
             // 6) Copy / Paste / Randomize
             MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(GetColorAccessors().get));
@@ -113,16 +152,25 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             SelectTab(ColorTab.Fill);
         }
 
-        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, ColorTab tab, float left)
+        private TabButton MakeTab(Asset<Texture2D> tex, ColorTab tab, float left)
         {
             const float iconSize = 22f;
 
-            string tooltip = tab.ToString() + " Text";
-            var btn = new SmallColoredImageButton(tex, tooltip: tooltip);
+            string tooltip = tab.ToString() + " Text Color";
+
+            TabButton btn = new(tooltip);
             btn.Left.Set(left, 0f);
             btn.Top.Set(4f, 0f);
             btn.Width.Set(iconSize, 0f);
             btn.Height.Set(iconSize, 0f);
+
+            btn.SetColor(tab switch
+            {
+                ColorTab.Fill => MainMenuTextColorHook.FillColor,
+                ColorTab.Outline => MainMenuTextColorHook.OutlineColor,
+                ColorTab.Hover => MainMenuTextColorHook.HoverColor,
+                _ => Color.White
+            });
 
             btn.OnLeftMouseDown += (_, _) => SelectTab(tab);
             Append(btn);
@@ -140,10 +188,26 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             // 2) Push edits through the common routine
             var (get, set) = GetColorAccessors();
-            Action<float> setter = v =>   
+            Action<float> setter = v =>
             {
-                var(_, dynSet) = GetColorAccessors();           // fetch *current* tab
+                var (_, dynSet) = GetColorAccessors();           // fetch *current* tab
                 ColorHelper.ApplyHslValue(ref hsl, id, v, dynSet, hexText);
+
+                // Save to config
+                switch (tab)
+                {
+                    // 1) Colour tabs ────────────────────────────────────────────
+                    case ColorTab.Fill:
+                        Conf.C.MainMenuTextColor.FillColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        break;
+                    case ColorTab.Outline:
+                        Conf.C.MainMenuTextColor.OutlineColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        break;
+                    case ColorTab.Hover:
+                        Conf.C.MainMenuTextColor.HoverColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        break;
+                }
+                Conf.Save();
             };
 
             // 3) Per-slider preview gradient
@@ -151,7 +215,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             {
                 HSLSliderId.Hue => Main.hslToRgb(x, 1f, 0.5f),
                 HSLSliderId.Saturation => Main.hslToRgb(hsl.X, x, hsl.Z),
-                _ => Main.hslToRgb(hsl.X, hsl.Y, x)
+                HSLSliderId.Luminance => Main.hslToRgb(hsl.X, hsl.Y, x)
             };
 
             var slider = new UIColoredSlider(
@@ -189,14 +253,78 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         private void SelectTab(ColorTab tab)
         {
             this.tab = tab;
-            string text = tab.ToString() + " Text";
-            header.SetText(text);
-            btnF.SetSelected(tab == ColorTab.Fill);
-            btnO.SetSelected(tab == ColorTab.Outline);
-            btnH.SetSelected(tab == ColorTab.Hover);
+
+            // Clear all
+            panel.Remove();
+            hexTag.Remove();
+            scaleSlider.Remove();
+            xPosSlider.Remove();
+            yPosSlider.Remove();
+
+            // Rebuild all
+            switch (tab)
+            {
+                // 1) Colour tabs ────────────────────────────────────────────
+                case ColorTab.Fill:
+                case ColorTab.Outline:
+                case ColorTab.Hover:
+                    {
+                        hsl = Main.rgbToHsl(GetColorAccessors().get());
+                        hexText.SetText(ColorHelper.ToHex(GetColorAccessors().get()));
+                        Append(panel);      // HSL sliders
+                        Append(hexTag);     // big HEX label
+                        break;
+                    }
+                case ColorTab.Scale:
+                    {
+                        Append(scaleSlider);
+                        break;
+                    }
+                case ColorTab.Position:
+                    {
+                        Append(xPosSlider);
+                        Append(yPosSlider);
+                        break;
+                    }
+            }
+
+            string text = tab.ToString();
+            if (text.Length <= 7)
+            {
+                header.SetText(text, 1.0f, false);
+            }
+            else if (text.Length > 7 && text.Length <= 10)
+            {
+                header.SetText(text, 0.91f, false);
+            }
+            else
+            {
+                header.SetText(text, 0.7f, false);
+            }
+
+            fillTab.SetSelected(tab == ColorTab.Fill);
+            outlineTab.SetSelected(tab == ColorTab.Outline);
+            hueTab.SetSelected(tab == ColorTab.Hover);
+            scaleTab.SetSelected(tab == ColorTab.Scale);
+            positionTab.SetSelected(tab == ColorTab.Position);
 
             hsl = Main.rgbToHsl(GetColorAccessors().get());
             hexText.SetText(ColorHelper.ToHex(GetColorAccessors().get()));
+
+            if (tab == ColorTab.Scale || tab == ColorTab.Position)
+            {
+                // big text below the tabs
+                header.Top.Set(8 + 32, 0);
+                header.HAlign = 0.5f;
+                header.Left.Set(0, 0);
+            }
+            else
+            {
+                // top right-aligned color
+                header.Top.Set(8, 0);
+                header.HAlign = 1f;
+                header.Left.Set(-32, 0);
+            }
         }
 
         private (Func<Color> get, Action<Color> set) GetColorAccessors()
@@ -205,8 +333,37 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             {
                 ColorTab.Fill => (() => MainMenuTextColorHook.FillColor, c => MainMenuTextColorHook.FillColor = c),
                 ColorTab.Outline => (() => MainMenuTextColorHook.OutlineColor, c => MainMenuTextColorHook.OutlineColor = c),
-                _ => (() => MainMenuTextColorHook.HoverColor, c => MainMenuTextColorHook.HoverColor = c)
+                ColorTab.Hover => (() => MainMenuTextColorHook.HoverColor, c => MainMenuTextColorHook.HoverColor = c),
+                _ => (() => Color.White,
+                _  => { })
             };
+        }
+
+        public override void Update(GameTime gt)
+        {
+            base.Update(gt);
+
+            Color current = Main.hslToRgb(hsl);
+
+            switch (tab)
+            {
+                case ColorTab.Fill:
+                    fillTab.SetColor(current);
+                    break;
+                case ColorTab.Outline:
+                    outlineTab.SetColor(current);
+                    break;
+                case ColorTab.Hover:
+                    hueTab.SetColor(current);
+                    break;
+                case ColorTab.Scale:
+                    header.SetText($"Text Scale: {MainMenuTextColorHook.Scale:F2}");
+                    fillTab.SetColor(current);
+                    break;
+                case ColorTab.Position:
+                    header.SetText($"Text Position: {MainMenuTextColorHook.OffsetX:F2}, {MainMenuTextColorHook.OffsetY:F2}");
+                    break;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -11,11 +11,11 @@ namespace UICustomizer.UI.MainMenuElements.Sections
     {
         private readonly UIElement col1;   // left column
         private readonly UIElement col2;   // right column
-        private float yOffset = 15f;
+        private float yOffset = 18f;
 
         public DrawSection()
         {
-            Height.Set(95, 0);
+            Height.Set(105, 0);
 
             Append(new UIText("Draw") { HAlign = 0.5f, Top = { Pixels = 0 } });
 
@@ -50,16 +50,15 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
 
             // ───── right column ─────
-            yOffset = 15; // reset
+            yOffset = 18; // reset
             MakeToggle("Logo: ", col2,
                 b => { Conf.C.MainMenuDraw.DrawLogo = b; LogoHook.IsDrawing = b; });
 
-            //MakeToggle("Text: ", col2,
-            //    b =>
-            //    {
-            //        Conf.C.MainMenuDraw.DrawMainText = b;
-            //        MainMenuTextColorHook.IsDrawing = !MainMenuTextColorHook.IsDrawing;
-            //    });
+            MakeToggle("Text: ", col2,
+                b =>
+                {
+                    MainMenuTextColorHook.IsDrawing = !MainMenuTextColorHook.IsDrawing;
+                });
 
             MakeToggle("Stars: ", col2,
                 b => { Conf.C.MainMenuDraw.DrawStars = b; SkipStarsHook.IsDrawing = b; });

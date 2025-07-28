@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
+using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using UICustomizer.Common.Systems.MainMenu;
 
@@ -12,7 +13,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         private TimeTab tab = TimeTab.Time;
 
         private readonly UIText header;
-        private readonly SmallColoredImageButton btnT, btnS, btnP;
+        private readonly TabButton timeTab, speedTab, parallaxTab;
         private readonly ZoeSlider timeSlider, speedSlider, parallaxSlider;
         private readonly ResetButton resetButton;
         private readonly PlayPause playPause;
@@ -30,18 +31,23 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             });
 
             // 2) Tabs
-            btnT = MakeTab(Ass.T, TimeTab.Time, 0);
-            btnS = MakeTab(Ass.S, TimeTab.Speed, 32);
-            btnP = MakeTab(Ass.P, TimeTab.Parallax, 32 + 32);
+            timeTab = MakeTab(Ass.T, TimeTab.Time, 0);
+            speedTab = MakeTab(Ass.S, TimeTab.Speed, 32);
+            parallaxTab = MakeTab(Ass.P, TimeTab.Parallax, 32 + 32);
 
             // ─── Common controls ──────────────────────────────────────────
-            playPause = new PlayPause
+            playPause = new PlayPause()
             {
                 Left = { Pixels = 6 },
                 Top = { Pixels = 6 }
             };
             playPause.OnLeftMouseDown += (_, _) =>
+            {
                 MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
+                Conf.C.MainMenuTime.IsPaused = !Conf.C.MainMenuTime.IsPaused;
+            };
+            bool initialPauseState = Conf.C.MainMenuTime.IsPaused;
+            playPause.SetImage(initialPauseState ? Ass.Pause : Ass.Play);
             Append(playPause);
 
             resetButton = new ResetButton
@@ -98,11 +104,11 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             SelectTab(TimeTab.Time);
         }
 
-        private SmallColoredImageButton MakeTab(Asset<Texture2D> tex, TimeTab tab, float left)
+        private TabButton MakeTab(Asset<Texture2D> tex, TimeTab tab, float left)
         {
             const float iconSize = 22f;
 
-            var btn = new SmallColoredImageButton(tex, tab.ToString());
+            TabButton btn = new(tab.ToString());
             btn.Left.Set(left, 0f);
             btn.Top.Set(4f, 0f);
             btn.Width.Set(iconSize, 0f);
@@ -117,9 +123,9 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             this.tab = tab;
 
             // ─── Tab button highlights ───
-            btnT.SetSelected(tab == TimeTab.Time);
-            btnS.SetSelected(tab == TimeTab.Speed);
-            btnP.SetSelected(tab == TimeTab.Parallax);
+            timeTab.SetSelected(tab == TimeTab.Time);
+            speedTab.SetSelected(tab == TimeTab.Speed);
+            parallaxTab.SetSelected(tab == TimeTab.Parallax);
 
             // ─── Purge all dynamic children ───
             playPause.Remove();
