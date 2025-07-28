@@ -31,8 +31,19 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 Color = color;
             }
 
+            // Load pos and scale from config
+            var cfg = Conf.C;
+            Scale = cfg?.MainMenuLogo.Scale ?? 1f;
+            OffsetX = cfg?.MainMenuLogo.OffsetX ?? 0f;
+            OffsetY = cfg?.MainMenuLogo.OffsetY ?? 0f;
+            Rotation = cfg?.MainMenuLogo.Rotation ?? 0f;
+
+            // Load isDrawing from config
+            IsDrawing = cfg?.MainMenuDraw.DrawLogo ?? true;
+
             // Load custom logo texture from config into the class variable here
             string path = Conf.C.MainMenuLogo.LogoFileName;
+            Log.Info($"LogoHook: Loading custom logo from path: {path}");
 
             if (!string.IsNullOrEmpty(path))
             {
@@ -63,7 +74,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             logoILHook = new(m, ModifyLogoPos);
         }
         public override void Unload()
-        { 
+        {
             logoHook = null;
             logoILHook?.Dispose();
             ResetCustomLogo();
@@ -143,8 +154,6 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static void ResetCustomLogo()
         {
             CustomLogoTexture = null;          // fall back to orig logo
-            Conf.C.MainMenuLogo.LogoFileName = null; // reset config and save
-            Conf.Save();
         }
 
     }

@@ -29,6 +29,8 @@ public class ZoeSlider : UIElement
         InnerColor = Color.Gray;
         InnerTexture = Ass.SliderGradient;
         OuterTexture = Ass.SliderHighlight;
+
+        OnValueAppliedOnMouseUp += (_) => Conf.Save();
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

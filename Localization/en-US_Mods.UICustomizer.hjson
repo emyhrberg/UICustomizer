@@ -63,22 +63,22 @@ Configs: {
 		}
 
 		MainMenuTextColor: {
-			Label: Main Menu Text Color
+			Label: Text Color
 			Tooltip: ""
 		}
 
 		MainMenuTime: {
-			Label: Main Menu Time
+			Label: Time
 			Tooltip: ""
 		}
 
 		MainMenuLogo: {
-			Label: Main Menu Logo
+			Label: Logo
 			Tooltip: ""
 		}
 
 		MainMenuBackground: {
-			Label: Main Menu Background
+			Label: Background
 			Tooltip: ""
 		}
 	}
@@ -128,6 +128,11 @@ Configs: {
 
 		DrawStars: {
 			Label: Draw Stars
+			Tooltip: ""
+		}
+
+		DrawText: {
+			Label: Draw Text
 			Tooltip: ""
 		}
 	}
@@ -222,6 +227,16 @@ Configs: {
 			Label: Logo File Name
 			Tooltip: ""
 		}
+
+		OffsetX: {
+			Label: Offset X
+			Tooltip: ""
+		}
+
+		OffsetY: {
+			Label: Offset Y
+			Tooltip: ""
+		}
 	}
 
 	MainMenuBackground: {
@@ -254,6 +269,16 @@ Configs: {
 
 		BackgroundFileName: {
 			Label: Background File Name
+			Tooltip: ""
+		}
+
+		OffsetX: {
+			Label: Offset X
+			Tooltip: ""
+		}
+
+		OffsetY: {
+			Label: Offset Y
 			Tooltip: ""
 		}
 	}

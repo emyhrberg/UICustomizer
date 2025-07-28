@@ -28,15 +28,15 @@ public class ColorTagConfigElement : ConfigElement<string>
     public override void OnBind()
     {
         base.OnBind();
-        if (string.IsNullOrWhiteSpace(Value))
-            Value = "#FFFFFF";                    // default white
+        // if (string.IsNullOrWhiteSpace(Value))
+        // Value = "#FFFFFF";                    // default white
         UpdateText();
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        UpdateText();                             // keep text fresh
+        // UpdateText();                             // keep text fresh
     }
 
     private void UpdateText()

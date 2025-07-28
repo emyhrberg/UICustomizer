@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using UICustomizer.Common.Configs;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using UICustomizer.Common.Systems.MainMenu;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace UICustomizer.UI.MainMenuElements.Sections
 {
@@ -45,6 +47,11 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             {
                 MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
                 Conf.C.MainMenuTime.IsPaused = !Conf.C.MainMenuTime.IsPaused;
+
+                // Also save time
+                Conf.C.MainMenuTime.Time = (int)Main.time;
+
+                Conf.Save();
             };
             bool initialPauseState = Conf.C.MainMenuTime.IsPaused;
             playPause.SetImage(initialPauseState ? Ass.Pause : Ass.Play);
@@ -78,17 +85,27 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 InnerTexture = Ass.SliderTime
                 //InnerTexture = Ass.SliderTime
             };
-            timeSlider.OnDrag += WorldTimeHelper.SetTime;
+            timeSlider.OnDrag += (v) =>
+            {
+                WorldTimeHelper.SetTime(v);
+            };
             Append(timeSlider);
 
             // ─── IsDrawing slider ─────────────────────────────────────────────
             speedSlider = new ZoeSlider
             {
                 Top = { Pixels = 45 },
-                Ratio = ColorHelper.InverseLerp(0f, 100f, TimeSpeedHook.Speed)
+                Ratio = ColorHelper.InverseLerp(0f, 100f, Conf.C.MainMenuTime.Speed)
             };
             speedSlider.OnDrag += v =>
+            {
                 TimeSpeedHook.Speed = MathHelper.Lerp(0f, 100f, v);
+                Conf.C.MainMenuTime.Speed = (int)MathHelper.Lerp(0f, 100f, v);
+            };
+            speedSlider.OnValueAppliedOnMouseUp += (value) =>
+            {
+                Conf.Save();
+            };
             Append(speedSlider);
 
             // ─── Parallax slider ─────────────────────────────────────────
@@ -98,7 +115,14 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 Ratio = ColorHelper.InverseLerp(0f, 100f, ParallaxSpeedHook.Speed)
             };
             parallaxSlider.OnDrag += v =>
+            {
                 ParallaxSpeedHook.Speed = MathHelper.Lerp(0f, 100f, v);
+                Conf.C.MainMenuTime.ParallaxSpeed = (int)MathHelper.Lerp(0f, 100f, v);
+            };
+            parallaxSlider.OnValueAppliedOnMouseUp += (value) =>
+            {
+                Conf.Save();
+            };
             Append(parallaxSlider);
 
             SelectTab(TimeTab.Time);

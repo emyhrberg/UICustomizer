@@ -29,7 +29,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         private readonly UIPanel hexTag;
         private readonly UIText hexText;
 
-        private readonly ResetButton resetCurrentTabBtn;
+        private readonly ResetButton reset;
         private readonly ResetButton resetLogoBtn;
 
         private readonly OnOffTextButton fileChoose;
@@ -62,23 +62,57 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             }
 
             // ─── 3. Reset ──────────────────────────────────────────────
-            resetCurrentTabBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
-            resetCurrentTabBtn.OnLeftMouseDown += (_, _) => ResetCurrentTab();
+            reset = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
+            reset.OnLeftMouseDown += (_, _) =>
+            {
+                switch (tab)
+                {
+                    case LogoTab.Scale:
+                        LogoHook.Scale = 1;
+                        scaleSlider.Ratio = 0.1f;
+                        break;
+
+                    case LogoTab.Rotation:
+                        LogoHook.Rotation = 0;
+                        rotationSlider.Ratio = 0;
+                        break;
+
+                    case LogoTab.Position:
+                        LogoHook.OffsetX = LogoHook.OffsetY = 0;
+                        xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
+                        break;
+
+                    case LogoTab.Color:
+                        LogoHook.Color = Color.White;
+                        hsl = Main.rgbToHsl(LogoHook.Color);
+                        hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                        break;
+                }
+            };
 
             // ─── 4. Sliders ────────────────────────────────────────────
             scaleSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            scaleSlider.OnDrag += v => LogoHook.Scale = MathHelper.Lerp(0, 10, v);
+            scaleSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuLogo.Scale);
+            scaleSlider.OnDrag += v => Conf.C.MainMenuLogo.Scale = LogoHook.Scale = MathHelper.Lerp(0, 10, v);
 
             rotationSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            rotationSlider.OnDrag += v => LogoHook.Rotation = MathHelper.Lerp(0, 6.28f, v);
+            rotationSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuLogo.Rotation);
+            rotationSlider.OnDrag += v => Conf.C.MainMenuLogo.Rotation = LogoHook.Rotation = MathHelper.Lerp(0, 6.28f, v);
 
             xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
+                                                       +Main.screenWidth * 0.5f, Conf.C.MainMenuLogo.OffsetX);
+
             xPosSlider.OnDrag += v =>
+            Conf.C.MainMenuLogo.OffsetX = 
                 LogoHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, v);
 
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
+                                                       +Main.screenWidth * 0.5f, Conf.C.MainMenuLogo.OffsetX);
             yPosSlider.OnDrag += v =>
+            Conf.C.MainMenuLogo.OffsetY = 
                 LogoHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
                                                        +Main.screenHeight * 0.5f, v);
             xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
@@ -250,7 +284,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             // purge everything that can change per-tab
             ClearDynamic();
 
-            Append(resetCurrentTabBtn);
+            Append(reset);
 
             switch (t)
             {
@@ -313,37 +347,10 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             pasteBtn.Remove();
             randBtn.Remove();
 
-            resetCurrentTabBtn.Remove();
+            reset.Remove();
             resetLogoBtn.Remove();
             fileChoose.Remove();
             fileText.Remove();
-        }
-
-        private void ResetCurrentTab()
-        {
-            switch (tab)
-            {
-                case LogoTab.Scale:
-                    LogoHook.Scale = 1;
-                    scaleSlider.Ratio = 0;            // since InverseLerp(0,10,1)=0
-                    break;
-
-                case LogoTab.Rotation:
-                    LogoHook.Rotation = 0;
-                    rotationSlider.Ratio = 0;
-                    break;
-
-                case LogoTab.Position:
-                    LogoHook.OffsetX = LogoHook.OffsetY = 0;
-                    xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
-                    break;
-
-                case LogoTab.Color:
-                    LogoHook.Color = Color.White;
-                    hsl = Main.rgbToHsl(LogoHook.Color);
-                    hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
-                    break;
-            }
         }
 
         // live label updates

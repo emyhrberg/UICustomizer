@@ -35,6 +35,12 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             OutlineColor = DefaultMenuColours.Outline;
             HoverColor = DefaultMenuColours.Hover;
 
+            Scale = cfg?.MainMenuTextColor.Scale ?? 1f;
+            OffsetX = cfg?.MainMenuTextColor.OffsetX ?? 0f;
+            OffsetY = cfg?.MainMenuTextColor.OffsetY ?? 0f;
+
+            IsDrawing = cfg?.MainMenuDraw.DrawText ?? true;
+
             Log.Info("found fill: " + cfg?.MainMenuTextColor.FillColor);
 
             // 2) overwrite only if the user actually stored something
@@ -73,37 +79,40 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         private void ModifyColors(ILContext il)
         {
-            int counter = 1;
-
             IL.Edit(il, c =>
             {
                 while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
                 {
-                    if (counter == 4)
+                    // Conditionally emit false if IsDrawing is false, effectivelly skipping the call.
+                    ILLabel label = il.DefineLabel();
+                    c.MarkLabel(label);
+                    int oldIndex = c.Index;
+                    c.GotoPrev(MoveType.Before, i => i.MatchLdsfld<Main>("spriteBatch"));
+                    c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(IsDrawing)));
+                    c.EmitBrfalse(label);
+                    c.Index = oldIndex + 2;
+                }
+                c.Index = 0;
+
+                // Match all DrawString calls
+                while (c.TryGotoNext(MoveType.Before, i => i.MatchCall(out var meth) && meth.Name == "DrawString"))
+                {
+                    int drawStringIndex = c.Index;
+
+                    if (c.TryGotoPrev(MoveType.After, i => i.MatchNewobj<Vector2>()))
+                        c.EmitDelegate<Func<Vector2, Vector2>>(pos => pos + new Vector2(OffsetX, OffsetY));
+                    c.Index = drawStringIndex;
+
+                    if (c.TryGotoPrev(MoveType.Before, i => i.MatchCall(out var meth) && meth.Name == "DrawString"))
                     {
-                        // Conditionally emit false if IsDrawing is false, effectivelly skipping the call.
-                        ILLabel label = il.DefineLabel();
-                        c.MarkLabel(label);
-                        int oldIndex = c.Index;
-                        c.GotoPrev(MoveType.Before, i => i.MatchLdsfld<Main>("spriteBatch"));
-                        c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(IsDrawing)));
-                        c.EmitBrfalse(label);
-                        c.Index = oldIndex + 2;
-
-                        // Match to the new Vector2 call and add offsetX and offsetY to it
-                        if (!c.TryGotoNext(MoveType.After,
-                        i => i.MatchNewobj<Vector2>()))
+                        if (c.TryGotoPrev(MoveType.After, i => i.MatchLdcI4(0))) // SpriteEffects.None
                         {
-                            Log.Warn("could not locate Vector2 ctor.");
-                            return;
+                            if (c.TryGotoPrev(MoveType.After, i => i.MatchLdcR4(out _) || i.MatchLdloc(out _))) // Scale
+                                c.EmitDelegate<Func<float, float>>(scale => scale * Scale);
                         }
-
-                        c.EmitDelegate<Func<Vector2, Vector2>>(pos =>
-                            pos + new Vector2(OffsetX, OffsetY));
                     }
-                    Log.Info("ModifyColors! " + counter++);
-
-                    
+                    c.Index = drawStringIndex;
+                    c.TryGotoNext(MoveType.After, i => i.MatchCall(out var meth) && meth.Name == "DrawString");
                 }
                 c.Index = 0;
 

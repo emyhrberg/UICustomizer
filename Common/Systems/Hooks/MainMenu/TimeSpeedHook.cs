@@ -10,7 +10,9 @@ public sealed class TimeSpeedHook : ModSystem
     public static float Speed = 1f; // Default rotationSlider is 1x
     public override void Load()
     {
-        //Speed = Conf.C.MainMenuTime.Speed;
+        var cfg = Conf.C;
+        Speed = cfg?.MainMenuTime.Speed ?? 1f;
+
         IL_Main.UpdateMenu += ModifyMenuTime;
     }
     public override void Unload() => IL_Main.UpdateMenu -= ModifyMenuTime;

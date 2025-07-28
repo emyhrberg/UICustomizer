@@ -1,27 +1,29 @@
-﻿using MonoMod.Cil;
+﻿
 using Terraria;
 using Terraria.ModLoader;
 using static Terraria.Main;
 
 namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
-    public class SkipStarsHook : ModSystem
+    public class SkipSunDrawHook : ModSystem
     {
         public static bool IsDrawing = true;
 
         public override void Load()
         {
-            On_Main.DrawStarsInBackground += SkipDraw;
+            // Load isDrawing from config
+            IsDrawing = Conf.C?.MainMenuDraw.DrawSun ?? true;
+            On_Main.DrawSunAndMoon += SkipDraw;
         }
         public override void Unload()
         {
-            On_Main.DrawStarsInBackground -= SkipDraw;
+            On_Main.DrawSunAndMoon -= SkipDraw;
         }
-        private void SkipDraw(On_Main.orig_DrawStarsInBackground orig, Main self, SceneArea sceneArea, bool artificial)
+        private void SkipDraw(On_Main.orig_DrawSunAndMoon orig, Main self, SceneArea sceneArea, Color moonColor, Color sunColor, float tempMushroomInfluence)
         {
             if (!IsDrawing) return;
 
-            orig(self, sceneArea, artificial);
+            orig(self, sceneArea, moonColor, sunColor, tempMushroomInfluence);
         }
     }
 }

@@ -15,8 +15,8 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static bool IsDrawing = true;
         public static Texture2D? CustomBackgroundTexture;
 
-        public static float Scale = 1f;      
-        public static float Rotation = 0f;    
+        public static float Scale = 1f;
+        public static float Rotation = 0f;
         public static Color Color = Color.White;
         public static float OffsetX = 0f;
         public static float OffsetY = 0f;
@@ -31,8 +31,18 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 Color = color;
             }
 
+            // Load pos and scale from config
+            var cfg = Conf.C;
+            Scale = cfg?.MainMenuBackground.Scale ?? 1f;
+            OffsetX = cfg?.MainMenuBackground.OffsetX ?? 0f;
+            OffsetY = cfg?.MainMenuBackground.OffsetY ?? 0f;
+            Rotation = cfg?.MainMenuBackground.Rotation ?? 0f;
+
+            IsDrawing = cfg?.MainMenuDraw.DrawBackground ?? true;
+
             // Load path from config
             string path = Conf.C.MainMenuBackground.BackgroundFileName;
+            Log.Info($"BackgroundHook: Loading custom background from path: {path}");
 
             if (!string.IsNullOrEmpty(path))
             {
@@ -61,11 +71,11 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         private static void DrawBGDetour(Action<Main> orig, Main self)
         {
             if (!IsDrawing)
-                return;                    
+                return;
 
             if (CustomBackgroundTexture is null)
             {
-                orig(self);           
+                orig(self);
                 return;
             }
 
@@ -80,13 +90,12 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             Vector2 pos = new(Main.screenWidth * 0.5f + OffsetX,
                                  Main.screenHeight * 0.5f + OffsetY);
 
-            Main.spriteBatch.Draw(tex, pos, null,Color,Rotation,origin, drawScale,SpriteEffects.None,0f);
+            Main.spriteBatch.Draw(tex, pos, null, Color, Rotation, origin, drawScale, SpriteEffects.None, 0f);
         }
 
         public static void ResetCustomBackground()
         {
             CustomBackgroundTexture = null;
-            Conf.C.MainMenuBackground.BackgroundFileName = null;
         }
     }
 }

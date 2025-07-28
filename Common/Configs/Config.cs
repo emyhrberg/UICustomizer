@@ -28,10 +28,10 @@ namespace UICustomizer.Common.Configs
         public MainMenuTime MainMenuTime = new();
 
         [Expand(false, false)]
-        public MainMenuLogo MainMenuLogo = new();
+        public MainMenuBackground MainMenuBackground = new();
 
         [Expand(false, false)]
-        public MainMenuBackground MainMenuBackground = new();
+        public MainMenuLogo MainMenuLogo = new();
 
         [Expand(false, false)]
         public MainMenuDraw MainMenuDraw = new();
@@ -99,9 +99,11 @@ namespace UICustomizer.Common.Configs
         public float Scale = 1f; // Scale for the text
 
         [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
         public float OffsetX = 0f; // X position offset
 
         [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
         public float OffsetY = 0f; // Y position offset
     }
 
@@ -112,30 +114,61 @@ namespace UICustomizer.Common.Configs
 
         // Time in ticks int
         [DefaultValue(0)]
-        [Range(0, 86400)]
-        public int Time = 0;
+        [Range(0f, 86400f)]
+        public float Time;
 
         // Speed in ticks int
         [DefaultValue(1)]
-        [Range(0, 100)]
-        public int Speed = 0;
+        [Range(0f, 100f)]
+        public float Speed;
 
         // Parallax speed in int
         [DefaultValue(5)]
-        [Range(0, 100)]
-        public int ParallaxSpeed = 0;
+        [Range(0f, 100f)]
+        public float ParallaxSpeed;
     }
 
-    public class MainMenuLogo
+    public class MainMenuBackground
     {
+        [Range(0.0f, 10f)]
         [DefaultValue(1f)]
         public float Scale = 1f;
 
+        [Range(0.0f, 6.28f)]
         [DefaultValue(0f)]
         public float Rotation = 0f;
 
-        // [DefaultValue("0,0")]
-        public Vector2 Position = Vector2.Zero;
+        [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
+        public float OffsetX = 0f; // X position offset
+
+        [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
+        public float OffsetY = 0f; // Y position offset
+
+        [DefaultValue("#FFFFFF")]
+        [CustomModConfigItem(typeof(ColorTagConfigElement))]
+        public string Color = "#FFFFFF"; // White by default
+
+        public string BackgroundFileName;
+    }
+    public class MainMenuLogo
+    {
+        [Range(0.0f, 10f)]
+        [DefaultValue(1f)]
+        public float Scale = 1f;
+
+        [Range(0.0f, 6.28f)]
+        [DefaultValue(0f)]
+        public float Rotation = 0f;
+
+        [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
+        public float OffsetX = 0f; // X position offset
+
+        [DefaultValue(0f)]
+        [Range(-1000f, 1000f)]
+        public float OffsetY = 0f; // Y position offset
 
         [DefaultValue("#FFFFFF")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
@@ -144,35 +177,18 @@ namespace UICustomizer.Common.Configs
         public string LogoFileName;
     }
 
-    public class MainMenuBackground
-    {
-        [DefaultValue(1f)]
-        public float Scale = 1f;
-
-        [DefaultValue(0f)]
-        public float Rotation = 0f;
-
-        // [DefaultValue("0,0")]
-        public Vector2 Position = Vector2.Zero;
-
-        [DefaultValue("#FFFFFF")]
-        [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string Color = "#FFFFFF"; // White by default
-
-        public string BackgroundFileName;
-    }
-
     public class MainMenuDraw
     {
         // First column
-        [DefaultValue(true)] public bool DrawBackground;
-        [DefaultValue(true)] public bool DrawSun;
-        [DefaultValue(true)] public bool DrawSky;
+        [DefaultValue(true)] public bool DrawBackground = true;
+        [DefaultValue(true)] public bool DrawSun = true;
+        [DefaultValue(true)] public bool DrawSky = true;
 
         // Second column
-        [DefaultValue(true)] public bool DrawLogo;
-        [DefaultValue(true)] public bool DrawStars;
-        [DefaultValue(true)] public bool DrawVersion;
+        [DefaultValue(true)] public bool DrawLogo = true;
+        [DefaultValue(true)] public bool DrawText = true;
+        [DefaultValue(true)] public bool DrawStars = true;
+        [DefaultValue(true)] public bool DrawVersion = true;
     }
 
     public static class Conf

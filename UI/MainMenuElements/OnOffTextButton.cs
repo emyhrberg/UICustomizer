@@ -10,23 +10,17 @@ namespace UICustomizer.UI.MainMenuElements
         public bool isOn = true;
 
         private bool _showOnHover;
-        public OnOffTextButton(string text, bool initiallyOn = true, bool NoOnOff = false, bool ShowOnHover=false) : base(text, textScale: 0.82f, large: false)
+
+        public OnOffTextButton(string text, bool initiallyOn = true, bool NoOnOff = false, bool ShowOnHover = false)
+    : base("", textScale: 0.82f, large: false)
         {
             this.isOn = initiallyOn;
             this._showOnHover = ShowOnHover;
-            if (!initiallyOn) isOn = false;
-
-            string onOff = isOn ? "On" : "Off";
-
-            if (NoOnOff) SetText(text);
-            else SetText(text + onOff);
 
             HAlign = 0.5f;
+            if (!ShowOnHover) TextColor = Color.Gray;
 
-            if (!ShowOnHover)
-            {
-                TextColor = Color.Gray;
-            }
+            UpdateLabelText(text, NoOnOff);
 
             OnMouseOver += (_, _) =>
             {
@@ -35,17 +29,21 @@ namespace UICustomizer.UI.MainMenuElements
 
             OnMouseOut += (_, _) =>
             {
-                if (!ShowOnHover)  TextColor = Color.Gray;
+                if (!ShowOnHover) TextColor = Color.Gray;
             };
 
             OnLeftClick += (_, _) =>
             {
                 if (NoOnOff || ShowOnHover) return;
                 isOn = !isOn;
-
-                string onOff = isOn ? "On" : "Off";
-                SetText(text + onOff);
+                UpdateLabelText(text, NoOnOff);
             };
+        }
+
+        private void UpdateLabelText(string baseText, bool NoOnOff)
+        {
+            string onOff = isOn ? "On" : "Off";
+            SetText(NoOnOff ? baseText : baseText + onOff);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

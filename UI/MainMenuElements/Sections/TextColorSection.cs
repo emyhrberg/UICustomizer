@@ -59,28 +59,33 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 };
                 hsl = Main.rgbToHsl(def);
 
+                var (_, setLive) = GetColorAccessors();
+                setLive(def);
+
                 string hex = $"#{def.R:X2}{def.G:X2}{def.B:X2}";
+
                 switch (tab)
                 {
-                    case ColorTab.Fill: 
+                    case ColorTab.Fill:
                         Conf.C.MainMenuTextColor.FillColor = hex;
                         fillTab.SetColor(def);
                         break;
-                    case ColorTab.Outline: 
+                    case ColorTab.Outline:
                         Conf.C.MainMenuTextColor.OutlineColor = hex;
                         outlineTab.SetColor(def);
                         break;
-                    case ColorTab.Hover: 
+                    case ColorTab.Hover:
                         Conf.C.MainMenuTextColor.HoverColor = hex;
                         hueTab.SetColor(def);
                         Log.Info("color set to Hover: " + def);
                         break;
                     case ColorTab.Scale:
-                        MainMenuTextColorHook.Scale = 1;
-                        scaleSlider.Ratio = 0;
+                        MainMenuTextColorHook.Scale = Conf.C.MainMenuTextColor.Scale = 1;
+                        scaleSlider.Ratio = 0.1f; // default to 1
                         break;
                     case ColorTab.Position:
-                        MainMenuTextColorHook.OffsetX = MainMenuTextColorHook.OffsetY = 0;
+                        MainMenuTextColorHook.OffsetX = Conf.C.MainMenuTextColor.OffsetX = 0;
+                        MainMenuTextColorHook.OffsetY = Conf.C.MainMenuTextColor.OffsetY = 0;
                         xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
                         break;
                 }
@@ -112,21 +117,34 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             // 2 extra sliders
             scaleSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            scaleSlider.OnDrag += v => MainMenuTextColorHook.Scale = MathHelper.Lerp(0, 10, v);
+            scaleSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuTextColor.Scale);
+            scaleSlider.OnDrag += v =>
+            {
+                MainMenuTextColorHook.Scale =
+                Conf.C.MainMenuTextColor.Scale =
+                MathHelper.Lerp(0, 10, v);
+                Conf.Save();
+            };
 
             xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, Conf.C.MainMenuTextColor.OffsetX);
             xPosSlider.OnDrag += v =>
             {
-                MainMenuTextColorHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
-                                                       +Main.screenWidth * 0.5f, v); 
-                Log.Info("x pos:" + MainMenuTextColorHook.OffsetX);
+                Conf.C.MainMenuTextColor.OffsetX =
+                MainMenuTextColorHook.OffsetX =
+                MathHelper.Lerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, v);
+                Conf.Save();
             };
 
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, Conf.C.MainMenuTextColor.OffsetY);
             yPosSlider.OnDrag += v =>
-                MainMenuTextColorHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
-                                                       +Main.screenHeight * 0.5f, v);
-            xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
+            {
+                Conf.C.MainMenuTextColor.OffsetY =
+                MainMenuTextColorHook.OffsetY =
+                MathHelper.Lerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, v);
+                Conf.Save();
+            };
 
             // 6) Copy / Paste / Randomize
             MakeBtn("Copy", 0, rowY, () => ColorHelper.CopyHex(GetColorAccessors().get));
@@ -335,7 +353,8 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 ColorTab.Outline => (() => MainMenuTextColorHook.OutlineColor, c => MainMenuTextColorHook.OutlineColor = c),
                 ColorTab.Hover => (() => MainMenuTextColorHook.HoverColor, c => MainMenuTextColorHook.HoverColor = c),
                 _ => (() => Color.White,
-                _  => { })
+                _ => { }
+                )
             };
         }
 
@@ -358,7 +377,6 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     break;
                 case ColorTab.Scale:
                     header.SetText($"Text Scale: {MainMenuTextColorHook.Scale:F2}");
-                    fillTab.SetColor(current);
                     break;
                 case ColorTab.Position:
                     header.SetText($"Text Position: {MainMenuTextColorHook.OffsetX:F2}, {MainMenuTextColorHook.OffsetY:F2}");

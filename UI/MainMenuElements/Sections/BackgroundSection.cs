@@ -30,7 +30,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
         private readonly UIPanel hexTag;
         private readonly UIText hexText;
 
-        private readonly ResetButton resetBtn;
+        private readonly ResetButton reset;
         private readonly ResetButton resetLogoBtn;
 
         private readonly OnOffTextButton fileChoose;
@@ -62,8 +62,33 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             }
 
             // ─── 3. Reset ──────────────────────────────────────────────
-            resetBtn = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
-            resetBtn.OnLeftMouseDown += (_, _) => ResetCurrentTab();
+            reset = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
+            reset.OnLeftMouseDown += (_, _) =>
+            {
+                switch (tab)
+                {
+                    case BackgroundTab.Scale:
+                        BackgroundHook.Scale = 1;
+                        scaleSlider.Ratio = 0.1f;
+                        break;
+
+                    case BackgroundTab.Rotation:
+                        BackgroundHook.Rotation = 0;
+                        rotationSlider.Ratio = 0;
+                        break;
+
+                    case BackgroundTab.Position:
+                        BackgroundHook.OffsetX = BackgroundHook.OffsetY = 0;
+                        xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
+                        break;
+
+                    case BackgroundTab.Color:
+                        BackgroundHook.Color = Color.White;
+                        hsl = Main.rgbToHsl(BackgroundHook.Color);
+                        hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
+                        break;
+                }
+            };
 
             resetLogoBtn = new()
             {
@@ -77,21 +102,29 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
             // ─── 4. Sliders ────────────────────────────────────────────
             scaleSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            scaleSlider.OnDrag += v => BackgroundHook.Scale = MathHelper.Lerp(0, 10, v);
+            scaleSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuBackground.Scale);
+            scaleSlider.OnDrag += v => Conf.C.MainMenuBackground.Scale = BackgroundHook.Scale = MathHelper.Lerp(0, 10, v);
 
             rotationSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
-            rotationSlider.OnDrag += v => BackgroundHook.Rotation = MathHelper.Lerp(0, 6, v);
+            rotationSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuBackground.Rotation);
+            rotationSlider.OnDrag += v => Conf.C.MainMenuBackground.Rotation = BackgroundHook.Rotation = MathHelper.Lerp(0, 6.28f, v);
 
             xPosSlider = new ZoeSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
+                                                       +Main.screenWidth * 0.5f, Conf.C.MainMenuBackground.OffsetX);
             xPosSlider.OnDrag += v =>
+            Conf.C.MainMenuBackground.OffsetX =
                 BackgroundHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, v);
 
+
             yPosSlider = new ZoeSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
+                                                       +Main.screenWidth * 0.5f, Conf.C.MainMenuBackground.OffsetY);
             yPosSlider.OnDrag += v =>
+            Conf.C.MainMenuBackground.OffsetY =
                 BackgroundHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
                                                        +Main.screenHeight * 0.5f, v);
-            xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
 
             // ─── 5. Colour panel ───────────────────────────────────────
             colorPanel = new UIPanel
@@ -216,7 +249,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 ColorHelper.ApplyHslValue(ref hsl, id, v, c => BackgroundHook.Color = c, hexText);
 
                 // Save to config
-                if (tab==BackgroundTab.Color)
+                if (tab == BackgroundTab.Color)
                 {
                     Conf.C.MainMenuBackground.Color = ColorHelper.ToHex(Main.hslToRgb(hsl));
                     Conf.Save();
@@ -254,7 +287,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             // purge everything that can change per-tab
             ClearDynamic();
 
-            Append(resetBtn);
+            Append(reset);
 
             switch (t)
             {
@@ -317,7 +350,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             pasteBtn.Remove();
             randBtn.Remove();
 
-            resetBtn.Remove();
+            reset.Remove();
             resetLogoBtn.Remove();
             fileChoose.Remove();
             fileText.Remove();
@@ -325,29 +358,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
         private void ResetCurrentTab()
         {
-            switch (tab)
-            {
-                case BackgroundTab.Scale:
-                    BackgroundHook.Scale = 1;
-                    scaleSlider.Ratio = 0;
-                    break;
 
-                case BackgroundTab.Rotation:
-                    BackgroundHook.Rotation = 0;
-                    rotationSlider.Ratio = 0;
-                    break;
-
-                case BackgroundTab.Position:
-                    BackgroundHook.OffsetX = BackgroundHook.OffsetY = 0;
-                    xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
-                    break;
-
-                case BackgroundTab.Color:
-                    BackgroundHook.Color = Color.White;
-                    hsl = Main.rgbToHsl(BackgroundHook.Color);
-                    hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
-                    break;
-            }
         }
 
         // live label updates

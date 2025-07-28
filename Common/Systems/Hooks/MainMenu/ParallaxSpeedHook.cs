@@ -10,8 +10,8 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         public override void Load()
         {
-            if (Conf.C.MainMenuTime.ParallaxSpeed != 0)
-                Speed = Conf.C.MainMenuTime.ParallaxSpeed;
+            Speed = Conf.C.MainMenuTime.ParallaxSpeed;
+
             IL_Main.DrawMenu += ModifyParallaxSpeed;
         }
         public override void Unload()

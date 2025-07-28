@@ -30,8 +30,8 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 m,
                 new Action<Action<int, Color, float>, int, Color, float>((orig, idx, col, yOff) =>
                 {
-                    if (!IsDrawing) return;   
-                    orig(idx, col, yOff);     
+                    if (!IsDrawing) return;
+                    orig(idx, col, yOff);
                 }));
         }
 
