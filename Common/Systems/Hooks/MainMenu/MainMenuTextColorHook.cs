@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
@@ -81,6 +82,74 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         {
             IL.Edit(il, c =>
             {
+                // Append num51 with OffsetX for hoverposX
+                // Append num52 with OffsetY for hoverposY
+
+                // Modify vector3 for hover pos
+                //while (c.TryGotoNext(MoveType.After, i => i.MatchStloc(188)))
+                //{
+                //    c.Emit(OpCodes.Ldloca, 188);
+                //    c.EmitDelegate<Action<Vector2>>(vector =>
+                //    {
+                //        vector.X += OffsetX;
+                //        vector.Y += OffsetY;
+                //    });
+                //    c.Emit(OpCodes.Stloc, 188); // Store result back to local 188
+                //}
+
+                // Match exact vector2 vector3 hover pos
+                while (c.TryGotoNext(MoveType.After,
+                    i => true,
+                    i => true,
+                    i => i.MatchLdloc(26),
+                    i => i.MatchLdloc(173),
+                    i => true,
+                    i => true,
+                    i => i.MatchLdloc(22),
+                    i => i.MatchLdloc(173),
+                    i => true,
+                    i => true,
+                    i => true,
+                    i => i.MatchStloc(188)))
+                {
+                    Log.Info("Found hover pos vector2 modification");
+                    c.EmitLdloca(188);
+                    c.EmitDelegate((ref Vector2 v) => { v = new Vector2(v.X + OffsetX, v.Y + OffsetY); });
+                }
+                c.Index = 0;
+
+                //var multiplyOp = typeof(Vector2).GetMethod("op_Multiply", [typeof(Vector2), typeof(float)]);
+                //while (c.TryGotoNext(i => i.MatchCall(multiplyOp)))
+                //{
+                //    c.Index++;
+                //    c.EmitDelegate<Func<Vector2, Vector2>>(v => new Vector2(v.X + OffsetX, v.Y + OffsetY));
+                //    Log.Info("Hover position patched");
+                //}
+                //c.Index = 0;
+
+                //// Match exact vector2 vector4 hover pos
+                //while (c.TryGotoNext(MoveType.After,
+                //  i => true,
+                //  i => true,
+                //  i => true,
+                //  i => i.MatchLdloc(26),
+                //  i => i.MatchLdloc(173),
+                //  i => true,
+                //  i => true,
+                //  i => i.MatchLdloc(22),
+                //  i => i.MatchLdloc(173),
+                //  i => true,
+                //  i => true
+                //))
+                //{
+                //    Log.Info("Found hover pos vector2 modification");
+                //    c.Emit(OpCodes.Ldloc, 188);
+                //    c.EmitDelegate<Func<Vector2, Vector2>>(vector =>
+                //        new Vector2(vector.X + OffsetX, vector.Y + OffsetY));
+                //    c.Emit(OpCodes.Stloc, 188);
+                //}
+                //c.Index = 0;
+
                 while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
                 {
                     // Conditionally emit false if IsDrawing is false, effectivelly skipping the call.
@@ -95,7 +164,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 c.Index = 0;
 
                 // Match all DrawString calls
-                while (c.TryGotoNext(MoveType.Before, i => i.MatchCall(out var meth) && meth.Name == "DrawString"))
+                while (c.TryGotoNext(MoveType.Before, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
                 {
                     int drawStringIndex = c.Index;
 
