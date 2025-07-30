@@ -154,7 +154,8 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static void ResetCustomLogo()
         {
             CustomLogoTexture = null;          // fall back to orig logo
+            Conf.C.MainMenuLogo.LogoFileName = null;
+            Conf.Save();
         }
-
     }
 }

@@ -96,6 +96,8 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static void ResetCustomBackground()
         {
             CustomBackgroundTexture = null;
+            Conf.C.MainMenuBackground.BackgroundFileName = null;
+            Conf.Save();
         }
     }
 }

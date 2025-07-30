@@ -1,11 +1,8 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
-using UICustomizer.Common.Configs;
 
 namespace UICustomizer.Common.Systems.Hooks.MainMenu
 {
@@ -82,73 +79,41 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         {
             IL.Edit(il, c =>
             {
-                // Append num51 with OffsetX for hoverposX
-                // Append num52 with OffsetY for hoverposY
-
-                // Modify vector3 for hover pos
-                //while (c.TryGotoNext(MoveType.After, i => i.MatchStloc(188)))
-                //{
-                //    c.Emit(OpCodes.Ldloca, 188);
-                //    c.EmitDelegate<Action<Vector2>>(vector =>
-                //    {
-                //        vector.X += OffsetX;
-                //        vector.Y += OffsetY;
-                //    });
-                //    c.Emit(OpCodes.Stloc, 188); // Store result back to local 188
-                //}
-
-                // Match exact vector2 vector3 hover pos
-                while (c.TryGotoNext(MoveType.After,
-                    i => true,
-                    i => true,
-                    i => i.MatchLdloc(26),
-                    i => i.MatchLdloc(173),
-                    i => true,
-                    i => true,
-                    i => i.MatchLdloc(22),
-                    i => i.MatchLdloc(173),
-                    i => true,
-                    i => true,
-                    i => true,
-                    i => i.MatchStloc(188)))
+                // Add position OffsetY to the mouseY hover check
+                for (int k = 0; k < 4; k++)
                 {
-                    Log.Info("Found hover pos vector2 modification");
-                    c.EmitLdloca(188);
-                    c.EmitDelegate((ref Vector2 v) => { v = new Vector2(v.X + OffsetX, v.Y + OffsetY); });
+                    if (!c.TryGotoNext(MoveType.Before,
+                        i => true,
+                        i => i.MatchLdsfld(out _) || i.Previous.MatchLdsfld(out _),
+                        i => i.MatchLdloc(5),
+                        i => i.MatchLdloc(7),
+                        i => i.MatchLdloc(173)))
+                    {
+                        Log.Info("guh Y not found");
+                        break;
+                    }
+                    Log.Info("guh Y found");
+
+                    c.Index += 3;
+                    c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(OffsetY)));
+                    c.EmitConvI4();
+                    c.EmitAdd();
                 }
                 c.Index = 0;
 
-                //var multiplyOp = typeof(Vector2).GetMethod("op_Multiply", [typeof(Vector2), typeof(float)]);
-                //while (c.TryGotoNext(i => i.MatchCall(multiplyOp)))
-                //{
-                //    c.Index++;
-                //    c.EmitDelegate<Func<Vector2, Vector2>>(v => new Vector2(v.X + OffsetX, v.Y + OffsetY));
-                //    Log.Info("Hover position patched");
-                //}
-                //c.Index = 0;
+                // Add position OffsetX to the mouseX hover check
+                c.GotoNext(MoveType.Before,
+                  i => i.MatchLdsfld<Main>("mouseX"),
+                  i => i.MatchLdloc(6) || i.Next.MatchLdloc(6),
+                  i => true
+                );
 
-                //// Match exact vector2 vector4 hover pos
-                //while (c.TryGotoNext(MoveType.After,
-                //  i => true,
-                //  i => true,
-                //  i => true,
-                //  i => i.MatchLdloc(26),
-                //  i => i.MatchLdloc(173),
-                //  i => true,
-                //  i => true,
-                //  i => i.MatchLdloc(22),
-                //  i => i.MatchLdloc(173),
-                //  i => true,
-                //  i => true
-                //))
-                //{
-                //    Log.Info("Found hover pos vector2 modification");
-                //    c.Emit(OpCodes.Ldloc, 188);
-                //    c.EmitDelegate<Func<Vector2, Vector2>>(vector =>
-                //        new Vector2(vector.X + OffsetX, vector.Y + OffsetY));
-                //    c.Emit(OpCodes.Stloc, 188);
-                //}
-                //c.Index = 0;
+                c.Index++;
+
+                c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(OffsetX)));
+                c.EmitConvI4();
+                c.EmitSub();
+                c.Index = 0;
 
                 while (c.TryGotoNext(MoveType.After, i => i.MatchCall(out MethodReference meth) && meth.Name == "DrawString"))
                 {

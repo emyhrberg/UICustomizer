@@ -113,17 +113,17 @@ namespace UICustomizer.Common.Configs
         public bool IsPaused;
 
         // Time in ticks int
-        [DefaultValue(0)]
+        [DefaultValue(0f)]
         [Range(0f, 86400f)]
         public float Time;
 
         // Speed in ticks int
-        [DefaultValue(1)]
+        [DefaultValue(1f)]
         [Range(0f, 100f)]
         public float Speed;
 
         // Parallax speed in int
-        [DefaultValue(5)]
+        [DefaultValue(5f)]
         [Range(0f, 100f)]
         public float ParallaxSpeed;
     }
