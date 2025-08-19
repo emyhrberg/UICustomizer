@@ -216,13 +216,13 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 {
                     // 1) Colour tabs ────────────────────────────────────────────
                     case ColorTab.Fill:
-                        Conf.C.MainMenuTextColor.FillColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        Conf.C.MainMenuTextColor.FillColor = ColorHelper.ColorToHex(Main.hslToRgb(hsl));
                         break;
                     case ColorTab.Outline:
-                        Conf.C.MainMenuTextColor.OutlineColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        Conf.C.MainMenuTextColor.OutlineColor = ColorHelper.ColorToHex(Main.hslToRgb(hsl));
                         break;
                     case ColorTab.Hover:
-                        Conf.C.MainMenuTextColor.HoverColor = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                        Conf.C.MainMenuTextColor.HoverColor = ColorHelper.ColorToHex(Main.hslToRgb(hsl));
                         break;
                 }
                 Conf.Save();
@@ -288,7 +288,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 case ColorTab.Hover:
                     {
                         hsl = Main.rgbToHsl(GetColorAccessors().get());
-                        hexText.SetText(ColorHelper.ToHex(GetColorAccessors().get()));
+                        hexText.SetText(ColorHelper.ColorToHex(GetColorAccessors().get()));
                         Append(panel);      // HSL sliders
                         Append(hexTag);     // big HEX label
                         break;
@@ -327,7 +327,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             positionTab.SetSelected(tab == ColorTab.Position);
 
             hsl = Main.rgbToHsl(GetColorAccessors().get());
-            hexText.SetText(ColorHelper.ToHex(GetColorAccessors().get()));
+            hexText.SetText(ColorHelper.ColorToHex(GetColorAccessors().get()));
 
             if (tab == ColorTab.Scale || tab == ColorTab.Position)
             {

@@ -21,38 +21,11 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
         public static float OffsetX = 0f; // Horizontal offset
         public static float OffsetY = 0f; // Vertical offset
 
-        public static Texture2D? CustomLogoTexture;
+        public static Texture2D CustomLogoTexture;
 
         public override void Load()
         {
-            // Load color from config
-            if (ColorHelper.TryParseHex(Conf.C.MainMenuLogo.Color, out var color))
-            {
-                Color = color;
-            }
-
-            // Load pos and scale from config
-            var cfg = Conf.C;
-            Scale = cfg?.MainMenuLogo.Scale ?? 1f;
-            OffsetX = cfg?.MainMenuLogo.OffsetX ?? 0f;
-            OffsetY = cfg?.MainMenuLogo.OffsetY ?? 0f;
-            Rotation = cfg?.MainMenuLogo.Rotation ?? 0f;
-
-            // Load isDrawing from config
-            IsDrawing = cfg?.MainMenuDraw.DrawLogo ?? true;
-
-            // Load custom logo texture from config into the class variable here
-            string path = Conf.C.MainMenuLogo.LogoFileName;
-            Log.Info($"LogoHook: Loading custom logo from path: {path}");
-
-            if (!string.IsNullOrEmpty(path))
-            {
-                Main.QueueMainThreadAction(() =>
-                {
-                    CustomLogoTexture =
-                        FileUploadHelper.ReadAndCreateTextureFromPath(path);
-                });
-            }
+            ApplyConfig();
 
             // Method
             MethodInfo m = typeof(MenuLoader).GetMethod("UpdateAndDrawModMenuInner", BindingFlags.NonPublic | BindingFlags.Static);
@@ -156,6 +129,39 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             CustomLogoTexture = null;          // fall back to orig logo
             Conf.C.MainMenuLogo.LogoFileName = null;
             Conf.Save();
+        }
+
+        public static void ApplyConfig()
+        {
+            var cfg = Conf.C;
+
+            // Load color from config
+            if (ColorHelper.TryParseHex(cfg?.MainMenuLogo.Color, out var parsed))
+                Color = parsed;
+
+            // Load pos and scale from config
+            Scale = cfg?.MainMenuLogo.Scale ?? 1f;
+            OffsetX = cfg?.MainMenuLogo.OffsetX ?? 0f;
+            OffsetY = cfg?.MainMenuLogo.OffsetY ?? 0f;
+            Rotation = cfg?.MainMenuLogo.Rotation ?? 0f;
+
+            // Load isDrawing from config
+            IsDrawing = cfg?.MainMenuDraw.DrawLogo ?? true;
+
+            // Load custom logo texture from config
+            string path = cfg?.MainMenuLogo.LogoFileName;
+            Log.Info($"LogoHook: Loading custom logo from path: {path}");
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                CustomLogoTexture = null;
+                return;
+            }
+
+            Main.QueueMainThreadAction(() =>
+            {
+                CustomLogoTexture = FileUploadHelper.ReadAndCreateTextureFromPath(path);
+            });
         }
     }
 }

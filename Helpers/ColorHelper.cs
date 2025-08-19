@@ -38,7 +38,7 @@ namespace UICustomizer.Helpers
                 Convert.ToByte(hex.Substring(4, 2), 16));
         }
 
-        public static string ToHex(Color c) => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+        public static string ColorToHex(Color c) => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
 
         public static bool TryParseHex(string? hex, out Color c)
         {
@@ -53,7 +53,7 @@ namespace UICustomizer.Helpers
         //  Clipboard helpers
         // ─────────────────────────────────────────────────────────────
         public static void CopyHex(Func<Color> getCurrentColor) =>
-            Platform.Get<IClipboard>().Value = ToHex(getCurrentColor());
+            Platform.Get<IClipboard>().Value = ColorToHex(getCurrentColor());
 
         /// <summary>Tries to read a colour from the clipboard and, if valid, applies it.</summary>
         public static bool PasteHex(
@@ -68,7 +68,7 @@ namespace UICustomizer.Helpers
             var c = new Color((byte)(u >> 16), (byte)(u >> 8), (byte)u);
             hsl = Main.rgbToHsl(c);
             applyColor(c);
-            hexText?.SetText(ToHex(c));
+            hexText?.SetText(ColorToHex(c));
             return true;
         }
 
@@ -83,7 +83,7 @@ namespace UICustomizer.Helpers
             hsl = new Vector3(Main.rand.NextFloat(), Main.rand.NextFloat(), Main.rand.NextFloat());
             var c = Main.hslToRgb(hsl.X, hsl.Y, hsl.Z * 0.85f + 0.15f);
             applyColor(c);
-            hexText?.SetText(ToHex(c));
+            hexText?.SetText(ColorToHex(c));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace UICustomizer.Helpers
 
             var c = Main.hslToRgb(hsl.X, hsl.Y, hsl.Z * 0.85f + 0.15f);
             applyColor(c);
-            hexText?.SetText(ToHex(c));
+            hexText?.SetText(ColorToHex(c));
         }
     }
 }

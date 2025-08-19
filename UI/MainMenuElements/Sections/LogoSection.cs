@@ -85,7 +85,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     case LogoTab.Color:
                         LogoHook.Color = Color.White;
                         hsl = Main.rgbToHsl(LogoHook.Color);
-                        hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                        hexText.SetText(ColorHelper.ColorToHex(LogoHook.Color));
                         break;
                 }
             };
@@ -104,7 +104,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                                                        +Main.screenWidth * 0.5f, Conf.C.MainMenuLogo.OffsetX);
 
             xPosSlider.OnDrag += v =>
-            Conf.C.MainMenuLogo.OffsetX = 
+            Conf.C.MainMenuLogo.OffsetX =
                 LogoHook.OffsetX = MathHelper.Lerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, v);
 
@@ -112,7 +112,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, Conf.C.MainMenuLogo.OffsetX);
             yPosSlider.OnDrag += v =>
-            Conf.C.MainMenuLogo.OffsetY = 
+            Conf.C.MainMenuLogo.OffsetY =
                 LogoHook.OffsetY = MathHelper.Lerp(-Main.screenHeight * 0.5f,
                                                        +Main.screenHeight * 0.5f, v);
             xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
@@ -248,7 +248,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
 
                 if (tab == LogoTab.Color)
                 {
-                    Conf.C.MainMenuLogo.Color = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                    Conf.C.MainMenuLogo.Color = ColorHelper.ColorToHex(Main.hslToRgb(hsl));
                     Conf.Save();
                 }
             };
@@ -369,7 +369,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     header.SetText($"Logo Position: {LogoHook.OffsetX:F2}, {LogoHook.OffsetY:F2}");
                     break;
                 case LogoTab.Color:
-                    hexText.SetText(ColorHelper.ToHex(LogoHook.Color));
+                    hexText.SetText(ColorHelper.ColorToHex(LogoHook.Color));
                     colorTab.SetColor(LogoHook.Color);
                     break;
             }

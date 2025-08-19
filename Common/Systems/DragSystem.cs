@@ -120,8 +120,6 @@ namespace UICustomizer.Common.Systems
                     {
                         lastWarningSent = DateTime.UtcNow;
 
-                        if (!Conf.C.ShowCombatTextTooltips) return;
-
                         Vector2 mouse = Main.MouseWorld;
 
                         Rectangle textRect = new(
@@ -139,7 +137,7 @@ namespace UICustomizer.Common.Systems
                     _dragSource = bounds;
                     _mouseStart = mouseUI;                      // store in UI units
                     _offsetStart = new Vector2(offsetX, offsetY);
-                    if (Conf.C.DisableItemUseWhileDragging)
+                    //if (Conf.C.DisableItemUseWhileDragging)
                     {
                         Main.LocalPlayer.mouseInterface = true;
                     }

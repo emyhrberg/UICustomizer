@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.RuntimeDetour;
 using Terraria;
@@ -13,7 +11,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
     public sealed class BackgroundHook : ModSystem
     {
         public static bool IsDrawing = true;
-        public static Texture2D? CustomBackgroundTexture;
+        public static Texture2D CustomBackgroundTexture;
 
         public static float Scale = 1f;
         public static float Rotation = 0f;
@@ -25,32 +23,10 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
 
         public override void Load()
         {
-            // Load color from config
-            if (ColorHelper.TryParseHex(Conf.C.MainMenuBackground.Color, out var color))
+            // Create background texture from config, if available
+            if (Conf.C?.MainMenuBackground.BackgroundFileName is not null)
             {
-                Color = color;
-            }
-
-            // Load pos and scale from config
-            var cfg = Conf.C;
-            Scale = cfg?.MainMenuBackground.Scale ?? 1f;
-            OffsetX = cfg?.MainMenuBackground.OffsetX ?? 0f;
-            OffsetY = cfg?.MainMenuBackground.OffsetY ?? 0f;
-            Rotation = cfg?.MainMenuBackground.Rotation ?? 0f;
-
-            IsDrawing = cfg?.MainMenuDraw.DrawBackground ?? true;
-
-            // Load path from config
-            string path = Conf.C.MainMenuBackground.BackgroundFileName;
-            Log.Info($"BackgroundHook: Loading custom background from path: {path}");
-
-            if (!string.IsNullOrEmpty(path))
-            {
-                Main.QueueMainThreadAction(() =>
-                {
-                    CustomBackgroundTexture =
-                        FileUploadHelper.ReadAndCreateTextureFromPath(path);
-                });
+                CustomBackgroundTexture = FileUploadHelper.ReadAndCreateTextureFromPath(Conf.C.MainMenuBackground.BackgroundFileName);
             }
 
             // Create and run the patching of the DrawBG hook
@@ -98,6 +74,35 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
             CustomBackgroundTexture = null;
             Conf.C.MainMenuBackground.BackgroundFileName = null;
             Conf.Save();
+        }
+
+        public static void ApplyConfig(Config cfg)
+        {
+            // Load color from config (default stays if parse fails)
+            if (ColorHelper.TryParseHex(cfg?.MainMenuBackground.Color, out var parsed))
+                Color = parsed;
+
+            // Load transform from config
+            Scale = cfg?.MainMenuBackground.Scale ?? 1f;
+            OffsetX = cfg?.MainMenuBackground.OffsetX ?? 0f;
+            OffsetY = cfg?.MainMenuBackground.OffsetY ?? 0f;
+            Rotation = cfg?.MainMenuBackground.Rotation ?? 0f;
+            IsDrawing = cfg?.MainMenuDraw.DrawBackground ?? true;
+
+            // (Re)load custom background texture from path if provided; clear if empty
+            string path = cfg?.MainMenuBackground.BackgroundFileName;
+            Log.Info($"BackgroundHook: Loading custom background from path: {path}");
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                CustomBackgroundTexture = null;
+                return;
+            }
+
+            Main.QueueMainThreadAction(() =>
+            {
+                CustomBackgroundTexture = FileUploadHelper.ReadAndCreateTextureFromPath(path);
+            });
         }
     }
 }

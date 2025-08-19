@@ -89,3 +89,7 @@ UI Editor panel
 
 BUGS:
 1. 
+
+--------------------------------------------------------------
+2025-08-20
+1. Sync main menu to save to config and load from config, also fix reset values

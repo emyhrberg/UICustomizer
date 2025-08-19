@@ -67,7 +67,7 @@ namespace UICustomizer.UI
 
             if (ContainsPoint(Main.MouseScreen))
             {
-                if (Conf.C.DisableItemUseWhileDragging)
+                //if (Conf.C.DisableItemUseWhileDragging)
                 {
                     Main.LocalPlayer.mouseInterface = true;
                 }

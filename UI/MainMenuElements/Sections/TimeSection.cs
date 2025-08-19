@@ -112,7 +112,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
             parallaxSlider = new ZoeSlider
             {
                 Top = { Pixels = 45 },
-                Ratio = ColorHelper.InverseLerp(0f, 100f, ParallaxSpeedHook.Speed)
+                Ratio = ColorHelper.InverseLerp(0f, 100f, Conf.C.MainMenuTime.ParallaxSpeed)
             };
             parallaxSlider.OnDrag += v =>
             {

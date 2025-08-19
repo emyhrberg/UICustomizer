@@ -85,7 +85,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     case BackgroundTab.Color:
                         BackgroundHook.Color = Color.White;
                         hsl = Main.rgbToHsl(BackgroundHook.Color);
-                        hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
+                        hexText.SetText(ColorHelper.ColorToHex(BackgroundHook.Color));
                         break;
                 }
             };
@@ -251,7 +251,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                 // Save to config
                 if (tab == BackgroundTab.Color)
                 {
-                    Conf.C.MainMenuBackground.Color = ColorHelper.ToHex(Main.hslToRgb(hsl));
+                    Conf.C.MainMenuBackground.Color = ColorHelper.ColorToHex(Main.hslToRgb(hsl));
                     Conf.Save();
                 }
             };
@@ -377,7 +377,7 @@ namespace UICustomizer.UI.MainMenuElements.Sections
                     header.SetText($"Background Position: {BackgroundHook.OffsetX:F2}, {BackgroundHook.OffsetY:F2}");
                     break;
                 case BackgroundTab.Color:
-                    hexText.SetText(ColorHelper.ToHex(BackgroundHook.Color));
+                    hexText.SetText(ColorHelper.ColorToHex(BackgroundHook.Color));
                     colorTab.SetColor(BackgroundHook.Color);
                     break;
             }

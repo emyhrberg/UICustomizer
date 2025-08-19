@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using UICustomizer.Common.Systems.Hooks.MainMenu;
 using UICustomizer.Common.Systems.MainMenu;
 
 namespace UICustomizer.Common.Configs
@@ -14,9 +15,6 @@ namespace UICustomizer.Common.Configs
 
         [DefaultValue(true)]
         public bool EditMainMenu = true;
-
-        [DefaultValue(true)]
-        public bool ShowMainMenu = true;
 
         [DefaultValue(true)]
         public bool ShowBackToMainMenu = true;
@@ -36,47 +34,70 @@ namespace UICustomizer.Common.Configs
         [Expand(false, false)]
         public MainMenuDraw MainMenuDraw = new();
 
-        [Header("Misc")]
-
-        [DefaultValue(true)]
-        public bool ShowMessageWhenEnteringWorld;
-
-        [DefaultValue(true)]
-        public bool ShowCombatTextTooltips;
-
-        [DefaultValue(true)]
-        public bool DisableItemUseWhileDragging;
-
         public override void OnChanged()
         {
             base.OnChanged();
 
-            // Config null check
-            if (ModContent.GetInstance<Config> == null)
+            if (Conf.C == null)
             {
-                Log.Info("Config is null in Config::OnChanged for some reason");
-                return;
+                Log.Error("Config is null OnChanged.");
             }
 
-            // Main menu system null check
-            var sys = ModContent.GetInstance<MainMenuSystem>();
-            if (sys == null)
-            {
-                Log.Info("MainMenuSystem is null in Config::OnChanged for some reason");
-                return;
-            }
+            ApplyMainMenuTextColor();
+            ApplyMainMenuTime();
+            ApplyMainMenuBackground();
+            ApplyMainMenuLogo();
+            ApplyMainMenuDraw();
 
-            // Update eye toggle
-            Log.Info("eyetoggleon?" + sys.state.eyeToggle.isOn);
-            sys.state.eyeToggle.isOn = Conf.C.ShowMainMenu;
-            Log.Info("eyetoggleon?" + sys.state.eyeToggle.isOn);
+            MainMenuPauseSystem.IsPaused = Conf.C.MainMenuTime.IsPaused;
+            TimeSpeedHook.Speed = Conf.C.MainMenuTime.Speed;
+            ParallaxSpeedHook.Speed = Conf.C.MainMenuTime.ParallaxSpeed;
 
-            //var mainmenu = ModContent.GetInstance<MainMenuDraw>();
-            //if (mainmenu == null) return;
-            //mainmenu.rRatio = OutlineColor.R / 255;
-            //mainmenu.gRatio = OutlineColor.G / 255;
-            //mainmenu.bRatio = OutlineColor.B / 255;
-            //Log.Info("red conf" + Conf.C.OutlineColor);
+            // Apply background settings (color/transform/texture path/draw toggle)
+            BackgroundHook.ApplyConfig(Conf.C);
+        }
+
+        private void ApplyMainMenuTextColor()
+        {
+            Color fillColor = ColorHelper.HexToColor(Conf.C.MainMenuTextColor.FillColor);
+            Color outlineColor = ColorHelper.HexToColor(Conf.C.MainMenuTextColor.OutlineColor);
+            Color hoverColor = ColorHelper.HexToColor(Conf.C.MainMenuTextColor.HoverColor);
+
+            MainMenuTextColorHook.FillColor = fillColor;
+            MainMenuTextColorHook.OutlineColor = outlineColor;
+            MainMenuTextColorHook.HoverColor = hoverColor;
+        }
+
+        private void ApplyMainMenuTime()
+        {
+            TimeSpeedHook.Speed = Conf.C.MainMenuTime.Speed;
+            ParallaxSpeedHook.Speed = Conf.C.MainMenuTime.ParallaxSpeed;
+        }
+
+        private void ApplyMainMenuBackground()
+        {
+            BackgroundHook.Scale = Conf.C.MainMenuBackground.Scale;
+            BackgroundHook.Rotation = Conf.C.MainMenuBackground.Rotation;
+            BackgroundHook.OffsetX = Conf.C.MainMenuBackground.OffsetX;
+            BackgroundHook.OffsetY = Conf.C.MainMenuBackground.OffsetY;
+            BackgroundHook.Color = ColorHelper.HexToColor(Conf.C.MainMenuBackground.Color);
+            BackgroundHook.CustomBackgroundTexture = FileUploadHelper.ReadAndCreateTextureFromPath(Conf.C.MainMenuBackground.BackgroundFileName);
+        }
+
+        private void ApplyMainMenuLogo()
+        {
+            LogoHook.Scale = Conf.C.MainMenuLogo.Scale;
+            LogoHook.Rotation = Conf.C.MainMenuLogo.Rotation;
+            LogoHook.OffsetX = Conf.C.MainMenuLogo.OffsetX;
+            LogoHook.OffsetY = Conf.C.MainMenuLogo.OffsetY;
+            LogoHook.Color = ColorHelper.HexToColor(Conf.C.MainMenuLogo.Color);
+            LogoHook.CustomLogoTexture = FileUploadHelper.ReadAndCreateTextureFromPath(Conf.C.MainMenuLogo.LogoFileName);
+        }
+
+        private void ApplyMainMenuDraw()
+        {
+            SkipSkyDrawHook.IsDrawing = Conf.C.MainMenuDraw.DrawSky;
+            SkipSunDrawHook.IsDrawing = Conf.C.MainMenuDraw.DrawSun;
         }
     }
 
@@ -84,15 +105,15 @@ namespace UICustomizer.Common.Configs
     {
         [DefaultValue("#8E8E8E")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string FillColor;    // null → new(142,142,142)=#8E8E8E
+        public string FillColor = "#8E8E8E";    // null → new(142,142,142)=#8E8E8E
 
         [DefaultValue("#000000")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string OutlineColor; // null → Color.Black=#000000
+        public string OutlineColor = "#000000"; // null → Color.Black=#000000
 
         [DefaultValue("#FFD700")]
         [CustomModConfigItem(typeof(ColorTagConfigElement))]
-        public string HoverColor;   // null → Main.OurFavoriteColor or new(255,215,0)=#FFD700
+        public string HoverColor = "#FFD700";   // null → Main.OurFavoriteColor or new(255,215,0)=#FFD700
 
         [DefaultValue(1f)]
         [Range(0.1f, 10f)]
@@ -120,12 +141,12 @@ namespace UICustomizer.Common.Configs
         // Speed in ticks int
         [DefaultValue(1f)]
         [Range(0f, 100f)]
-        public float Speed;
+        public float Speed = 1f;
 
         // Parallax speed in int
         [DefaultValue(5f)]
         [Range(0f, 100f)]
-        public float ParallaxSpeed;
+        public float ParallaxSpeed = 5f;
     }
 
     public class MainMenuBackground

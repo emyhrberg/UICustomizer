@@ -92,7 +92,6 @@ namespace UICustomizer.UI.Editor
             {
                 EditorSystem.SetActive(false);
 
-                if (!Conf.C.ShowCombatTextTooltips) return;
                 CombatText.NewText(Main.LocalPlayer.getRect(), Color.Green, "UI Layout saved!");
             }, () => "Save and exit", width: 70);
 
