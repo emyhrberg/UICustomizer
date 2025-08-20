@@ -1,5 +1,6 @@
 ﻿using System;
 using Terraria.ModLoader;
+using UICustomizer.Edit.UI;
 
 namespace UICustomizer.Common.Integrations.Heros
 {

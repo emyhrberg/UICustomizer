@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Terraria;
+using UICustomizer.Edit.Hooks;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 

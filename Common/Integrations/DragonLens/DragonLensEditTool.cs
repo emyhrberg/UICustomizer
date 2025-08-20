@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
+using UICustomizer.Edit.UI;
 
 namespace UICustomizer.Common.Integrations.DragonLens
 {

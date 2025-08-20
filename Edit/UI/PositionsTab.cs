@@ -1,6 +1,7 @@
 using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UICustomizer.Edit.Hooks;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 

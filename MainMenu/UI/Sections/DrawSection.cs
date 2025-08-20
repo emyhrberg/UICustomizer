@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UICustomizer.MainMenu.Hooks;
 
 namespace UICustomizer.MainMenu.UI.Sections
 {

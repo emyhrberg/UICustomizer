@@ -2,6 +2,8 @@
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using UICustomizer.Edit.UI;
+using UICustomizer.MainMenu.Hooks;
 
 namespace UICustomizer.MainMenu.UI.Sections
 {

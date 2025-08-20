@@ -1,5 +1,6 @@
 ﻿using CheatSheet;
 using Terraria.ModLoader;
+using UICustomizer.Edit.UI;
 
 namespace UICustomizer.Common.Integrations.CheatSheet
 {

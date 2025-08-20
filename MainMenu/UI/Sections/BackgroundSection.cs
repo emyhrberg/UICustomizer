@@ -6,6 +6,8 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using UICustomizer.Edit.UI;
+using UICustomizer.MainMenu.Hooks;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
 namespace UICustomizer.MainMenu.UI.Sections

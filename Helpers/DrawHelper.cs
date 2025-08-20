@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using UICustomizer.Edit.UI;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 

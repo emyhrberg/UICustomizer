@@ -5,6 +5,8 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using UICustomizer.Edit.UI;
+using UICustomizer.MainMenu.Hooks;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
 namespace UICustomizer.MainMenu.UI.Sections
@@ -232,7 +234,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             {
                 HSLSliderId.Hue => Main.hslToRgb(x, 1f, 0.5f),
                 HSLSliderId.Saturation => Main.hslToRgb(hsl.X, x, hsl.Z),
-                HSLSliderId.Luminance => Main.hslToRgb(hsl.X, hsl.Y, x)
+                HSLSliderId.Luminance => Main.hslToRgb(hsl.X, hsl.Y, x),
             };
 
             var slider = new UIColoredSlider(
