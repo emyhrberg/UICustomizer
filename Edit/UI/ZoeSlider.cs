@@ -7,7 +7,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.UI;
 
-namespace UICustomizer.UI;
+namespace UICustomizer.Edit.UI;
 
 public class ZenSlider : UIElement
 {
@@ -102,7 +102,7 @@ public class ZenSlider : UIElement
         // Draw blip
         Texture2D blip = TextureAssets.ColorSlider.Value;
         Vector2 blipOrigin = blip.Size() * 0.5f;
-        Vector2 blipPosition = new(innerBarArea.X + (Ratio * innerBarArea.Width), innerBarArea.Center.Y);
+        Vector2 blipPosition = new(innerBarArea.X + Ratio * innerBarArea.Width, innerBarArea.Center.Y);
 
         sb.Draw(blip, blipPosition, null, Color.White, 0f, blipOrigin, 1f, SpriteEffects.None, 0f);
     }

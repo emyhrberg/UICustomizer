@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     /// <summary>
     /// Scrollbar that can be disabled.

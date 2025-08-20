@@ -2,13 +2,11 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     /// <summary>
     /// A simple checkbox UI element consisting of a text label and a checkbox box.

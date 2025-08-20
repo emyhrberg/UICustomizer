@@ -5,7 +5,7 @@ using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu
+namespace UICustomizer.MainMenu.Hooks
 {
     /// <summary>Overlays the main-menu background with a custom image.</summary>
     public sealed class BackgroundHook : ModSystem

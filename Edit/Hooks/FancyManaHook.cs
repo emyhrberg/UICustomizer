@@ -4,7 +4,7 @@ using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     public class FancyManaHook : ModSystem
     {

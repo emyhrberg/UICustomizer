@@ -2,7 +2,7 @@
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public class EyeLayerToggleElement : UIImage
     {

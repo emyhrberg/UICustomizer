@@ -4,11 +4,9 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
 
-namespace UICustomizer.UI.Editor
+namespace UICustomizer.Edit.UI
 {
     public sealed class EditTab : Tab
     {

@@ -5,7 +5,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     public class HotbarHook : ModSystem
     {

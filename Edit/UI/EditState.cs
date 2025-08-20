@@ -1,10 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
 using Terraria.UI;
-using UICustomizer.UI.Editor;
 
-namespace UICustomizer.Common.States
+namespace UICustomizer.Edit.UI
 {
     public class EditorState : UIState
     {

@@ -2,13 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public class CollapsibleSection : UIElement
     {

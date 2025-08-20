@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using static Terraria.Main;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu
+namespace UICustomizer.MainMenu.Hooks
 {
     public class SkipSunDrawHook : ModSystem
     {

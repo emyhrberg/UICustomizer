@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using UICustomizer.Common.Systems.Hooks;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 using static UICustomizer.Helpers.Layouts.MapThemeHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;

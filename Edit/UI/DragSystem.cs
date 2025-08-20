@@ -3,11 +3,10 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems.Hooks;
+using UICustomizer.Edit.Hooks;
 using UICustomizer.Helpers.Layouts;
 
-namespace UICustomizer.Common.Systems
+namespace UICustomizer.Edit.UI
 {
     public class DragSystem : ModSystem
     {
@@ -151,7 +150,7 @@ namespace UICustomizer.Common.Systems
             /* update drag (new offset for the element by modifying its offset using ref) */
             if (_dragSource == bounds)
             {
-                Vector2 deltaUI = (mouseUI - _mouseStart);
+                Vector2 deltaUI = mouseUI - _mouseStart;
 
                 offsetX = _offsetStart.X + deltaUI.X;
                 offsetY = _offsetStart.Y + deltaUI.Y;
@@ -178,9 +177,9 @@ namespace UICustomizer.Common.Systems
         {
             var r = bounds();
             if (r.Left < 0) offsetX -= r.Left;
-            else if (r.Right > Main.screenWidth) offsetX -= (r.Right - Main.screenWidth);
+            else if (r.Right > Main.screenWidth) offsetX -= r.Right - Main.screenWidth;
             if (r.Top < 0) offsetY -= r.Top;
-            else if (r.Bottom > Main.screenHeight) offsetY -= (r.Bottom - Main.screenHeight);
+            else if (r.Bottom > Main.screenHeight) offsetY -= r.Bottom - Main.screenHeight;
         }
 
         private static void SnapToEdges(ref float offsetX, ref float offsetY, Func<float, Rectangle> bounds, int threshold)
@@ -190,13 +189,13 @@ namespace UICustomizer.Common.Systems
             if (Math.Abs(r.Left) <= threshold)
                 offsetX -= r.Left;
             else if (Math.Abs(r.Right - Main.screenWidth / Main.UIScale) <= threshold)
-                offsetX -= (r.Right - Main.screenWidth / Main.UIScale);
+                offsetX -= r.Right - Main.screenWidth / Main.UIScale;
 
             // vertical snap
             if (Math.Abs(r.Top) <= threshold)
                 offsetY -= r.Top;
             else if (Math.Abs(r.Bottom - Main.screenHeight / Main.UIScale) <= threshold)
-                offsetY -= (r.Bottom - Main.screenHeight / Main.UIScale);
+                offsetY -= r.Bottom - Main.screenHeight / Main.UIScale;
         }
 
         #endregion
@@ -224,8 +223,8 @@ namespace UICustomizer.Common.Systems
         {
             int w = 440;               // vanilla 10×44-slot bar
             int h = 76;
-            int x = (int)(20) + (int)HotbarHook.OffsetX; // 20-px edge gap /u
-            int y = (int)(-3) + (int)HotbarHook.OffsetY;
+            int x = 20 + (int)HotbarHook.OffsetX; // 20-px edge gap /u
+            int y = -3 + (int)HotbarHook.OffsetY;
 
             return new Rectangle(x, y, w, h);
         }
@@ -273,8 +272,8 @@ namespace UICustomizer.Common.Systems
 
             int w = (int)(258 * s);
             int h = (int)(265 * s);
-            int x = (int)((Main.screenWidth / multiplier) - 300 + MapHook.OffsetX);
-            int y = 80 + (int)(MapHook.OffsetY);
+            int x = (int)(Main.screenWidth / multiplier - 300 + MapHook.OffsetX);
+            int y = 80 + (int)MapHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
 
@@ -321,7 +320,7 @@ namespace UICustomizer.Common.Systems
             }
 
             int w = 255;
-            int x = (int)((Main.screenWidth / multiplier) - 300 + InfoAccsHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 300 + InfoAccsHook.OffsetX);
             int y = 347 + (int)InfoAccsHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
@@ -330,7 +329,7 @@ namespace UICustomizer.Common.Systems
         {
             int w = 263;
             int h = 78;
-            int x = (int)((Main.screenWidth / multiplier) - 305 + ClassicLifeHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 305 + ClassicLifeHook.OffsetX);
             int y = 4 + (int)ClassicLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
@@ -348,7 +347,7 @@ namespace UICustomizer.Common.Systems
         {
             int w = 255;
             int h = 78;
-            int x = (int)((Main.screenWidth / multiplier) - 300 + FancyLifeHook.OffsetX);
+            int x = (int)(Main.screenWidth / multiplier - 300 + FancyLifeHook.OffsetX);
             int y = 4 + (int)FancyLifeHook.OffsetY;
             return new Rectangle(x, y, w, h);
         }
@@ -476,8 +475,8 @@ namespace UICustomizer.Common.Systems
 
         public static Rectangle AccessoriesBounds(float multiplier = 1)
         {
-            int h = (int)(428);
-            int w = (int)(225);
+            int h = 428;
+            int w = 225;
             int x = (int)(Main.screenWidth / multiplier - 230 + AccessoriesHook.OffsetX);
             int y = 390 + (int)AccessoriesHook.OffsetY;
 
@@ -507,8 +506,8 @@ namespace UICustomizer.Common.Systems
 
         public static Rectangle CraftingWindowBounds(float multiplier = 1)
         {
-            int w = (int)(45);
-            int h = (int)(60);
+            int w = 45;
+            int h = 60;
 
             if (EditorTabSettings.FitBounds)
             {

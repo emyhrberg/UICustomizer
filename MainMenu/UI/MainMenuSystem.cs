@@ -1,9 +1,8 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Common.Systems.MainMenu;
 
-namespace UICustomizer.MainMenu;
+namespace UICustomizer.MainMenu.UI;
 
 [Autoload(Side = ModSide.Client)]
 internal sealed class MainMenuSystem : ModSystem

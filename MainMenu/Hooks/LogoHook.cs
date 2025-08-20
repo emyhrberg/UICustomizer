@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
-using Mono.Cecil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
-using UICustomizer.Common.Configs;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu
+namespace UICustomizer.MainMenu.Hooks
 {
     public class LogoHook : ModSystem
     {

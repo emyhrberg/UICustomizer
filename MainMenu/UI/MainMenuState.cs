@@ -2,10 +2,9 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.UI.MainMenuElements;
-using UICustomizer.UI.MainMenuElements.Sections;
+using UICustomizer.MainMenu.UI.Sections;
 
-namespace UICustomizer.MainMenu;
+namespace UICustomizer.MainMenu.UI;
 
 public sealed class MainMenuState : UIState
 {

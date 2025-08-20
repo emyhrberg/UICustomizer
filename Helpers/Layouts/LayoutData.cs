@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
-using static UICustomizer.Helpers.Layouts.MapThemeHelper;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
+using static UICustomizer.Helpers.Layouts.MapThemeHelper;
 using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.Helpers.Layouts

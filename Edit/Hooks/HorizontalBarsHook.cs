@@ -2,9 +2,8 @@ using System;
 using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.ModLoader;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.Common.Systems.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     public class HorizontalBarsHook : ModSystem
     {

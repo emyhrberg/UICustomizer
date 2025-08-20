@@ -5,10 +5,9 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
-namespace UICustomizer.UI.MainMenuElements.Sections
+namespace UICustomizer.MainMenu.UI.Sections
 {
     internal sealed class LogoSection : BaseSection
     {

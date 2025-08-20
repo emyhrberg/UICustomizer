@@ -1,5 +1,4 @@
-﻿using DragonLens.Content.GUI;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
@@ -7,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 
-namespace UICustomizer.UI.MainMenuElements
+namespace UICustomizer.MainMenu.UI
 {
     public class TabButton : UIElement
     {

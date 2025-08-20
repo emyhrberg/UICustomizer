@@ -2,7 +2,7 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 
-namespace UICustomizer.UI.MainMenuElements
+namespace UICustomizer.MainMenu.UI
 {
     public class ResetButton : UIColoredImageButton
     {

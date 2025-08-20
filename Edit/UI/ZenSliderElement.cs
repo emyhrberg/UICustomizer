@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     internal class ZenSliderElement : UIElement
     {
@@ -27,11 +27,11 @@ namespace UICustomizer.UI
         {
             Min = min;
             Max = max;
-            this.tooltipText = tooltip;
-            this.labelTextKey = label;
+            tooltipText = tooltip;
+            labelTextKey = label;
             this.step = step;
-            this.onValueChangedCallback = onValueChanged;
-            this.applyOnReleaseBehavior = applyOnRelease;
+            onValueChangedCallback = onValueChanged;
+            applyOnReleaseBehavior = applyOnRelease;
 
             Width.Set(0, 1f);
             Height.Set(23, 0);
@@ -133,7 +133,7 @@ namespace UICustomizer.UI
             {
                 string liveText, appliedTextFormatted;
 
-                bool usePercentage = (labelTextKey != null && labelTextKey.Contains("UI Scale")) || (Max - Min <= 1f && Min >= 0f && Max <= 1f);
+                bool usePercentage = labelTextKey != null && labelTextKey.Contains("UI Scale") || Max - Min <= 1f && Min >= 0f && Max <= 1f;
 
                 if (usePercentage)
                 {
@@ -151,7 +151,7 @@ namespace UICustomizer.UI
             }
             else // For normal sliders like Snap Threshold
             {
-                bool usePercentage = (Max - Min <= 1f && Min >= 0f && Max <= 1f); // This condition might not apply to Snap if its range is 0-100
+                bool usePercentage = Max - Min <= 1f && Min >= 0f && Max <= 1f; // This condition might not apply to Snap if its range is 0-100
 
                 // Check if the Snap slider (or other non-percentage, non-applyOnRelease sliders) has a whole number value
                 if (!usePercentage && appliedValue % 1 == 0)

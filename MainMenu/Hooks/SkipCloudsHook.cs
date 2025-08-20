@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu
+namespace UICustomizer.MainMenu.Hooks
 {
     public class SkipCloudsHook : ModSystem
     {

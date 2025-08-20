@@ -1,11 +1,10 @@
 using System;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
-namespace UICustomizer.UI.Editor
+namespace UICustomizer.Edit.UI
 {
     public class PositionsTab : Tab
     {

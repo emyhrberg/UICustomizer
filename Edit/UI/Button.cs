@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
-using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     /// <summary>
     /// A simple button UI element that can be clicked to perform an action.

@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks.MainMenu;
+namespace UICustomizer.MainMenu.Hooks;
 
 public sealed class TimeSpeedHook : ModSystem
 {
@@ -57,12 +57,12 @@ public sealed class TimeSpeedHook : ModSystem
             c.GotoNext(MoveType.After,
                 i => i.MatchLdcR8(33.88235294117647));
 
-            c.EmitDelegate((double time) => time * TimeSpeedHook.Speed);
+            c.EmitDelegate((double time) => time * Speed);
 
             c.GotoNext(MoveType.After,
                 i => i.MatchLdcR8(30.857142857142858));
 
-            c.EmitDelegate((double time) => time * TimeSpeedHook.Speed);
+            c.EmitDelegate((double time) => time * Speed);
         }
         catch (Exception e)
         {

@@ -2,12 +2,8 @@
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
-using UICustomizer.Common.Systems.MainMenu;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
-namespace UICustomizer.UI.MainMenuElements.Sections
+namespace UICustomizer.MainMenu.UI.Sections
 {
     internal class TimeSection : BaseSection
     {

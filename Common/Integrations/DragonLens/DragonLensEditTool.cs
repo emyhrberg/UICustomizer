@@ -6,7 +6,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Integrations.DragonLens
+namespace UICustomizer.Common.Integrations.DragonLens
 {
     [JITWhenModsEnabled("DragonLens")]
     [ExtendsFromMod("DragonLens")]

@@ -1,11 +1,7 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.UI;
-using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public class SaveButtonOnlyButton : Button
     {

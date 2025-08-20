@@ -1,11 +1,6 @@
 ﻿using System.ComponentModel;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using UICustomizer.Common.Configs.ConfigElements;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
-using UICustomizer.Common.Systems.MainMenu;
-using UICustomizer.MainMenu;
 
 namespace UICustomizer.Common.Configs
 {

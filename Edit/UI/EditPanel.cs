@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using UICustomizer.Common.Systems;
 using static UICustomizer.Helpers.DrawHelper;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
-namespace UICustomizer.UI.Editor
+namespace UICustomizer.Edit.UI
 {
     public class EditPanel : BasePanel
     {

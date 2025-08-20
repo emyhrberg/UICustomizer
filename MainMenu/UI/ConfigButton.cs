@@ -3,9 +3,8 @@ using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Common.Configs;
 
-namespace UICustomizer.UI.MainMenuElements
+namespace UICustomizer.MainMenu.UI
 {
     public class ConfigButton : UIImage
     {

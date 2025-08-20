@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
-using Terraria.UI;
 
-namespace UICustomizer.UI.MainMenuElements
+namespace UICustomizer.MainMenu.UI
 {
     internal class SmallColoredImageButton : UIColoredImageButton
     {

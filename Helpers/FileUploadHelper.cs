@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Utilities.FileBrowser;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems.Hooks.MainMenu;
 
 namespace UICustomizer.Helpers;
 

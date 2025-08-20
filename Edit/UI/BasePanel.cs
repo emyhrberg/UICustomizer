@@ -4,11 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Common.Systems;
-using UICustomizer.Helpers;
-using UICustomizer.UI.Editor;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public abstract class BasePanel : DraggablePanel
     {

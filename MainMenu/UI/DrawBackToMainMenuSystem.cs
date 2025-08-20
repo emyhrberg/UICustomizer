@@ -5,9 +5,8 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
-using UICustomizer.Common.Configs;
 
-namespace UICustomizer.MainMenu
+namespace UICustomizer.MainMenu.UI
 {
     internal class DrawBackToMainMenuSystem : ModSystem
     {

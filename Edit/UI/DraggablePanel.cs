@@ -2,10 +2,8 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Configs;
-using UICustomizer.Common.Systems;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public class DraggablePanel : UIPanel
     {

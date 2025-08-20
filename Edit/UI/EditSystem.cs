@@ -2,10 +2,9 @@
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Common.States;
 using UICustomizer.Helpers.Layouts;
 
-namespace UICustomizer.Common.Systems
+namespace UICustomizer.Edit.UI
 {
     [Autoload(Side = ModSide.Client)]
     public class EditSystem : ModSystem

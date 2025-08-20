@@ -4,7 +4,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public class Resize : UIImageButton
     {

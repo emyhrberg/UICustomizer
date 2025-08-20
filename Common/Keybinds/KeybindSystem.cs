@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 using Terraria.ModLoader;
-using UICustomizer.Common.Systems;
 
 namespace UICustomizer.Common.Keybinds
 {

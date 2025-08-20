@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Helpers;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     public abstract class Tab : UIPanel
     {

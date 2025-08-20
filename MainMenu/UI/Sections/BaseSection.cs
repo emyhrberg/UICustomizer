@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.UI.Elements;
+﻿using Terraria.GameContent.UI.Elements;
 
-namespace UICustomizer.UI.MainMenuElements.Sections
+namespace UICustomizer.MainMenu.UI.Sections
 {
     public class BaseSection : UIPanel
     {

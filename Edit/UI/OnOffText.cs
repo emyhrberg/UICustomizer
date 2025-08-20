@@ -3,7 +3,7 @@ using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 
-namespace UICustomizer.UI
+namespace UICustomizer.Edit.UI
 {
     internal class OnOffText : UIText
     {

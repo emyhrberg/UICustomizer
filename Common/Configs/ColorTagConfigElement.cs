@@ -1,12 +1,10 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.Config.UI;
-using Terraria.UI;
 
-namespace UICustomizer.Common.Configs.ConfigElements;
+namespace UICustomizer.Common.Configs;
 
 public class ColorTagConfigElement : ConfigElement<string>
 {

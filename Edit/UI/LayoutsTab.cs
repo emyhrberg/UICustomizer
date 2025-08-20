@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
 
-namespace UICustomizer.UI.Editor
+namespace UICustomizer.Edit.UI
 {
     public class LayoutsTab : Tab
     {

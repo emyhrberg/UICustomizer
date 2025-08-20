@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 
-namespace UICustomizer.UI.MainMenuElements
+namespace UICustomizer.MainMenu.UI
 {
     internal class OnOffTextButton : UIText
     {
@@ -14,8 +13,8 @@ namespace UICustomizer.UI.MainMenuElements
         public OnOffTextButton(string text, bool initiallyOn = true, bool NoOnOff = false, bool ShowOnHover = false)
     : base("", textScale: 0.82f, large: false)
         {
-            this.isOn = initiallyOn;
-            this._showOnHover = ShowOnHover;
+            isOn = initiallyOn;
+            _showOnHover = ShowOnHover;
 
             HAlign = 0.5f;
             if (!ShowOnHover) TextColor = Color.Gray;

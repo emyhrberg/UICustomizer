@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using UICustomizer.Common.Systems;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
@@ -100,11 +99,11 @@ namespace UICustomizer.Helpers
             // Inspired by UICharacterCreation::Draw()
             float x = FontAssets.MouseText.Value.MeasureString(text).X;
             Vector2 vector = new Vector2(Main.mouseX, Main.mouseY) + new Vector2(16f);
-            if (vector.Y > (float)(Main.screenHeight - 15))
+            if (vector.Y > Main.screenHeight - 15)
             {
                 vector.Y = Main.screenHeight - 15;
             }
-            if (vector.X > (float)Main.screenWidth - x + 40)
+            if (vector.X > Main.screenWidth - x + 40)
             {
                 vector.X = Main.screenWidth - 460;
             }
@@ -134,17 +133,17 @@ namespace UICustomizer.Helpers
                 Main.combatText[i].active = true;
                 Main.combatText[i].scale = 0f;
                 Main.combatText[i].rotation = 0f;
-                Main.combatText[i].position.X = (float)location.X + (float)location.Width * 0.5f - vector.X * 0.5f;
-                Main.combatText[i].position.Y = (float)location.Y + (float)location.Height * 0.25f - vector.Y * 0.5f;
-                Main.combatText[i].position.X += Main.rand.Next(-(int)((double)location.Width * 0.5), (int)((double)location.Width * 0.5) + 1);
-                Main.combatText[i].position.Y += Main.rand.Next(-(int)((double)location.Height * 0.5), (int)((double)location.Height * 0.5) + 1);
+                Main.combatText[i].position.X = location.X + location.Width * 0.5f - vector.X * 0.5f;
+                Main.combatText[i].position.Y = location.Y + location.Height * 0.25f - vector.Y * 0.5f;
+                Main.combatText[i].position.X += Main.rand.Next(-(int)(location.Width * 0.5), (int)(location.Width * 0.5) + 1);
+                Main.combatText[i].position.Y += Main.rand.Next(-(int)(location.Height * 0.5), (int)(location.Height * 0.5) + 1);
                 Main.combatText[i].color = color;
                 Main.combatText[i].text = text;
                 Main.combatText[i].velocity.Y = -7f;
                 if (Main.player[Main.myPlayer].gravDir == -1f)
                 {
                     Main.combatText[i].velocity.Y *= -1f;
-                    Main.combatText[i].position.Y = (float)location.Y + (float)location.Height * 0.75f + vector.Y * 0.5f;
+                    Main.combatText[i].position.Y = location.Y + location.Height * 0.75f + vector.Y * 0.5f;
                 }
 
                 Main.combatText[i].lifeTime = 60;
@@ -155,8 +154,8 @@ namespace UICustomizer.Helpers
                     Main.combatText[i].text = text;
                     Main.combatText[i].lifeTime *= 2;
                     Main.combatText[i].velocity.Y *= 2f;
-                    Main.combatText[i].velocity.X = (float)Main.rand.Next(-25, 26) * 0.05f;
-                    Main.combatText[i].rotation = (float)(Main.combatText[i].lifeTime / 2) * 0.002f;
+                    Main.combatText[i].velocity.X = Main.rand.Next(-25, 26) * 0.05f;
+                    Main.combatText[i].rotation = Main.combatText[i].lifeTime / 2 * 0.002f;
                     if (Main.combatText[i].velocity.X < 0f)
                     {
                         Main.combatText[i].rotation *= -1f;

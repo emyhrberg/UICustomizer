@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Systems.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     /// <summary>
     /// Finds all calls to Vector2 constructor in the map drawing code and injects an offset to the position.
@@ -49,7 +49,7 @@ namespace UICustomizer.Common.Systems.Hooks
                             // Only apply offset when in minimap mode
                             if (Main.mapStyle == 1 && !Main.mapFullscreen)
                             {
-                                return new Vector2(pos.X + (OffsetX * Main.MapScale), pos.Y + (OffsetY * Main.MapScale));
+                                return new Vector2(pos.X + OffsetX * Main.MapScale, pos.Y + OffsetY * Main.MapScale);
                             }
                             return pos;
                         });
@@ -63,7 +63,7 @@ namespace UICustomizer.Common.Systems.Hooks
                             // Only apply offset when in minimap mode
                             if (Main.mapStyle == 1 && !Main.mapFullscreen)
                             {
-                                return new Vector2(pos.X - (OffsetX * Main.MapScale), pos.Y - (OffsetY * Main.MapScale));
+                                return new Vector2(pos.X - OffsetX * Main.MapScale, pos.Y - OffsetY * Main.MapScale);
                             }
                             return pos;
                         });
@@ -94,7 +94,7 @@ namespace UICustomizer.Common.Systems.Hooks
                         // Only apply offset when in minimap mode
                         if (Main.mapStyle == 1 && !Main.mapFullscreen)
                         {
-                            return new Vector2(pos.X + (OffsetX * Main.MapScale), pos.Y + (OffsetY * Main.MapScale));
+                            return new Vector2(pos.X + OffsetX * Main.MapScale, pos.Y + OffsetY * Main.MapScale);
                         }
                         return pos;
                     });
