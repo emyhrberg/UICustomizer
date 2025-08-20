@@ -92,4 +92,7 @@ BUGS:
 
 --------------------------------------------------------------
 2025-08-20
+Todo:
 1. Sync main menu to save to config and load from config, also fix reset values
+2. Fix bug where hotbar hover text is still stuck, also life hover text
+3. 

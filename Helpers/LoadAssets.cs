@@ -15,6 +15,7 @@ namespace UICustomizer.Helpers
         public static Asset<Texture2D> Inventory_Tick_On;
 
         // Edit menu
+        public static Asset<Texture2D> DarkPanel;
         public static Asset<Texture2D> EditorIcon;
         public static Asset<Texture2D> EditorIconHover;
         public static Asset<Texture2D> EditorIconSmall;

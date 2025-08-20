@@ -1,8 +1,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 using UICustomizer.EditMode.System;
 
 namespace UICustomizer.EditMode.UI
@@ -15,10 +17,13 @@ namespace UICustomizer.EditMode.UI
             ImageScale = 1f;
             Top.Set(260, 0);
             Left.Set(Main.GameMode == GameModeID.Creative ? 65 : 30, 0);
+        }
 
-            // Click action
+        public override void LeftClick(UIMouseEvent evt)
+        {
+            base.LeftClick(evt);
             var sys = ModContent.GetInstance<EditSystem>();
-            OnLeftClick += (_, _) => sys.Toggle();
+            sys.Toggle();
         }
 
         public override void Draw(SpriteBatch sb)
@@ -27,7 +32,7 @@ namespace UICustomizer.EditMode.UI
 
             base.Draw(sb);
 
-            Rectangle r = new(76, 270, 28, 28);
+            Rectangle r = new(74, 268, 28, 28);
             //sb.Draw(TextureAssets.MagicPixel.Value, r, Color.White*0.5f); 
             bool hover = r.Contains(Main.MouseScreen.ToPoint());
 
