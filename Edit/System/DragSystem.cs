@@ -22,10 +22,10 @@ namespace UICustomizer.EditMode.System
         {
             base.PostUpdateInput();
 
-            if (!EditSystem.IsActive) return;
+            var sys = ModContent.GetInstance<EditSystem>();
+            if (sys == null || sys.editState == null) return;
+            if (!sys.Enabled) return;
 
-            EditSystem sys = ModContent.GetInstance<EditSystem>();
-            if (sys == null || sys.state == null) return;
 
             // Handle dragging of UI elements
             HandleDrag(MapBounds, ref MapHook.OffsetX, ref MapHook.OffsetY);
@@ -109,7 +109,7 @@ namespace UICustomizer.EditMode.System
                 // Force switch to "active" layout
                 LayoutHelper.CurrentLayoutName = "Active";
                 var sys = ModContent.GetInstance<EditSystem>();
-                sys.state.editorPanel.layoutsTab.Populate();
+                //sys.state.editorPanel.layoutsTab.Populate();
             }
 
             /* update drag (new offset for the element by modifying its offset using ref) */
@@ -149,6 +149,7 @@ namespace UICustomizer.EditMode.System
                 offsetY -= r.Top;
             else if (Math.Abs(r.Bottom - Main.screenHeight / Main.UIScale) <= threshold)
                 offsetY -= r.Bottom - Main.screenHeight / Main.UIScale;
+        }
 
         #region Bounds
 

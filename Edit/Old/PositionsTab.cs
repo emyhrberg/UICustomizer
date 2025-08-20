@@ -1,11 +1,11 @@
 //using System;
 //using Terraria.GameContent.UI.Elements;
 //using Terraria.UI;
-//using UICustomizer.EditMode.Helpers;
-//using UICustomizer.EditMode.Hooks;
-//using static UICustomizer.EditMode.Helpers.ElementHelper;
+//using UICustomizer.EditState.Helpers;
+//using UICustomizer.EditState.Hooks;
+//using static UICustomizer.EditState.Helpers.ElementHelper;
 
-//namespace UICustomizer.EditMode.UI
+//namespace UICustomizer.EditState.UI
 //{
 //    public class PositionsTab : Tab
 //    {

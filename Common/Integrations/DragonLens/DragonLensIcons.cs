@@ -21,8 +21,7 @@ namespace UICustomizer.Common.Integrations.DragonLens
                 foreach (var provider in ThemeHandler.allIconProviders.Values)
                 {
                     // assign (overwrites if the key exists already) – never throws
-                    provider.icons["UIEditor"] = Ass.EditorIcon.Value;
-                    provider.icons["Layers"] = Ass.LayersIcon.Value;
+                    provider.icons["UIEditor"] = Ass.EditorIconSmall.Value;
                 }
 
                 // rebuild toolbars *after* icons (and tools) have been injected
@@ -33,7 +32,6 @@ namespace UICustomizer.Common.Integrations.DragonLens
         public override void PostUpdateEverything()
         {
             base.PostUpdateEverything();
-
             // AddIcons();
             // This is a workaround to ensure that the icons are added after the mod is loaded.
         }

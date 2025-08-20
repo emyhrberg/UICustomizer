@@ -17,6 +17,8 @@ namespace UICustomizer.Helpers
         // Edit menu
         public static Asset<Texture2D> EditorIcon;
         public static Asset<Texture2D> EditorIconHover;
+        public static Asset<Texture2D> EditorIconSmall;
+        public static Asset<Texture2D> EditorIconSmallHover;
         public static Asset<Texture2D> Hitbox;
 
         // Main menu

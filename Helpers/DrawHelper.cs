@@ -2,7 +2,9 @@
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
+using UICustomizer.EditMode.Helpers;
 using UICustomizer.EditMode.System;
+using static UICustomizer.EditMode.Helpers.ElementHelper;
 
 namespace UICustomizer.Helpers
 {
@@ -14,7 +16,7 @@ namespace UICustomizer.Helpers
                 color = Color.Red;
 
             var sys = ModContent.GetInstance<EditSystem>();
-            if (sys == null || sys.state == null) return;
+            if (sys == null || sys.editState == null) return;
 
             // Draw hitboxes
             // if (EditorTabSettings.ShowHitboxes)

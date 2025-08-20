@@ -25,11 +25,13 @@ namespace UICustomizer.Common.Integrations.CheatSheet
 
         private void AddButtons()
         {
+            var sys = ModContent.GetInstance<EditSystem>();
+
             // Edit button
             CheatSheetInterface.RegisterButton(
-            texture: Ass.EditorIcon,
-            buttonClickedAction: EditSystem.ToggleActive,
-            tooltip: () => EditSystem.IsActive ? Loc.Get("EditorPanel.Icon.Close") : Loc.Get("EditorPanel.Icon.Open")
+            texture: Ass.EditorIconSmall,
+            buttonClickedAction: sys.Toggle,
+            tooltip: () => sys.Enabled ? Loc.Get("EditorPanel.Icon.Close") : Loc.Get("EditorPanel.Icon.Open")
             );
         }
     }

@@ -313,7 +313,10 @@ EditorPanel: {
 	}
 }
 
-"Keybinds.Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
+Keybinds: {
+	"Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
+	"UI Editor.DisplayName": U I  Editor
+}
 
 Tools: {
 	"UI Editor": {

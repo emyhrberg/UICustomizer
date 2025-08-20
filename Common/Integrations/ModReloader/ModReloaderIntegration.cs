@@ -24,8 +24,8 @@ namespace UICustomizer.Common.Integrations.ModReloader
             MR.Call(
                 "AddButton",
                 "UI", // name
-                () => EditSystem.ToggleActive(),
-                Ass.EditorIcon, // asset
+                () => ModContent.GetInstance<EditSystem>().Toggle,
+                Ass.EditorIconSmall, // asset
                 "Edit UI layout" // tooltip
             );
             Log.Info("Added ModReloader button for UICustomizer");

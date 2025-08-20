@@ -23,7 +23,8 @@ namespace UICustomizer.Common.Integrations.DragonLens
 
         public override void OnActivate()
         {
-            EditSystem.ToggleActive();
+            var sys = ModContent.GetInstance<EditSystem>();
+            sys.Toggle();
         }
 
         public override void DrawIcon(SpriteBatch spriteBatch, Rectangle position)
@@ -31,7 +32,7 @@ namespace UICustomizer.Common.Integrations.DragonLens
             // base.DrawIcon(spriteBatch, position);
 
             // Draw the icon for the UI Editor tool
-            Asset<Texture2D> asset = Ass.EditorIcon;
+            Asset<Texture2D> asset = Ass.EditorIconSmall;
             if (asset == null || !asset.IsLoaded)
             {
                 Log.Info("DragonLensToolIcon is not loaded");
@@ -49,7 +50,8 @@ namespace UICustomizer.Common.Integrations.DragonLens
 
             spriteBatch.Draw(tex, pos, null, Color.White, 0, tex.Size() / 2f, scale, 0, 0);
 
-            if (EditSystem.IsActive)
+            var sys = ModContent.GetInstance<EditSystem>();
+            if (sys.Enabled)
             {
                 // Draw the icon with a glow effect when edit mode is active
                 GUIHelper.DrawOutline(spriteBatch, new Rectangle(position.X - 4, position.Y - 4, 46, 46), ThemeHandler.ButtonColor.InvertColor());

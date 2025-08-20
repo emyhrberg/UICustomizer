@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using Terraria;
 using UICustomizer.EditMode.Hooks;
+using static UICustomizer.EditMode.Helpers.ElementHelper;
+using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
 
 namespace UICustomizer.EditMode.Helpers
 {

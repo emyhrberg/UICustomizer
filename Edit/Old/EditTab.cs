@@ -4,9 +4,9 @@
 //using Terraria;
 //using Terraria.GameContent.UI.Elements;
 //using Terraria.UI;
-//using UICustomizer.EditMode.Helpers;
+//using UICustomizer.EditState.Helpers;
 
-//namespace UICustomizer.EditMode.UI
+//namespace UICustomizer.EditState.UI
 //{
 //    public sealed class EditTab : Tab
 //    {
@@ -18,7 +18,7 @@
 //        /// </summary>
 //        public enum Checkbox
 //        {
-//            EditMode,
+//            EditState,
 //            SnapToEdges,
 //            ShowHitboxes,
 //            FitBounds,
@@ -28,7 +28,7 @@
 
 //        public Dictionary<Checkbox, bool> checkboxStates = new()
 //        {
-//            [Checkbox.EditMode] = true,
+//            [Checkbox.EditState] = true,
 //            [Checkbox.SnapToEdges] = true,
 //            [Checkbox.ShowHitboxes] = true,
 //            [Checkbox.FitBounds] = true,
@@ -136,8 +136,8 @@
 
 //            var editMode = new OnOffText(
 //                "Edit Mode",
-//                () => EditorTabSettings.EditMode,
-//                value => EditorTabSettings.EditMode = value
+//                () => EditorTabSettings.EditState,
+//                value => EditorTabSettings.EditState = value
 //            );
 //            list.Add(editMode);
 
@@ -181,11 +181,11 @@
 //        // {
 //        //     var checkboxEdit = new CheckboxElement(
 //        //         text: "Edit Mode",
-//        //         initialState: checkboxStates[Checkbox.EditMode],
+//        //         initialState: checkboxStates[Checkbox.EditState],
 //        //         onStateChanged: newState =>
 //        //         {
-//        //             checkboxStates[Checkbox.EditMode] = newState;
-//        //             EditorTabSettings.EditMode = newState;
+//        //             checkboxStates[Checkbox.EditState] = newState;
+//        //             EditorTabSettings.EditState = newState;
 //        //         },
 //        //         width: 100,
 //        //         tooltip: "Enable edit mode to be able to drag elements"

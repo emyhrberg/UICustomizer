@@ -20,9 +20,10 @@ namespace UICustomizer.Common.Keybinds
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             KeybindSystem keybindSystem = ModContent.GetInstance<KeybindSystem>();
+            var sys = ModContent.GetInstance<EditSystem>();
 
             if (keybindSystem.EditPanelToggle.JustPressed)
-                EditSystem.ToggleActive();
+                sys.Toggle();
         }
     }
 }

@@ -3,11 +3,11 @@
 //using Microsoft.Xna.Framework.Graphics;
 //using Terraria;
 //using static UICustomizer.Helpers.DrawHelper;
-//using static UICustomizer.EditMode.Helpers.ElementHelper;
-//using UICustomizer.EditMode.UI.Old;
-//using UICustomizer.EditMode.System;
+//using static UICustomizer.EditState.Helpers.ElementHelper;
+//using UICustomizer.EditState.UI.Old;
+//using UICustomizer.EditState.System;
 
-//namespace UICustomizer.EditMode.UI
+//namespace UICustomizer.EditState.UI
 //{
 //    public class EditPanel : BasePanel
 //    {

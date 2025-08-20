@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
+using UICustomizer.MainMenu.Helpers;
 using UICustomizer.MainMenu.Hooks;
 using UICustomizer.UI;
 

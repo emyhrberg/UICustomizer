@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
+using static UICustomizer.EditMode.Helpers.ElementHelper;
+using static UICustomizer.EditMode.Helpers.MapThemeHelper;
+using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
 
 namespace UICustomizer.EditMode.Helpers
 {

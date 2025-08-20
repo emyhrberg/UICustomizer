@@ -24,14 +24,15 @@ namespace UICustomizer.Common.Integrations.Heros
             // EditPermissionKey, // permission Name
             // Loc.Get("EditorPanel.Icon.Label"), // header
             // (bool hasPerm) => PermissionChanged(hasPerm, EditPermissionKey)); // groupUpdated
+            var sys = ModContent.GetInstance<EditSystem>();
 
             // Add editor button
             herosMod.Call("AddSimpleButton",
                 EditPermissionKey, // permission Name
-                Ass.EditorIcon, // icon
-                () => EditSystem.ToggleActive(),
+                Ass.EditorIconSmall, // icon
+                () => sys.Toggle(),
                 (Action<bool>)(hasPerm => PermissionChanged(hasPerm, EditPermissionKey)), // permission changed
-                () => EditSystem.IsActive ? Loc.Get("EditorPanel.Icon.Close") : Loc.Get("EditorPanel.Icon.Open") // tooltip
+                () => sys.Enabled ? Loc.Get("EditorPanel.Icon.Close") : Loc.Get("EditorPanel.Icon.Open") // tooltip
             );
 
             // Add layer permission

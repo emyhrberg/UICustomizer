@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UICustomizer.EditMode.Hooks;
+using static UICustomizer.EditMode.Helpers.ElementHelper;
+using static UICustomizer.EditMode.Helpers.MapThemeHelper;
+using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
 
 namespace UICustomizer.EditMode.Helpers
 {
@@ -17,8 +20,8 @@ namespace UICustomizer.EditMode.Helpers
         {
             string layoutName = "Active";
 
-            GetActiveResourceTheme(out ResourceTheme currentTheme);
-            GetActiveMapTheme(out MapTheme mapTheme);
+            ResourceThemeHelper.GetActiveResourceTheme(out ResourceTheme currentTheme);
+            MapThemeHelper.GetActiveMapTheme(out MapTheme mapTheme);
 
             var layoutData = new LayoutData
             {
