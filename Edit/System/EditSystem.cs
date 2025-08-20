@@ -23,9 +23,6 @@ namespace UICustomizer.Edit.System
         {
             Enabled = !Enabled;
             SoundEngine.PlaySound(SoundID.MenuTick);
-
-            if (Enabled)
-                Main.hidePlayerCraftingMenu = true;
         }
 
         public override void OnWorldLoad()
