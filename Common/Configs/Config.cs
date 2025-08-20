@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using UICustomizer.Common.Configs.ConfigElements;
 using UICustomizer.Common.Systems.Hooks.MainMenu;
 using UICustomizer.Common.Systems.MainMenu;
+using UICustomizer.MainMenu;
 
 namespace UICustomizer.Common.Configs
 {
@@ -41,20 +43,25 @@ namespace UICustomizer.Common.Configs
             if (Conf.C == null)
             {
                 Log.Error("Config is null OnChanged.");
+                return;
             }
 
-            ApplyMainMenuTextColor();
-            ApplyMainMenuTime();
-            ApplyMainMenuBackground();
-            ApplyMainMenuLogo();
-            ApplyMainMenuDraw();
+            if (!Conf.C.EditMainMenu)
+            {
+                var sys = ModContent.GetInstance<MainMenuSystem>();
+                if (sys == null)
+                {
+                    Log.Error("MainMenuSystem is null OnChanged.");
+                    return;
+                }
+                sys.ui.SetState(null);
+            }
 
-            MainMenuPauseSystem.IsPaused = Conf.C.MainMenuTime.IsPaused;
-            TimeSpeedHook.Speed = Conf.C.MainMenuTime.Speed;
-            ParallaxSpeedHook.Speed = Conf.C.MainMenuTime.ParallaxSpeed;
-
-            // Apply background settings (color/transform/texture path/draw toggle)
-            BackgroundHook.ApplyConfig(Conf.C);
+            // ApplyMainMenuTextColor();
+            // ApplyMainMenuTime();
+            // ApplyMainMenuBackground();
+            // ApplyMainMenuLogo();
+            // ApplyMainMenuDraw();
         }
 
         private void ApplyMainMenuTextColor()
@@ -136,7 +143,7 @@ namespace UICustomizer.Common.Configs
         // Time in ticks int
         [DefaultValue(0f)]
         [Range(0f, 86400f)]
-        public float Time;
+        public float Time = 0f;
 
         // Speed in ticks int
         [DefaultValue(1f)]

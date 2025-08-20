@@ -1,15 +1,10 @@
-[h1] UI Editor [/h1] 
+﻿[h1] UI Editor [/h1] 
 This mod allows you to move all UI: the hotbar, chat, map, health, mana, and buff positions can now be set to a new position of your choosing. The mod is client-sided.
-
-To use, open inventory and click on "UI Editor" in the bottom right corner.
-
-[img]https://i.imgur.com/dF6cGZA.png[/img]
 
 [h2] Features [/h2] 
 [list]
 [*] [b]UI Editor:[/b] Use dragging to move all vanilla UI to your desired position and save.
 [*] [b]Layouts:[/b] After finding a layout you like, you can save it for later use and even share it with your friends!
-[*] [b]Toggle Interface Layers:[/b] Allows you to toggle individual or all interface layers for all mods.
 [*] [b]Toggle Resource Packs:[/b] Easily enable and disable resource packs while in a world without exiting!
 [/list]
 

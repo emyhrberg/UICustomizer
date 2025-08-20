@@ -16,7 +16,7 @@ namespace UICustomizer.Helpers
             if (color == default)
                 color = Color.Red;
 
-            var sys = ModContent.GetInstance<EditorSystem>();
+            var sys = ModContent.GetInstance<EditSystem>();
             if (sys == null || sys.state == null || sys.state.editorPanel == null) return;
 
             // Draw hitboxes
@@ -52,34 +52,6 @@ namespace UICustomizer.Helpers
                     Utils.DrawBorderString(sb, element.ToString(), pos, Color.White);
                 }
                 return; // Exit early for this element if no mapping for eye toggle
-            }
-
-            // Draw eye toggle (only if mapping was found)
-            if (EditorTabSettings.ShowEyeToggle)
-            {
-                if (LayerSystem.LayerStates == null)
-                {
-                    return;
-                }
-
-                bool isCurrentlyVisible = LayerSystem.LayerStates.TryGetValue(interfaceLayerName, out bool currentState) ? currentState : true;
-                Rectangle eyeRect = new(rect.X - Ass.EyeOpen.Width(), rect.Y, Ass.EyeOpen.Width(), Ass.EyeOpen.Height());
-
-                if (eyeRect.Contains(Main.mouseX, Main.mouseY))
-                {
-                    sb.Draw(isCurrentlyVisible ? Ass.EyeOpenHover.Value : Ass.EyeClosedHover.Value, eyeRect, Color.White); // Draw hover icon
-                    if (Main.mouseLeft && Main.mouseLeftRelease)
-                    {
-                        isCurrentlyVisible = !isCurrentlyVisible;
-                        // Use interfaceLayerName (from mapping) as the key for LayerSystem.LayerStates
-                        LayerSystem.LayerStates[interfaceLayerName] = isCurrentlyVisible;
-                        Main.mouseLeftRelease = false;
-                    }
-                }
-                else // Only draw the normal eye if not hovering
-                {
-                    sb.Draw(isCurrentlyVisible ? Ass.EyeOpen.Value : Ass.EyeClosed.Value, eyeRect, Color.White);
-                }
             }
 
             // Draw names of the UI elements
@@ -139,7 +111,7 @@ namespace UICustomizer.Helpers
             Utils.DrawBorderStringFourWay(
                 sb, FontAssets.MouseText.Value, text, vector.X, vector.Y, new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor), Color.Black, Vector2.Zero);
         }
-        
+
         public static int NewText(Rectangle location, Color color, string text, bool dramatic = false, bool dot = false)
         {
             if (Main.netMode == NetmodeID.Server)

@@ -309,32 +309,11 @@ EditorPanel: {
 	}
 }
 
-LayerPanel: {
-	Icon: {
-		Label: Layers Tool
-		Open: Open Layers Tool
-		Close: Close Layers Tool
-		Tooltip: Toggle elements, interface layers, and resource packs!
-	}
-}
-
-Keybinds: {
-	"Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
-	"Toggle Layer Panel.DisplayName": Toggle  Layer  Panel
-	"UI Editor.DisplayName": U I  Editor
-	"Layers And Packs.DisplayName": Layers  And  Packs
-	"Layers And PacksRightClick.DisplayName": Layers  And  Packs Right Click
-}
+"Keybinds.Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
 
 Tools: {
 	"UI Editor": {
 		DisplayName: UI Editor
 		Description: The tool has no description! Add one in .hjson files!
-	}
-
-	"Layers And Packs": {
-		DisplayName: Layers And Packs
-		Description: The tool has no description! Add one in .hjson files!
-		RightClickName: Layers And Packs Right Click
 	}
 }
