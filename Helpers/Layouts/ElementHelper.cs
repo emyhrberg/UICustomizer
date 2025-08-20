@@ -30,7 +30,7 @@ namespace UICustomizer.Helpers.Layouts
             [Element.Chat] = "Vanilla: Player Chat",
             [Element.Hotbar] = "Vanilla: Hotbar",
             [Element.Map] = "Vanilla: Map / Minimap",
-            [Element.InfoAccs] = "Vanilla: Info Accessories Bar", 
+            [Element.InfoAccs] = "Vanilla: Info Accessories Bar",
             [Element.ClassicLife] = "Vanilla: Resource Bars",
             [Element.ClassicMana] = "Vanilla: Resource Bars",
             [Element.FancyLife] = "Vanilla: Resource Bars",

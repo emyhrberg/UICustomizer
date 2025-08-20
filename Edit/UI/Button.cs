@@ -21,7 +21,7 @@ namespace UICustomizer.UI
         private readonly Color _baseBg;
         private readonly Color _hoverBg;
 
-        public Button(string text, Action onClick, Func<string> tooltip=default,  Action onRightClick = null, bool maxWidth=false, int width = 100, int height=30)
+        public Button(string text, Action onClick, Func<string> tooltip = default, Action onRightClick = null, bool maxWidth = false, int width = 100, int height = 30)
         {
             _baseBg = UICommon.DefaultUIBlue;
             _hoverBg = UICommon.DefaultUIBlueMouseOver * 0.1f;

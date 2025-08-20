@@ -37,4 +37,4 @@ namespace UICustomizer.UI.MainMenuElements
         }
     }
 }
-   
+

@@ -59,7 +59,7 @@ namespace UICustomizer.UI.MainMenuElements
             string first = _tooltip.Substring(0, 1);
             Vector2 charPos = position -= new Vector2(5, 10);
 
-            Utils.DrawBorderString(spriteBatch, first, position, _color); 
+            Utils.DrawBorderString(spriteBatch, first, position, _color);
 
             //spriteBatch.Draw(_texture.Value, position, null, _color, 0f, _texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
         }

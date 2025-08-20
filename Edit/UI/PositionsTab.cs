@@ -1,8 +1,7 @@
 using System;
-using Microsoft.Xna.Framework; // Required for OutlineColor
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Common.Systems.Hooks; // Assuming your hooks are here
+using UICustomizer.Common.Systems.Hooks;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
@@ -61,8 +60,8 @@ namespace UICustomizer.UI.Editor
         private void BuildPositionsContent(UIElement contentContainer)
         {
             const float LineHeight = 22f;
-            const float ElementNameMaxWidth = 95f; 
-            const float CoordTextLeftOffset = ElementNameMaxWidth + 5f; 
+            const float ElementNameMaxWidth = 95f;
+            const float CoordTextLeftOffset = ElementNameMaxWidth + 5f;
             const float CoordTextWidth = 85f;
             const float ResetButtonLeftOffset = CoordTextLeftOffset + CoordTextWidth + 20f;
 

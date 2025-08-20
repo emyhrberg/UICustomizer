@@ -37,8 +37,8 @@ namespace UICustomizer.UI
             _tooltip = tooltip;
 
             Height.Set(height, 0);
-            Width.Set(width+4, 1);
-            MaxWidth.Set(width+4, 1);
+            Width.Set(width + 4, 1);
+            MaxWidth.Set(width + 4, 1);
             //Left.Set(-2, 0);
 
             // Eye

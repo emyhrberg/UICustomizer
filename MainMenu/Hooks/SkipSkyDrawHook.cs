@@ -35,7 +35,7 @@ namespace UICustomizer.Common.Systems.Hooks.MainMenu
                 //c.EmitBr(label);
                 //c.Index += 6;
                 //c.MarkLabel(label);
-                
+
                 // Skip if IsDrawing is false
                 ILLabel afterDraw = il.DefineLabel(); // label after the Draw so we can jump over it
                 c.EmitLdsfld(typeof(SkipSkyDrawHook).GetField(nameof(IsDrawing))); // push bool
