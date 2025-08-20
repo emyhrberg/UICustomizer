@@ -36,23 +36,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             parallaxTab = MakeTab(Ass.P, TimeTab.Parallax, 32 + 32);
 
             // ─── Common controls ──────────────────────────────────────────
-            playPause = new PlayPause()
-            {
-                Left = { Pixels = 6 },
-                Top = { Pixels = 6 }
-            };
-            playPause.OnLeftMouseDown += (_, _) =>
-            {
-                MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
-                Conf.C.MainMenuTime.IsPaused = !Conf.C.MainMenuTime.IsPaused;
-
-                // Also save time
-                Conf.C.MainMenuTime.Time = (int)Main.time;
-
-                Conf.Save();
-            };
-            bool initialPauseState = Conf.C.MainMenuTime.IsPaused;
-            playPause.SetImage(initialPauseState ? Ass.Pause : Ass.Play);
+            playPause = new PlayPause();
             Append(playPause);
 
             resetButton = new ResetButton

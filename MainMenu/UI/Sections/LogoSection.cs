@@ -198,7 +198,7 @@ namespace UICustomizer.MainMenu.UI.Sections
                 fileText.SetText("No file chosen");
             };
 
-            // ─── initialise state ───────────────────────────────────────
+            // ─── initialise mainState ───────────────────────────────────────
             hsl = Main.rgbToHsl(LogoHook.Color);
             SelectTab(LogoTab.Scale);          // show initial controls
         }
@@ -276,7 +276,7 @@ namespace UICustomizer.MainMenu.UI.Sections
         {
             tab = t;
 
-            // visual state for tab buttons
+            // visual mainState for tab buttons
             scaleTab.SetSelected(t == LogoTab.Scale);
             rotationTab.SetSelected(t == LogoTab.Rotation);
             colorTab.SetSelected(t == LogoTab.Color);

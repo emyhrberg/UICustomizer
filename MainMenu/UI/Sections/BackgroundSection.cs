@@ -200,7 +200,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             if (!string.IsNullOrEmpty(filePath))
                 fileText.SetText(filePath);
 
-            // ─── initialise state ───────────────────────────────────────
+            // ─── initialise mainState ───────────────────────────────────────
             hsl = Main.rgbToHsl(BackgroundHook.Color);
             SelectTab(BackgroundTab.Scale);          // show initial controls
         }
@@ -279,7 +279,7 @@ namespace UICustomizer.MainMenu.UI.Sections
         {
             tab = t;
 
-            // visual state for tab buttons
+            // visual mainState for tab buttons
             scaleTab.SetSelected(t == BackgroundTab.Scale);
             rotationTab.SetSelected(t == BackgroundTab.Rotation);
             colorTab.SetSelected(t == BackgroundTab.Color);

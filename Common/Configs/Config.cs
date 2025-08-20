@@ -43,6 +43,8 @@ namespace UICustomizer.Common.Configs
                 return;
             }
 
+            Log.Info("change");
+
             if (!Conf.C.EditMainMenu)
             {
                 var sys = ModContent.GetInstance<MainMenuSystem>();
@@ -52,6 +54,8 @@ namespace UICustomizer.Common.Configs
                     return;
                 }
                 sys.ui.SetState(null);
+
+                Log.Info("State: " + sys.ui.CurrentState);
             }
 
             // ApplyMainMenuTextColor();

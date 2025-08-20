@@ -81,10 +81,10 @@ namespace UICustomizer.MainMenu.UI
                 layerDepth: 0f,
                 alphaMult: alpha
             );
-
             // Optional: Return to main menu on click
             if (hovered && Main.mouseLeft && Main.mouseLeftRelease)
             {
+                Conf.C.SaveChanges();
                 Main.menuMode = 0;
                 SoundEngine.PlaySound(Terraria.ID.SoundID.MenuClose);
             }

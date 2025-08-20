@@ -29,7 +29,7 @@ namespace UICustomizer.Edit.UI
             if (sys == null || sys.state == null) return;
 
             // If dragging the UIEditorPanel, dont drag anything else
-            // if (sys.state.editorPanel.dragging || sys.state.editorPanel.resize.draggingResize)
+            // if (sys.mainState.editorPanel.dragging || sys.mainState.editorPanel.resize.draggingResize)
             // return;
 
             // Handle dragging of UI elements

@@ -1,34 +1,34 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
-
-namespace UICustomizer.MainMenu.UI;
+using UICustomizer.MainMenu.UI;
 
 [Autoload(Side = ModSide.Client)]
 internal sealed class MainMenuSystem : ModSystem
 {
     public UserInterface ui;
-    public MainMenuState state;
+    public MainMenuState mainState;
     public MainMenuEyeState eyeState;
 
     public override void PostSetupContent()
     {
-        if (Conf.C is null || !Conf.C.EditMainMenu) return;
 
-        // Initialize the user interface
         ui = new UserInterface();
 
-        // Setup main menu state
-        state = new MainMenuState();
-        eyeState = new MainMenuEyeState();
+        mainState = new();
+        eyeState = new();
 
-        state.eyeToggle.OnLeftClick += (_, _) => ui.SetState(eyeState);
-        eyeState.eyeToggle.OnLeftClick += (_, _) => ui.SetState(state);
+        // Create eye button for both states
+        mainState.eyeButton = new(Ass.Inventory_Tick_On, () => ui.SetState(eyeState));
+        mainState.Append(mainState.eyeButton);
+        eyeState.eyeButton = new(Ass.Inventory_Tick_Off, () => ui.SetState(mainState));
+        eyeState.Append(eyeState.eyeButton);
 
-        // Set the initial state to the main menu state
-        ui.SetState(state);
+        if (Conf.C is not null && Conf.C.EditMainMenu)
+        {
+            ui.SetState(mainState);
+        }
 
-        // Hook into the main menu drawing and updating
         On_Main.DrawVersionNumber += DrawMenuUI;
         On_Main.UpdateUIStates += PostUpdateUIStates;
     }
@@ -36,22 +36,27 @@ internal sealed class MainMenuSystem : ModSystem
     private void DrawMenuUI(On_Main.orig_DrawVersionNumber orig, Color menuColor, float upBump)
     {
         orig(menuColor, upBump);
+
+        if (Conf.C != null && !Conf.C.EditMainMenu) return;
+
         if (Main.gameMenu && Main.menuMode == 0 && ui?.CurrentState != null)
-        {
-            //Main.spriteBatch.Begin(default, default, default, default, default, default, Main.UIScaleMatrix);
             ui.Draw(Main.spriteBatch, new GameTime());
-            //Main.spriteBatch.End();
-        }
     }
 
     private void PostUpdateUIStates(On_Main.orig_UpdateUIStates orig, GameTime gameTime)
     {
-        ui.SetState(null);
+        orig(gameTime);
+
+        if (Conf.C != null && !Conf.C.EditMainMenu)
+        {
+            ui.SetState(null);
+            return;
+        }
 
         if (Main.gameMenu && Main.menuMode == 0)
         {
             if (ui.CurrentState == null)
-                ui.SetState(state);
+                ui.SetState(mainState);
 
             ui.Update(gameTime);
         }
@@ -60,7 +65,6 @@ internal sealed class MainMenuSystem : ModSystem
             ui.SetState(null);
         }
 
-        orig(gameTime);
     }
 
     public override void Unload()
@@ -68,6 +72,7 @@ internal sealed class MainMenuSystem : ModSystem
         On_Main.DrawVersionNumber -= DrawMenuUI;
         On_Main.UpdateUIStates -= PostUpdateUIStates;
         ui = null;
-        state = null;
+        mainState = null;
+        eyeState = null;
     }
 }

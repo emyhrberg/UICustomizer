@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using UICustomizer.MainMenu.Hooks;
@@ -7,14 +8,14 @@ namespace UICustomizer.MainMenu.UI
 {
     public class PlayPause : UIColoredImageButton
     {
-        public bool isPaused = true; // default
+        public bool isPaused = false; // default
 
         public PlayPause() : base(Ass.Pause, true)
         {
             HAlign = 1f;
             Width.Set(22, 0);
             Height.Set(22, 0);
-            Top.Set(3, 0);
+            Top.Set(0, 0);
 
             SetImage(Ass.Pause);
 
@@ -22,6 +23,13 @@ namespace UICustomizer.MainMenu.UI
             {
                 isPaused = !isPaused;
                 SetImage(isPaused ? Ass.Pause : Ass.Play);
+                Conf.C.MainMenuTime.IsPaused = !isPaused;
+
+                if (isPaused)
+                {
+                    Conf.C.MainMenuTime.Time = (float) Main.time;
+                }
+                Conf.Save();
             };
         }
 

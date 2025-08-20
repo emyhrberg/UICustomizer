@@ -9,7 +9,7 @@ namespace UICustomizer.Helpers
 {
     /// <summary>
     /// General colour utilities
-    /// Callers supply any state (HSL vector, UI text, delegates) via parameters.
+    /// Callers supply any mainState (HSL vector, UI text, delegates) via parameters.
     /// </summary>
     public static class ColorHelper
     {

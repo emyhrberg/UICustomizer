@@ -15,7 +15,7 @@ public sealed class MainMenuState : UIState
     // Header Elements
     private UIText headerText;
     private ConfigButton configButton;
-    public EyeButton eyeToggle;
+    public EyeButton eyeButton;
 
     public MainMenuState()
     {
@@ -29,8 +29,9 @@ public sealed class MainMenuState : UIState
         headerText = new("UI Editor", 1.15f) { HAlign = 0.5f, Top = { Pixels = 6f } };
         panel.Append(headerText);
 
-        eyeToggle = new EyeButton(Ass.Inventory_Tick_On);
-        panel.Append(eyeToggle);
+        // Eye button created in parent (MainMenuSystem)
+        //eyeButton = new EyeButton();
+        //panel.Append(eyeButton);
 
         configButton = new ConfigButton(UICommon.ButtonModConfigTexture);
         panel.Append(configButton);

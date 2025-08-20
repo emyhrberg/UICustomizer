@@ -12,9 +12,9 @@ namespace UICustomizer.Edit.UI
     {
         #region Checkboxes
         /// <summary>
-        /// Each checkbox are added here and contains a state in the dictionary.
+        /// Each checkbox are added here and contains a mainState in the dictionary.
         /// A checkbox <see cref="CheckboxElement"/> is created for each of these.
-        /// /// The <see cref="CheckboxElement"/> will update the state of in this dictionary when toggled.
+        /// /// The <see cref="CheckboxElement"/> will update the mainState of in this dictionary when toggled.
         /// </summary>
         public enum Checkbox
         {
