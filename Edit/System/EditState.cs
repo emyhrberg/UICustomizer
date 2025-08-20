@@ -172,6 +172,34 @@ namespace UICustomizer.Edit.System
                 return; // Exit early for this element if no mapping for eye toggle
             }
 
+            // Draw eye toggle (only if mapping was found)
+            if (EditorFlags.ShowLayerToggle)
+            {
+                if (LayerSystem.LayerStates == null)
+                {
+                    return;
+                }
+
+                bool isCurrentlyVisible = LayerSystem.LayerStates.TryGetValue(interfaceLayerName, out bool currentState) ? currentState : true;
+                Rectangle eyeRect = new(rect.X - Ass.Inventory_Tick_On.Width(), rect.Y, Ass.Inventory_Tick_On.Width(), Ass.Inventory_Tick_On.Height());
+
+                if (eyeRect.Contains(Main.mouseX, Main.mouseY))
+                {
+                    sb.Draw(Ass.Inventory_Tick_On.Value, eyeRect, Color.White); // Draw hover icon
+                    if (Main.mouseLeft && Main.mouseLeftRelease)
+                    {
+                        isCurrentlyVisible = !isCurrentlyVisible;
+                        // Use interfaceLayerName (from mapping) as the key for LayerSystem.LayerStates
+                        LayerSystem.LayerStates[interfaceLayerName] = isCurrentlyVisible;
+                        Main.mouseLeftRelease = false;
+                    }
+                }
+                else // Only draw the normal eye if not hovering
+                {
+                    sb.Draw(isCurrentlyVisible ? Ass.Inventory_Tick_On.Value : Ass.Inventory_Tick_Off.Value, eyeRect, Color.White);
+                }
+            }
+
             // Draw names of the UI elements
             // Use interfaceLayerName if available and ShowNames is true, otherwise use element.ToString()
             if (EditorFlags.ShowNames)

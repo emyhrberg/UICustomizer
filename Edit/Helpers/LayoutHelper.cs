@@ -13,8 +13,6 @@ namespace UICustomizer.Edit.Helpers
 {
     public static class LayoutHelper
     {
-        public static string CurrentLayoutName { get; set; } = "Vanilla";
-
         #region save layouts
 
         public static void WriteLayoutFile(string layoutName, LayoutData data)
@@ -47,6 +45,48 @@ namespace UICustomizer.Edit.Helpers
             {
                 Log.Error($"Failed to write layout '{layoutName}': {ex.Message}");
             }
+        }
+
+        public static void SaveCurrentAs(string layoutName, bool setAsActiveInConfig = true)
+        {
+            if (string.IsNullOrWhiteSpace(layoutName))
+                layoutName = "CustomLayout";
+
+            GetActiveResourceTheme(out ResourceTheme currentTheme);
+            GetActiveMapTheme(out MapTheme mapTheme);
+
+            var data = new LayoutData
+            {
+                ResourceTheme = currentTheme,
+                MapTheme = mapTheme,
+                Offsets = new Dictionary<Element, Vector2>
+                {
+                    [Element.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Element.Hotbar] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Element.Map] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
+                    [Element.InfoAccs] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Element.ClassicLife] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Element.ClassicMana] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Element.FancyLife] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Element.FancyMana] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Element.HorizontalBars] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Element.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Element.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Element.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY)
+                }
+            };
+
+            WriteLayoutFile(layoutName, data);
+
+            if (setAsActiveInConfig)
+            {
+                var cfg = ModContent.GetInstance<Config>();
+                cfg.Layout = layoutName;
+                Terraria.ModLoader.Config.ConfigManager.Save(cfg);
+            }
+
+            Log.Info($"Saved layout '{layoutName}' with resource theme '{currentTheme}' and map theme '{mapTheme}'.");
         }
 
         #endregion
@@ -97,6 +137,7 @@ namespace UICustomizer.Edit.Helpers
                 Log.Error($"Error applying layout '{layoutName}': {ex.Message}");
             }
         }
+
         public static void TryApplyLayoutFromConfig()
         {
             var cfg = ModContent.GetInstance<Config>();
@@ -117,18 +158,25 @@ namespace UICustomizer.Edit.Helpers
 
         #endregion
 
-        public static void SaveCurrentAs(string layoutName, bool setAsActiveInConfig = true)
+        public static void CreateAndOpenNewLayoutFile(string layoutName)
         {
-            if (string.IsNullOrWhiteSpace(layoutName))
-                layoutName = "CustomLayout";
+            string basePath = FileHelper.GetLayoutFilePath(layoutName);
+            string path = basePath;
+            int counter = 1;
 
+            // Generate unique filename if needed
+            while (File.Exists(path))
+            {
+                path = FileHelper.GetLayoutFilePath($"{layoutName}{counter}");
+                counter++;
+            }
+
+            // Get current theme and positions
             GetActiveResourceTheme(out ResourceTheme currentTheme);
-            GetActiveMapTheme(out MapTheme mapTheme);
 
-            var data = new LayoutData
+            var layoutData = new LayoutData
             {
                 ResourceTheme = currentTheme,
-                MapTheme = mapTheme,
                 Offsets = new Dictionary<Element, Vector2>
                 {
                     [Element.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
@@ -143,20 +191,13 @@ namespace UICustomizer.Edit.Helpers
                     [Element.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
                     [Element.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
                     [Element.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
-                    [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY)
+                    [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY),
                 }
             };
 
-            WriteLayoutFile(layoutName, data);
+            LayoutHelper.WriteLayoutFile(Path.GetFileNameWithoutExtension(path), layoutData);
 
-            if (setAsActiveInConfig)
-            {
-                var cfg = ModContent.GetInstance<Config>();
-                cfg.Layout = layoutName;
-                Terraria.ModLoader.Config.ConfigManager.Save(cfg);
-            }
-
-            Log.Info($"Saved layout '{layoutName}' with resource theme '{currentTheme}' and map theme '{mapTheme}'.");
+            FileHelper.OpenFileAtPath(path);
         }
 
         private static void ApplyPositions(Dictionary<Element, Vector2> positions)

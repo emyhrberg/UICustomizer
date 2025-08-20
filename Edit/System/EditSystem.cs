@@ -31,6 +31,7 @@ namespace UICustomizer.Edit.System
             editState = new();
             ui.SetState(editState);
 
+            ExampleLayouts.CreateAllExampleLayouts();
             LayoutHelper.TryApplyLayoutFromConfig();
         }
 
