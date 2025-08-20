@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.EditMode.Helpers;
+using UICustomizer.Edit.Helpers;
+using UICustomizer.Edit.System;
 
-namespace UICustomizer.Edit.UI; 
+namespace UICustomizer.Edit.UI.Subpanels;
 internal sealed class LayoutsPanel : UIPanel
 {
     public LayoutsPanel()
@@ -16,7 +20,7 @@ internal sealed class LayoutsPanel : UIPanel
 
         Width.Set(360, 0);
         Height.Set(260, 0);
-        Left.Set(70, 0);
+        Left.Set(90, 0);
         Top.Set(0, 0);
         SetPadding(8);
 
@@ -27,41 +31,41 @@ internal sealed class LayoutsPanel : UIPanel
     {
         RemoveAllChildren();
 
-        float y = 4;
+        float y = 4f;
 
-        // Active layout
-        Append(MakeButton("Use Active", "Switch to Active layout", () =>
-        {
-            TryCall(() => LayoutHelper.ApplyLayout("Active"));
-            TryCall(() => LayoutHelper.CurrentLayoutName = "Active");
-            TryCall(() => LayoutHelper.SaveLastLayout());
-        }, y));
-        y += 28;
-
-        // Presets
-        Append(new UIText("Presets", 0.9f) { Top = { Pixels = y }, Left = { Pixels = 6 } });
-        y += 20;
+        Append(new UIText("Layouts", 0.9f) { Top = { Pixels = y }, Left = { Pixels = 6 } });
+        y += 18f;
+        var line = new Underline(thickness: 2f, horizontalInset: 6f);
+        line.Top.Pixels = y;
+        Append(line);
+        y += 8f;
 
         var names = TryGetLayouts() ?? new List<string>();
-        foreach (var name in names.Where(n => !string.Equals(n, "Active", StringComparison.OrdinalIgnoreCase)))
+        foreach (var name in names)
         {
             Append(MakeButton(name, "Apply this layout", () =>
             {
                 TryCall(() => LayoutHelper.ApplyLayout(name));
-                TryCall(() => LayoutHelper.CurrentLayoutName = name);
-                TryCall(() => LayoutHelper.SaveLastLayout());
             }, y));
-
-            y += 26;
+            y += 26f;
         }
 
-        y += 6;
+        y += 6f;
         Append(new UIText("Options", 0.9f) { Top = { Pixels = y }, Left = { Pixels = 6 } });
-        y += 20;
+        y += 18f;
+        line.Top.Pixels = y;
+        Append(line);
+        y += 8f;
 
-        Append(MakeButton("Open layout folder", "Open layout folder", () => TryCall(FileHelper.OpenLayoutFolder), y)); y += 26;
-        Append(MakeButton("Save as new layout", "Create a new layout file", () => TryCall(() => FileHelper.CreateAndOpenNewLayoutFile("MyCustomLayout")), y)); y += 26;
-        Append(MakeButton("Remove all layouts", "Delete all layouts", () => TryCall(FileHelper.DeleteAllLayouts), y)); y += 26;
+        Append(MakeButton("Open layout folder", "Open layout folder", () => TryCall(FileHelper.OpenLayoutFolder), y)); y += 26f;
+
+        Append(MakeButton(
+            "Save layout",
+            "Save current positions to a new layout and set it in config",
+            () => TryCall(() => LayoutHelper.SaveCurrentAs("MyCustomLayout", setAsActiveInConfig: true)),
+            y
+        ));
+        y += 26f;
     }
 
     private UIElement MakeButton(string text, string tip, Action onClick, float y)
@@ -94,5 +98,18 @@ internal sealed class LayoutsPanel : UIPanel
     private static List<string> TryGetLayouts()
     {
         try { return FileHelper.GetLayouts().ToList(); } catch { return null; }
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        BackgroundColor = ColorHelper.DarkBluePanel * 0.75f;
+        BorderColor = Color.Black * 0.45f;
+
+        base.Draw(spriteBatch);
+    }
+
+    public override void LeftClick(UIMouseEvent evt)
+    {
+        base.LeftClick(evt);
     }
 }

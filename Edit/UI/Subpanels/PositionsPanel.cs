@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Humanizer;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.EditMode.Hooks;
+using UICustomizer.Edit.Helpers;
+using UICustomizer.Edit.Hooks;
+using UICustomizer.Edit.System;
 
-namespace UICustomizer.Edit.UI;
+namespace UICustomizer.Edit.UI.Subpanels;
 
 internal sealed class PositionsPanel : UIPanel
 {
@@ -16,24 +17,47 @@ internal sealed class PositionsPanel : UIPanel
 
     public PositionsPanel()
     {
-        BorderColor = new Color(89, 116, 213) * 0.9f;
-        BackgroundColor = new Color(73, 94, 171) * 0.9f;
-
         Width.Set(520, 0);
         Height.Set(420, 0);
-        Left.Set(70, 0);
+        Left.Set(90, 0);
         Top.Set(0, 0);
         SetPadding(8);
 
-        float y = 6f;
+        Build();
+    }
+
+    private void Build()
+    {
+        var header = new UIText("Positions", 0.9f) { Left = { Pixels = 6 }, Top = { Pixels = 4 } };
+        Append(header);
+
+        var resetAll = new UIPanel
+        {
+            Width = { Pixels = 90 },
+            Height = { Pixels = 20 },
+            HAlign = 1f,
+            Top = { Pixels = 2 },
+            BackgroundColor = new Color(100, 40, 40) * 0.7f,
+            BorderColor = new Color(150, 60, 60)
+        };
+        resetAll.SetPadding(0);
+        resetAll.Append(new UIText("Reset All", 0.75f) { HAlign = 0.5f, VAlign = 0.5f, TextColor = Color.White });
+        resetAll.OnLeftClick += (_, _) => LayoutHelper.ResetAllOffsets();
+        resetAll.OnMouseOver += (_, _) => resetAll.BackgroundColor = new Color(150, 50, 50) * 0.9f;
+        resetAll.OnMouseOut += (_, _) => resetAll.BackgroundColor = new Color(100, 40, 40) * 0.7f;
+        Append(resetAll);
+
+        var underline = MakeUnderline(24);
+        Append(underline);
+
+        float y = 34f;
         void AddLine(string name, Func<int> getX, Func<int> getY, Action<int, int> resetXY)
         {
             const float lineH = 22f;
             var nameTxt = new UIText($"{name}:", 0.8f) { Left = { Pixels = 0 }, Top = { Pixels = y } };
             Append(nameTxt);
 
-            var coord = new UIText($"({getX()}, {getY()})", 0.8f)
-            { Left = { Pixels = 80 }, Top = { Pixels = y } };
+            var coord = new UIText($"({getX()}, {getY()})", 0.8f) { Left = { Pixels = 80 }, Top = { Pixels = y } };
             _coordTexts.Add(coord);
             Append(coord);
 
@@ -74,6 +98,22 @@ internal sealed class PositionsPanel : UIPanel
         AddLine("CraftWindow", () => (int)CraftWindowHook.OffsetX, () => (int)CraftWindowHook.OffsetY, (x, y) => { CraftWindowHook.OffsetX = x; CraftWindowHook.OffsetY = y; });
     }
 
+    private UIElement MakeUnderline(float top)
+    {
+        var line = new UIImage(TextureAssets.MagicPixel)
+        {
+            Left = { Pixels = 6 },
+            Top = { Pixels = top },
+            Width = { Percent = 1f, Pixels = -12 },
+            Height = { Pixels = 1 }
+        };
+        line.ScaleToFit = true;      // stretch to the assigned Width/Height
+        line.ImageScale = 1f;        // no additional scaling
+        line.Color = Color.White;    // white line
+        line.IgnoresMouseInteraction = true;
+        return line;
+    }
+
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -104,5 +144,18 @@ internal sealed class PositionsPanel : UIPanel
         Refresh(() => (int)CraftingHook.OffsetX, () => (int)CraftingHook.OffsetY);
         Refresh(() => (int)AccessoriesHook.OffsetX, () => (int)AccessoriesHook.OffsetY);
         Refresh(() => (int)CraftWindowHook.OffsetX, () => (int)CraftWindowHook.OffsetY);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        BackgroundColor = ColorHelper.DarkBluePanel * 0.75f;
+        BorderColor = Color.Black*0.45f;
+
+        base.Draw(spriteBatch);
+    }
+
+    public override void LeftClick(UIMouseEvent evt)
+    {
+        base.LeftClick(evt);
     }
 }

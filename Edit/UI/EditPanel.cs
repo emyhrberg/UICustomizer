@@ -1,12 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Edit.UI;
-using UICustomizer.EditMode.System;
+using UICustomizer.Edit.System;
+using UICustomizer.Edit.UI.Subpanels;
 
-namespace UICustomizer.EditMode.UI;
+namespace UICustomizer.Edit.UI;
 public sealed class EditPanel : UIPanel
 {
     private enum Subpanel { None, Positions, Layouts, Settings }
@@ -22,13 +21,11 @@ public sealed class EditPanel : UIPanel
     private Subpanel _active;
 
     private const int IconSize = 40;
-    private static readonly Point SubPanelPos = new(70, 0);
-    private static readonly Point SubPanelSize = new(300, 300);
 
     public EditPanel()
     {
         Width.Set(50, 0);
-        Top.Set(785, 0);
+        Top.Set(600, 0);
         Left.Set(20, 0);
         Height.Set(6 + IconSize + 6 + IconSize + 6 + IconSize + 6, 0);
         SetPadding(0);
@@ -81,11 +78,26 @@ public sealed class EditPanel : UIPanel
         _btnSettings.SetSelected(false);
 
         UIPanel panelToShow = null;
+        Vector2 pos = new(90, 450);
+        Vector2 size = new(0,0);
+
         switch (target)
         {
-            case Subpanel.Positions: panelToShow = _positions; _btnPositions.SetSelected(true); break;
-            case Subpanel.Layouts: panelToShow = _layouts; _btnLayouts.SetSelected(true); break;
-            case Subpanel.Settings: panelToShow = _settings; _btnSettings.SetSelected(true); break;
+            case Subpanel.Positions:
+                panelToShow = _positions;
+                _btnPositions.SetSelected(true);
+                size = new(250, 400);
+                break;
+            case Subpanel.Layouts:
+                panelToShow = _layouts;
+                _btnLayouts.SetSelected(true);
+                size = new(250, 200);
+                break;
+            case Subpanel.Settings:
+                panelToShow = _settings;
+                _btnSettings.SetSelected(true);
+                size = new(250, 200);
+                break;
         }
 
         if (panelToShow != null)
@@ -93,13 +105,14 @@ public sealed class EditPanel : UIPanel
             var sys = ModContent.GetInstance<EditSystem>();
             sys.editState.Append(panelToShow);
 
-            Vector2 SubPanelPos = new(70, 600);
-            Vector2 SubPanelSize = new(285, 390);
+            panelToShow.Left.Set(pos.X, 0f);
+            panelToShow.Top.Set(pos.Y, 0f);
+            panelToShow.Width.Set(size.X, 0f);
+            panelToShow.Height.Set(size.Y, 0f);
 
-            panelToShow.Left.Set(SubPanelPos.X, 0f);
-            panelToShow.Top.Set(SubPanelPos.Y, 0f);
-            panelToShow.Width.Set(SubPanelSize.X, 0f);
-            panelToShow.Height.Set(SubPanelSize.Y, 0f);
+            this.Remove();
+            sys.editState.Append(this);
+
             _active = target;
         }
     }
@@ -119,6 +132,8 @@ public sealed class EditPanel : UIPanel
         var sys = ModContent.GetInstance<EditSystem>();
         if (!sys.Enabled)
             return;
+
+        Top.Set(600, 0);
 
         base.Draw(spriteBatch);
     }

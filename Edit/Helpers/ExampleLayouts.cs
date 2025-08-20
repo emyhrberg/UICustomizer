@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.IO;
-using static UICustomizer.EditMode.Helpers.ElementHelper;
-using static UICustomizer.EditMode.Helpers.MapThemeHelper;
-using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
+using static UICustomizer.Edit.Helpers.ElementHelper;
+using static UICustomizer.Edit.Helpers.MapThemeHelper;
+using static UICustomizer.Edit.Helpers.ResourceThemeHelper;
 
-namespace UICustomizer.EditMode.Helpers
+namespace UICustomizer.Edit.Helpers
 {
-    public static class DefaultLayouts
+    public static class ExampleLayouts
     {
-        public static void CreateAllDefaultLayouts()
+        public static void CreateAllExampleLayouts()
         {
             // Ensure the layouts folder exists
             string layoutsFolder = FileHelper.GetLayoutsFolderPath();
@@ -17,17 +17,16 @@ namespace UICustomizer.EditMode.Helpers
                 Directory.CreateDirectory(layoutsFolder);
             }
 
-            CreateDefaultLayout();
+            CreateVanillaLayout();
             CreateHotbarCenteredLayout();
             CreateMapLeftLayout();
             CreateMinecraftLayout();
             CreateMirrorLayout();
-            CreateLastLayoutFile();
         }
 
-        private static void CreateDefaultLayout()
+        private static void CreateVanillaLayout()
         {
-            const string layoutName = "Default";
+            const string layoutName = "Vanilla";
 
             string defaultPath = FileHelper.GetLayoutFilePath(layoutName);
             if (!File.Exists(defaultPath))
@@ -154,9 +153,7 @@ namespace UICustomizer.EditMode.Helpers
                         [Element.Accessories] = new Vector2(0, 0)
                     }
                 };
-                Log.Info($"Creating layout: {layoutName}");
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
-                Log.Info($"Created layout: {layoutName}");
             }
         }
 
@@ -189,9 +186,7 @@ namespace UICustomizer.EditMode.Helpers
                         [Element.Accessories] = new Vector2(0, 0)
                     }
                 };
-                Log.Info($"Creating layout: {layoutName}");
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
-                Log.Info($"Created layout: {layoutName}");
             }
         }
 
@@ -224,22 +219,7 @@ namespace UICustomizer.EditMode.Helpers
                         [Element.Accessories] = new Vector2(0, 0)
                     }
                 };
-                Log.Info($"Creating layout: {layoutName}");
                 LayoutHelper.WriteLayoutFile(layoutName, layoutData);
-                Log.Info($"Created layout: {layoutName}");
-            }
-        }
-
-        private static void CreateLastLayoutFile()
-        {
-            string directory = FileHelper.GetLayoutsFolderPath();
-            string lastLayoutPath = Path.Combine(directory, "LastLayout.txt");
-
-            // If it doesn't exist, create it with a default value
-            if (!File.Exists(lastLayoutPath))
-            {
-                File.WriteAllText(lastLayoutPath, "Default");
-                LayoutHelper.CurrentLayoutName = "Default";
             }
         }
     }

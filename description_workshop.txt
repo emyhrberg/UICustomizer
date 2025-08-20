@@ -1,17 +1,15 @@
-﻿[h1] UI Editor [/h1] 
-This mod allows you to move all UI: the hotbar, chat, map, health, mana, and buff positions can now be set to a new position of your choosing. The mod is client-sided.
+﻿[h1] UI Editor – Customize Your Game ✨ [/h1]  
+Want a cleaner, more personal setup? With **UI Editor** you can drag, drop, and move all the game menus exactly where you want them.  
+Hotbar, chat, map, health, mana, buffs - arrange everything to fit your style.  
 
-[h2] Features [/h2] 
-[list]
-[*] [b]UI Editor:[/b] Use dragging to move all vanilla UI to your desired position and save.
-[*] [b]Layouts:[/b] After finding a layout you like, you can save it for later use and even share it with your friends!
-[*] [b]Toggle Resource Packs:[/b] Easily enable and disable resource packs while in a world without exiting!
-[/list]
+[h2] 🌟 Drag & Drop UI [/h2]  
+Move everything with your mouse and lock in your style. Your layouts save automatically, and you can even share your favorite layouts with your friends! 🤝  
 
-[h2] Support [/h2]
-[list]
-[*] Source code hosted at [url=https://github.com/emyhrberg/UICustomizer] GitHub [/url] (currently private)
-[*] Got questions or suggestions? Join our [url=https://discord.gg/6ykWs5uS] Discord Server [/url]
-[*] Wish to support me and my mods? You can do so at my [url=https://ko-fi.com/erkyy] Ko-Fi page [/url]
-[*] Thanks to [url=https://steamcommunity.com/id/thraaks/]thraaks[/url] for making the icon!
-[/list]
+[h2] 🌟 Resource Pack Toggler [/h2]  
+Enable or disable resource packs instantly while in a world – no restart needed. ⚡  
+
+[h3] ❤️ Credits [/h3]  
+Thanks to [url=https://steamcommunity.com/id/thraaks/]thraaks[/url] for the icon and sprites! 🎨  
+
+[h3] ❤️ Support the Project [/h3]  
+👉 [url=https://github.com/emyhrberg/AdvancedChatFeatures] GitHub [/url] | 💬 [url=https://discord.gg/JWbYUktRPV] Discord [/url] | ☕ [url=https://ko-fi.com/erkyy] Ko-Fi [/url]  

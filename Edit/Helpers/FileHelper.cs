@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Terraria;
-using UICustomizer.EditMode.Hooks;
-using static UICustomizer.EditMode.Helpers.ElementHelper;
-using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
+using UICustomizer.Edit.Hooks;
+using static UICustomizer.Edit.Helpers.ElementHelper;
 
-namespace UICustomizer.EditMode.Helpers
+namespace UICustomizer.Edit.Helpers
 {
     /// <summary>
     /// Handles file I/O operations for UICustomizer layouts.
@@ -30,21 +29,6 @@ namespace UICustomizer.EditMode.Helpers
             return Path.Combine(folder, $"{layoutName}.json");
         }
 
-        public static string GetLastLayoutFilePath()
-        {
-            return Path.Combine(GetLayoutsFolderPath(), "LastLayout.txt");
-        }
-
-        public static string LoadLastLayoutName()
-        {
-            string lastPath = GetLastLayoutFilePath();
-            if (!File.Exists(lastPath))
-                return "Default";
-
-            string text = File.ReadAllText(lastPath).Trim();
-            return string.IsNullOrEmpty(text) ? "Default" : text;
-        }
-
         #region file operations
 
         public static void CreateAndOpenNewLayoutFile(string layoutName)
@@ -61,7 +45,7 @@ namespace UICustomizer.EditMode.Helpers
             }
 
             // Get current theme and positions
-            ResourceThemeHelper.GetActiveResourceTheme(out ResourceTheme currentTheme);
+            ResourceThemeHelper.GetActiveResourceTheme(out ResourceThemeHelper.ResourceTheme currentTheme);
 
             var layoutData = new LayoutData
             {
@@ -86,7 +70,6 @@ namespace UICustomizer.EditMode.Helpers
 
             LayoutHelper.WriteLayoutFile(Path.GetFileNameWithoutExtension(path), layoutData);
 
-            // Open the newly created file
             try
             {
                 Process.Start(new ProcessStartInfo
@@ -139,50 +122,6 @@ namespace UICustomizer.EditMode.Helpers
                 Log.Warn($"Layouts folder does not exist: {folder}");
             }
         }
-
-        public static void OpenLayoutFile(string layoutName)
-        {
-            string path = GetLayoutFilePath(layoutName);
-            if (!File.Exists(path))
-            {
-                Log.Warn($"Layout file '{layoutName}.json' not found.");
-                return;
-            }
-
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Failed to open layout file: {ex.Message}");
-            }
-        }
-
-        public static void DeleteAllLayouts()
-        {
-            string folder = GetLayoutsFolderPath();
-            if (!Directory.Exists(folder))
-                return;
-
-            try
-            {
-                foreach (var file in Directory.GetFiles(folder, "*.json"))
-                {
-                    File.Delete(file);
-                }
-                Log.Info("All layouts deleted successfully.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error deleting layouts: {ex.Message}");
-            }
-        }
-
         #endregion
     }
 }

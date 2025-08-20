@@ -5,6 +5,7 @@ Configs: {
 		Headers: {
 			MainMenu: Main Menu
 			Misc: Misc
+			UIEditor: UI Editor
 		}
 
 		EditMainMenu: {
@@ -84,6 +85,11 @@ Configs: {
 		MainMenuBackground: {
 			Label: Background
 			Tooltip: ""
+		}
+
+		Layout: {
+			Label: Layout
+			Tooltip: The active layout file name. Open the Layouts folder to view and edit all layouts.
 		}
 	}
 

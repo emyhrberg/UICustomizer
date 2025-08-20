@@ -1,17 +1,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.EditMode.System;
+using UICustomizer.Edit.System;
 
-namespace UICustomizer.EditMode.UI
+namespace UICustomizer.Edit.UI
 {
     public class EditToggleButton : UIImage
     {
-        public EditToggleButton() : base(Ass.EditorIcon)
+        public EditToggleButton() : base(Ass.EditorIconSmall)
         {
             // Size
             ImageScale = 1f;

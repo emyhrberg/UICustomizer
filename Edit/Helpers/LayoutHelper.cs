@@ -3,55 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using UICustomizer.EditMode.Hooks;
-using static UICustomizer.EditMode.Helpers.ElementHelper;
-using static UICustomizer.EditMode.Helpers.MapThemeHelper;
-using static UICustomizer.EditMode.Helpers.ResourceThemeHelper;
+using Terraria.ModLoader;
+using UICustomizer.Edit.Hooks;
+using static UICustomizer.Edit.Helpers.ElementHelper;
+using static UICustomizer.Edit.Helpers.MapThemeHelper;
+using static UICustomizer.Edit.Helpers.ResourceThemeHelper;
 
-namespace UICustomizer.EditMode.Helpers
+namespace UICustomizer.Edit.Helpers
 {
     public static class LayoutHelper
     {
-        public static string CurrentLayoutName { get; set; } = "Default";
+        public static string CurrentLayoutName { get; set; } = "Vanilla";
 
         #region save layouts
 
-        public static void SaveActiveLayout()
-        {
-            string layoutName = "Active";
-
-            ResourceThemeHelper.GetActiveResourceTheme(out ResourceTheme currentTheme);
-            MapThemeHelper.GetActiveMapTheme(out MapTheme mapTheme);
-
-            var layoutData = new LayoutData
-            {
-                ResourceTheme = currentTheme,
-                MapTheme = mapTheme,
-                Offsets = new Dictionary<Element, Vector2>
-                {
-                    [Element.Chat] = new(ChatHook.OffsetX, ChatHook.OffsetY),
-                    [Element.Hotbar] = new(HotbarHook.OffsetX, HotbarHook.OffsetY),
-                    [Element.Map] = new(MapHook.OffsetX, MapHook.OffsetY),
-                    [Element.InfoAccs] = new(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
-                    [Element.ClassicLife] = new(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
-                    [Element.ClassicMana] = new(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
-                    [Element.FancyLife] = new(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
-                    [Element.FancyMana] = new(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
-                    [Element.HorizontalBars] = new(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
-                    [Element.BarLifeText] = new(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
-                    [Element.BarManaText] = new(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
-                    [Element.Buffs] = new(BuffHook.OffsetX, BuffHook.OffsetY),
-                    [Element.Inventory] = new(InventoryHook.OffsetX, InventoryHook.OffsetY),
-                }
-            };
-
-            WriteLayoutFile(layoutName, layoutData);
-            CurrentLayoutName = layoutName;
-            SaveLastLayout();
-            Log.Info($"Saved layout '{layoutName}' with life theme '{currentTheme}'.");
-        }
-
-        // Emojis.
         public static void WriteLayoutFile(string layoutName, LayoutData data)
         {
             try
@@ -81,14 +46,7 @@ namespace UICustomizer.EditMode.Helpers
             catch (Exception ex)
             {
                 Log.Error($"Failed to write layout '{layoutName}': {ex.Message}");
-                Log.Error($"Stack trace: {ex.StackTrace}");
             }
-        }
-
-        public static void SaveLastLayout()
-        {
-            string lastPath = FileHelper.GetLastLayoutFilePath();
-            File.WriteAllText(lastPath, CurrentLayoutName);
         }
 
         #endregion
@@ -107,48 +65,98 @@ namespace UICustomizer.EditMode.Helpers
             {
                 string json = File.ReadAllText(path);
 
-                // Try to deserialize as new format first
                 var layoutData = JsonConvert.DeserializeObject<LayoutData>(json);
                 Dictionary<Element, Vector2> positions;
-                ResourceTheme resourceTheme = ResourceTheme.Classic; // Default fallback
-                MapTheme mapTheme = MapTheme.Default; // Default fallback
+                ResourceTheme resourceTheme = ResourceTheme.Classic;
+                MapTheme mapTheme = MapTheme.Default;
 
                 if (layoutData?.Offsets != null)
                 {
-                    // New format - extract positions and themes from layout data
                     positions = layoutData.Offsets.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-                    // Use the SAVED themes from the layout, not current themes
                     resourceTheme = layoutData.ResourceTheme;
                     mapTheme = layoutData.MapTheme;
                 }
                 else
                 {
-                    // Legacy format - just positions, use defaults for themes
                     positions = JsonConvert.DeserializeObject<Dictionary<Element, Vector2>>(json);
                     if (positions == null)
                     {
                         Log.Error($"Failed to parse '{layoutName}.json'.");
                         return;
                     }
-                    // Keep default themes for legacy layouts
                 }
 
-                // Apply the SAVED themes from the layout
                 SetResourceTheme(resourceTheme);
                 SetMapTheme(mapTheme);
-
-                // Apply positions
                 ApplyPositions(positions);
 
-                CurrentLayoutName = layoutName;
                 Log.Info($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.");
-                //Main.NewText($"Applied layout '{layoutName}' with resource theme '{resourceTheme}' and map theme '{mapTheme}'.", OutlineColor.LightGreen);
             }
             catch (Exception ex)
             {
                 Log.Error($"Error applying layout '{layoutName}': {ex.Message}");
             }
+        }
+        public static void TryApplyLayoutFromConfig()
+        {
+            var cfg = ModContent.GetInstance<Config>();
+            string name = cfg.Layout;
+
+            if (string.IsNullOrWhiteSpace(name))
+                return;
+
+            string path = FileHelper.GetLayoutFilePath(name);
+            if (!File.Exists(path))
+            {
+                Log.Warn($"Configured layout '{name}' not found.");
+                return;
+            }
+
+            ApplyLayout(name);
+        }
+
+        #endregion
+
+        public static void SaveCurrentAs(string layoutName, bool setAsActiveInConfig = true)
+        {
+            if (string.IsNullOrWhiteSpace(layoutName))
+                layoutName = "CustomLayout";
+
+            GetActiveResourceTheme(out ResourceTheme currentTheme);
+            GetActiveMapTheme(out MapTheme mapTheme);
+
+            var data = new LayoutData
+            {
+                ResourceTheme = currentTheme,
+                MapTheme = mapTheme,
+                Offsets = new Dictionary<Element, Vector2>
+                {
+                    [Element.Chat] = new Vector2(ChatHook.OffsetX, ChatHook.OffsetY),
+                    [Element.Hotbar] = new Vector2(HotbarHook.OffsetX, HotbarHook.OffsetY),
+                    [Element.Map] = new Vector2(MapHook.OffsetX, MapHook.OffsetY),
+                    [Element.InfoAccs] = new Vector2(InfoAccsHook.OffsetX, InfoAccsHook.OffsetY),
+                    [Element.ClassicLife] = new Vector2(ClassicLifeHook.OffsetX, ClassicLifeHook.OffsetY),
+                    [Element.ClassicMana] = new Vector2(ClassicManaHook.OffsetX, ClassicManaHook.OffsetY),
+                    [Element.FancyLife] = new Vector2(FancyLifeHook.OffsetX, FancyLifeHook.OffsetY),
+                    [Element.FancyMana] = new Vector2(FancyManaHook.OffsetX, FancyManaHook.OffsetY),
+                    [Element.HorizontalBars] = new Vector2(HorizontalBarsHook.OffsetX, HorizontalBarsHook.OffsetY),
+                    [Element.BarLifeText] = new Vector2(BarLifeTextHook.OffsetX, BarLifeTextHook.OffsetY),
+                    [Element.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
+                    [Element.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
+                    [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY)
+                }
+            };
+
+            WriteLayoutFile(layoutName, data);
+
+            if (setAsActiveInConfig)
+            {
+                var cfg = ModContent.GetInstance<Config>();
+                cfg.Layout = layoutName;
+                Terraria.ModLoader.Config.ConfigManager.Save(cfg);
+            }
+
+            Log.Info($"Saved layout '{layoutName}' with resource theme '{currentTheme}' and map theme '{mapTheme}'.");
         }
 
         private static void ApplyPositions(Dictionary<Element, Vector2> positions)
@@ -181,12 +189,6 @@ namespace UICustomizer.EditMode.Helpers
             { InventoryHook.OffsetX = (int)inv.X; InventoryHook.OffsetY = (int)inv.Y; }
         }
 
-        public static void LoadLastLayout()
-        {
-            string lastLayoutName = FileHelper.LoadLastLayoutName();
-            ApplyLayout(lastLayoutName);
-        }
-        #endregion
         public static void ResetAllOffsets()
         {
             ChatHook.OffsetX = ChatHook.OffsetY = 0f;
@@ -206,9 +208,6 @@ namespace UICustomizer.EditMode.Helpers
             CraftingHook.OffsetX = CraftingHook.OffsetY = 0f;
             AccessoriesHook.OffsetX = AccessoriesHook.OffsetY = 0f;
             CraftWindowHook.OffsetX = CraftWindowHook.OffsetY = 0f;
-
-            // Write to active layout
-            SaveActiveLayout();
         }
     }
 }

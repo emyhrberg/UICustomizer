@@ -2,7 +2,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.EditMode.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     public class CraftWindowHook : ModSystem
     {

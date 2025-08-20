@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.ModLoader;
 
-namespace UICustomizer.EditMode.Hooks
+namespace UICustomizer.Edit.Hooks
 {
     public class ClassicLifeHook : ModSystem
     {

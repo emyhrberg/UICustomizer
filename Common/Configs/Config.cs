@@ -10,6 +10,11 @@ namespace UICustomizer.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
+        [Header("UIEditor")]
+
+        [DefaultValue("")]
+        public string Layout;
+
         [Header("MainMenu")]
 
         [DefaultValue(true)]

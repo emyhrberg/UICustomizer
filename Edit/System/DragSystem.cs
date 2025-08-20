@@ -3,10 +3,10 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using UICustomizer.EditMode.Helpers;
-using UICustomizer.EditMode.Hooks;
+using UICustomizer.Edit.Helpers;
+using UICustomizer.Edit.Hooks;
 
-namespace UICustomizer.EditMode.System
+namespace UICustomizer.Edit.System
 {
     public class DragSystem : ModSystem
     {
@@ -105,11 +105,6 @@ namespace UICustomizer.EditMode.System
                 {
                     Main.LocalPlayer.mouseInterface = true;
                 }
-
-                // Force switch to "active" layout
-                LayoutHelper.CurrentLayoutName = "Active";
-                var sys = ModContent.GetInstance<EditSystem>();
-                //sys.state.editorPanel.layoutsTab.Populate();
             }
 
             /* update drag (new offset for the element by modifying its offset using ref) */
@@ -121,7 +116,7 @@ namespace UICustomizer.EditMode.System
                 offsetY = offsetStart.Y + deltaUI.Y;
 
                 // only snap if the user has Snap enabled
-                //if (EditorTabSettings.SnapToEdges)
+                if (EditorFlags.SnapToEdges)
                 {
                     SnapToEdges(ref offsetX, ref offsetY, bounds, threshold: 10);
                 }
@@ -130,7 +125,6 @@ namespace UICustomizer.EditMode.System
                 {
                     // End drag
                     dragSource = null;
-                    LayoutHelper.SaveActiveLayout();
                 }
             }
         }
@@ -186,7 +180,7 @@ namespace UICustomizer.EditMode.System
             int h = 55;
 
             // Set width
-            //if (EditorTabSettings.FitBounds)
+            if (EditorFlags.FitBounds)
             {
                 int c = 0; // buff count active
                 foreach (var b in Main.LocalPlayer.buffType)
@@ -232,7 +226,7 @@ namespace UICustomizer.EditMode.System
         {
             int h = 35;
 
-            //if (EditorTabSettings.FitBounds)
+            if (EditorFlags.FitBounds)
             {
                 int shown = 0;
 
@@ -364,7 +358,7 @@ namespace UICustomizer.EditMode.System
             int w = 125; // default width
             int y = (int)(570 - h + CraftingHook.OffsetY);
 
-            //if (EditorTabSettings.FitBounds)
+            if (EditorFlags.FitBounds)
             {
                 // Variables
                 int heightCount = Main.numAvailableRecipes;
@@ -431,7 +425,7 @@ namespace UICustomizer.EditMode.System
             int x = (int)(Main.screenWidth / multiplier - 230 + AccessoriesHook.OffsetX);
             int y = 390 + (int)AccessoriesHook.OffsetY;
 
-            //if (EditorTabSettings.FitBounds)
+            if (EditorFlags.FitBounds)
             {
                 int count = Main.LocalPlayer.GetAmountOfExtraAccessorySlotsToShow();
 
@@ -460,7 +454,7 @@ namespace UICustomizer.EditMode.System
             int w = 45;
             int h = 60;
 
-            //if (EditorTabSettings.FitBounds)
+            if (EditorFlags.FitBounds)
             {
                 // --- Width ---
                 int widthCount = Main.numAvailableRecipes;

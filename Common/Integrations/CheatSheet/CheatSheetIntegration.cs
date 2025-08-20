@@ -1,6 +1,6 @@
 ﻿using CheatSheet;
 using Terraria.ModLoader;
-using UICustomizer.EditMode.System;
+using UICustomizer.Edit.System;
 
 namespace UICustomizer.Common.Integrations.CheatSheet
 {

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.EditMode.System;
+using UICustomizer.Edit.Helpers;
+using UICustomizer.Edit.System;
 
-namespace UICustomizer.Edit.UI;
+namespace UICustomizer.Edit.UI.Subpanels;
 
 internal sealed class SettingsPanel : UIPanel
 {
@@ -71,17 +73,21 @@ internal sealed class SettingsPanel : UIPanel
 
     public SettingsPanel()
     {
-        // Journey-like blues
         BorderColor = new Color(89, 116, 213) * 0.9f;
         BackgroundColor = new Color(73, 94, 171) * 0.9f;
 
         Width.Set(320, 0);
         Height.Set(180, 0);
-        Left.Set(70, 0);     // offset to the right of the vertical toolbar
+        Left.Set(90, 0);
         Top.Set(0, 0);
 
         SetPadding(8);
 
+        Build();
+    }
+
+    private void Build()
+    {
         // rows stack
         float y = 6;
         void AddRow(string label, Func<bool> getter, Action<bool> setter)
@@ -104,7 +110,6 @@ internal sealed class SettingsPanel : UIPanel
                     sys.Toggle(); // keep single source of truth
             });
 
-        // The rest are example persistent flags. Replace with your existing EditorTabSettings if you prefer.
         AddRow("Show hitboxes", () => EditorFlags.ShowHitboxes, v => EditorFlags.ShowHitboxes = v);
         AddRow("Show element names", () => EditorFlags.ShowNames, v => EditorFlags.ShowNames = v);
         AddRow("Fit hitbox bounds", () => EditorFlags.FitBounds, v => EditorFlags.FitBounds = v);
@@ -112,12 +117,16 @@ internal sealed class SettingsPanel : UIPanel
         AddRow("Show layer toggle", () => EditorFlags.ShowLayerToggle, v => EditorFlags.ShowLayerToggle = v);
     }
 
-    internal static class EditorFlags
+    public override void Draw(SpriteBatch spriteBatch)
     {
-        public static bool ShowHitboxes = true;
-        public static bool ShowNames = true;
-        public static bool FitBounds = true;
-        public static bool SnapToEdges = true;
-        public static bool ShowLayerToggle = false;
+        BackgroundColor = ColorHelper.DarkBluePanel * 0.75f;
+        BorderColor = Color.Black * 0.45f;
+
+        base.Draw(spriteBatch);
+    }
+
+    public override void LeftClick(UIMouseEvent evt)
+    {
+        base.LeftClick(evt);
     }
 }

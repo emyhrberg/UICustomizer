@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.EditMode.UI;
-using Terraria.ID;
+using UICustomizer.Edit.Helpers;
+using UICustomizer.Edit.UI;
 
-namespace UICustomizer.EditMode.System
+namespace UICustomizer.Edit.System
 {
     [Autoload(Side = ModSide.Client)]
     public class EditSystem : ModSystem
@@ -32,18 +33,16 @@ namespace UICustomizer.EditMode.System
             ui = new();
             editState = new();
             ui.SetState(editState);
+
+            LayoutHelper.TryApplyLayoutFromConfig();
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
-            //if (ui.CurrentState != null)
-            //Log.Info("state" + ui.CurrentState);
-            //else
-            //Log.Info("null");
-            //ui.SetState(editState);
+            if (!Enabled || ui?.CurrentState != editState)
+                return;
 
-            if (ui?.CurrentState == editState)
-                ui?.Update(gameTime);
+            ui.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
