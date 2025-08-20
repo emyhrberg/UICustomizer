@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
@@ -27,7 +26,7 @@ public sealed class MainMenuState : UIState
 
         panel = new();
         panel.Width.Set(320, 0);
-        panel.Height.Set(795+30, 0);
+        panel.Height.Set(795 + 30, 0);
         panel.OverflowHidden = false;
         panel.BackgroundColor = ColorHelper.DarkBluePanel * 0.5f;
         panel.SetPadding(0);

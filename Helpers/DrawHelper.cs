@@ -3,8 +3,6 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using UICustomizer.EditMode.System;
-using UICustomizer.Helpers.Layouts;
-using static UICustomizer.Helpers.Layouts.ElementHelper;
 
 namespace UICustomizer.Helpers
 {

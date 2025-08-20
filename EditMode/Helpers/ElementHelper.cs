@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UICustomizer.Edit.Helpers
+namespace UICustomizer.EditMode.Helpers
 {
     public static class ElementHelper
     {

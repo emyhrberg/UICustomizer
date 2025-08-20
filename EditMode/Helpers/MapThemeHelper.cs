@@ -1,7 +1,7 @@
 using System.Linq;
 using Terraria;
 
-namespace UICustomizer.Edit.Helpers
+namespace UICustomizer.EditMode.Helpers
 {
     public static class MapThemeHelper
     {

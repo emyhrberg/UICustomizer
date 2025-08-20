@@ -7,7 +7,7 @@ using Terraria.UI;
 using UICustomizer.EditMode.Helpers;
 using UICustomizer.EditMode.System;
 
-namespace UICustomizer.EditMode.UI.Old
+namespace UICustomizer.EditMode.Old
 {
     public class LayoutsTab : Tab
     {

@@ -4,11 +4,6 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UICustomizer.EditMode.Hooks;
-using UICustomizer.Helpers.Layouts;
-using static UICustomizer.Edit.Helpers.ElementHelper;
-using static UICustomizer.Helpers.Layouts.ElementHelper;
-using static UICustomizer.Helpers.Layouts.MapThemeHelper;
-using static UICustomizer.Helpers.Layouts.ResourceThemeHelper;
 
 namespace UICustomizer.EditMode.Helpers
 {

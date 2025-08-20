@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
-using static UICustomizer.Edit.Helpers.ElementHelper;
-using static UICustomizer.Edit.Helpers.MapThemeHelper;
-using static UICustomizer.Edit.Helpers.ResourceThemeHelper;
 
-namespace UICustomizer.Edit.Helpers
+namespace UICustomizer.EditMode.Helpers
 {
     public class LayoutData
     {

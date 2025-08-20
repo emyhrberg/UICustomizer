@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using UICustomizer.MainMenu.Helpers;
@@ -27,7 +26,7 @@ namespace UICustomizer.MainMenu.UI
                 MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
                 SetImage(isPaused ? Ass.Pause : Ass.Play);
                 Conf.C.MainMenuTime.IsPaused = !isPaused;
-                Conf.C.MainMenuTime.Time = (float) WorldTimeHelper.ConvertToTotalTime();
+                Conf.C.MainMenuTime.Time = (float)WorldTimeHelper.ConvertToTotalTime();
                 Conf.Save();
             };
         }

@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Terraria;
-using UICustomizer.EditMode.Helpers;
 using UICustomizer.EditMode.Hooks;
 
-namespace UICustomizer.Helpers.Layouts
+namespace UICustomizer.EditMode.Helpers
 {
     /// <summary>
     /// Handles file I/O operations for UICustomizer layouts.
@@ -48,14 +47,14 @@ namespace UICustomizer.Helpers.Layouts
 
         public static void CreateAndOpenNewLayoutFile(string layoutName)
         {
-            string basePath = FileHelper.GetLayoutFilePath(layoutName);
+            string basePath = GetLayoutFilePath(layoutName);
             string path = basePath;
             int counter = 1;
 
             // Generate unique filename if needed
             while (File.Exists(path))
             {
-                path = FileHelper.GetLayoutFilePath($"{layoutName}{counter}");
+                path = GetLayoutFilePath($"{layoutName}{counter}");
                 counter++;
             }
 
@@ -102,7 +101,7 @@ namespace UICustomizer.Helpers.Layouts
 
         public static List<string> GetLayouts()
         {
-            string folder = FileHelper.GetLayoutsFolderPath();
+            string folder = GetLayoutsFolderPath();
             if (!Directory.Exists(folder))
             {
                 Log.Warn($"Layouts folder does not exist: {folder}");
