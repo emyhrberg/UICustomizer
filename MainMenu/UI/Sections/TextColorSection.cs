@@ -90,7 +90,6 @@ namespace UICustomizer.MainMenu.UI.Sections
                         xPosSlider.Ratio = yPosSlider.Ratio = 0.5f;
                         break;
                 }
-                Log.Info("color set to def: " + def);
 
                 Conf.Save();
             };

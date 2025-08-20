@@ -23,7 +23,6 @@ namespace UICustomizer.MainMenu.Hooks
 
         public override void Load()
         {
-            ApplyConfig();
 
             // Method
             MethodInfo m = typeof(MenuLoader).GetMethod("UpdateAndDrawModMenuInner", BindingFlags.NonPublic | BindingFlags.Static);
@@ -44,11 +43,17 @@ namespace UICustomizer.MainMenu.Hooks
             // Create IL Logo Hook
             logoILHook = new(m, ModifyLogoPos);
         }
+
+        public override void PostSetupContent()
+        {
+            ApplyConfig();
+        }
+
         public override void Unload()
         {
             logoHook = null;
             logoILHook?.Dispose();
-            ResetCustomLogo();
+            //ResetCustomLogo();
         }
 
         private static void ModifyLogoPos(ILContext il)

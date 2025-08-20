@@ -8,7 +8,7 @@ namespace UICustomizer.MainMenu.UI
 {
     public class PlayPause : UIColoredImageButton
     {
-        public bool isPaused = false; // default
+        public bool isPaused = true; // default
 
         public PlayPause() : base(Ass.Pause, true)
         {
@@ -16,25 +16,24 @@ namespace UICustomizer.MainMenu.UI
             Width.Set(22, 0);
             Height.Set(22, 0);
             Top.Set(0, 0);
+            Left.Set(6, 0);
 
             SetImage(Ass.Pause);
 
             OnLeftClick += (_, _) =>
             {
                 isPaused = !isPaused;
+                MainMenuPauseSystem.IsPaused = !MainMenuPauseSystem.IsPaused;
                 SetImage(isPaused ? Ass.Pause : Ass.Play);
                 Conf.C.MainMenuTime.IsPaused = !isPaused;
-
-                if (isPaused)
-                {
-                    Conf.C.MainMenuTime.Time = (float) Main.time;
-                }
+                Conf.C.MainMenuTime.Time = (float) WorldTimeHelper.ConvertToTotalTime();
                 Conf.Save();
             };
         }
 
         public override void Update(GameTime gameTime)
         {
+            Left.Set(6, 0);
             base.Update(gameTime);
         }
 

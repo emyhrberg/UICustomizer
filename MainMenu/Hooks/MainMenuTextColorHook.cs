@@ -43,7 +43,9 @@ namespace UICustomizer.MainMenu.Hooks
 
             // 2) overwrite only if the user actually stored something
             if (ColorHelper.TryParseHex(cfg?.MainMenuTextColor.FillColor, out var fill))
+            {
                 FillColor = fill;
+            }
 
             if (ColorHelper.TryParseHex(cfg?.MainMenuTextColor.OutlineColor, out var outline))
                 OutlineColor = outline;
@@ -67,10 +69,6 @@ namespace UICustomizer.MainMenu.Hooks
                 return false;
             }
 
-            // If config is not default, use it
-            //FillColor = ColorHelper.HexToColor(Conf.C.FillColor);
-            //HoverColor = ColorHelper.HexToColor(Conf.C.HoverColor);
-
             color = Color.Lerp(FillColor, HoverColor, interpolator);
             return true;
         }
@@ -89,10 +87,10 @@ namespace UICustomizer.MainMenu.Hooks
                         i => i.MatchLdloc(7),
                         i => i.MatchLdloc(173)))
                     {
-                        Log.Info("guh Y not found");
+                        //Log.Info("guh Y not found");
                         break;
                     }
-                    Log.Info("guh Y found");
+                    //Log.Info("guh Y found");
 
                     c.Index += 3;
                     c.EmitLdsfld(typeof(MainMenuTextColorHook).GetField(nameof(OffsetY)));

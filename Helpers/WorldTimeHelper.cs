@@ -5,6 +5,18 @@ namespace UICustomizer.Helpers
 {
     public static class WorldTimeHelper
     {
+        public static double ConvertToTotalTime()
+        {
+            if (Main.dayTime)
+            {
+                return Main.time;
+            }
+            else
+            {
+                return Main.dayLength + Main.time;
+            }
+        }
+
         public static void SetTime(float ratio)
         {
             // 0 … 1  → always stay inside one 24-hour cycle

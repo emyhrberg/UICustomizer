@@ -178,7 +178,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             {
                 HAlign = 0.5f,
                 Left = { Pixels = 50 },
-                Top = { Pixels = 160 }
+                Top = { Pixels = 160 },
             };
             fileChoose.OnLeftClick += (_, _) =>
             {
@@ -192,6 +192,8 @@ namespace UICustomizer.MainMenu.UI.Sections
 
                 BackgroundHook.CustomBackgroundTexture = tex;
                 Conf.C.MainMenuBackground.BackgroundFileName = file;   // store path
+                Log.Info("stored: " + Conf.C.MainMenuBackground.BackgroundFileName);
+
                 Conf.Save();
 
                 fileText.SetText(file);
@@ -328,9 +330,9 @@ namespace UICustomizer.MainMenu.UI.Sections
             else
             {
                 // file chooser only on non-colour tabs
-                Append(fileChoose);
                 Append(fileText);
                 Append(resetLogoBtn);
+                Append(fileChoose);
 
                 header.Top.Set(8 + 32, 0);
                 header.HAlign = 0.5f;
@@ -355,11 +357,6 @@ namespace UICustomizer.MainMenu.UI.Sections
             resetLogoBtn.Remove();
             fileChoose.Remove();
             fileText.Remove();
-        }
-
-        private void ResetCurrentTab()
-        {
-
         }
 
         // live label updates

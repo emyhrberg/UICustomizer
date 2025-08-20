@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 
 namespace UICustomizer.MainMenu.UI
@@ -13,7 +14,7 @@ namespace UICustomizer.MainMenu.UI
         {
             ImageScale = 0.62f;
             HAlign = 1f;
-            Left.Set(-60, 0);
+            Left.Set(-3, 0);
             Top.Set(0, 0);
 
             OnLeftClick += (_, _) => action?.Invoke();
@@ -27,7 +28,7 @@ namespace UICustomizer.MainMenu.UI
             {
                 if (_texture == Ass.Inventory_Tick_On) isOn = true;
 
-                string showOrHide = isOn ? "Click to hide" : "Click to show";
+                string showOrHide = isOn ? "Hide" : "Show";
                 UICommon.TooltipMouseText(showOrHide);
             }
         }

@@ -37,7 +37,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             Append(col2);
             BuildEverything();
 
-            reset = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 6 } };
+            reset = new ResetButton { Left = { Pixels = 6 }, Top = { Pixels = 0 } };
             reset.OnLeftMouseDown += (_, _) =>
             {
                 Conf.C.MainMenuDraw.DrawText = true;
@@ -71,32 +71,35 @@ namespace UICustomizer.MainMenu.UI.Sections
                 v => Conf.C.MainMenuDraw.DrawBackground = v,
                 v => BackgroundHook.IsDrawing = v);
 
+            MakeToggle("Clouds: ", col1,
+                () => Conf.C.MainMenuDraw.DrawClouds,
+                v => Conf.C.MainMenuDraw.DrawClouds = v,
+                v => SkipCloudsHook.IsDrawing = v);
+
             MakeToggle("Logo: ", col1,
                 () => Conf.C.MainMenuDraw.DrawLogo,
                 v => Conf.C.MainMenuDraw.DrawLogo = v,
                 v => LogoHook.IsDrawing = v);
 
-            MakeToggle("Text: ", col1,
-                () => Conf.C.MainMenuDraw.DrawText,
-                v => Conf.C.MainMenuDraw.DrawText = v,
-                v => MainMenuTextColorHook.IsDrawing = v);
-
-            // Column 2
-            yOffset = 18f;
-            MakeToggle("Sun: ", col2,
-                () => Conf.C.MainMenuDraw.DrawSun,
-                v => Conf.C.MainMenuDraw.DrawSun = v,
-                v => SkipSunDrawHook.IsDrawing = v);
-
-            MakeToggle("Sky: ", col2,
+            MakeToggle("Sky: ", col1,
                 () => Conf.C.MainMenuDraw.DrawSky,
                 v => Conf.C.MainMenuDraw.DrawSky = v,
                 v => SkipSkyDrawHook.IsDrawing = v);
 
+            yOffset = 18f;
+            // Column 2
+            MakeToggle("Sun: ", col2,
+                () => Conf.C.MainMenuDraw.DrawSun,
+                v => Conf.C.MainMenuDraw.DrawSun = v,
+                v => SkipSunDrawHook.IsDrawing = v);
             MakeToggle("Stars: ", col2,
                 () => Conf.C.MainMenuDraw.DrawStars,
                 v => Conf.C.MainMenuDraw.DrawStars = v,
                 v => SkipStarsHook.IsDrawing = v);
+            MakeToggle("Text: ", col2,
+                () => Conf.C.MainMenuDraw.DrawText,
+                v => Conf.C.MainMenuDraw.DrawText = v,
+                v => MainMenuTextColorHook.IsDrawing = v);
             MakeToggle("Version: ", col2,
                 () => Conf.C.MainMenuDraw.DrawVersion,
                 v => Conf.C.MainMenuDraw.DrawVersion = v,

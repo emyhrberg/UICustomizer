@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.UI.Elements;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent.UI.Elements;
 
 namespace UICustomizer.MainMenu.UI.Sections
 {
@@ -9,6 +10,11 @@ namespace UICustomizer.MainMenu.UI.Sections
             Width.Set(-28, 1);
             HAlign = 0.5f;
             Left.Set(12, 0);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
     }
 }

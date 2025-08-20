@@ -23,11 +23,7 @@ namespace UICustomizer.MainMenu.Hooks
 
         public override void Load()
         {
-            // Create background texture from config, if available
-            if (Conf.C?.MainMenuBackground.BackgroundFileName is not null)
-            {
-                CustomBackgroundTexture = FileUploadHelper.ReadAndCreateTextureFromPath(Conf.C.MainMenuBackground.BackgroundFileName);
-            }
+            Log.Info("load bg" + Conf.C.MainMenuBackground.BackgroundFileName);
 
             // Create and run the patching of the DrawBG hook
             MethodInfo m = typeof(Main).GetMethod("DrawBG", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -38,10 +34,15 @@ namespace UICustomizer.MainMenu.Hooks
             }
         }
 
+        public override void PostSetupContent()
+        {
+            ApplyConfig();
+        }
+
         public override void Unload()
         {
             _drawBGHook?.Dispose();
-            ResetCustomBackground();
+            //ResetCustomBackground();
         }
 
         private static void DrawBGDetour(Action<Main> orig, Main self)
@@ -76,22 +77,26 @@ namespace UICustomizer.MainMenu.Hooks
             Conf.Save();
         }
 
-        public static void ApplyConfig(Config cfg)
+        public static void ApplyConfig()
         {
-            // Load color from config (default stays if parse fails)
+            var cfg = Conf.C;
+
+            // Load color from config
             if (ColorHelper.TryParseHex(cfg?.MainMenuBackground.Color, out var parsed))
                 Color = parsed;
 
-            // Load transform from config
+            // Load pos and scale from config
             Scale = cfg?.MainMenuBackground.Scale ?? 1f;
             OffsetX = cfg?.MainMenuBackground.OffsetX ?? 0f;
             OffsetY = cfg?.MainMenuBackground.OffsetY ?? 0f;
             Rotation = cfg?.MainMenuBackground.Rotation ?? 0f;
+
+            // Load isDrawing from config
             IsDrawing = cfg?.MainMenuDraw.DrawBackground ?? true;
 
-            // (Re)load custom background texture from path if provided; clear if empty
+            // Load custom logo texture from config
             string path = cfg?.MainMenuBackground.BackgroundFileName;
-            Log.Info($"BackgroundHook: Loading custom background from path: {path}");
+            Log.Info($"Loading custom background from path: {path}");
 
             if (string.IsNullOrWhiteSpace(path))
             {

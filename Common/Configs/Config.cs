@@ -54,15 +54,13 @@ namespace UICustomizer.Common.Configs
                     return;
                 }
                 sys.ui.SetState(null);
-
-                Log.Info("State: " + sys.ui.CurrentState);
             }
 
-            // ApplyMainMenuTextColor();
-            // ApplyMainMenuTime();
-            // ApplyMainMenuBackground();
-            // ApplyMainMenuLogo();
-            // ApplyMainMenuDraw();
+            ApplyMainMenuTextColor();
+            ApplyMainMenuTime();
+            ApplyMainMenuBackground();
+            ApplyMainMenuLogo();
+            ApplyMainMenuDraw();
         }
 
         private void ApplyMainMenuTextColor()
@@ -210,13 +208,14 @@ namespace UICustomizer.Common.Configs
     {
         // First column
         [DefaultValue(true)] public bool DrawBackground = true;
-        [DefaultValue(true)] public bool DrawSun = true;
+        [DefaultValue(true)] public bool DrawClouds = true;
+        [DefaultValue(true)] public bool DrawLogo = true;
         [DefaultValue(true)] public bool DrawSky = true;
 
         // Second column
-        [DefaultValue(true)] public bool DrawLogo = true;
-        [DefaultValue(true)] public bool DrawText = true;
         [DefaultValue(true)] public bool DrawStars = true;
+        [DefaultValue(true)] public bool DrawSun = true;
+        [DefaultValue(true)] public bool DrawText = true;
         [DefaultValue(true)] public bool DrawVersion = true;
     }
 

@@ -9,7 +9,11 @@ Configs: {
 
 		EditMainMenu: {
 			Label: Edit Main Menu
-			Tooltip: ""
+			Tooltip:
+				'''
+				Whether to allow editing the main menu.
+				Leaving it off means using the vanilla main menu with no changes.
+				'''
 		}
 
 		ShowMainMenu: {

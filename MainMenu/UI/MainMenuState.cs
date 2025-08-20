@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
@@ -9,7 +10,7 @@ namespace UICustomizer.MainMenu.UI;
 public sealed class MainMenuState : UIState
 {
     // Parent Elements
-    private ExpandablePanel panel;
+    private UIPanel panel;
     private UIList list;
 
     // Header Elements
@@ -24,6 +25,14 @@ public sealed class MainMenuState : UIState
             return;
 
         panel = new();
+        panel.Width.Set(320, 0);
+        panel.Height.Set(795+30, 0);
+        panel.OverflowHidden = false;
+        panel.BackgroundColor = ColorHelper.DarkBluePanel * 0.5f;
+        panel.SetPadding(0);
+        panel.HAlign = 1f;
+        panel.Top.Set(3, 0);
+        panel.Left.Set(-3, 0);
         Append(panel);
 
         headerText = new("UI Editor", 1.15f) { HAlign = 0.5f, Top = { Pixels = 6f } };
@@ -38,12 +47,6 @@ public sealed class MainMenuState : UIState
 
         // Build list on expanding
         BuildList();
-
-        panel.OnExpanded += () =>
-        {
-            BuildList();
-            panel.Recalculate();
-        };
     }
 
     private void BuildList()
@@ -58,7 +61,6 @@ public sealed class MainMenuState : UIState
             ListPadding = 0f, // AFFECTS ALL SECTIONS!
             ManualSortMethod = _ => { }
         };
-        panel.VisibleWhenExpanded.Add(list);
 
         // Add all sections
         TextColorSection textColorSection = new();
@@ -72,6 +74,7 @@ public sealed class MainMenuState : UIState
         list.Add(backgroundSection);
         list.Add(logoSection);
         list.Add(drawSection);
+        panel.Append(list);
     }
 
     public override void Draw(SpriteBatch sb)
