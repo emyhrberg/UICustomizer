@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
+using UICustomizer.MainMenu.Helpers;
 using UICustomizer.MainMenu.Hooks;
 
 namespace UICustomizer.MainMenu.UI

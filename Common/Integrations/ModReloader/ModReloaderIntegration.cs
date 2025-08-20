@@ -1,5 +1,5 @@
 using Terraria.ModLoader;
-using UICustomizer.Edit.UI;
+using UICustomizer.EditMode.System;
 
 namespace UICustomizer.Common.Integrations.ModReloader
 {

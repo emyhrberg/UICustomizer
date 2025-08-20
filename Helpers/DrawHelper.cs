@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.ModLoader;
-using UICustomizer.Edit.UI;
+using UICustomizer.EditMode.System;
 using UICustomizer.Helpers.Layouts;
 using static UICustomizer.Helpers.Layouts.ElementHelper;
 
@@ -17,10 +16,10 @@ namespace UICustomizer.Helpers
                 color = Color.Red;
 
             var sys = ModContent.GetInstance<EditSystem>();
-            if (sys == null || sys.state == null || sys.state.editorPanel == null) return;
+            if (sys == null || sys.state == null) return;
 
             // Draw hitboxes
-            if (EditorTabSettings.ShowHitboxes)
+            // if (EditorTabSettings.ShowHitboxes)
             {
                 const float fillScaleX = 0.985f;
                 const float fillScaleY = 0.97f;
@@ -35,7 +34,7 @@ namespace UICustomizer.Helpers
                     (int)(rect.Height * fillScaleY)
                 );
 
-                sb.Draw(TextureAssets.MagicPixel.Value, fillRect, color * EditorTabSettings.Opacity);
+                sb.Draw(TextureAssets.MagicPixel.Value, fillRect, color * 100);
 
                 // Draw outline around the full-size rect
                 DrawSlices(sb, rect, color, fill: false, fillOpacity: 0f);
@@ -46,7 +45,7 @@ namespace UICustomizer.Helpers
             if (!ElementHelper.ElementInterfaceLayerMapping.TryGetValue(element, out string interfaceLayerName))
             {
                 // Still draw the name if ShowNames is enabled, using the enum's string representation
-                if (EditorTabSettings.ShowNames)
+                // if (EditorTabSettings.ShowNames)
                 {
                     Vector2 pos = rect.Location.ToVector2();
                     Utils.DrawBorderString(sb, element.ToString(), pos, Color.White);
@@ -56,13 +55,17 @@ namespace UICustomizer.Helpers
 
             // Draw names of the UI elements
             // Use interfaceLayerName if available and ShowNames is true, otherwise use element.ToString()
-            if (EditorTabSettings.ShowNames)
+            // if (EditorTabSettings.ShowNames)
             {
                 Vector2 pos = rect.Location.ToVector2();
                 // Display the mapped interfaceLayerName if available, otherwise the enum name.
                 string displayName = !string.IsNullOrEmpty(interfaceLayerName) ? interfaceLayerName : element.ToString();
-                if (EditorTabSettings.ShowEyeToggle) displayName = interfaceLayerName;
-                else displayName = element.ToString();
+
+                // if (EditorTabSettings.ShowEyeToggle)
+                // displayName = interfaceLayerName;
+                // else
+                displayName = element.ToString();
+
                 Utils.DrawBorderString(sb, displayName, pos, Color.White);
             }
         }
@@ -74,7 +77,7 @@ namespace UICustomizer.Helpers
         private static void DrawSlices(SpriteBatch sb, Rectangle t, Color col, bool fill = true, float fillOpacity = 0.3f)
         {
             var tex = Ass.Hitbox.Value;
-            int c = EditorTabSettings.Stroke;                         // 5-px corners / edge thickness
+            int c = 5;                         // 5-px corners / edge thickness
             Rectangle sc = new(0, 0, c, c),
                       eh = new(c, 0, 30 - 2 * c, c),
                       ev = new(0, c, c, 30 - 2 * c),
@@ -94,85 +97,5 @@ namespace UICustomizer.Helpers
             sb.Draw(tex, new Rectangle(t.X, t.Bottom - c, c, c), sc, col, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0); // BL
         }
 
-        public static void DrawTextAtMouse(SpriteBatch sb, string text)
-        {
-            // This method is used for drawing tooltips in main menu
-            // Inspired by UICharacterCreation::Draw()
-            float x = FontAssets.MouseText.Value.MeasureString(text).X;
-            Vector2 vector = new Vector2(Main.mouseX, Main.mouseY) + new Vector2(16f);
-            if (vector.Y > Main.screenHeight - 15)
-            {
-                vector.Y = Main.screenHeight - 15;
-            }
-            if (vector.X > Main.screenWidth - x + 40)
-            {
-                vector.X = Main.screenWidth - 460;
-            }
-            Utils.DrawBorderStringFourWay(
-                sb, FontAssets.MouseText.Value, text, vector.X, vector.Y, new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor), Color.Black, Vector2.Zero);
-        }
-
-        public static int NewText(Rectangle location, Color color, string text, bool dramatic = false, bool dot = false)
-        {
-            if (Main.netMode == NetmodeID.Server)
-            {
-                return 100;
-            }
-
-            for (int i = 0; i < 100; i++)
-            {
-                if (Main.combatText[i].active)
-                {
-                    continue;
-                }
-
-                int num = 0;
-
-                Vector2 vector = FontAssets.CombatText[num].Value.MeasureString(text);
-                Main.combatText[i].alpha = 1f;
-                Main.combatText[i].alphaDir = -1;
-                Main.combatText[i].active = true;
-                Main.combatText[i].scale = 0f;
-                Main.combatText[i].rotation = 0f;
-                Main.combatText[i].position.X = location.X + location.Width * 0.5f - vector.X * 0.5f;
-                Main.combatText[i].position.Y = location.Y + location.Height * 0.25f - vector.Y * 0.5f;
-                Main.combatText[i].position.X += Main.rand.Next(-(int)(location.Width * 0.5), (int)(location.Width * 0.5) + 1);
-                Main.combatText[i].position.Y += Main.rand.Next(-(int)(location.Height * 0.5), (int)(location.Height * 0.5) + 1);
-                Main.combatText[i].color = color;
-                Main.combatText[i].text = text;
-                Main.combatText[i].velocity.Y = -7f;
-                if (Main.player[Main.myPlayer].gravDir == -1f)
-                {
-                    Main.combatText[i].velocity.Y *= -1f;
-                    Main.combatText[i].position.Y = location.Y + location.Height * 0.75f + vector.Y * 0.5f;
-                }
-
-                Main.combatText[i].lifeTime = 60;
-                Main.combatText[i].crit = dramatic;
-                Main.combatText[i].dot = dot;
-                if (dramatic)
-                {
-                    Main.combatText[i].text = text;
-                    Main.combatText[i].lifeTime *= 2;
-                    Main.combatText[i].velocity.Y *= 2f;
-                    Main.combatText[i].velocity.X = Main.rand.Next(-25, 26) * 0.05f;
-                    Main.combatText[i].rotation = Main.combatText[i].lifeTime / 2 * 0.002f;
-                    if (Main.combatText[i].velocity.X < 0f)
-                    {
-                        Main.combatText[i].rotation *= -1f;
-                    }
-                }
-
-                if (dot)
-                {
-                    Main.combatText[i].velocity.Y = -4f;
-                    Main.combatText[i].lifeTime = 40;
-                }
-
-                return i;
-            }
-
-            return 100;
-        }
     }
 }

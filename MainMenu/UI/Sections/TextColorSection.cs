@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UICustomizer.Edit.UI;
+using UICustomizer.EditMode.UI;
 using UICustomizer.MainMenu.Hooks;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
@@ -26,7 +26,7 @@ namespace UICustomizer.MainMenu.UI.Sections
         private Vector3 hsl; // current HSL
 
         // Extra sliders
-        private ZenSlider scaleSlider, xPosSlider, yPosSlider;
+        private Slider scaleSlider, xPosSlider, yPosSlider;
 
         public TextColorSection()
         {
@@ -116,7 +116,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             float rowY = panel.Top.Pixels + panel.Height.Pixels + 8f;
 
             // 2 extra sliders
-            scaleSlider = new ZenSlider { Top = { Pixels = 45 + 32 } };
+            scaleSlider = new Slider { Top = { Pixels = 45 + 32 } };
             scaleSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuTextColor.Scale);
             scaleSlider.OnDrag += v =>
             {
@@ -126,7 +126,7 @@ namespace UICustomizer.MainMenu.UI.Sections
                 Conf.Save();
             };
 
-            xPosSlider = new ZenSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider = new Slider { Top = { Pixels = 45 + 32 } };
             xPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, Conf.C.MainMenuTextColor.OffsetX);
             xPosSlider.OnDrag += v =>
             {
@@ -136,7 +136,7 @@ namespace UICustomizer.MainMenu.UI.Sections
                 Conf.Save();
             };
 
-            yPosSlider = new ZenSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider = new Slider { Top = { Pixels = 75 + 32 } };
             yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f, +Main.screenWidth * 0.5f, Conf.C.MainMenuTextColor.OffsetY);
             yPosSlider.OnDrag += v =>
             {

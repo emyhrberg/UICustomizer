@@ -2,8 +2,9 @@
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
-using UICustomizer.Edit.UI;
+using UICustomizer.EditMode.UI;
 using UICustomizer.MainMenu.Hooks;
+using UICustomizer.UI;
 
 namespace UICustomizer.MainMenu.UI.Sections
 {
@@ -14,7 +15,7 @@ namespace UICustomizer.MainMenu.UI.Sections
 
         private readonly UIText header;
         private readonly TabButton timeTab, speedTab, parallaxTab;
-        private readonly ZenSlider timeSlider, speedSlider, parallaxSlider;
+        private readonly Slider timeSlider, speedSlider, parallaxSlider;
         private readonly ResetButton resetButton;
         private readonly PlayPause playPause;
 
@@ -60,7 +61,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             Append(resetButton);
 
             // ─── Time slider ──────────────────────────────────────────────
-            timeSlider = new ZenSlider
+            timeSlider = new Slider
             {
                 Top = { Pixels = 45 },
                 Ratio = WorldTimeHelper.GetRatioFromTime(),
@@ -74,7 +75,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             Append(timeSlider);
 
             // ─── IsDrawing slider ─────────────────────────────────────────────
-            speedSlider = new ZenSlider
+            speedSlider = new Slider
             {
                 Top = { Pixels = 45 },
                 Ratio = ColorHelper.InverseLerp(0f, 100f, Conf.C.MainMenuTime.Speed)
@@ -91,7 +92,7 @@ namespace UICustomizer.MainMenu.UI.Sections
             Append(speedSlider);
 
             // ─── Parallax slider ─────────────────────────────────────────
-            parallaxSlider = new ZenSlider
+            parallaxSlider = new Slider
             {
                 Top = { Pixels = 45 },
                 Ratio = ColorHelper.InverseLerp(0f, 100f, Conf.C.MainMenuTime.ParallaxSpeed)

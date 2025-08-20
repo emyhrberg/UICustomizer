@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UICustomizer.Edit.UI;
+using UICustomizer.EditMode.UI;
 using UICustomizer.MainMenu.Hooks;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
@@ -22,8 +22,8 @@ namespace UICustomizer.MainMenu.UI.Sections
 
         private readonly TabButton scaleTab, rotationTab, colorTab, positionTab;
 
-        private readonly ZenSlider scaleSlider, rotationSlider;
-        private readonly ZenSlider xPosSlider, yPosSlider;
+        private readonly Slider scaleSlider, rotationSlider;
+        private readonly Slider xPosSlider, yPosSlider;
 
         private readonly UIPanel colorPanel;
         private readonly UIColoredSlider hue, sat, lum;
@@ -102,15 +102,15 @@ namespace UICustomizer.MainMenu.UI.Sections
             };
 
             // ─── 4. Sliders ────────────────────────────────────────────
-            scaleSlider = new ZenSlider { Top = { Pixels = 45 + 32 } };
+            scaleSlider = new Slider { Top = { Pixels = 45 + 32 } };
             scaleSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuBackground.Scale);
             scaleSlider.OnDrag += v => Conf.C.MainMenuBackground.Scale = BackgroundHook.Scale = MathHelper.Lerp(0, 10, v);
 
-            rotationSlider = new ZenSlider { Top = { Pixels = 45 + 32 } };
+            rotationSlider = new Slider { Top = { Pixels = 45 + 32 } };
             rotationSlider.Ratio = ColorHelper.InverseLerp(0, 10, Conf.C.MainMenuBackground.Rotation);
             rotationSlider.OnDrag += v => Conf.C.MainMenuBackground.Rotation = BackgroundHook.Rotation = MathHelper.Lerp(0, 6.28f, v);
 
-            xPosSlider = new ZenSlider { Top = { Pixels = 45 + 32 } };
+            xPosSlider = new Slider { Top = { Pixels = 45 + 32 } };
             xPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, Conf.C.MainMenuBackground.OffsetX);
             xPosSlider.OnDrag += v =>
@@ -119,7 +119,7 @@ namespace UICustomizer.MainMenu.UI.Sections
                                                        +Main.screenWidth * 0.5f, v);
 
 
-            yPosSlider = new ZenSlider { Top = { Pixels = 75 + 32 } };
+            yPosSlider = new Slider { Top = { Pixels = 75 + 32 } };
             yPosSlider.Ratio = ColorHelper.InverseLerp(-Main.screenWidth * 0.5f,
                                                        +Main.screenWidth * 0.5f, Conf.C.MainMenuBackground.OffsetY);
             yPosSlider.OnDrag += v =>

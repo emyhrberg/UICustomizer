@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
+using UICustomizer.MainMenu.Helpers;
 
 namespace UICustomizer.MainMenu.Hooks
 {

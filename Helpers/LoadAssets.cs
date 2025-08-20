@@ -10,24 +10,19 @@ namespace UICustomizer.Helpers
     /// </summary>
     public static class Ass
     {
-        // Add assets here
-        public static Asset<Texture2D> EditorIcon;
-        public static Asset<Texture2D> EyeClosed;
-        public static Asset<Texture2D> EyeClosedHover;
-        public static Asset<Texture2D> EyeOpen;
-        public static Asset<Texture2D> EyeOpenHover;
-        public static Asset<Texture2D> Hitbox;
+        // General assets
         public static Asset<Texture2D> Inventory_Tick_Off;
         public static Asset<Texture2D> Inventory_Tick_On;
-        public static Asset<Texture2D> LayersIcon;
-        public static Asset<Texture2D> Minus;
-        public static Asset<Texture2D> MinusHover;
+
+        // Edit menu
+        public static Asset<Texture2D> EditorIcon;
+        public static Asset<Texture2D> EditorIconHover;
+        public static Asset<Texture2D> Hitbox;
+
+        // Main menu
         public static Asset<Texture2D> Pause;
         public static Asset<Texture2D> Play;
-        public static Asset<Texture2D> Plus;
-        public static Asset<Texture2D> PlusHover;
         public static Asset<Texture2D> Reset;
-        public static Asset<Texture2D> Resize;
         public static Asset<Texture2D> Slider;
         public static Asset<Texture2D> SliderGradient;
         public static Asset<Texture2D> SliderHighlight;
