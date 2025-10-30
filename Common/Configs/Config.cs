@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using UICustomizer.MainMenu.Helpers;
-using UICustomizer.MainMenu.Hooks;
+using UICustomizer.Core.MainMenuEditor.Helpers;
+using UICustomizer.Core.MainMenuEditor.Hooks;
 
 namespace UICustomizer.Common.Configs
 {
