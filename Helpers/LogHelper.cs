@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Helpers
+namespace UIEditor.Helpers
 {
     public static class Log
     {
@@ -16,7 +16,7 @@ namespace UICustomizer.Helpers
             {
                 try
                 {
-                    return ModLoader.GetMod("UICustomizer");
+                    return ModLoader.GetMod("UIEditor");
                 }
                 catch (Exception ex)
                 {

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using UICustomizer.Core.MainMenuEditor.Helpers;
-using UICustomizer.Core.MainMenuEditor.Hooks;
+using UIEditor.Core.MainMenuEditor.Helpers;
+using UIEditor.Core.MainMenuEditor.Hooks;
 
-namespace UICustomizer.Common.Configs
+namespace UIEditor.Common.Configs
 {
     public class Config : ModConfig
     {

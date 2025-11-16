@@ -1,7 +1,7 @@
 using Terraria.ModLoader;
-using UICustomizer.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.System;
 
-namespace UICustomizer.Common.Integrations.ModReloader
+namespace UIEditor.Common.Integrations.ModReloader
 {
     [JITWhenModsEnabled("ModReloader")]
     public sealed class ModReloaderIntegration : ModPlayer
@@ -28,7 +28,7 @@ namespace UICustomizer.Common.Integrations.ModReloader
                 Ass.EditorIconSmall, // asset
                 "Edit UI layout" // tooltip
             );
-            Log.Info("Added ModReloader button for UICustomizer");
+            Log.Info("Added ModReloader button for UIEditor");
         }
     }
 }

@@ -4,7 +4,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.Config.UI;
 
-namespace UICustomizer.Common.Configs;
+namespace UIEditor.Common.Configs;
 
 public class ColorTagConfigElement : ConfigElement<string>
 {

@@ -2,7 +2,7 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.UI
+namespace UIEditor.Core.MainMenuEditor.UI
 {
     internal class OnOffTextButton : UIText
     {

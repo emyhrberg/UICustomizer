@@ -3,10 +3,10 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using UICustomizer.Core.IngameEditor.Helpers;
-using UICustomizer.Core.IngameEditor.Hooks;
+using UIEditor.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.Hooks;
 
-namespace UICustomizer.Core.IngameEditor.System
+namespace UIEditor.Core.IngameEditor.System
 {
     public class DragSystem : ModSystem
     {

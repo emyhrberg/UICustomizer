@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
-using UICustomizer.Core.MainMenuEditor.Helpers;
-using UICustomizer.Core.MainMenuEditor.Hooks;
+using UIEditor.Core.MainMenuEditor.Helpers;
+using UIEditor.Core.MainMenuEditor.Hooks;
 
-namespace UICustomizer.Core.MainMenuEditor.UI
+namespace UIEditor.Core.MainMenuEditor.UI
 {
     public class PlayPause : UIColoredImageButton
     {

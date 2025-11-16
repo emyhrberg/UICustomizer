@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.Helpers;
 
-namespace UICustomizer.Core.IngameEditor.UI.Subpanels;
+namespace UIEditor.Core.IngameEditor.UI.Subpanels;
 internal sealed class LayoutsPanel : UIPanel
 {
     public LayoutsPanel()

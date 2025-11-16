@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.Helpers;
-using UICustomizer.Core.IngameEditor.Hooks;
+using UIEditor.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.Hooks;
 
-namespace UICustomizer.Core.IngameEditor.UI.Subpanels;
+namespace UIEditor.Core.IngameEditor.UI.Subpanels;
 
 internal sealed class PositionsPanel : UIPanel
 {

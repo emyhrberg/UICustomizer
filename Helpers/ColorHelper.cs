@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
-namespace UICustomizer.Helpers
+namespace UIEditor.Helpers
 {
     /// <summary>
     /// General colour utilities

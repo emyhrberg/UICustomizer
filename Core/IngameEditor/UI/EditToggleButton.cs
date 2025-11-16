@@ -4,9 +4,9 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.System;
 
-namespace UICustomizer.Core.IngameEditor.UI
+namespace UIEditor.Core.IngameEditor.UI
 {
     public class EditToggleButton : UIImage
     {

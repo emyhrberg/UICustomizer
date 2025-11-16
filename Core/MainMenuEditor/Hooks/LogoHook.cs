@@ -5,9 +5,9 @@ using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
-using UICustomizer.Core.MainMenuEditor.Helpers;
+using UIEditor.Core.MainMenuEditor.Helpers;
 
-namespace UICustomizer.Core.MainMenuEditor.Hooks
+namespace UIEditor.Core.MainMenuEditor.Hooks
 {
     public class LogoHook : ModSystem
     {

@@ -4,10 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.Helpers;
-using UICustomizer.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.System;
 
-namespace UICustomizer.Core.IngameEditor.UI.Subpanels;
+namespace UIEditor.Core.IngameEditor.UI.Subpanels;
 
 internal sealed class SettingsPanel : UIPanel
 {

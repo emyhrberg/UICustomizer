@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Terraria.ModLoader;
-using UICustomizer.Core.IngameEditor.Hooks;
-using static UICustomizer.Core.IngameEditor.Helpers.ElementHelper;
-using static UICustomizer.Core.IngameEditor.Helpers.MapThemeHelper;
-using static UICustomizer.Core.IngameEditor.Helpers.ResourceThemeHelper;
+using UIEditor.Core.IngameEditor.Hooks;
+using static UIEditor.Core.IngameEditor.Helpers.ElementHelper;
+using static UIEditor.Core.IngameEditor.Helpers.MapThemeHelper;
+using static UIEditor.Core.IngameEditor.Helpers.ResourceThemeHelper;
 
-namespace UICustomizer.Core.IngameEditor.Helpers
+namespace UIEditor.Core.IngameEditor.Helpers
 {
     public static class LayoutHelper
     {

@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks
 {
     public class ChatHook : ModSystem
     {

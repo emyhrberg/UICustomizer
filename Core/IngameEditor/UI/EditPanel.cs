@@ -2,10 +2,10 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.System;
-using UICustomizer.Core.IngameEditor.UI.Subpanels;
+using UIEditor.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.UI.Subpanels;
 
-namespace UICustomizer.Core.IngameEditor.UI;
+namespace UIEditor.Core.IngameEditor.UI;
 
 public sealed class EditPanel : UIPanel
 {

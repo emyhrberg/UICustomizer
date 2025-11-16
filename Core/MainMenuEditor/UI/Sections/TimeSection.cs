@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
-using UICustomizer.Core.MainMenuEditor.Helpers;
-using UICustomizer.Core.MainMenuEditor.Hooks;
-using UICustomizer.UI;
+using UIEditor.Core.MainMenuEditor.Helpers;
+using UIEditor.Core.MainMenuEditor.Hooks;
+using UIEditor.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.UI.Sections
+namespace UIEditor.Core.MainMenuEditor.UI.Sections
 {
     internal class TimeSection : BaseSection
     {

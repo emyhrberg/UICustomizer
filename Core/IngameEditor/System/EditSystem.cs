@@ -4,10 +4,10 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.Helpers;
-using UICustomizer.Core.IngameEditor.UI;
+using UIEditor.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.UI;
 
-namespace UICustomizer.Core.IngameEditor.System
+namespace UIEditor.Core.IngameEditor.System
 {
     [Autoload(Side = ModSide.Client)]
     public class EditSystem : ModSystem

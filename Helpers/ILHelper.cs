@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using MonoMod.Cil;
 
-namespace UICustomizer.Helpers
+namespace UIEditor.Helpers
 {
     public sealed class ILEditException(string message, Exception innerException) : Exception(message, innerException)
     {

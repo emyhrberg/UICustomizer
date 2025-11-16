@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
-using static UICustomizer.Core.IngameEditor.Helpers.ElementHelper;
-using static UICustomizer.Core.IngameEditor.Helpers.MapThemeHelper;
-using static UICustomizer.Core.IngameEditor.Helpers.ResourceThemeHelper;
+using static UIEditor.Core.IngameEditor.Helpers.ElementHelper;
+using static UIEditor.Core.IngameEditor.Helpers.MapThemeHelper;
+using static UIEditor.Core.IngameEditor.Helpers.ResourceThemeHelper;
 
-namespace UICustomizer.Core.IngameEditor.Helpers
+namespace UIEditor.Core.IngameEditor.Helpers
 {
     public class LayoutData
     {

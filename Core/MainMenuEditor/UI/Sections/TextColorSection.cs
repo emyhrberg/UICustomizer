@@ -5,11 +5,11 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UICustomizer.Core.MainMenuEditor.Hooks;
-using UICustomizer.UI;
+using UIEditor.Core.MainMenuEditor.Hooks;
+using UIEditor.UI;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
-namespace UICustomizer.Core.MainMenuEditor.UI.Sections
+namespace UIEditor.Core.MainMenuEditor.UI.Sections
 {
     internal class TextColorSection : BaseSection
     {

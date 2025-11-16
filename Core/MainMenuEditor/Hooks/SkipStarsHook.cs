@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using static Terraria.Main;
 
-namespace UICustomizer.Core.MainMenuEditor.Hooks
+namespace UIEditor.Core.MainMenuEditor.Hooks
 {
     public class SkipStarsHook : ModSystem
     {

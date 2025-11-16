@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks
 {
     /// <summary>
     /// Finds all calls to Vector2 constructor in the map drawing code and injects an offset to the position.

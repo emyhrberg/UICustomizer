@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Helpers
+namespace UIEditor.Helpers
 {
     /// <summary>
     /// Static class to hold all assets used in the mod.
@@ -49,7 +49,7 @@ namespace UICustomizer.Helpers
             {
                 if (field.FieldType == typeof(Asset<Texture2D>))
                 {
-                    string modName = "UICustomizer";
+                    string modName = "UIEditor";
                     string path = field.Name;
                     var asset = ModContent.Request<Texture2D>($"{modName}/Assets/{path}", AssetRequestMode.AsyncLoad);
                     field.SetValue(null, asset);

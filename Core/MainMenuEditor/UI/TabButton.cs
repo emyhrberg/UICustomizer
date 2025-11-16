@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.UI
+namespace UIEditor.Core.MainMenuEditor.UI
 {
     public class TabButton : UIElement
     {

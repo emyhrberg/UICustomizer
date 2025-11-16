@@ -3,7 +3,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks
 {
     public class CraftingHook : ModSystem
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 
-namespace UICustomizer.Core.MainMenuEditor.UI.Sections
+namespace UIEditor.Core.MainMenuEditor.UI.Sections
 {
     public class BaseSection : UIPanel
     {

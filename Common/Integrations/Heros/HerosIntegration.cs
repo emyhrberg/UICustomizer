@@ -1,8 +1,8 @@
 ﻿using System;
 using Terraria.ModLoader;
-using UICustomizer.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.System;
 
-namespace UICustomizer.Common.Integrations.Heros
+namespace UIEditor.Common.Integrations.Heros
 {
     [JITWhenModsEnabled("HEROsMod")]
     public sealed class HerosModIntegration : ModSystem

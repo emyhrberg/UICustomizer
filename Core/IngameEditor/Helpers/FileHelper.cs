@@ -5,14 +5,14 @@ using System.IO;
 using System.Linq;
 using Terraria;
 
-namespace UICustomizer.Core.IngameEditor.Helpers
+namespace UIEditor.Core.IngameEditor.Helpers
 {
     /// <summary>
-    /// Handles file I/O operations for UICustomizer layouts.
+    /// Handles file I/O operations for UIEditor layouts.
     /// </summary>
     public static class FileHelper
     {
-        private const string FolderName = "UICustomizerLayouts";
+        private const string FolderName = "UIEditorLayouts";
 
         public static string GetLayoutsFolderPath()
         {

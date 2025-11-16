@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace UICustomizer.Core.IngameEditor.UI
+namespace UIEditor.Core.IngameEditor.UI
 {
     internal class IconOptionButton : UIColoredImageButton
     {

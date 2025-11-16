@@ -1,7 +1,7 @@
 ﻿using System;
 using Terraria;
 
-namespace UICustomizer.Core.MainMenuEditor.Helpers
+namespace UIEditor.Core.MainMenuEditor.Helpers
 {
     public static class WorldTimeHelper
     {

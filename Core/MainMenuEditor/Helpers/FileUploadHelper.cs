@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Utilities.FileBrowser;
 
-namespace UICustomizer.Core.MainMenuEditor.Helpers;
+namespace UIEditor.Core.MainMenuEditor.Helpers;
 
 /// <summary>
 /// Lets the user choose an image file and hands the texture off to 

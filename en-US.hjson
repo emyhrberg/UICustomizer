@@ -1,0 +1,226 @@
+Mods: {
+	UIEditor: {
+		"Keybinds.Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
+
+		Configs: {
+			Config: {
+				DisplayName: Config
+
+				Headers: {
+					UIEditor: U I Editor Header
+					MainMenu: Main Menu Header
+				}
+
+				Layout: {
+					Label: Layout
+					Tooltip: ""
+				}
+
+				EditMainMenu: {
+					Label: Edit Main Menu
+					Tooltip: ""
+				}
+
+				ShowBackToMainMenu: {
+					Label: Show Back To Main Menu
+					Tooltip: ""
+				}
+
+				MainMenuTextColor: {
+					Label: Main Menu Text Color
+					Tooltip: ""
+				}
+
+				MainMenuTime: {
+					Label: Main Menu Time
+					Tooltip: ""
+				}
+
+				MainMenuBackground: {
+					Label: Main Menu Background
+					Tooltip: ""
+				}
+
+				MainMenuLogo: {
+					Label: Main Menu Logo
+					Tooltip: ""
+				}
+
+				MainMenuDraw: {
+					Label: Main Menu Draw
+					Tooltip: ""
+				}
+			}
+
+			MainMenuTextColor: {
+				Tooltip: ""
+
+				FillColor: {
+					Label: Fill Color
+					Tooltip: ""
+				}
+
+				OutlineColor: {
+					Label: Outline Color
+					Tooltip: ""
+				}
+
+				HoverColor: {
+					Label: Hover Color
+					Tooltip: ""
+				}
+
+				Scale: {
+					Label: Scale
+					Tooltip: ""
+				}
+
+				OffsetX: {
+					Label: Offset X
+					Tooltip: ""
+				}
+
+				OffsetY: {
+					Label: Offset Y
+					Tooltip: ""
+				}
+			}
+
+			MainMenuTime: {
+				Tooltip: ""
+
+				IsPaused: {
+					Label: Is Paused
+					Tooltip: ""
+				}
+
+				Time: {
+					Label: Time
+					Tooltip: ""
+				}
+
+				Speed: {
+					Label: Speed
+					Tooltip: ""
+				}
+
+				ParallaxSpeed: {
+					Label: Parallax Speed
+					Tooltip: ""
+				}
+			}
+
+			MainMenuBackground: {
+				Tooltip: ""
+
+				Scale: {
+					Label: Scale
+					Tooltip: ""
+				}
+
+				Rotation: {
+					Label: Rotation
+					Tooltip: ""
+				}
+
+				OffsetX: {
+					Label: Offset X
+					Tooltip: ""
+				}
+
+				OffsetY: {
+					Label: Offset Y
+					Tooltip: ""
+				}
+
+				Color: {
+					Label: Color
+					Tooltip: ""
+				}
+
+				BackgroundFileName: {
+					Label: Background File Name
+					Tooltip: ""
+				}
+			}
+
+			MainMenuLogo: {
+				Tooltip: ""
+
+				Scale: {
+					Label: Scale
+					Tooltip: ""
+				}
+
+				Rotation: {
+					Label: Rotation
+					Tooltip: ""
+				}
+
+				OffsetX: {
+					Label: Offset X
+					Tooltip: ""
+				}
+
+				OffsetY: {
+					Label: Offset Y
+					Tooltip: ""
+				}
+
+				Color: {
+					Label: Color
+					Tooltip: ""
+				}
+
+				LogoFileName: {
+					Label: Logo File Name
+					Tooltip: ""
+				}
+			}
+
+			MainMenuDraw: {
+				Tooltip: ""
+
+				DrawBackground: {
+					Label: Draw Background
+					Tooltip: ""
+				}
+
+				DrawClouds: {
+					Label: Draw Clouds
+					Tooltip: ""
+				}
+
+				DrawLogo: {
+					Label: Draw Logo
+					Tooltip: ""
+				}
+
+				DrawSky: {
+					Label: Draw Sky
+					Tooltip: ""
+				}
+
+				DrawStars: {
+					Label: Draw Stars
+					Tooltip: ""
+				}
+
+				DrawSun: {
+					Label: Draw Sun
+					Tooltip: ""
+				}
+
+				DrawText: {
+					Label: Draw Text
+					Tooltip: ""
+				}
+
+				DrawVersion: {
+					Label: Draw Version
+					Tooltip: ""
+				}
+			}
+		}
+	}
+}

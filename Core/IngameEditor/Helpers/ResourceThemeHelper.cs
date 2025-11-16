@@ -1,6 +1,6 @@
 using Terraria;
 
-namespace UICustomizer.Core.IngameEditor.Helpers
+namespace UIEditor.Core.IngameEditor.Helpers
 {
     public static class ResourceThemeHelper
     {

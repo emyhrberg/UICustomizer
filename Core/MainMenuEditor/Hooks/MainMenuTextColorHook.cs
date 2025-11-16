@@ -4,7 +4,7 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Core.MainMenuEditor.Hooks
+namespace UIEditor.Core.MainMenuEditor.Hooks
 {
     public class MainMenuTextColorHook : ModSystem
     {

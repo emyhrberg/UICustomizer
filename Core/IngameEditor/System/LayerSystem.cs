@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace UICustomizer.Core.IngameEditor.System;
+namespace UIEditor.Core.IngameEditor.System;
 
 public class LayerSystem : ModSystem
 {

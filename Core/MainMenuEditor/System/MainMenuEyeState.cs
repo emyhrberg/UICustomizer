@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria.UI;
-using UICustomizer.Core.MainMenuEditor.UI;
+using UIEditor.Core.MainMenuEditor.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.System;
+namespace UIEditor.Core.MainMenuEditor.System;
 
 public sealed class MainMenuEyeState : UIState
 {

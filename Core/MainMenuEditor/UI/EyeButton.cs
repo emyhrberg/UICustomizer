@@ -4,7 +4,7 @@ using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.UI
+namespace UIEditor.Core.MainMenuEditor.UI
 {
     public class EyeButton : UIImage
     {

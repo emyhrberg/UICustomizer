@@ -6,7 +6,7 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
 
-namespace UICustomizer.Core.MainMenuEditor.UI
+namespace UIEditor.Core.MainMenuEditor.UI
 {
     internal class DrawBackToMainMenuSystem : ModSystem
     {

@@ -2,7 +2,7 @@ using DragonLens.Core.Systems.ThemeSystem;
 using DragonLens.Core.Systems.ToolbarSystem;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Common.Integrations.DragonLens
+namespace UIEditor.Common.Integrations.DragonLens
 {
     [JITWhenModsEnabled("DragonLens")]
     [ExtendsFromMod("DragonLens")]

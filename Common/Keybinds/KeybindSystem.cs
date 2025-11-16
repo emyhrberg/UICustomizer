@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 using Terraria.ModLoader;
-using UICustomizer.Core.IngameEditor.System;
+using UIEditor.Core.IngameEditor.System;
 
-namespace UICustomizer.Common.Keybinds
+namespace UIEditor.Common.Keybinds
 {
     public class KeybindSystem : ModSystem
     {

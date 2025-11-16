@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UICustomizer.Core.MainMenuEditor.Hooks
+namespace UIEditor.Core.MainMenuEditor.Hooks
 {
     public class ParallaxSpeedHook : ModSystem
     {

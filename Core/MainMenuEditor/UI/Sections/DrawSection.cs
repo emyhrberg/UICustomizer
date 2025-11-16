@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using UICustomizer.Core.MainMenuEditor.Hooks;
+using UIEditor.Core.MainMenuEditor.Hooks;
 
-namespace UICustomizer.Core.MainMenuEditor.UI.Sections
+namespace UIEditor.Core.MainMenuEditor.UI.Sections
 {
     public class DrawSection : BaseSection
     {

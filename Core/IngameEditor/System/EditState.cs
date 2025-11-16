@@ -5,11 +5,11 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
-using UICustomizer.Core.IngameEditor.Helpers;
-using UICustomizer.Core.IngameEditor.UI;
-using static UICustomizer.Core.IngameEditor.Helpers.ElementHelper;
+using UIEditor.Core.IngameEditor.Helpers;
+using UIEditor.Core.IngameEditor.UI;
+using static UIEditor.Core.IngameEditor.Helpers.ElementHelper;
 
-namespace UICustomizer.Core.IngameEditor.System
+namespace UIEditor.Core.IngameEditor.System
 {
     public class EditState : UIState
     {

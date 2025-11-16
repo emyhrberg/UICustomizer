@@ -43,4 +43,4 @@ jobs:
           EOF
 
       - name: Lint
-        run: dotnet format style UICustomizer.sln --verify-no-changes
+        run: dotnet format style UIEditor.sln --verify-no-changes

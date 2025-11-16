@@ -6,7 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 
-namespace UICustomizer.UI
+namespace UIEditor.UI
 {
     internal class SliderElement : UIElement
     {

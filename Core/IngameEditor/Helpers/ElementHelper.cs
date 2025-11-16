@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace UICustomizer.Core.IngameEditor.Helpers
+namespace UIEditor.Core.IngameEditor.Helpers
 {
     public static class ElementHelper
     {
