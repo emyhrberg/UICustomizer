@@ -4,7 +4,6 @@ using Terraria.GameContent.UI.Elements;
 using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.Helpers;
 using UIEditor.Core.MainMenuEditor.Hooks;
-using UIEditor.UI;
 
 namespace UIEditor.Core.MainMenuEditor.UI.Sections
 {

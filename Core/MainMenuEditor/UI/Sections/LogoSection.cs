@@ -8,7 +8,6 @@ using Terraria.UI;
 using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.Helpers;
 using UIEditor.Core.MainMenuEditor.Hooks;
-using UIEditor.UI;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
 
 namespace UIEditor.Core.MainMenuEditor.UI.Sections
