@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.System;
 
 [Autoload(Side = ModSide.Client)]

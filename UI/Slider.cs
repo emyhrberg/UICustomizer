@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.UI;
+using UIEditor.Core.Helpers;
 
 namespace UIEditor.UI;
 

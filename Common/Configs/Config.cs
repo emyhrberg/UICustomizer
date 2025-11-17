@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.Helpers;
 using UIEditor.Core.MainMenuEditor.Hooks;
 

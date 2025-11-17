@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.Helpers;
 using UIEditor.Core.MainMenuEditor.Hooks;
 using UIEditor.UI;

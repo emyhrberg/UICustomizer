@@ -3,77 +3,76 @@ using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.ModLoader;
 
-namespace UIEditor.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks;
+
+public class ClassicManaHook : ModSystem
 {
-    public class ClassicManaHook : ModSystem
+    public static float OffsetX = 0;
+    public static float OffsetY = 0;
+
+    public override void Load()
     {
-        public static float OffsetX = 0;
-        public static float OffsetY = 0;
+        IL_ClassicPlayerResourcesDisplaySet.DrawMana += InjectOffset;
+    }
 
-        public override void Load()
-        {
-            IL_ClassicPlayerResourcesDisplaySet.DrawMana += InjectOffset;
-        }
+    public override void Unload()
+    {
+        IL_ClassicPlayerResourcesDisplaySet.DrawMana -= InjectOffset;
+    }
 
-        public override void Unload()
+    private void InjectOffset(ILContext il)
+    {
+        try
         {
-            IL_ClassicPlayerResourcesDisplaySet.DrawMana -= InjectOffset;
-        }
+            ILCursor c = new(il);
 
-        private void InjectOffset(ILContext il)
-        {
-            try
+            // Find 800 ldc.i4 and add OffsetX
+            // Moves mana text X
+            while (c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcI4(800)))
             {
-                ILCursor c = new(il);
-
-                // Find 800 ldc.i4 and add OffsetX
-                // Moves mana text X
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcI4(800)))
+                c.EmitDelegate((int value) =>
                 {
-                    c.EmitDelegate((int value) =>
-                    {
-                        return (int)(value + OffsetX);
-                    });
-                }
-
-                // Find 6 ldc.r4
-                // Moves mana text Y
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcR4(6f)))
-                {
-                    c.EmitDelegate((float value) =>
-                    {
-                        return value + OffsetY;
-                    });
-                }
-
-                // 775 ldc.i4
-                // Moves mana stars X
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcI4(775)))
-                {
-                    c.EmitDelegate((int value) =>
-                    {
-                        return (int)(value + OffsetX);
-                    });
-                }
-
-                // ldc.i4.s 30
-                // Moves mana stars Y
-                while (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcI4(30)))
-                {
-                    c.EmitDelegate((int value) =>
-                    {
-                        return value + (int)OffsetY;
-                    });
-                }
+                    return (int)(value + OffsetX);
+                });
             }
-            catch (Exception e)
+
+            // Find 6 ldc.r4
+            // Moves mana text Y
+            while (c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcR4(6f)))
             {
-                throw new ILPatchFailureException(Mod, il, e);
+                c.EmitDelegate((float value) =>
+                {
+                    return value + OffsetY;
+                });
             }
+
+            // 775 ldc.i4
+            // Moves mana stars X
+            while (c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcI4(775)))
+            {
+                c.EmitDelegate((int value) =>
+                {
+                    return (int)(value + OffsetX);
+                });
+            }
+
+            // ldc.i4.s 30
+            // Moves mana stars Y
+            while (c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcI4(30)))
+            {
+                c.EmitDelegate((int value) =>
+                {
+                    return value + (int)OffsetY;
+                });
+            }
+        }
+        catch (Exception e)
+        {
+            throw new ILPatchFailureException(Mod, il, e);
         }
     }
 }

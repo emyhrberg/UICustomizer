@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Utilities.FileBrowser;
+using UIEditor.Core.Helpers;
 
 namespace UIEditor.Core.MainMenuEditor.Helpers;
 

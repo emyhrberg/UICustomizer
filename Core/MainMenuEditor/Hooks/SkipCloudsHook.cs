@@ -3,6 +3,7 @@ using System.Reflection;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
+using UIEditor.Core.Helpers;
 
 namespace UIEditor.Core.MainMenuEditor.Hooks
 {

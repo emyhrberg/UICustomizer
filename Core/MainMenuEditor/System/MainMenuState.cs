@@ -2,6 +2,7 @@
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
+using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.UI;
 using UIEditor.Core.MainMenuEditor.UI.Sections;
 

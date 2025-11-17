@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
+using UIEditor.Core.Helpers;
 
 namespace UIEditor.Core.MainMenuEditor.UI
 {

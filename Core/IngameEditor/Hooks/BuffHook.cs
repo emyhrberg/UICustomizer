@@ -3,48 +3,47 @@ using MonoMod.Cil;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace UIEditor.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks;
+
+public class BuffHook : ModSystem
 {
-    public class BuffHook : ModSystem
+    public static float OffsetX = 0;
+    public static float OffsetY = 0;
+
+    public override void Load()
     {
-        public static float OffsetX = 0;
-        public static float OffsetY = 0;
+        IL_Main.DrawBuffIcon += InjectBuffOffset;
+    }
 
-        public override void Load()
+    public override void Unload()
+    {
+        IL_Main.DrawBuffIcon -= InjectBuffOffset;
+    }
+
+    private void InjectBuffOffset(ILContext il)
+    {
+        // Log.Info("IL buff patching...");
+
+        try
         {
-            IL_Main.DrawBuffIcon += InjectBuffOffset;
-        }
+            ILCursor c = new(il);
 
-        public override void Unload()
-        {
-            IL_Main.DrawBuffIcon -= InjectBuffOffset;
-        }
-
-        private void InjectBuffOffset(ILContext il)
-        {
-            // Log.Info("IL buff patching...");
-
-            try
+            // Find ldarg.2 (x parameter) and add offset
+            while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(2)))
             {
-                ILCursor c = new(il);
-
-                // Find ldarg.2 (x parameter) and add offset
-                while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(2)))
-                {
-                    c.EmitDelegate<Func<int, int>>(x => x + (int)OffsetX);
-                }
-
-                c.Index = 0;
-                // Find ldarg.3 (y parameter) and add offset  
-                while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(3)))
-                {
-                    c.EmitDelegate<Func<int, int>>(y => y + (int)OffsetY);
-                }
+                c.EmitDelegate<Func<int, int>>(x => x + (int)OffsetX);
             }
-            catch (Exception e)
+
+            c.Index = 0;
+            // Find ldarg.3 (y parameter) and add offset  
+            while (c.TryGotoNext(MoveType.After, i => i.MatchLdarg(3)))
             {
-                throw new ILPatchFailureException(Mod, il, e);
+                c.EmitDelegate<Func<int, int>>(y => y + (int)OffsetY);
             }
+        }
+        catch (Exception e)
+        {
+            throw new ILPatchFailureException(Mod, il, e);
         }
     }
 }

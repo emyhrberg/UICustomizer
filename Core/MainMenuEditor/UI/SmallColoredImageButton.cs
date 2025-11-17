@@ -3,6 +3,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.UI;
+using UIEditor.Core.Helpers;
 
 namespace UIEditor.Core.MainMenuEditor.UI
 {

@@ -3,42 +3,41 @@ using MonoMod.Cil;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.ModLoader;
 
-namespace UIEditor.Core.IngameEditor.Hooks
+namespace UIEditor.Core.IngameEditor.Hooks;
+
+public class FancyLifeTextHook : ModSystem
 {
-    public class FancyLifeTextHook : ModSystem
+    public static float OffsetX = 0;
+    public static float OffsetY = 0;
+
+    public override void Load()
     {
-        public static float OffsetX = 0;
-        public static float OffsetY = 0;
+        IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectLifeBarTextOffset;
+    }
 
-        public override void Load()
-        {
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText += InjectLifeBarTextOffset;
-        }
+    public override void Unload()
+    {
+        IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectLifeBarTextOffset;
+    }
 
-        public override void Unload()
+    private void InjectLifeBarTextOffset(ILContext il)
+    {
+        try
         {
-            IL_FancyClassicPlayerResourcesDisplaySet.DrawLifeBarText -= InjectLifeBarTextOffset;
-        }
+            ILCursor c = new(il);
 
-        private void InjectLifeBarTextOffset(ILContext il)
-        {
-            try
+            if (c.TryGotoNext(MoveType.After,
+                i => i.MatchLdcR4(130f),
+                i => i.MatchLdcR4(-24f),
+                i => i.MatchNewobj<Vector2>()))
             {
-                ILCursor c = new(il);
-
-                if (c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdcR4(130f),
-                    i => i.MatchLdcR4(-24f),
-                    i => i.MatchNewobj<Vector2>()))
-                {
-                    c.EmitDelegate<Func<Vector2, Vector2>>(offset => new Vector2(offset.X + OffsetX, offset.Y + OffsetY));
-                    // Log.Info("Hooked fancy life bar text offset");
-                }
+                c.EmitDelegate<Func<Vector2, Vector2>>(offset => new Vector2(offset.X + OffsetX, offset.Y + OffsetY));
+                // Log.Info("Hooked fancy life bar text offset");
             }
-            catch (Exception e)
-            {
-                throw new ILPatchFailureException(Mod, il, e);
-            }
+        }
+        catch (Exception e)
+        {
+            throw new ILPatchFailureException(Mod, il, e);
         }
     }
 }

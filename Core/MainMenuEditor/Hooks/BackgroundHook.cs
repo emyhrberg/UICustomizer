@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoMod.RuntimeDetour;
 using Terraria;
 using Terraria.ModLoader;
+using UIEditor.Core.Helpers;
 using UIEditor.Core.MainMenuEditor.Helpers;
 
 namespace UIEditor.Core.MainMenuEditor.Hooks
