@@ -2,6 +2,7 @@ using System;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using UIEditor.Core.LayersEditor;
 
 namespace UIEditor.Core.IngameEditor.UI;
 public class DraggablePanel : UIPanel
@@ -21,9 +22,13 @@ public class DraggablePanel : UIPanel
         UIElement target = evt.Target;
         while (target != null)
         {
-            if (target is Scrollbar || target is CloseButton ||
-                target is CheckboxEyeElement || target is Button)
+            if (target is Scrollbar
+                || target is CloseButton
+                || target is CheckboxEyeElement
+                || target is ToggleAllEyeElement 
+                || target is Button)
                 return;
+
             target = target.Parent;
         }
 
@@ -63,10 +68,14 @@ public class DraggablePanel : UIPanel
 
         if (ContainsPoint(Main.MouseScreen))
         {
-            //if (Conf.C.DisableItemUseWhileDragging)
-            {
-                Main.LocalPlayer.mouseInterface = true;
-            }
+            Main.LocalPlayer.mouseInterface = true;
+        }
+
+        // If the mouse button is no longer held, make sure we stop dragging,
+        // even if LeftMouseUp never fired on this element.
+        if (!Main.mouseLeft && dragging)
+        {
+            dragging = false;
         }
 
         if (Slider.IsAnySliderHeld) return;
@@ -83,7 +92,6 @@ public class DraggablePanel : UIPanel
             float clampedX = Math.Clamp(rawX, 0, Main.screenWidth - panelW);
             float clampedY = Math.Clamp(rawY, 0, Main.screenHeight - panelH);
 
-            // 4) Apply!
             Left.Set(rawX, 0f);
             Top.Set(rawY, 0f);
             Recalculate();

@@ -1,10 +1,14 @@
-UI Customizer!
-Move the hotbar, chat, map, health, mana, and buff positions with ease! This mod allows you to move a significant amount of UI to your liking.
-
-How to use:
-Open up your inventory and press "UI Editor" in the bottom right corner.
+:UI Editor 
+This is a mod that allows you to customize the position of ANY UI IN THE GAME.
+It also has a lot more useful features:
 
 Features:
-- Editor: Allows you to move and customize all UI. Save and share layouts with your friends!
-- Toggle Interface Layers: Toggle interface layers for each mod.
-- Toggle Resource Packs: Easily enable and disable resource packs while in a world without exiting!
+- Drag and drop any UI to your liking (chat, hotbar, inventory, map, etc)
+- Save your layouts and share with your friends!
+- Toggle resource packs in-game
+- Toggle interface layers and UI elements from vanilla or any mod.
+
+How to use
+- If you already have either Mod Reloader, CheatSheet, DragonLens or Heros Mod, the panels are automatically added to all of those menus.
+- If you don't have either of these mods, go to controls -> assign a keybind to open the UI Editor or Layer Editor.
+- To create a layout, simply enter edit mode via the UI Editor panel and move the UI to your liking, then press Layouts -> Save this layout.

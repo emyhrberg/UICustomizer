@@ -6,6 +6,7 @@ using Terraria.GameContent;
 using Terraria.ModLoader;
 using UIEditor.Core.Helpers.Layouts;
 using UIEditor.Core.IngameEditor.Systems;
+using UIEditor.Core.LayersEditor;
 using static UIEditor.Core.Helpers.Layouts.ElementHelper;
 
 namespace UIEditor.Core.IngameEditor.UI;
@@ -165,7 +166,7 @@ public class EditPanel : BasePanel
 
         // Draw eye toggle
         // Try to get the interface layer name from the mapping
-        if (!ElementInterfaceLayerMapping.TryGetValue(element, out string interfaceLayerName))
+        if (!ElementHelper.ElementInterfaceLayerMapping.TryGetValue(element, out string interfaceLayerName))
         {
             // Still draw the name if ShowNames is enabled, using the enum's string representation
             if (EditorTabSettings.ShowNames)
@@ -174,6 +175,37 @@ public class EditPanel : BasePanel
                 Utils.DrawBorderString(sb, element.ToString(), pos, Color.White);
             }
             return; // Exit early for this element if no mapping for eye toggle
+        }
+
+        // Draw eye toggle (only if mapping was found)
+        if (EditorTabSettings.ShowEyeToggle)
+        {
+            if (LayerSystem.LayerStates == null)
+            {
+                return;
+            }
+
+            bool isCurrentlyVisible = LayerSystem.LayerStates.TryGetValue(interfaceLayerName, out bool currentState) ? currentState : true;
+            Rectangle eyeRect = new(rect.X - Ass.EyeOpen.Width(), rect.Y, Ass.EyeOpen.Width(), Ass.EyeOpen.Height());
+
+            if (eyeRect.Contains(Main.mouseX, Main.mouseY))
+            {
+                // choose hover sprite depending on current visibility
+                Texture2D hoverTex = (isCurrentlyVisible ? Ass.EyeOpenHover.Value : Ass.EyeClosedHover.Value);
+                sb.Draw(hoverTex, eyeRect, Color.White);
+
+                if (Main.mouseLeft && Main.mouseLeftRelease)
+                {
+                    isCurrentlyVisible = !isCurrentlyVisible;
+                    LayerSystem.LayerStates[interfaceLayerName] = isCurrentlyVisible;
+                    Main.mouseLeftRelease = false;
+                }
+            }
+            else
+            {
+                sb.Draw(isCurrentlyVisible ? Ass.EyeOpen.Value : Ass.EyeClosed.Value, eyeRect, Color.White);
+            }
+
         }
 
         // Draw names of the UI elements

@@ -3,10 +3,10 @@ using Terraria.UI;
 using UIEditor.Core.IngameEditor.UI;
 
 namespace UIEditor.Core.IngameEditor.Systems;
-public class EditorState : UIState
+public class EditState : UIState
 {
     public EditPanel editorPanel;
-    public EditorState()
+    public EditState()
     {
         // The entire editorPanel that contains all the UI elements for editing.
         editorPanel = new();

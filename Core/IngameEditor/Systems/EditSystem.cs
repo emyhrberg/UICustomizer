@@ -11,7 +11,7 @@ public class EditSystem : ModSystem
 {
     // UI components
     public UserInterface ui;
-    public EditorState state;
+    public EditState state;
 
     public static bool IsActive { get; private set; } = false;
 
@@ -51,7 +51,7 @@ public class EditSystem : ModSystem
     public override void OnWorldLoad()
     {
         ui = new UserInterface();
-        state = new EditorState();
+        state = new EditState();
 
         ui.SetState(null);
 
@@ -75,7 +75,7 @@ public class EditSystem : ModSystem
         if (mouseText != -1)
         {
             layers.Insert(mouseText, new LegacyGameInterfaceLayer(
-                name: "UICustomizer: EditSystem",
+                name: "UIEditor: EditSystem",
                 drawMethod: () =>
                 {
                     if (ui.CurrentState != null)

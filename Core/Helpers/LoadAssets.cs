@@ -17,6 +17,10 @@ namespace UIEditor.Core.Helpers
         // Edit menu
         public static Asset<Texture2D> DarkPanel;
         public static Asset<Texture2D> EditorIconSmall;
+        public static Asset<Texture2D> EditorIcon;
+        public static Asset<Texture2D> LayersIcon;
+        public static Asset<Texture2D> LayersIconSmall;
+        public static Asset<Texture2D> LayersIconSmallHover;
         public static Asset<Texture2D> EditorIconSmallHover;
         public static Asset<Texture2D> EyeClosed;
         public static Asset<Texture2D> EyeClosedHover;

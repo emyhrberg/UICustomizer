@@ -16,6 +16,9 @@ namespace UIEditor.Common.Configs
         [DefaultValue("")]
         public string Layout;
 
+        [DefaultValue(true)]
+        public bool ShowIconsUnderInventory = true;
+
         [Header("MainMenu")]
 
         [DefaultValue(true)]

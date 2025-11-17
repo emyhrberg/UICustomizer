@@ -1,14 +1,19 @@
 Mods: {
 	UIEditor: {
-		"Keybinds.Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
+		Keybinds: {
+			"Toggle Edit Panel.DisplayName": Toggle  Edit  Panel
+			"Toggle Layers Panel.DisplayName": Toggle  Layers  Panel
+			"UI Editor.DisplayName": U I  Editor
+			"Layers Tool.DisplayName": Layers  Tool
+		}
 
 		Configs: {
 			Config: {
 				DisplayName: Config
 
 				Headers: {
-					UIEditor: U I Editor Header
-					MainMenu: Main Menu Header
+					UIEditor: Ingame Editor
+					MainMenu: Main Menu Editor
 				}
 
 				Layout: {
@@ -48,6 +53,11 @@ Mods: {
 
 				MainMenuDraw: {
 					Label: Main Menu Draw
+					Tooltip: ""
+				}
+
+				ShowIconsUnderInventory: {
+					Label: Show Icons Under Inventory
 					Tooltip: ""
 				}
 			}
@@ -220,6 +230,18 @@ Mods: {
 					Label: Draw Version
 					Tooltip: ""
 				}
+			}
+		}
+
+		Tools: {
+			"UI Editor": {
+				DisplayName: UI Editor
+				Description: The tool has no description! Add one in .hjson files!
+			}
+
+			"Layers Tool": {
+				DisplayName: Layers Tool
+				Description: The tool has no description! Add one in .hjson files!
 			}
 		}
 	}

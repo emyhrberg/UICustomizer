@@ -11,11 +11,11 @@ using UIEditor.Core.IngameEditor.Hooks;
 namespace UIEditor.Core.Helpers.Layouts;
 
 /// <summary>
-/// Handles file I/O operations for UICustomizer layouts.
+/// Handles file I/O operations for UIEditor layouts.
 /// </summary>
 public static class FileHelper
 {
-    private const string FolderName = "UICustomizerLayouts";
+    private const string FolderName = "UIEditorLayouts";
 
     public static string GetLayoutsFolderPath()
     {

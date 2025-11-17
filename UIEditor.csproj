@@ -26,7 +26,6 @@
         <Publicize Include="DragonLens" IncludeVirtualMembers="false" IncludeCompilerGeneratedMembers="false" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Common\Integrations\DragonLens\" />
       <Folder Include="Common\Integrations\ModReloader\" />
       <Folder Include="Core\IngameEditor\Hooks\" />
     </ItemGroup>

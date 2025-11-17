@@ -1,15 +1,21 @@
-﻿[h1] UI Editor – Customize Your Game ✨ [/h1]  
-Want a cleaner, more personal setup? With **UI Editor** you can drag, drop, and move all the game menus exactly where you want them.  
-Hotbar, chat, map, health, mana, buffs - arrange everything to fit your style.  
+﻿[h1] UI Editor [/h1]  
+This is a mod that allows you to customize the position of ANY UI IN THE GAME.
+It also has a lot more useful features:
 
-[h2] 🌟 Drag & Drop UI [/h2]  
-Move everything with your mouse and lock in your style. Your layouts save automatically, and you can even share your favorite layouts with your friends! 🤝  
+[h2] Features [/h2]
+- Drag and drop any UI to your liking (chat, hotbar, inventory, map, etc)
+- Save your layouts and share with your friends!
+- Toggle resource packs in-game
+- Toggle interface layers and UI elements from vanilla or any mod.
 
-[h2] 🌟 Resource Pack Toggler [/h2]  
-Enable or disable resource packs instantly while in a world – no restart needed. ⚡  
+[h2] How to use [/h2]
+- You will find new icons under the inventory which can be used to toggle the editor.
+- If you already have either Mod Reloader, CheatSheet, DragonLens or Heros Mod, the panels are automatically added to all of those menus.
+- To create a layout, simply enter edit mode via the UI Editor panel and move the UI to your liking, then press Layouts -> Save this layout.
 
-[h3] ❤️ Credits [/h3]  
-Thanks to [url=https://steamcommunity.com/id/thraaks/]thraaks[/url] for the icon and sprites! 🎨  
-
-[h3] ❤️ Support the Project [/h3]  
-👉 [url=https://github.com/emyhrberg/AdvancedChatFeatures] GitHub [/url] | 💬 [url=https://discord.gg/JWbYUktRPV] Discord [/url] | ☕ [url=https://ko-fi.com/erkyy] Ko-Fi [/url]  
+[h2] Links [/h2]
+[list]
+[*] Source code hosted at [url=https://github.com/emyhrberg/UIEditor] GitHub [/url]
+[*] Join the community with questions or suggestions! [url=https://discord.gg/JWbYUktRPV] Discord [/url]
+[*] Wish to support my mod development? You can do so at [url=https://ko-fi.com/erkyy] Ko-Fi [/url]
+[/list]
