@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
-using UIEditor.Core.Helpers;
+using UIEditor.Core.IngameEditor.UI;
 using UIEditor.Core.MainMenuEditor.Helpers;
 using UIEditor.Core.MainMenuEditor.Hooks;
 using static Terraria.GameContent.UI.States.UICharacterCreation;
@@ -180,13 +181,26 @@ namespace UIEditor.Core.MainMenuEditor.UI.Sections
             fileChoose.OnLeftClick += (_, _) =>
             {
                 string file = FileUploadHelper.OpenFileDialog();
+
+                // User cancelled or invalid path
+                if (string.IsNullOrWhiteSpace(file) || !File.Exists(file))
+                {
+                    return;
+                }
+
                 Texture2D tex = FileUploadHelper.ReadAndCreateTextureFromPath(file);
-                LogoHook.CustomLogoTexture = tex; // set the texture in the hook
-                Conf.C.MainMenuLogo.LogoFileName = tex.Name;
+                if (tex == null)
+                {
+                    return;
+                }
+
+                LogoHook.CustomLogoTexture = tex;
+
+                // Store the actual file path in config, same as BackgroundSection
+                Conf.C.MainMenuLogo.LogoFileName = file;
                 Conf.Save();
 
-                if (!string.IsNullOrEmpty(tex.Name))
-                    fileText.SetText(tex.Name);
+                fileText.SetText(file);
             };
 
             resetLogoBtn = new()

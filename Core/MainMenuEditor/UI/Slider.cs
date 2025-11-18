@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.UI;
 using UIEditor.Core.Helpers;
 
-namespace UIEditor.UI;
+namespace UIEditor.Core.MainMenuEditor.UI;
 
 public class Slider : UIElement
 {

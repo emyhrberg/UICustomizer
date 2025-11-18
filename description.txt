@@ -1,14 +1,14 @@
-:UI Editor 
-This is a mod that allows you to customize the position of ANY UI IN THE GAME.
-It also has a lot more useful features:
+﻿﻿[c/FFFF00:UI Editor]
+This mod allows you to drag and drop the position of any UI in the game.
 
-Features:
+[c/00FF88:Features]
 - Drag and drop any UI to your liking (chat, hotbar, inventory, map, etc)
 - Save your layouts and share with your friends!
 - Toggle resource packs in-game
 - Toggle interface layers and UI elements from vanilla or any mod.
 
-How to use
+[c/00BFFF:How to use]
+- There are new icons below the inventory to use.
 - If you already have either Mod Reloader, CheatSheet, DragonLens or Heros Mod, the panels are automatically added to all of those menus.
 - If you don't have either of these mods, go to controls -> assign a keybind to open the UI Editor or Layer Editor.
-- To create a layout, simply enter edit mode via the UI Editor panel and move the UI to your liking, then press Layouts -> Save this layout.
+- To create a layout: Enter the UI editor, move the UI, then press the 'Layouts' tab, then scroll down and press 'Save this layout'.

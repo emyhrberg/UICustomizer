@@ -1,7 +1,7 @@
 displayName = UI Editor
 author = Erky
-version = 0.9.1
+version = 1.0
 side = client
 weakReferences = DragonLens, CheatSheet
 after = ModReloader
-buildIgnore = \Old*, \Assets\Old*, \Assets\Workshop*
+buildIgnore = \Old*, \Assets\Old*, \Assets\Workshop\*
