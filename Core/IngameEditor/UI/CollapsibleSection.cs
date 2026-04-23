@@ -96,6 +96,8 @@ public class CollapsibleSection : UIElement
             AppendContent();
 
         Recalculate();
+        Parent?.Recalculate();
+        Parent?.Parent?.Recalculate();
     }
 
     private void AppendContent()
@@ -112,11 +114,13 @@ public class CollapsibleSection : UIElement
         var list = new UIList
         {
             Width = { Percent = 1f, Pixels = 0 },
-            Height = { Pixels = contentHeight }
+            Height = { Percent = 1f, Pixels = 0 }
         };
         panel.Append(list);
 
         contentBuilder(list);
+        list.Recalculate();
+        panel.Recalculate();
         Append(panel);
     }
 

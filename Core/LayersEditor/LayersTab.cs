@@ -52,6 +52,7 @@ public class LayersTab : Tab
         Log.Info("Found " + vanillaCount + " vanilla layers and " + nonVanillaCount + " non-vanilla layers.");
 
         list.Clear();
+        _sectionToggleAllCheckboxes.Clear();
         list.SetPadding(20);
         list.ListPadding = 0;
         list.Left.Set(-8, 0);
@@ -82,14 +83,16 @@ public class LayersTab : Tab
             var count = LayerSystem.LayerStates.Count(kv => actualPred(kv.Key));
             return count == 1
                 ? 35
-                : Math.Max(80, count * 25) + 10;
+                : Math.Max(80, count * 30f + 20f);
         };
 
         var section = new CollapsibleSection(
             title,
             content =>
             {
-                foreach (var kv in LayerSystem.LayerStates.Where(kv => actualPred(kv.Key)).OrderBy(kv => kv.Key, StringComparer.OrdinalIgnoreCase))
+                foreach (var kv in LayerSystem.LayerStates
+                    .Where(kv => actualPred(kv.Key))
+                    .OrderBy(kv => GetLayerSortKey(kv.Key), StringComparer.OrdinalIgnoreCase))
                 {
                     var chk = new CheckboxEyeElement(
                         kv.Key,
@@ -138,6 +141,14 @@ public class LayersTab : Tab
         //section.ListPadding = 0f;
         list.SetPadding(20f);
         list.Add(section);
+    }
+
+    private static string GetLayerSortKey(string layerName)
+    {
+        int prefixSeparator = layerName.IndexOf(':');
+        return prefixSeparator >= 0 && prefixSeparator < layerName.Length - 1
+            ? layerName[(prefixSeparator + 1)..].Trim()
+            : layerName;
     }
 
     public override void Update(GameTime gameTime)

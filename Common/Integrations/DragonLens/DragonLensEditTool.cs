@@ -3,6 +3,7 @@ using DragonLens.Core.Systems.ToolSystem;
 using DragonLens.Helpers;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using UIEditor.Core.IngameEditor.Systems;
@@ -20,6 +21,13 @@ public class DragonLensEditTool : Tool
     public override string Description => "Edit the UI layout.";
 
     public override bool HasRightClick => false;
+
+    #region Disable netcode and packet sending
+    public override bool SyncOnClientJoint => false;
+
+    public override void SendPacket(BinaryWriter writer) { }
+    public override void RecievePacket(BinaryReader reader, int sender) { }
+    #endregion
 
     public override void OnActivate()
     {
