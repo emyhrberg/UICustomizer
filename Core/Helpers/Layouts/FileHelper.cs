@@ -81,6 +81,7 @@ public static class FileHelper
                 [Element.BarManaText] = new Vector2(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
                 [Element.Buffs] = new Vector2(BuffHook.OffsetX, BuffHook.OffsetY),
                 [Element.Inventory] = new Vector2(InventoryHook.OffsetX, InventoryHook.OffsetY),
+                [Element.MapToggle] = new Vector2(MapToggleHook.OffsetX, MapToggleHook.OffsetY),
             }
         };
 

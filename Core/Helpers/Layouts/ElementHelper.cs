@@ -20,6 +20,7 @@ public static class ElementHelper
         BarManaText,
         Buffs,
         Inventory,
+        MapToggle,
         Crafting,
         Accessories,
         CraftingWindow
@@ -39,6 +40,7 @@ public static class ElementHelper
         [Element.HorizontalBars] = "Vanilla: Resource Bars",
         [Element.Buffs] = "Vanilla: Resource Bars",
         [Element.Inventory] = "Vanilla: Inventory",
+        [Element.MapToggle] = "Vanilla: Inventory",
         [Element.Crafting] = "Vanilla: Inventory",
         [Element.Accessories] = "Vanilla: Inventory",
         [Element.CraftingWindow] = "Vanilla: Inventory",

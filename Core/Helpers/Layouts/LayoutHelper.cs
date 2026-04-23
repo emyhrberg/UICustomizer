@@ -42,6 +42,7 @@ public static class LayoutHelper
                 [Element.BarManaText] = new(BarManaTextHook.OffsetX, BarManaTextHook.OffsetY),
                 [Element.Buffs] = new(BuffHook.OffsetX, BuffHook.OffsetY),
                 [Element.Inventory] = new(InventoryHook.OffsetX, InventoryHook.OffsetY),
+                [Element.MapToggle] = new(MapToggleHook.OffsetX, MapToggleHook.OffsetY),
             }
         };
 
@@ -179,6 +180,8 @@ public static class LayoutHelper
         { BuffHook.OffsetX = buff.X; BuffHook.OffsetY = buff.Y; }
         if (positions.TryGetValue(Element.Inventory, out Vector2 inv))
         { InventoryHook.OffsetX = (int)inv.X; InventoryHook.OffsetY = (int)inv.Y; }
+        if (positions.TryGetValue(Element.MapToggle, out Vector2 mapToggle))
+        { MapToggleHook.OffsetX = mapToggle.X; MapToggleHook.OffsetY = mapToggle.Y; }
     }
 
     public static void LoadLastLayout()
@@ -203,6 +206,7 @@ public static class LayoutHelper
         BarLifeTextHook.OffsetX = BarLifeTextHook.OffsetY = 0f;
         BarManaTextHook.OffsetX = BarManaTextHook.OffsetY = 0f;
         InventoryHook.OffsetX = InventoryHook.OffsetY = 0f;
+        MapToggleHook.OffsetX = MapToggleHook.OffsetY = 0f;
         CraftingHook.OffsetX = CraftingHook.OffsetY = 0f;
         AccessoriesHook.OffsetX = AccessoriesHook.OffsetY = 0f;
         CraftWindowHook.OffsetX = CraftWindowHook.OffsetY = 0f;

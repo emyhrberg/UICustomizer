@@ -50,6 +50,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = Vector2.Zero,
                     [Element.Buffs] = Vector2.Zero,
                     [Element.Inventory] = Vector2.Zero,
+                    [Element.MapToggle] = Vector2.Zero,
                     [Element.Crafting] = Vector2.Zero,
                     [Element.Accessories] = Vector2.Zero
                 }
@@ -83,6 +84,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = Vector2.Zero,
                     [Element.Buffs] = Vector2.Zero,
                     [Element.Inventory] = Vector2.Zero,
+                    [Element.MapToggle] = Vector2.Zero,
                     [Element.Crafting] = Vector2.Zero,
                     [Element.Accessories] = Vector2.Zero
                 }
@@ -113,6 +115,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = new Vector2(0, 0),
                     [Element.Buffs] = new Vector2(0, 0),
                     [Element.Inventory] = new Vector2(0, 0),
+                    [Element.MapToggle] = new Vector2(0, 0),
                     [Element.Chat] = new Vector2(0, 0),
                     [Element.ClassicLife] = new Vector2(0, 0),
                     [Element.ClassicMana] = new Vector2(0, 0),
@@ -147,6 +150,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = new Vector2(0, 0),
                     [Element.Buffs] = new Vector2(0, 0),
                     [Element.Inventory] = new Vector2(0, 0),
+                    [Element.MapToggle] = new Vector2(0, 0),
                     [Element.ClassicLife] = new Vector2(0, 0),
                     [Element.ClassicMana] = new Vector2(0, 0),
                     [Element.Crafting] = new Vector2(0, 0),
@@ -182,6 +186,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = new Vector2(0, 0),
                     [Element.Buffs] = new Vector2(1450, 9),
                     [Element.Inventory] = new Vector2(1348, 54),
+                    [Element.MapToggle] = new Vector2(0, 0),
                     [Element.ClassicLife] = new Vector2(0, 0),
                     [Element.ClassicMana] = new Vector2(0, 0),
                     [Element.Crafting] = new Vector2(0, 0),
@@ -219,6 +224,7 @@ public static class DefaultLayouts
                     [Element.BarManaText] = new Vector2(0, 0),
                     [Element.Buffs] = new Vector2(0, 0),
                     [Element.Inventory] = new Vector2(106, 673),
+                    [Element.MapToggle] = new Vector2(0, 0),
                     [Element.Crafting] = new Vector2(0, 0),
                     [Element.Accessories] = new Vector2(0, 0)
                 }

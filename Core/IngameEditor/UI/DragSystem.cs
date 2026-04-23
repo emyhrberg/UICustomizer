@@ -44,6 +44,8 @@ public class DragSystem : ModSystem
         {
             // convert to float
             HandleDrag(InventoryBounds, ref InventoryHook.OffsetX, ref InventoryHook.OffsetY);
+            if (Main.mapEnabled)
+                HandleDrag(MapToggleBounds, ref MapToggleHook.OffsetX, ref MapToggleHook.OffsetY);
             HandleDrag(CraftingBounds, ref CraftingHook.OffsetX, ref CraftingHook.OffsetY);
             HandleDrag(AccessoriesBounds, ref AccessoriesHook.OffsetX, ref AccessoriesHook.OffsetY);
         }
@@ -404,6 +406,21 @@ public class DragSystem : ModSystem
         int h = 315;
         int x = (int)(20 + InventoryHook.OffsetX);
         int y = 1 + (int)InventoryHook.OffsetY;
+        return new Rectangle(x, y, w, h);
+    }
+
+    public static Rectangle MapToggleBounds(float multiplier = 1)
+    {
+        bool verticalLayout = Main.screenWidth < 940;
+        int x = verticalLayout
+            ? (int)(Main.screenWidth / multiplier - 40 + MapToggleHook.OffsetX)
+            : (int)(Main.screenWidth / multiplier - 440 + MapToggleHook.OffsetX);
+        int y = verticalLayout
+            ? (int)(-200 + MapToggleHook.OffsetY)
+            : (int)(40 + MapToggleHook.OffsetY);
+        int w = verticalLayout ? 32 : 32 * 4;
+        int h = verticalLayout ? 32 * 4 : 32;
+
         return new Rectangle(x, y, w, h);
     }
 

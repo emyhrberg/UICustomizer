@@ -42,6 +42,7 @@ public class EditPanel : BasePanel
                 Element.InfoAccs => Color.Red,
                 Element.Chat => Color.Blue,
                 Element.Inventory => Color.Blue,
+                Element.MapToggle => Color.CornflowerBlue,
                 Element.Crafting => Color.Yellow,
                 Element.Accessories => Color.Magenta,
                 Element.Hotbar => Color.Cyan,
@@ -85,6 +86,8 @@ public class EditPanel : BasePanel
         if (Main.playerInventory)
         {
             DrawHitboxOutlineAndText(sb, DragSystem.InventoryBounds(), Element.Inventory, x: -75, color: elementColors[Element.Inventory]);
+            if (Main.mapEnabled)
+                DrawHitboxOutlineAndText(sb, DragSystem.MapToggleBounds(), Element.MapToggle, x: -85, color: elementColors[Element.MapToggle]);
             DrawHitboxOutlineAndText(sb, DragSystem.CraftingBounds(), Element.Crafting, x: -70, color: elementColors[Element.Crafting]);
             DrawHitboxOutlineAndText(sb, DragSystem.AccessoriesBounds(), Element.Accessories, x: -90, color: elementColors[Element.Accessories]);
         }

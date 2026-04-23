@@ -1,2 +1,2 @@
-v1.2:
-- Fixed bug causing vanilla interface layer to overflow. 
+v1.3:
+- Added map toggle

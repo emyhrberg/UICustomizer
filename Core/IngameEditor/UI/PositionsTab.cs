@@ -80,6 +80,7 @@ public class PositionsTab : Tab
             ( Element.BarManaText, () => (int)BarManaTextHook.OffsetX, () => (int)BarManaTextHook.OffsetY, (x,y) => { BarManaTextHook.OffsetX = x;  BarManaTextHook.OffsetY  = y; } ),
             ( Element.Chat,        () => (int)ChatHook.OffsetX,        () => (int)ChatHook.OffsetY,        (x,y) => { ChatHook.OffsetX = x;       ChatHook.OffsetY       = y; } ),
             ( Element.Inventory,   () => (int)InventoryHook.OffsetX,   () => (int)InventoryHook.OffsetY,   (x,y) => { InventoryHook.OffsetX = x;  InventoryHook.OffsetY  = y; } ),
+            ( Element.MapToggle,   () => (int)MapToggleHook.OffsetX,   () => (int)MapToggleHook.OffsetY,   (x,y) => { MapToggleHook.OffsetX = x;  MapToggleHook.OffsetY  = y; } ),
             ( Element.Crafting,    () => (int)CraftingHook.OffsetX,    () => (int)CraftingHook.OffsetY,    (x,y) => { CraftingHook.OffsetX = x;  CraftingHook.OffsetY  = y; } ),
             ( Element.Accessories, () => (int)AccessoriesHook.OffsetX, () => (int)AccessoriesHook.OffsetY, (x,y) => { AccessoriesHook.OffsetX = x;AccessoriesHook.OffsetY = y; } ),
             ( Element.CraftingWindow,() => (int)CraftWindowHook.OffsetX,() => (int)CraftWindowHook.OffsetY,(x,y) => { CraftWindowHook.OffsetX = x;  CraftWindowHook.OffsetY  = y; } )
@@ -175,6 +176,7 @@ public class PositionsTab : Tab
             (() => (int)BarManaTextHook.OffsetX, () => (int)BarManaTextHook.OffsetY),
             (() => (int)ChatHook.OffsetX, () => (int)ChatHook.OffsetY),
             (() => (int)InventoryHook.OffsetX, () => (int)InventoryHook.OffsetY),
+            (() => (int)MapToggleHook.OffsetX, () => (int)MapToggleHook.OffsetY),
             (() => (int)CraftingHook.OffsetX, () => (int)CraftingHook.OffsetY),
             (() => (int)AccessoriesHook.OffsetX, () => (int)AccessoriesHook.OffsetY),
             (() => (int)CraftWindowHook.OffsetX, () => (int)CraftWindowHook.OffsetY)
